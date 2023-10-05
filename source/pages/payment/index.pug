@@ -1,0 +1,38 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-payment'
+  - var authorized = 'true'
+
+block title
+  title Платежи | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/payment
+
+  hr
+
+  .container-fluid
+    
+    h1 Платежи
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/payment
+          
+      article.col-12.col-md-9
+    
+        include ../../components/payment/template
+
+        hr
+
+        include ../../modules/appeal-item/payment
+  
+    

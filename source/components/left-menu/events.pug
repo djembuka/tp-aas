@@ -1,0 +1,44 @@
+// start /components/left-menu/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'left-menu'
+else
+  - var componentsArray = [ 'left-menu' ]
+  
+.b-left-menu.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .b-left-menu__item
+      span Новости СРО
+
+    .b-left-menu__item
+      a( href="" ) Официальные новости
+      
+    .b-left-menu__item
+      a.active( href="" ) Региональные новости
+      .b-left-menu__sub
+        a( href="" ) Центральное отделение
+        a( href="" ) Северо-Западное отделение
+        a( href="" ) Приволжское отделение
+        a( href="" ) Южное отделение
+        a( href="" ) Волго-Донское отделение
+        a( href="" ) Уральское отделение
+        a( href="" ) Сибирское оделение
+        a( href="" ) Дальневостовчное отделение
+        
+    .b-left-menu__item
+      a( href="" ) Подписки
+      
+    .b-left-menu__item
+      a( href="" ) Выйти
+
+// end /components/left-menu/

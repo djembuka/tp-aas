@@ -1,0 +1,26 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-registry'
+  - var authorized = 'true'
+
+block title
+  title Реестр членов | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/registry
+
+  hr
+
+  .container-fluid
+
+    h1 Реестр членов — аудиторов и индивидуальных аудиторов
+    
+    include ../../components/registry/template
+  
+    

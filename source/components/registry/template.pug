@@ -1,0 +1,97 @@
+// start /components/registry/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'registry'
+else
+  - var componentsArray = [ 'registry' ]
+  
+.b-registry.ph-block
+
+  .ph
+
+    .ph__form
+      div
+      div
+    .ph__table
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-registry__form
+
+      form( action="" method="GET" )
+        .b-form-field
+          label Поиск по реестру
+          input.b-form-input( type="search" )
+        hr.hr--sm.d-block.d-sm-none
+        .b-form-submit
+          button.btn.btn-secondary( type="submit" ) Найти
+
+    hr.hr--xl
+
+    table.table.table-responsive( data-result="/components/registry-report/result.json" )
+      thead
+        tr
+          th( data-field="name" ) ФИО
+          th( data-field="attestat" ) Номер аттестата
+          th( data-field="ornz" ) ОРНЗ
+          th( data-field="ogrnip" ) ОГРНИП
+          th( data-field="rf" ) Субъект РФ
+          th( data-field="status" ) Отметки
+      tbody
+        tr( data-url="/pages/profile/" )
+          td Савельева Людмила Викторовна
+          td К026015
+          td 20606017533
+          td 20606017533
+          td Республика Коми
+          td
+            .b-status-label-block
+              .b-status-label( style="background-color: #ff3939; color: #fff;" ) Исключен
+              .b-status-label( style="background-color: #ff3939; color: #fff;" ) Членство приостановлено
+              .b-status-label Не читает уведомления
+        tr( data-url="/pages/profile/" )
+          td Широкова Ольга Владимировна
+          td К014405
+          td 20406000014
+          td
+          td г. Москва
+        tr( data-url="/pages/profile/" )
+          td Ушаков Алексей Вячеславович
+          td К011759
+          td 20406000036
+          td
+          td Тульская область
+
+        tr( data-url="/pages/profile/" )
+          td Пасичниченко Елена Владимировна
+          td К028657
+          td 20806000042
+          td
+          td Красноярский край
+
+        tr( data-url="/pages/profile/" )
+          td Ушаков Андрей Вячеславович
+          td К006766,06-000101
+          td 20306000057
+          td 320715400044608
+          td Тульская область
+
+        tr( data-url="/pages/profile/" )
+          td Махнёва Вера Александровна
+          td К004774
+          td 20306010960
+          td
+          td Республика Башкортостан
+
+    hr.hr--xl
+
+    include ../../modules/pagination/include
+
+
+// end /components/registry/

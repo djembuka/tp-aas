@@ -1,0 +1,149 @@
+@import '../../styl/component-include.styl'
+
+.b-events-tabs
+  display block
+  overflow hidden
+
+  &__tabs
+    position relative
+    border-bottom 1px solid $line-color
+    padding-bottom 14px
+    font-size $14px
+    font-family $roboto
+
+    @media( max-width 650px )
+      transform( translateX( 100px ))
+      opacity 0
+      transition( all .5s ease )
+      
+      &.animate
+        opacity 1
+        transform( translate(0))
+    
+    a.swiper-slide
+      display inline-block
+      margin-right 30px
+      white-space nowrap
+      width auto !important
+
+      &,
+      &:hover,
+      &:focus,
+      &:active
+        color #6f6f6f
+
+      &.active
+        color #3b3b3b
+        pointer-events none
+
+    .swiper-container-initialized
+
+      a
+
+        &:hover
+          opacity 1
+
+  &__decor
+    position absolute
+    bottom -1px
+    left 0
+    border-top 1px solid #999
+    transition( all .5s ease )
+      
+  div.swiper-slide
+    background-color #fafafa
+    height auto
+    font-family $roboto
+        
+  &__item
+    height 100%
+    border-radius 10px
+    position relative
+    background-color $placeholder-color
+    
+    .b-bg &
+      background-color #fff
+      
+  &__top
+    background-color $primary-color
+    border-radius 10px 10px 0 0
+    padding 20px 20px 40px
+    color #fff
+    overflow hidden
+    background-bg()
+    position relative
+    font-family $roboto
+    
+    &:before
+      content ''
+      display block
+      position absolute
+      top 0
+      left 0
+      background-color rgba( 0,0,0,.35 )
+      width 100%
+      height 100%
+      z-index 1
+    
+  &__date
+    font-size $24px
+    margin-bottom 10px
+    position relative
+    z-index 2
+    
+  &__year
+    font-size $11px
+    position relative
+    z-index 2
+    
+  &__tag
+    font-size $12px
+    line-height 30px
+    height 30px
+    border-radius 3px
+    padding 0 20px
+    background-color rgba( 67,117,216,.9 )
+    position absolute
+    bottom 20px
+    right 20px
+    z-index 2
+      
+    a&
+    
+      &,
+      &:hover,
+      &:focus,
+      &:active
+        color #fff
+        
+      &:hover
+        opacity .85
+    
+  &__bottom
+    padding 20px 20px 110px 20px
+      
+  &__btn
+    position absolute
+    bottom 20px
+    left 20px
+    display flex
+    justify-content space-between
+    flex-wrap wrap-reverse
+    align-items baseline
+    width calc( 100% - 40px )
+
+    .btn
+      width 135px
+      margin 15px 20px 0 0
+
+  &__link
+    white-space nowrap
+    font-size $12px
+      
+  a&__title
+
+    &,
+    &:hover,
+    &:focus,
+    &:active
+      color #3b3b3b

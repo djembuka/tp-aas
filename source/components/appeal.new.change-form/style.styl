@@ -1,0 +1,116 @@
+@import '../../styl/component-include.styl'
+
+.b-appeal-new-change-form
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+        
+h1
+  width calc( 100% - 260px )
+
+  @media( max-width 1199px)
+    width 100%
+    
+.b-appeal-new-change-form
+  text-align left
+
+/*control*/
+.b-complete-comment {
+  margin-top 5px
+}
+.b-add-fieldset-block__wrapper
+  display flex
+  justify-content space-between
+  flex-wrap wrap
+
+.b-add-fieldset-block__control
+  margin-bottom 2rem
+
+  &:nth-of-type(7)
+    margin-bottom 0
+
+  @media (max-width: 575px)
+    width 100%
+
+    &:nth-of-type(7)
+      margin-bottom 2rem
+
+.b-appeal-new-change-form__submit
+  display flex
+  align-items center
+
+  .btn
+    margin-right 20px
+
+  @media (max-width: 575px)
+    display block
+
+    small
+      display block
+
+    .btn
+      margin 0 0 1rem
+      width 100%
+
+.multy-control-wrapper
+  position relative
+
+  &__remove.btn-delete
+    position absolute
+    top -12px
+    right calc(50% + 15px - 12px)
+    width 24px
+    height 24px
+    cursor pointer
+    transition( opacity .5s ease )
+    z-index 10
+
+    &:hover
+      opacity .7
+
+    @media(max-width 991px)
+      right -12px
+
+  .anim &
+
+    input:not([type=checkbox]),
+    input:not([type=radio]),
+    textarea
+      transition( background-color 1s ease )
+
+    label
+      transition( all 1s ease )
+
+  .new &
+
+    &:last-of-type
+
+      input:not([type=checkbox]),
+      input:not([type=radio]),
+      textarea
+        background-color #e7f8e8
+
+      label
+        color #74c37a
+
+@import './style/collapse-vue-component.styl'
+@import './style/checkbox-vue-component.styl'
+@import './style/file-vue-component.styl'
+@import './style/add-fieldset-block.styl'
+@import './style/select.styl'
+@import './style/datepicker.styl'
+@import './style/transition.styl'

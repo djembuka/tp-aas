@@ -1,0 +1,5 @@
+{
+  "STATUS": "Y",
+  "TBODY": "<tr><td>Савельева Людмила Викторовна<\/td><td>20606017533<\/td><td>18 мая 2021 15:12:41<\/td><td>Голосует<\/td><td><a class=\"pdf-icon\" href=\"/upload/example.pdf\" target=\"_blank\" style=\"background-image: url('/template/images/pdf.svg');\"><\/a><\/td><\/tr>",
+  "PAGINATION": "<div class=\"b-pagination-block text-right ph-block main-pagination ph-block--animated\"><span class=\"i-active\">1<\/span><a href=\"/reestr/auditory/?PAGEN_1=page-2\">2<\/a><a href=\"/reestr/auditory/?PAGEN_1=page-3\">3<\/a><a href=\"/reestr/auditory/?PAGEN_1=page-4\">4<\/a><a href=\"/reestr/auditory/?PAGEN_1=page-5\">5<\/a><a href=\"/reestr/auditory/?PAGEN_1=page-173\">...<\/a><a href=\"/reestr/auditory/?PAGEN_1=page-341\">341<\/a><a class=\"i-forward\" href=\"/reestr/auditory/?PAGEN_1=page-2\">Следующая<\/a><\/div>"
+}

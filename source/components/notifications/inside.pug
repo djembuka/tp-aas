@@ -1,0 +1,13 @@
+// start /components/notifications/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'notifications'
+else
+  - var componentsArray = [ 'notifications' ]
+
+.notification.notification--inside
+  .notification__content Вам необходимо пройти 40 часов курсов по повышению квалификации за последние 3 года.
+    a.notification__clear.btn.btn-md( href="" style="margin-left: 35px;" ) Понятно
+
+// end /components/notifications/

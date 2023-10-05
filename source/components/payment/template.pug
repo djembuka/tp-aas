@@ -1,0 +1,25 @@
+// start /components/payment/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'payment'
+else
+  - var componentsArray = [ 'payment' ]
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="/components/payment/store.js" )
+  
+.b-payment.ph-block
+
+  .ph
+    
+    .ph__num-blocks
+      div
+
+  .ph-content 
+  
+    #paymentApp
+
+// end /components/payment/

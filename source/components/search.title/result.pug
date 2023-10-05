@@ -1,0 +1,55 @@
+// start /components/search.title/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'search.title'
+else
+  - var componentsArray = [ 'search.title' ]
+  
+.title-search-result( style="position: absolute; top: 231px; left: 9px; width: 384px;" )
+  .container-fluid
+    .title-search-wrapper
+      .title-search-body
+        .title-search-item
+          a(href="/pc/podpiska_na_rassylku/index.php")
+            i( style="background-image: url( '/upload/search/1.jpg' );" )
+            span
+              b К000223
+              small.text-muted Широкова Ольга Владимировна,
+                | 
+                span.text-danger исключена
+        .title-search-item
+          a(href="/help_aas/sad/index.php")
+            i( style="background-image: url( '/upload/search/2.jpg' );" )
+            span
+              b К000223
+              | 23
+              small.text-muted Васильева Анна Владимировна
+        .title-search-item
+          a(href="/activity/confirmation_training/index.php")
+            i( style="background-image: url( '/upload/search/3.jpg' );" )
+            span
+              b К000223
+              small.text-muted Широкова Ольга Владимировна
+        .title-search-item
+          a(href="/activity/povyshenie_kvalifikacii/index.php")
+            i( style="background-image: url( '/upload/search/4.jpg' );" )
+            span
+              b К000223
+              | 23
+              small.text-muted Васильева Анна Владимировна
+        .title-search-item
+          a(href="/rules/changereestr/index.php")
+            i( style="background-image: url( '/upload/search/5.jpg' );" )
+            span
+              b К000223
+              small.text-muted Широкова Ольга Владимировна
+        .title-search-item
+          a(href="/rules/changereestr/index.php")
+            small Правила неззависимости аудитров.
+              | 
+              span.text-muted 10 марта 2021. Архив
+      .title-search-all
+        a(href="/search/index.php?q=%D0%BF%D0%BE") Все результаты поиска 
+
+// end /components/search.title/

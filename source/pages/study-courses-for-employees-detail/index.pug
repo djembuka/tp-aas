@@ -1,0 +1,40 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-study-courses-for-employees-detail'
+  - var authorized = 'true'
+
+block title
+  title УМЦ для сотрудников детально | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/study
+
+  hr
+
+  .container-fluid
+  
+    h1 Актуальные вопросы применения новых ФСБУ при аудите. Изменения в налоговом законодательстве. Практика применения МСА
+
+    hr
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/study
+          
+      article.col-12.col-md-9
+
+        - var tab = 'description'
+  
+        include ../../components/study.courses.for-employees.detail/template
+
+        hr
+
+        include ../../modules/appeal-item/study

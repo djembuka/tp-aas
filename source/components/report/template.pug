@@ -1,0 +1,400 @@
+// start /components/report/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'report'
+else
+  - var componentsArray = [ 'report' ]
+  
+.b-report.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-report__panel
+      .b-report__panel__data(style="background-image: url('/template/images/vuesax-linear-clipboard-text.svg');")
+        div
+          b Создан:
+          | 
+          | 13 марта 2023 12:01
+        div
+          b Статус:
+          | 
+          span.label-green
+            span Сдан
+        div
+          b Отчет сдан:
+          | 
+          | 13 марта 2023 12:01
+      a.b-report__panel__download( href="" target="_blank" )
+        | Скачать PDF
+        span(style="background-image: url('/template/images/pdf.svg');")
+
+    .b-report__text
+
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Основные сведения
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Наименование организации
+              p ООО "ЮЦ "ВЕКТОР Право"
+              .text-muted.small ОРНЗ
+              p 11006003935
+              .text-muted.small Фактический адрес
+              p 119049, Москва, Коровий вал, д. 7, стр. 1, оф. 2 119049, Москва, Коровий вал, д. 7, стр. 1, оф. 2 119049, Москва, Коровий вал, д. 7, стр. 1, оф. 2 119049
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Юридический адрес
+              p 107113, г. Москва, Песочная аллея, д. 5, стр. 3
+              .text-muted.small ОКПО
+              p Нет информации
+              .text-muted.small ОГРН
+              p 1027739241970
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Дата сдачи формы №2-Аудит в Минфин России
+              p 10.02.2021
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Контакты
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Email
+              p info@v-pravo.ru
+              .text-muted.small Телефон мобильный
+              p Нет информации
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Телефон домашний
+              p Нет информации
+              .text-muted.small  Телефон рабочий
+              p +7 (495) 925 00 99
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Факс
+              p Нет информации
+              .text-muted.small Сайт
+              p www.v-pravo.ru; vector-pravo.ru
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Численность персонала. На 31 декабря
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Численность работников (на 31 декабря)
+              p 9
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Из них аудиторов
+              p 7
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Из них аудиторов, работающих по совместительству
+              p 6
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Численность персонала. В среднем за год
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Численность работников (в среднем)
+              p 6
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Из них аудиторов
+              p 4
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Объем оказанных услуг. За отчетный год
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Объем услуг (тыс. руб.)
+              p 2955
+              .text-muted.small Обязательный аудит (тыс. руб.)
+              p 1092
+              .text-muted.small Инициативный аудит (тыс. руб.)
+              p 0
+              .text-muted.small Cопутствующие аудиту услуги (тыс. руб.)
+              p 1863
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Прочие услуги связанные с аудитом (тыс. руб.)
+              p 0
+              .text-muted.small  Из них орган., в которых проведен аудит (тыс. руб.)
+              p 0
+              .text-muted.small Объем услуг по аудиту отчетности ОЗО (тыс. руб.)
+              p 0
+              .text-muted.small Аудит организаций, с ценными бумагами (тыс. руб.)
+              p 0
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Аудит кредитных организаций (тыс. руб.)
+              p 0
+              .text-muted.small Аудит некредит. фин. организаций (тыс. руб.)
+              p 0
+              .text-muted.small Орган., с госучастием не менее 25% (тыс. руб.)
+              p 0
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Объем оказанных услуг. За предыдущий год
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Объем услуг (тыс. руб)
+              p 1595
+              .text-muted.small Обязательный аудит (тыс. руб)
+              p 925
+              .text-muted.small Инициативный аудит (тыс. руб)
+              p 0
+              .text-muted.small Сопутствующие аудиту услуги (тыс. руб)
+              p 670
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Прочие услуги связанные с аудитом (тыс. руб)
+              p 0
+              .text-muted.small Из них орган., в которых проведен аудит (тыс. руб.)
+              p 0
+              .text-muted.small Объем услуг по аудиту отчетности ОЗО (тыс. руб.)
+              p 0
+              .text-muted.small Аудит организаций, с ценными бумагами (тыс. руб.)
+              p 0
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Аудит кредитных организаций (тыс. руб.)
+              p 0
+              .text-muted.small Аудит некредитных фин. организаций (тыс. руб.)
+              p 0
+              .text-muted.small Организаций, с госучастием не менее 25% (тыс. руб.)
+              p 0
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Характеристика организаций
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Количество организаций, в которых проведен аудит
+              p 3
+              .text-muted.small Организации с выручкой менее 400 млн. руб.
+              p 0
+              .text-muted.small Организации с выручкой от 400 до 1 000 млн. руб.
+              p 1
+              .text-muted.small Организации с выручкой от 1 000 до 2 000 млн. руб.
+              p 0
+              .text-muted.small Организации с выручкой от 2 000 до 4 000 млн. руб.
+              p 0
+              .text-muted.small Организации с выручкой более 4 000 млн. руб.
+              p 2
+              .text-muted.small Организации добывающие полезные ископаемые
+              p 0
+              .text-muted.small Организации производящие электроэнергию
+              p 0
+              .text-muted.small Строительные организации
+              p 3
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Организации занимающиеся транспортом и связью
+              p 0
+              .text-muted.small Торговые организации
+              p 0
+              .text-muted.small Количество ОЗО
+              p 0
+              .text-muted.small Аудит организаций, с ценными бумагами
+              p 0
+              .text-muted.small Организаций, выпустивших проспект ценных бумаг
+              p 0
+              .text-muted.small Кредитных организаций
+              p 0
+              .text-muted.small Страховых организаций
+              p 0
+              .text-muted.small Негосударственные пенсионные фонды
+              p 0
+              .text-muted.small Организаций с госучастием не менее 25%
+              p 0
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small Организаций, с участием субъекта РФ не менее 25%
+              p 0
+              .text-muted.small Организаций, в которых проведен обязательный аудит
+              p 3
+              .text-muted.small Акционерные общества
+              p 0
+              .text-muted.small Некредитные финансовые организации
+              p 0
+              .text-muted.small Организаций, финансовые показатели выше мин. значений
+              p 0
+              .text-muted.small Представляющих консолидированную финансовую отчетность
+              p 0
+              .text-muted.small Организаций, в которых проведен инициативный аудит
+              p 0
+              .text-muted.small Организации, с доп. услугами
+              p 0
+              .text-muted.small Количество организаций, которым оказаны сопутствующие аудиту услуги
+              p 0
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Выданные аудиторские заключения
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Количество выданных аудиторских заключений
+              p 3
+              .text-muted.small С выражением немодифицированного мнения
+              p 3
+              .text-muted.small С выражением мнения с оговоркой
+              p 0
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small С выражением отрицательного мнения
+              p 0
+              .text-muted.small С отказом от выражением мнения
+              p 0
+              .text-muted.small С выражением сомнения относительно непрерывности деятельности
+              p 0
+            hr.d-block.d-lg-none.w-100
+            .col-12.col-lg-4
+              .text-muted.small С указанием на значительную неопределённость
+              p 0
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Участие в сетях аудиторских организаций
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Название сети
+              p Нет информации
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Руководство
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small ФИО
+              p Данильченко Бэлла Альбертовна
+            .col-12.col-lg-4
+              .text-muted.small ОРНЗ
+              p 22006170022
+            .col-12.col-lg-4
+              .text-muted.small Форма ЕИО
+              p Генеральный директор
+              
+      .b-collapse-block.slide
+        .b-collapse-block__head
+          a(href="") Сотрудники
+          span
+        .b-collapse-block__body
+          .row
+            .col-12.col-lg-4
+              .text-muted.small ФИО
+              p Данильченко Бэлла Альбертовна
+            .col-12.col-lg-4
+              .text-muted.small ОРНЗ
+              p 22006170022
+            .col-12.col-lg-4
+              .text-muted.small Тип договора
+              p Основное
+          .row
+            .col-12.col-lg-4
+              .text-muted.small ФИО
+              p Киреев Алексей Михайлович
+            .col-12.col-lg-4
+              .text-muted.small ОРНЗ
+              p 20206018405
+            .col-12.col-lg-4
+              .text-muted.small Тип договора
+              p Основное
+          .row
+            .col-12.col-lg-4
+              .text-muted.small ФИО
+              p Лебедева Елена Константиновна
+            .col-12.col-lg-4
+              .text-muted.small ОРНЗ
+              p 22006134156
+            .col-12.col-lg-4
+              .text-muted.small Тип договора
+              p По совместительству
+          .row
+            .col-12.col-lg-4
+              .text-muted.small ФИО
+              p Нехай Сергей Степанович
+            .col-12.col-lg-4
+              .text-muted.small ОРНЗ
+              p 22006165500
+            .col-12.col-lg-4
+              .text-muted.small Тип договора
+              p По совместительству
+          .row
+            .col-12.col-lg-4
+              .text-muted.small ФИО
+              p Пыжикова Нина Васильевна
+            .col-12.col-lg-4
+              .text-muted.small ОРНЗ
+              p 22006022635
+            .col-12.col-lg-4
+              .text-muted.small Тип договора
+              p По совместительству
+          .row
+            .col-12.col-lg-4
+              .text-muted.small ФИО
+              p Толстенко Максим Анатольевич
+            .col-12.col-lg-4
+              .text-muted.small ОРНЗ
+              p 22006071832
+            .col-12.col-lg-4
+              .text-muted.small Тип договора
+              p По совместительству
+          .row
+            .col-12.col-lg-4
+              .text-muted.small ФИО
+              p Флоренский Виктор Анверович
+            .col-12.col-lg-4
+              .text-muted.small ОРНЗ
+              p 22006137420
+            .col-12.col-lg-4
+              .text-muted.small Тип договора
+              p По совместительству
+
+    hr
+
+    .b-report-buttons 
+
+      a.btn.btn-light.btn-link-color(href="")
+        span.icon( style="background-image: url( '/template/images/icon-edit.svg' );" )
+        span Редактировать
+
+      a.btn.btn-light.btn-red-color(href="")
+        span.icon( style="background-image: url( '/template/images/icon-remove.svg' );" )
+        span Удалить
+
+// end /components/report/

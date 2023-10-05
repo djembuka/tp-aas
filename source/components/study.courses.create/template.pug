@@ -1,0 +1,58 @@
+// start /components/study.courses.create/
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="https://unpkg.com/vue-select@latest" )
+link( rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js" )
+link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue-scrollto" )
+script( src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js" )
+
+script( src="/components/study.courses.create/store.js" )
+
+script
+  | window.studyCourseCreatePaths = {
+  |   addCompany: '/components/study.courses.create/addCompany.json',
+  | };
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'study.courses.create'
+else
+  - var componentsArray = [ 'study.courses.create' ]
+  
+.b-study-courses-create.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    #studyCoursesCreateWizard
+
+    #studyCoursesCreateModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="studyCoursesCreateModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+          .modal-body
+            h3.text-center Вы добавили курс
+
+            hr
+
+            p.text-center После добавления курса он появился в <a href="">списке ваших курсов</a> в статусе «Черновик», для публикации на страницах сайта СРО ААС, вам необходимо отправить курс на модерацию в отдел повышения и подтверждения квалификации. Для этого <a href="">проверьте курс</a> и нажмите кнопку «Отправить на модерацию».
+
+            hr
+
+            .text-center.modal-buttons
+              a.btn.btn-lg.btn-primary( href="" ) Понятно
+
+
+// end /components/study.courses.create/

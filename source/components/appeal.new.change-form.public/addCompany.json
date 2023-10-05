@@ -1,0 +1,12 @@
+{
+  "STATUS": "Y",
+  "DATA": {
+    "companyId": "companyId10",
+    "hidden": [
+      {
+        "name": "infoblockId",
+        "value": "companyId10"
+      }
+    ]
+  }
+}

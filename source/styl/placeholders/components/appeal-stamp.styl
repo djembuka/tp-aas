@@ -1,0 +1,26 @@
+.b-appeal-stamp
+
+  &.ph-block
+    position relative
+  
+  .ph
+
+    &__text
+      margin-top 20px
+
+      div
+        height 7px
+        background-color $placeholder-color
+        margin-bottom 10px
+      
+        &:last-child
+          width 70%
+        
+    &-content
+      position absolute
+      top 0
+      left 0
+      width 100%
+      transition( opacity .5s ease )
+      opacity 0
+      z-index 1

@@ -1,0 +1,140 @@
+// start /components/check.detail.out/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'check.detail.out'
+else
+  - var componentsArray = [ 'check.detail.out' ]
+  
+.b-check-detail-out.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .row
+      .col-lg-6 
+        table.table
+          tbody
+            tr
+              th Номер проверки
+              td N3456
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Дата начала проверки
+              td 13.01.2021 13:08
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Дата окончания проверки
+              td 21.01.2021 13:08
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Объект проверки
+              td 
+                div
+                  a(href="") ООО АФ «КОНСУЛ»
+                  hr.hr--xs
+                  .small.text-muted 11782631892674
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Вид проверки
+              td Плановая
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+      .col-lg-6 
+        table.table
+          tbody
+            tr
+              th Статус
+              td
+                span.label-gray
+                  span Черновик
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Проверяемый период
+              td 2017-2020
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Уполномоченный эксперт
+              td
+                div
+                  a(href="") Байкова Светлана Викторовна
+                  hr.hr--xs
+                  .small.text-muted 11782631892674
+                  hr
+                  a(href="") Андриенко Олег Владимирович
+                  hr.hr--xs
+                  .small.text-muted 11782631892674
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Куратор проверки
+              td
+                div
+                  a(href="") Байкова Светлана Викторовна
+                  hr.hr--xs
+                  .small.text-muted 11782631892674
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+    h3 Инструкция проверки
+
+    p В соответствии с Правилами организации и осуществления ВКД СРО ААС объекту ВКД в целях подготовки внешней проверки необходимо:
+
+    .b-inst
+      form(action="/components/check.detail.out/response.json" method="POST")
+
+        label.b-inst__form-control
+          .b-inst__checkbox
+            input.filled-in(type='checkbox' name='answer[240946][]' value='240796')
+            span
+          .b-inst__form-control__content
+            .b-inst__form-control__num
+              span 1.
+            .b-inst__form-control__text
+              | Представить в СРО ААС в срок не позднее, чем за 10 (десять ) рабочих дней до начала проверки следующие заполненные документы:
+
+              hr
+
+              include ../../modules/docs/docs
+
+        hr
+
+        label.b-inst__form-control
+          .b-inst__checkbox
+            input.filled-in(type='checkbox' name='answer[240946][]' value='240796')
+            span
+          .b-inst__form-control__content
+            .b-inst__form-control__num
+              span 2.
+            .b-inst__form-control__text
+              | Оплатить целевой взнос на организацию и осуществление внешнего контроля деятельности в срок не позднее рабочего дня, предшествующего дате начала проверки.
+
+        hr
+
+        label.b-inst__form-control
+          .b-inst__checkbox
+            input.filled-in(type='checkbox' name='answer[240946][]' value='240796')
+            span
+          .b-inst__form-control__content
+            .b-inst__form-control__num
+              span 3.
+            .b-inst__form-control__text
+              | Рассмотреть утвержденные Планом ВКД кандидатуры уполномоченного эксперта (уполномоченных экспертов) и Куратора проверки на предмет выявления фактов и обстоятельств, свидетельствующих о нарушении (угрозе нарушения) принципа независимости уполномоченного эксперта, Куратора от объекта ВКД.
+
+        hr
+
+        label.b-inst__form-control
+          .b-inst__checkbox
+            input.filled-in(type='checkbox' name='answer[240946][]' value='240796')
+            span
+          .b-inst__form-control__content
+            .b-inst__form-control__num
+              span 4.
+            .b-inst__form-control__text
+              | Подписать и в течение 5 (пяти) рабочих дней после получения настоящего Уведомления направить в СРО ААС по электронной почте подписанные сканированные копии либо в формате электронных документов, подписанных с использованием электронной цифровой подписи, Уведомление и Письмо о подтверждении независимости при проведении внешнего контроля деятельности уполномоченного эксперта по контролю деятельности и Куратора от объекта ВКД либо Заявление о замене уполномоченного эксперта по контролю деятельности/Куратора проверки с указанием оснований (формат документов представлен в составе Типового комплекта документов по ВКД). Документы, перечисленные в настоящем Уведомлении, в указанные сроки необходимо направить с сопроводительным письмом, составленным в произвольной форме, в СРО ААС в электронном виде (в формате Word или Exсel, а также скан-образы подписанных и скрепленных печатью (при ее наличии) документов на бумажном носителе) либо в формате электронных документов, подписанных с использованием электронной цифровой подписи. Вышеуказанные документы и информацию просим направить в Отдел по контролю деятельности СРО ААС на электронный адрес vkd@auditor-sro.org.
+
+// end /components/check.detail.out/

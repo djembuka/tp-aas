@@ -1,0 +1,210 @@
+// start /components/reports-list/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'reports-list'
+else
+  - var componentsArray = [ 'reports-list' ]
+  
+.b-reports-list.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-reports-list__select(data-param="YEAR")
+      select.select--link
+        option(value="") Все
+        option(value="2022" selected="selected") 2022
+        option(value="2023") 2023
+
+    hr.hr--sl
+
+    .b-reports-list__item
+      .b-reports-list__year 2022
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022 Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-green
+              span Сдан
+            | 12 апреля 2022
+        .b-reports-list__button
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--new
+      .b-reports-list__year
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022 Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date Крайний срок: 30 апреля 2023 23:59 (68 дней)
+        .b-reports-list__button.b-reports-list__button--center
+          a.btn.btn-secondary.btn-lg(href="") Сдать отчет
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--new-deadline
+      .b-reports-list__year
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date Крайний срок: 30 апреля 2023 23:59 (68 дней)
+        .b-reports-list__button.b-reports-list__button--center
+          a.btn.btn-secondary.btn-lg(href="") Сдать отчет
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--empty
+      .b-reports-list__year 2022
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Уточненный отчет «Форма 2-аудит» за 2021 номер 192729
+          .b-reports-list__date.small
+            .label-red
+              span Не сдан
+        .b-reports-list__button
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--didnt-pass-year-period
+      .b-reports-list__year 2023
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022 Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-red
+              span Не сдан
+        .b-reports-list__button.b-reports-list__button--center
+          a.btn.btn-secondary.btn-md(href="") Сдать уточненный
+          .small До 31 декабря 2022
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--didnt-pass
+      .b-reports-list__year 2022
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-red
+              span Не сдан
+        .b-reports-list__button
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--updated
+      .b-reports-list__year 2022
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-green
+              span Сдан
+            | 12 апреля 2022
+        .b-reports-list__button.b-reports-list__button--right
+          a.btn-edit( href="" )
+              svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+                g
+                  path(d="M9.263,1.439l-8.21,8.69a3.05,3.05,0,0,0-.67,1.43L.013,14.8a1.527,1.527,0,0,0,1.87,1.77l3.22-.55a2.871,2.871,0,0,0,1.39-.75l8.21-8.69c1.42-1.5,2.06-3.21-.15-5.3C12.353-.791,10.683-.061,9.263,1.439Z" transform="translate(4.002 3.701)")
+                  path(d="M0,0A6.126,6.126,0,0,0,5.45,5.15" transform="translate(11.895 6.59)")
+                  path(d="M0,0H24V24H0Z" fill="none" opacity="0")
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--passed-year-period
+      .b-reports-list__year 2022
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022 Годовой отчет аудиторской организации за 2022 Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-green
+              span Сдан
+            | 12 апреля 2022
+        .b-reports-list__button.b-reports-list__button--center
+          a.btn.btn-secondary.btn-md(href="") Сдать уточненный
+          .small До 31 декабря 2022
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-green
+              span Сдан
+            | 12 апреля 2022
+        .b-reports-list__button.b-reports-list__button--center
+          a.btn.btn-secondary.btn-md(href="") Сдать уточненный
+          .small До 31 декабря 2022
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--passed
+      .b-reports-list__year 2022
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-green
+              span Сдан
+            | 12 апреля 2022
+        .b-reports-list__button
+
+    hr.hr--md
+
+    .b-reports-list__item.b-reports-list__item--draft
+      .b-reports-list__year 2022
+
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-gray
+              span Черновик
+            | Крайний срок: 31 декабря 2022 23:59
+        .b-reports-list__button.b-reports-list__button--right
+          a.btn-edit( href="" )
+              svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+                g
+                  path(d="M9.263,1.439l-8.21,8.69a3.05,3.05,0,0,0-.67,1.43L.013,14.8a1.527,1.527,0,0,0,1.87,1.77l3.22-.55a2.871,2.871,0,0,0,1.39-.75l8.21-8.69c1.42-1.5,2.06-3.21-.15-5.3C12.353-.791,10.683-.061,9.263,1.439Z" transform="translate(4.002 3.701)")
+                  path(d="M0,0A6.126,6.126,0,0,0,5.45,5.15" transform="translate(11.895 6.59)")
+                  path(d="M0,0H24V24H0Z" fill="none" opacity="0")
+
+          a.btn-remove( href="" )
+              svg(xmlns="http://www.w3.org/2000/svg" width="16.251" height="20" viewBox="0 0 16.251 20")
+                path(d="M24.7,11.1H21.264v-.626A1.875,1.875,0,0,0,19.39,8.6h-2.5a1.875,1.875,0,0,0-1.874,1.874V11.1H11.576a1.562,1.562,0,0,0-1.561,1.563v1.25a.624.624,0,0,0,.624.624h15a.625.625,0,0,0,.626-.624v-1.25A1.563,1.563,0,0,0,24.7,11.1Zm-8.438-.626a.625.625,0,0,1,.624-.624h2.5a.625.625,0,0,1,.624.624V11.1h-3.75Z" transform="translate(-10.015 -8.601)")
+                path(d="M10.941,13.909a.2.2,0,0,0-.2.2l.516,10.822a1.873,1.873,0,0,0,1.873,1.786h9.492A1.873,1.873,0,0,0,24.5,24.935l.516-10.822a.2.2,0,0,0-.2-.2Zm9.44,1.561a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Z" transform="translate(-9.823 -6.721)")
+
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-gray
+              span Черновик
+            | Крайний срок: 31 декабря 2022 23:59
+        .b-reports-list__button.b-reports-list__button--right
+          a.btn-edit( href="" )
+              svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+                g
+                  path(d="M9.263,1.439l-8.21,8.69a3.05,3.05,0,0,0-.67,1.43L.013,14.8a1.527,1.527,0,0,0,1.87,1.77l3.22-.55a2.871,2.871,0,0,0,1.39-.75l8.21-8.69c1.42-1.5,2.06-3.21-.15-5.3C12.353-.791,10.683-.061,9.263,1.439Z" transform="translate(4.002 3.701)")
+                  path(d="M0,0A6.126,6.126,0,0,0,5.45,5.15" transform="translate(11.895 6.59)")
+                  path(d="M0,0H24V24H0Z" fill="none" opacity="0")
+
+          a.btn-remove( href="" )
+              svg(xmlns="http://www.w3.org/2000/svg" width="16.251" height="20" viewBox="0 0 16.251 20")
+                path(d="M24.7,11.1H21.264v-.626A1.875,1.875,0,0,0,19.39,8.6h-2.5a1.875,1.875,0,0,0-1.874,1.874V11.1H11.576a1.562,1.562,0,0,0-1.561,1.563v1.25a.624.624,0,0,0,.624.624h15a.625.625,0,0,0,.626-.624v-1.25A1.563,1.563,0,0,0,24.7,11.1Zm-8.438-.626a.625.625,0,0,1,.624-.624h2.5a.625.625,0,0,1,.624.624V11.1h-3.75Z" transform="translate(-10.015 -8.601)")
+                path(d="M10.941,13.909a.2.2,0,0,0-.2.2l.516,10.822a1.873,1.873,0,0,0,1.873,1.786h9.492A1.873,1.873,0,0,0,24.5,24.935l.516-10.822a.2.2,0,0,0-.2-.2Zm9.44,1.561a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Z" transform="translate(-9.823 -6.721)")
+      
+
+    hr.hr--xl
+
+    include ../../modules/pagination/include
+
+
+// end /components/reports-list/

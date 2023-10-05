@@ -1,0 +1,35 @@
+@import '../../styl/component-include.styl'
+
+.pwa-button
+  display none
+  position fixed
+  bottom 15px
+  left 15px
+  background-color #F8F8F8
+  border-radius 10px
+  padding 20px
+  width calc(100% - 30px)
+  font-family $roboto
+  transition( opacity .3s ease )
+
+  @media(max-width 575px)
+
+    &.i-visible
+      display block
+
+    &.i-hide
+      opacity 0
+
+  svg
+    margin 0 auto 20px
+    display block
+
+  p
+    margin-bottom 20px
+    text-align center
+
+  .btn
+    width 100%
+
+    &:first-of-type
+      margin-bottom 10px

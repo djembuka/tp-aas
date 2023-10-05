@@ -1,0 +1,36 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-report-form'
+  - var authorized = 'true'
+
+block title
+  title Сдать отчет организации | Pages | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/registry
+
+  hr
+
+  .container-fluid
+
+    a.bx-calendar-cell( href="javascript:void(0)" data-date="1611532800000" style="position:absolute;top: 1000px; left: 500px;z-index:10;" ) 25
+  
+    h1 Сдать отчет организации
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/registry
+          
+      article.col-12.col-md-8
+        
+        include ../../components/report-form/template
+  
+    

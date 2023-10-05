@@ -1,0 +1,53 @@
+// start /components/report-form/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'report-form-auditor'
+else
+  - var componentsArray = [ 'report-form-auditor' ]
+  
+.b-report-form.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+    
+    #reportFormApp
+    
+    #submitConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="submitConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+          .modal-body
+            h3.text-center Вы хотите отредактировать отчет?
+
+            hr
+
+            p Вы переходите в режим редактирования отчета. После внесения изменений в отчет вам необходимо сдать его, нажав на кнопку «Сдать отчет».
+            
+            p До тех пор, пока вы повторно не отправите отчет, он будет находиться в статусе «Необходимо сдать».
+
+            hr
+
+            .text-center.modal-buttons
+              button.btn.btn-secondary.btn-lg( type="submit" onclick="document.getElementById('reportFormAuditor').submit()" ) Отправить
+              button.btn.btn-light.btn-lg( data-dismiss="modal" ) Отменить
+  
+    link( href="/components/report-form-auditor/chunk-vendors.css" rel="stylesheet" )
+    link( href="/components/report-form-auditor/style_ext.css" rel="stylesheet" )
+    script( src="/components/report-form-auditor/store.js" )
+    script( src="/template/js/velocity.min.js" )
+    script( src="/components/report-form-auditor/chunk-vendors.js" )
+    script( src="/components/report-form-auditor/app.js" )
+    
+    
+
+// end /components/report-form/

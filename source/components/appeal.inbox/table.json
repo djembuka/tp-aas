@@ -1,0 +1,74 @@
+{
+  "cols": [
+    { "field": "id", "title": "Номер (ID)", "sortType": "asc" },
+    { "field": "date", "title": "Дата создания" },
+    { "field": "author", "title": "Автор" },
+    { "field": "object", "title": "Объект обращения" },
+    { "field": "type", "title": "Тип обращения" },
+    { "field": "status", "title": "Статус" }
+  ],
+  "rows": [
+    {
+      "new": true,
+      "url": "/",
+      "target": "_self",
+      "title": "Обращение 35",
+      "data": {
+        "id": "35",
+        "date": "18 мая 2021<br>15:12:41",
+        "author": "Савельева Мария Евгеньевна<br>139847198247",
+        "object": "Петров Петр Иванович<br>22006051514",
+        "type": "Изменение в реестре",
+        "status": "На рассмотрении"
+      }
+    },
+    {
+      "data": {
+        "id": "34",
+        "date": "18 мая 2021<br>15:12:41",
+        "author": "Савельева Мария Евгеньевна<br>139847198247",
+        "object": "Петров Петр Иванович<br>22006051514",
+        "type": "Изменение в реестре",
+        "status": "На рассмотрении"
+      }
+    },
+    {
+      "new": true,
+      "data": {
+        "id": "34",
+        "date": "18 мая 2021<br>15:12:41",
+        "author": "Савельева Мария Евгеньевна<br>139847198247",
+        "object": "Петров Петр Иванович<br>22006051514",
+        "type": "Изменение в реестре",
+        "status": "На рассмотрении"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_self",
+      "title": "Обращение 35",
+      "data": {
+        "id": "35",
+        "date": "18 мая 2021<br>15:12:41",
+        "author": "Савельева Мария Евгеньевна<br>139847198247",
+        "object": "Петров Петр Иванович<br>22006051514",
+        "type": "Изменение в реестре",
+        "status": "На рассмотрении"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_blank",
+      "title": "Обращение 36",
+      "data": {
+        "id": "36",
+        "date": "18 мая 2021<br>15:12:41",
+        "author": "Савельева Мария Евгеньевна<br>139847198247",
+        "object": "Петров Петр Иванович<br>22006051514",
+        "type": "Изменение в реестре",
+        "status": "На рассмотрении"
+      }
+    }
+  ],
+  "pagination": "<div class=\"b-pagination-block text-right ph-block sys-pagination-aas ph-block--animated\"><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">1</a><span class=\"main-ui-pagination-page main-ui-pagination-active i-active\">2</span><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">3</a><a class=\"main-ui-pagination-page main-ui-pagination-dots\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=151\">...</a><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=298\">298</a><a class=\"main-ui-pagination-arrow main-ui-pagination-prev i-backward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">Предыдущая</a><a class=\"main-ui-pagination-arrow main-ui-pagination-next i-forward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">Следующая</a></div>"
+}

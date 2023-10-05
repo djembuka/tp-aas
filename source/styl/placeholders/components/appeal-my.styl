@@ -1,0 +1,47 @@
+.b-appeal-my  
+
+  &.ph-block
+    position relative
+  
+  .ph
+    display flex
+    justify-content flex-start
+
+    > div
+      background-color $placeholder-color
+      border-radius 3px
+      height 48px
+      width calc((100% - 30px * 4) / 9 * 2)
+      margin-right 30px
+
+      &:first-child
+        width calc((100% - 30px * 4) / 9 * 1)
+
+      &:last-child
+        margin-right 0
+
+    @media( max-width 1199px )
+      justify-content space-between
+      flex-wrap wrap
+      
+      > div
+        width calc( (100% - 30px) / 2 ) !important
+        margin 0 0 30px
+
+    @media( max-width 767px )
+      
+      > div
+        width 100% !important
+        margin 0 0 30px
+
+        &:last-child
+          margin-bottom 0
+        
+    &-content
+      position absolute
+      top 0
+      left 0
+      width 100%
+      transition( opacity .5s ease )
+      opacity 0
+      z-index 0

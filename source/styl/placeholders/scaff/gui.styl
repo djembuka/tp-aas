@@ -1,0 +1,89 @@
+body
+  margin 0
+  overflow-y scroll
+
+.container-fluid
+  padding-right 15px
+  padding-left 15px
+  margin-right auto
+  margin-left auto
+  width 100%
+  box-sizing border-box
+  
+  @media ( min-width 1200px )
+    max-width 1480px
+
+  @media ( min-width 768px )
+    padding-right 35px !important
+    padding-left 35px !important
+    
+*, ::after, ::before
+  box-sizing: border-box
+
+.row
+  display -ms-flexbox
+  display flex
+  -ms-flex-wrap wrap
+  flex-wrap wrap
+  margin-right -15px
+  margin-left -15px
+  
+  &.justify-content-md-between
+  
+    @media (min-width 768px)
+      -ms-flex-pack justify!important
+      justify-content space-between!important
+
+h1, .h1, h2, .h2, h3, .h3, p, blockquote, ul, ol
+  max-width 770px
+
+h1
+  font-size $38px
+  line-height 1.18
+  height 44px
+  position relative
+  margin 0 0 1rem !important
+  color #fff
+  overflow hidden
+  transition( all .5s ease )
+  
+  &:after
+    content ''
+    display block
+    position absolute
+    top 0
+    left 0
+    height 44px
+    background-color $placeholder-color
+    width 60%
+    transition( all .5s ease )
+    z-index 1
+
+.h1-flex-wrapper .btn
+  display none
+
+hr
+  margin-top 1rem
+  margin-bottom 1rem
+  border none
+  border-top 1px solid transparent !important
+  
+  &.hr--xs
+    margin-top .25rem
+    margin-bottom .25rem
+  
+  &.hr--sm
+    margin-top .5rem
+    margin-bottom .5rem
+  
+  &.hr--md
+    margin-top .75rem
+    margin-bottom .75rem
+  
+  &.hr--lg
+    margin-top 1.5rem
+    margin-bottom 1.5rem
+  
+  &.hr--xl
+    margin-top 2rem
+    margin-bottom 2rem

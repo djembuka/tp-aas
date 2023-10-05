@@ -1,0 +1,119 @@
+@import '../../styl/component-include.styl'
+
+.b-study-courses-create
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-study-courses-create
+  text-align left
+
+  &--loading
+    pointer-events none
+    filter blur(2px)
+
+  .b-float-label-select-vc
+    margin-bottom 2rem
+
+.b-scc
+
+  &-nav
+    display flex
+    align-items center
+
+    &__item
+      font-size $16px
+      font-family $roboto
+      font-weight $bold
+      display flex
+      align-items center
+      pointer-events none
+
+      a
+        color #8393AA
+
+      &:after
+        content ''
+        display block
+        width 8px
+        height 8px
+        border-right 1px solid #000
+        border-bottom 1px solid #000
+        transform(rotate(-45deg))
+        margin 0 1rem
+
+      &:last-of-type:after
+        display none
+
+      &--visited
+        pointer-events auto
+
+        a
+          color $link-color
+
+      &--active,
+      &--visited&--active
+        pointer-events none
+
+        a
+          color #3B3B3B
+
+  &-step
+
+    &__controls
+      width 100%
+      max-width 530px
+
+    .b-float-label
+      margin-bottom 2rem
+
+    &__button
+      margin-top 3rem
+
+    &__error
+      color $danger-color
+      text-align center
+      margin-bottom 2rem
+
+    &__block
+      background-color #FAFBFC
+      padding 1.25rem
+      border-radius 0.625rem
+      position relative
+
+      &-delete
+        position absolute
+        top 1.25rem
+        right 1.25rem
+
+      &-title
+        color #3B3B3B
+        font-size $18px
+        font-family $roboto
+        font-weight $bold
+        margin-bottom 2rem
+
+      &-controls
+        width 100%
+        max-width 530px
+
+@import './style/collapse-vue-component.styl'
+@import './style/checkbox-vue-component.styl'
+@import './style/add-fieldset-block.styl'
+@import './style/select.styl'
+@import './style/datepicker.styl'
+@import './style/transition.styl'

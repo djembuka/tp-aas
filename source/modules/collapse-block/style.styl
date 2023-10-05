@@ -1,0 +1,85 @@
+@import '../../styl/component-include.styl'
+
+.b-collapse-block
+  display block
+  border-bottom 1px solid $line-color
+
+  &__head
+    font-size $24px
+    font-weight bold
+    font-family $roboto
+    padding 25px 0
+    display flex
+    justify-content space-between
+    cursor pointer
+      
+    a
+      width calc( 100% - 32px - 15px )
+      display flex
+      justify-content space-between
+
+      .b-collapse-block.slide &
+
+        &,
+        &:hover,
+        &:focus,
+        &:active
+          color #3b3b3b
+
+      strong
+        display inline-block
+        vertical-align top
+        width 22px
+        height 30px
+        background-bg()
+        margin-right 20px
+
+      em
+        width calc( 100% - 22px )
+
+      i:first-child
+        font-style normal
+        margin-right 12px
+
+      i:last-child
+        font-size $14px
+        font-style normal
+        color #c0cad6
+        white-space nowrap
+
+    span
+      display inline-block
+      width 32px
+      height 32px
+      background-color $line-color
+      border-radius 5px
+      position relative
+
+      &:before,
+      &:after
+        content ''
+        position absolute
+        top 8px
+        left 15px
+        width 0
+        height 16px
+        border-right 1px solid #666666
+        transition( transform .5s ease )
+
+      &:before
+
+        .b-collapse-block.slide &
+          transform( rotate( 270 deg ))
+
+      &:after
+        transform( rotate( 90deg ))
+
+        .b-collapse-block.slide &
+          transform( rotate( 450 deg ))
+
+  &__body
+    display none
+
+    .b-collapse-block.open &
+    .b-collapse-block.show-on-load &
+      display block

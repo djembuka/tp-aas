@@ -1,0 +1,404 @@
+window.onload = function () {
+  //excerpt vue application
+
+  if (!window.Vue && !window.Vuex) return;
+
+  //global vars
+  window.moderationScriptURL = {
+    getUsers: '/components/excerpts/getuserjson.json',
+    getExcerpts: '/components/excerpts/getuserdata.json',
+  };
+
+  window.moderationSrcPath = '/template/images/';
+
+  const store = Vuex.createStore({
+    state() {
+      return window.excerptStore;
+    },
+    mutations: {
+      changeUser(state, payload) {
+        state.user = payload;
+      },
+      changeBlockState(state, payload) {
+        state.blocks[payload.index].state = payload.state;
+      },
+      changeProp(state, payload) {
+        state.blocks[payload.index][payload.prop] = payload.value;
+      },
+      changeBlocks(state, payload) {
+        state.blocks = payload;
+      },
+    },
+  });
+
+  const excerptsApp = Vue.createApp({
+    data() {
+      return {};
+    },
+    template: `
+      <excerpt-search></excerpt-search>
+      <person-card></person-card>
+      <div class="b-excerpts-items" v-if="$store.state.blocks">
+        <excerpt-item v-for="(block, index) in $store.state.blocks" :index='index' :block="block" :key="block.id"></excerpt-item>
+      </div>
+      <div class="b-excerpts-placeholder" v-else>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    `,
+    methods: {},
+    mounted() {
+      //hide more
+      document.documentElement.addEventListener('click', (e) => {
+        if (
+          e.target.closest('.b-excerpts__more__files') ||
+          e.target.className.search('b-excerpts__more__files') >= 0 ||
+          e.target.className.search('b-excerpts__more__button') >= 0
+        ) {
+          return;
+        }
+        if (this.$store.state.blocks) {
+          this.$store.state.blocks.forEach((block, index) => {
+            store.commit('changeProp', {
+              index: index,
+              prop: 'isMoreOpen',
+              value: false,
+            });
+          });
+        }
+      });
+    },
+  });
+
+  excerptsApp.use(store);
+
+  //person card
+  excerptsApp.component('person-card', {
+    data() {
+      return {};
+    },
+    template: `
+      <div class="b-excerpts-person-card">
+        <b class="b-excerpts-person-card__placeholder" v-html="$store.state.text.noUser" v-if="!$store.state.user.ID"></b>
+        <div v-else class="b-excerpts-person-card__data">
+          <div class="b-excerpts-person-card__photo" :style="$store.state.user.PHOTO"></div>
+          <div>
+            <b class="b-excerpts-person-card__name">{{ $store.state.user.FIO }}</b>
+            <span class="b-excerpts-person-card__ornz">ОРНЗ: <b>{{ $store.state.user.ORNZ }}</b></span>
+          </div>
+          
+        </div>
+      </div>
+    `,
+  });
+
+  //search component
+  excerptsApp.component('excerpt-search', {
+    data() {
+      return {
+        users: [],
+        activeUser: {},
+        activeHint: [],
+        inputText: '',
+        hover: false,
+        isActive: false,
+      };
+    },
+
+    computed: {
+      isClearable() {
+        return this.inputText !== '' && this.hover ? true : false;
+      },
+    },
+
+    template: `<div class="b-float-label b-excerpts-search" @mouseover="hover=true;" @mouseout="hover=false;">
+      <input ref="input" id="moderation-filter-fio" type="text" name="FIO" required="" autocomplete="off" v-model="inputText" @input="changeInput" @blur="blurInput($event)" @keydown.enter.prevent="enterInput" @keydown.up.prevent="upArrow()" @keydown.down.prevent="downArrow()">
+      <label for="moderation-filter-fio" :class="{active: isActive}">ФИО или ОРНЗ</label>
+      <div class="b-input-clear" @click.prevent="clearInput()" v-show="isClearable"></div>
+      <div class="b-input-hint">
+        <div v-for="(user, index) in users" :data-id="user.ID" :data-ornz="user.ORNZ" :class="{active: activeHint[index]}" class="b-input-hint__item" @click.prevent="clickHint($event)"><div class="b-input-hint__img" :style="user.PHOTO"></div><a href="" class="b-input-hint__text">{{user.ORNZ}}<br>{{user.FIO}}</a></div>
+      </div>
+    </div>`,
+
+    methods: {
+      changeInput() {
+        this.activeHint = [];
+        this.activeUser = {};
+
+        if (this.inputText.length >= 5) {
+          (async () => {
+            try {
+              let response = await fetch(
+                `${window.moderationScriptURL.getUsers}?s=${this.inputText}`,
+                {
+                  headers: {
+                    Authentication: 'secret',
+                  },
+                }
+              );
+              let result = await response.json();
+
+              //change active hint array
+              this.activeHint = result.map((elem) => null);
+
+              //store.commit( 'changeUsers', result );
+              this.users = result;
+            } catch (err) {
+              throw err;
+            }
+          })();
+        } else {
+          this.users = [];
+        }
+      },
+      upArrow() {
+        let activeIndex = this.activeHint.indexOf(true);
+        let arr = this.activeHint.map((elem) => null);
+        if (activeIndex >= 0) {
+          this.activeHint[activeIndex] = null;
+        }
+        if (--activeIndex < 0) {
+          activeIndex = this.activeHint.length - 1;
+        }
+        arr[activeIndex] = true;
+        //lightlight hint
+        this.activeHint = arr;
+        //set active user
+        this.activeUser =
+          this.users.filter((user) => user.ORNZ === this.inputText)[0] || {};
+      },
+      downArrow() {
+        let activeIndex = this.activeHint.indexOf(true);
+        let arr = this.activeHint.map((elem) => null);
+        if (activeIndex >= 0) {
+          this.activeHint[activeIndex] = null;
+        }
+        if (++activeIndex > this.activeHint.length - 1) {
+          activeIndex = 0;
+        }
+        arr[activeIndex] = true;
+        //lightlight hint
+        this.activeHint = arr;
+        //set active user
+        this.activeUser =
+          this.users.filter((user) => user.ORNZ === this.inputText)[0] || {};
+      },
+      blurInput(e) {
+        /*setTimeout(() => {
+          this.renderExcerpts();
+        }, 500);*/
+        if (e.target.value !== '') {
+          this.isActive = true;
+        } else {
+          this.isActive = false;
+        }
+      },
+      clickHint(e) {
+        let id = e.target.getAttribute('data-id');
+        if (!id) {
+          id = e.target.parentNode.getAttribute('data-id');
+        }
+        this.activeUser = this.users.find((user) => user.ID === id) || {};
+        this.renderExcerpts();
+      },
+      enterInput() {
+        //check if there is an active hint
+        let activeIndex = this.activeHint.indexOf(true);
+        if (activeIndex >= 0) {
+          this.activeUser = this.users[activeIndex] || {};
+        } else {
+          //if not
+          if (this.inputText.match(/\d+/g)) {
+            this.activeUser =
+              this.users.filter(
+                (user) => user.ORNZ.search(this.inputText) >= 0
+              )[0] || {};
+          } else {
+            this.activeUser =
+              this.users.filter(
+                (user) => user.FIO.search(this.inputText) >= 0
+              )[0] || {};
+          }
+        }
+        this.renderExcerpts();
+      },
+      clearInput() {
+        this.inputText = '';
+        this.activeHint = [];
+        this.activeUser = {};
+        this.isActive = false;
+      },
+      renderExcerpts() {
+        this.inputText = '';
+        this.isActive = false;
+        this.users = [];
+        //set user id
+        store.commit('changeUser', this.activeUser || {});
+        //request excerpts
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.moderationScriptURL.getExcerpts}?id=${this.activeUser.ID}&type=${this.activeUser.TYPE}`,
+              {
+                headers: {
+                  Authentication: 'secret',
+                },
+              }
+            );
+            let result = await response.json();
+
+            if (result.blocks) {
+              store.commit('changeBlocks', result.blocks);
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+      },
+    },
+  });
+
+  //excerpt block component
+  excerptsApp.component('excerpt-item', {
+    props: ['index', 'block'],
+    template: `
+      <div class="b-excerpts-item">
+        <div class="b-excerpts-item__title">{{ block.text.head }}</div>
+
+        <div v-if="block.state==='empty'" class="b-excerpts-item__placeholder" :style="$store.state.images.placeholder"></div>
+        <div v-else-if="block.state==='loading'" class="b-excerpts__loader">
+          <div class="circle-loader">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"> </div>
+            <div class="circle circle-3"></div>
+            <div class="circle circle-4"></div>
+            <div class="circle circle-5"></div>
+          </div>
+        </div>
+        <excerpt-file v-if="block.state==='excerpt'" :index="index" :title="block.title" :date="block.date" :files="block.files"></excerpt-file>
+
+        <div class="b-excerpts-item__btn">
+          <a class="btn btn-secondary btn-md" href="#" data-toggle="modal" data-target="#getExcerptModal" @click.prevent="clickBtn()">{{ block.btn.text }}</a>
+        </div>
+      </div>
+    `,
+    methods: {
+      clickBtn() {
+        //show modal
+        $('#getExcerptModal').modal('show');
+
+        //send request
+        this.sendRequest();
+      },
+      sendRequest() {
+        (async () => {
+          try {
+            //change block's state to loading
+            store.commit('changeBlockState', {
+              index: this.index,
+              state: 'loading',
+            });
+
+            //get json
+            let response = await fetch(this.block.btn.url);
+            let excerpt = await response.json();
+
+            //close modal
+            setTimeout(() => {
+              $('#getExcerptModal').modal('hide');
+            }, 1500);
+
+            if (excerpt.STATUS !== 'Y') {
+              //show error message
+              store.commit('changeBlockState', {
+                index: this.index,
+                state: 'error',
+              });
+              store.commit('changeProp', {
+                index: this.index,
+                prop: 'error',
+                value: excerpt.MESSAGE,
+              });
+              return;
+            }
+
+            //change block's state to excerpt
+            store.commit('changeBlockState', {
+              index: this.index,
+              state: 'excerpt',
+            });
+
+            //fill store
+            store.commit('changeProp', {
+              index: this.index,
+              prop: 'title',
+              value: excerpt.DATA.title,
+            });
+            store.commit('changeProp', {
+              index: this.index,
+              prop: 'date',
+              value: excerpt.DATA.date,
+            });
+            store.commit('changeProp', {
+              index: this.index,
+              prop: 'files',
+              value: excerpt.DATA.files,
+            });
+
+            //download the excerpt immediately
+            if (excerpt.DATA.files.pdf.url) {
+              window.open(excerpt.DATA.files.pdf.url);
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+      },
+    },
+    mounted() {
+      if (store.state.blocks[this.index].state === 'loading') {
+        this.sendRequest();
+      }
+    },
+  });
+
+  //excerpt item component
+  excerptsApp.component('excerpt-file', {
+    data() {
+      return {};
+    },
+    props: ['index', 'title', 'date', 'files'],
+    template: `
+      <div class="b-excerpts__item">
+        <a class="b-excerpts__file" target="_blank" :href="files.pdf.url" style="background-image: url('/template/images/pdf.svg')"></a>
+        <div class="b-excerpts__title">
+          <a :href="files.pdf.url" v-html="title"></a>
+          <span>{{date}}</span>, <span>{{files.pdf.size}}</span>
+        </div>
+        <div class="b-excerpts__more" v-if="files['pdf-sig']">
+          <a class="b-excerpts__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')" @click="clickMoreBtn($event)"></a>
+          <div class="b-excerpts__more__files" :class="{show: $store.state.blocks[index].isMoreOpen}">
+            <span>Для некоторых сервисов требуется формат PDF + .sig</span>
+            <div class="b-excerpts__more__files-wrapper">
+              <a :href="files['pdf-sig'].pdf.url" target="_blank" style="background-image: url('/template/images/pdf.svg')">pdf</a>
+              <a :href="files['pdf-sig'].sig.url" target="_blank" style="background-image: url('/template/images/sig.svg')">sig</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+    methods: {
+      clickMoreBtn(e) {
+        e.preventDefault();
+        store.commit('changeProp', {
+          index: this.index,
+          prop: 'isMoreOpen',
+          value: !store.state.blocks[this.index].isMoreOpen,
+        });
+      },
+    },
+  });
+
+  excerptsApp.mount('#excerptsApp');
+};

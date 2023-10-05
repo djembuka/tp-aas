@@ -1,0 +1,202 @@
+// start /components/registry-work/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'registry-work'
+else
+  - var componentsArray = [ 'registry-work' ]
+  
+.b-registry.ph-block
+
+  .ph
+
+    .ph__form
+      div
+      div
+    .ph__table
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    p В разделе указаны сводные данные из реестра аудиторских компаний в которых вы отмечены, как сотрудник(ца).
+
+    hr
+
+    table.table.table-responsive( data-result="/components/registry-work/result.json" )
+      thead
+        tr
+          th.text-left( data-field="name" ) Название компании
+          th( data-field="ornz" ) ОРНЗ
+          th( data-field="occupation" ) Должность
+          th( data-field="comments" ) Комментарий
+      tbody
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20606017533
+          td Аудитор
+          td.text-danger Нет в ваших данных
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20406000014
+          td Аудитор
+          td.text-success Совпадает с вашими данными
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20406000036
+          td Аудитор
+          td.text-success Совпадает с вашими данными
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20806000042
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20306000057
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20306010960
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+    hr
+
+    p В разделе указаны сводные данные из реестра аудиторских компаний в которых вы отмечены, как сотрудник(ца).
+
+    hr
+
+    table.table.table-responsive( data-result="/components/registry-work/result.json" )
+      thead
+        tr
+          th.text-left( data-field="name" ) Название компании
+          th( data-field="ornz" ) ОРНЗ
+          th( data-field="occupation" ) Должность
+          th( data-field="comments" ) Комментарий
+      tbody
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20606017533
+          td Аудитор
+          td.text-danger Нет в ваших данных
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20406000014
+          td Аудитор
+          td.text-success Совпадает с вашими данными
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20406000036
+          td Аудитор
+          td.text-success Совпадает с вашими данными
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20806000042
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20306000057
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20306010960
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+    hr
+
+    p В разделе указаны сводные данные из реестра аудиторских компаний в которых вы отмечены, как сотрудник(ца).
+
+    hr
+
+    table.table.table-responsive( data-result="/components/registry-work/result.json" )
+      thead
+        tr
+          th.text-left( data-field="name" ) Название компании
+          th( data-field="ornz" ) ОРНЗ
+          th( data-field="occupation" ) Должность
+          th( data-field="comments" ) Комментарий
+      tbody
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20606017533
+          td Аудитор
+          td.text-danger Нет в ваших данных
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20406000014
+          td Аудитор
+          td.text-success Совпадает с вашими данными
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20406000036
+          td Аудитор
+          td.text-success Совпадает с вашими данными
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20806000042
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20306000057
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+        tr( data-url="/pages/profile/" )
+          td ООО «Адит»
+          td 20306010960
+          td Аудитор
+          td.text-danger Нет в ваших данных
+
+    h3 Что делать если данные не соответствуют действительности?
+    p Если вы нашли в таблице компании, которые неверно указали вас в качестве сотрудника, вам необходимо сообщить об этом в отдел по работе с членами.
+    p 
+      a( href="" ) Инструкция по устранению ошибки.
+
+    hr
+
+    table.table
+      thead
+        tr
+          th.text-left Название компании
+          th.text-left Комментарий
+      tbody
+        tr
+          td.text-left Нет
+          td.text-left Вы не указаны ни в одной из аудиторских компаний. Эта информация совпадает с
+            | 
+            a( href="" ) вашими данными
+            | .
+
+    hr
+
+    table.table
+      thead
+        tr
+          th.text-left Название компании
+          th.text-left Комментарий
+      tbody
+        tr
+          td.text-left Нет
+          td.text-left.text-danger Вы не указаны ни в одной из аудиторских компаний. Эта не совпадает с 
+            | 
+            a( href="" ) вашими данными
+            | .
+
+// end /components/registry-work/

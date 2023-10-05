@@ -1,0 +1,104 @@
+// start /components/appeal.change-registry/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'appeal.change-registry'
+else
+  - var componentsArray = [ 'appeal.change-registry' ]
+  
+.b-appeal-change-registry.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    p Выберите тип изменения, которое вы хотите внести. Каждое изменение это отдельная заявка, которую необходимо отправить в СРО ААС. Вы сможете создать новое изменение, только после отправки черновика предыдущего 
+
+    hr
+
+    .row
+      .col-sm-6
+        .b-appeal-change-registry__select
+          label Быстрый выбор типа изменения 
+          select#appealChangeRegistrySelect
+            option( value="blockId1") Изменение информации об организации
+            option( value="blockId2") Изменение информации о филалах
+            option( value="blockId3") Изменение состава учредителей (участников)
+            option( value="blockId4") Изменение учредителя (юридического лица)
+            option( value="blockId5") Изменения сведений о единоличном исполнительном органе
+            option( value="blockId6") Изменения сведений о членах коллегиального исполнительного органа
+            option( value="blockId7") Изменения сведений об аудиторах
+            option( value="blockId8") Изменения сведений о деятельности
+            option( value="blockId9") Изменения сведений о международной деятельности
+
+    hr
+
+    .b-collapse-block.open.slide( data-id="blockId1" )
+      .b-collapse-block__head
+        a( href="" ) Изменение информации об организации
+        span
+      .b-collapse-block__body
+        include blocks
+        
+    .b-collapse-block( data-id="blockId2" )
+      .b-collapse-block__head
+        a( href="" ) Изменение информации о филалах
+        span
+      .b-collapse-block__body
+        include blocks
+
+    .b-collapse-block( data-id="blockId3" )
+      .b-collapse-block__head
+        a( href="" ) Изменение состава учредителей (участников)
+        span
+      .b-collapse-block__body
+        include blocks
+
+    .b-collapse-block( data-id="blockId4" )
+      .b-collapse-block__head
+        a( href="" ) Изменение учредителя (юридического лица)
+        span
+      .b-collapse-block__body
+        include blocks
+
+    .b-collapse-block( data-id="blockId5" )
+      .b-collapse-block__head
+        a( href="" ) Изменения сведений о единоличном исполнительном органе
+        span
+      .b-collapse-block__body
+        include blocks
+
+    .b-collapse-block( data-id="blockId6" )
+      .b-collapse-block__head
+        a( href="" ) Изменения сведений о членах коллегиального исполнительного органа
+        span
+      .b-collapse-block__body
+        include blocks
+
+    .b-collapse-block( data-id="blockId7" )
+      .b-collapse-block__head
+        a( href="" ) Изменения сведений об аудиторах
+        span
+      .b-collapse-block__body
+        include blocks
+
+    .b-collapse-block( data-id="blockId8" )
+      .b-collapse-block__head
+        a( href="" ) Изменения сведений о деятельности
+        span
+      .b-collapse-block__body
+        include blocks
+
+    .b-collapse-block( data-id="blockId9" )
+      .b-collapse-block__head
+        a( href="" ) Изменения сведений о международной деятельности
+        span
+      .b-collapse-block__body
+        include blocks
+
+// end /components/appeal.change-registry/

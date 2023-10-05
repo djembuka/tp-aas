@@ -1,0 +1,102 @@
+doctype html
+html
+  head
+    title Справка аудиторской организации
+    meta( charset="utf-8" )
+    
+  body
+    link( href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700" rel="stylesheet" )
+    link( href="/components/pdf/excerpt.css" rel="stylesheet" )
+
+    table.header
+      col( width="150" )
+      col( width="500" )
+      col( width="150" )
+      tr
+        td.aas-logo( rowspan="5" )
+          img( src="/template/images/logo-aas-small.svg" alt="СРО ААС" width="140" )
+        td.header-companyname Саморегулируемая организация аудиторов
+        td.ifac-logo( rowspan="5" )
+          img( src="/template/images/logo-ifac.svg" alt="СРО ААС" width="70" )
+      tr
+        td.header-companytitle Ассоциация «Содружество»
+      tr
+        td.header-membership член Международной Федерации Бухгалтеров (IFAC)
+      tr
+        td.header-inn (ОГРН 1097799010870 ИНН 7729440813 КПП 772901001)
+      tr
+        td.header-address 119192, г. Москва, Мичуринский проспект, дом 21, корпус 4.<br>т: +7 (495) 734-22-22, ф: +7 (495) 734-04-22, www.auditor-sro.org, info@auditor-sro.org
+
+    table
+      tr
+        td.text-right.pb-1 По месту требования
+
+    table.h1
+      tr
+        td.h1-title СПРАВКА
+
+    table.date-number
+      tr
+        td.date «9» апреля  2021 г.
+        td.number № 450-ФС/21
+
+    table.text
+      tr
+        td.text( style="padding-bottom: 15px;") Настоящим подтверждаем, что аудиторская организация
+      tr
+        td.fio
+          b ДАННЫЕ
+      tr
+        td.note (полное наименование аудиторской организации)
+
+    table.certificate
+      tr
+        td является членом Саморегулируемой организации аудиторов Ассоциации «Содружество» (СРО ААС) с «9»&nbsp;февраля&nbsp;2002&nbsp;г. по настоящее время.
+
+    table.table-data 
+      col( width="40" )
+      col( width="300" )
+      col( width="460" )
+      tbody
+        tr 
+          td( colspan="3" ) Сведения об аудиторской организации:
+        each title, index in ['Основной регистрационный номер записи (ОРНЗ)', 'Сведения о государственной регистрации (ОГРН)', 'Индивидуальный налоговый номер (ИНН)', 'Адрес (место нахождения)']
+          tr.border 
+            td( align="center" )= index+1
+            td= title
+            td ДАННЫЕ
+
+      tbody
+
+        - var arr = [['Вид нарушения', 'Меры дисциплинарного воздействия', 'Номер и дата принятия решения', 'Орган, принявший решения', 'Срок, на который приостановлено членство', 'Дата принятия решения о восстановлении членства', 'Дата, с которой восстановлено членство']]
+
+        each title, blockIndex in ['Сведения о применении мер дисциплинарного воздействия со стороны СРО ААС за период 3 (трех) лет:']
+
+          tr 
+            td( colspan="3" )= title
+
+          tr.border 
+            td( align="center" colspan="3" )
+              b 1
+          each data, index in arr[blockIndex]
+            tr.border 
+              td( align="center" )= index+1
+              td= data
+              td ДАННЫЕ
+
+    table
+      tr
+        td
+          p
+            b Меры дисциплинарного воздействия со стороны СРО ААС за период 3 (трех) лет не применялись.
+
+    table.issue-date
+      tr
+        td Справка сформирована по состоянию на <b>«7» апреля 2021 года</b>.
+
+    table.signature( autosize="1" )
+      tr
+        td.occupation Генеральный директор СРО ААС
+        td.signature
+          img( src="/template/images/signature-stamp.png" alt="" width="280" )
+        td.fio Носова О.А.

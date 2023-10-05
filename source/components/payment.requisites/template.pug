@@ -1,0 +1,52 @@
+// start /components/payment.requisites/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'payment.requisites'
+else
+  - var componentsArray = [ 'payment.requisites' ]
+  
+.b-payment-requisites.ph-block
+
+  .ph
+    .ph-wrapper
+      div
+      div
+
+  .ph-content
+
+    h2 Размер и порядок уплаты обязательных взносов c 01.01.2023 года
+
+    .b-payment-requisites-wrapper 
+
+      .b-payment-requisites-item.b-blue
+        .b-payment-requisites-text
+          .b-payment-requisites-h3 Членский взнос аудиторов за 1 квартал (ежеквартальный)
+        .b-payment-requisites-footer
+          .b-payment-requisites-price 1 000 &#8381;
+          a.btn.btn-dark.btn-md( href="") Оплатить
+
+      .b-payment-requisites-item.b-green
+        .b-payment-requisites-text
+          .b-payment-requisites-h3 Членский взнос аудиторов за год
+          .b-payment-requisites-p Членские взносы за четыре квартала при уплате до 31 января 2023 года
+        .b-payment-requisites-footer
+          .b-payment-requisites-price 3 000 &#8381;
+          a.btn.btn-success.btn-md( href="") Оплатить
+
+      .b-payment-requisites-item.b-blue
+        .b-payment-requisites-text
+          .b-payment-requisites-h3 Членский взнос аудиторов за 1 квартал (ежеквартальный)
+          .b-payment-requisites-p Членские взносы за четыре квартала при уплате до 31 января 2023 года
+        .b-payment-requisites-footer
+          .b-payment-requisites-price 1 000 &#8381;
+          a.btn.btn-dark.btn-md( href="") Оплатить
+
+      .b-payment-requisites-item.b-green
+        .b-payment-requisites-text
+          .b-payment-requisites-h3 Членский взнос аудиторов за год
+        .b-payment-requisites-footer
+          .b-payment-requisites-price 3 000 &#8381;
+          a.btn.btn-success.btn-md( href="") Оплатить
+
+// end /components/payment.requisites/

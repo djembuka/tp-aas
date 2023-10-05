@@ -1,0 +1,68 @@
+// start /components/appeal.history/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'appeal.history'
+else
+  - var componentsArray = [ 'appeal.history' ]
+  
+.b-appeal-history.ph-block
+
+  .ph
+    .ph__table
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    table.table.table-responsive( data-result="/components/registry/result.json" )
+      thead
+        tr
+          th( data-field="id" ) Номер (ID)
+          th( data-field="created" ) Дата создания
+          th( data-field="type" ) Тип обращения
+          th( data-field="subtype" ) Подтип обращения
+          th( data-field="status" ) Статус
+          th
+      tbody
+        tr( data-url="/pages/appeal-detail-public/" data-target="_self" )
+          td 34
+          td 18 мая 2021<br>15:12:41
+          td Изменение в реестре
+          td Изменение в реестре
+          td 
+            .label-blue
+              span На проверке
+        tr( data-url="/pages/appeal-detail-public/" data-target="_self" )
+          td 34
+          td 18 мая 2021<br>15:12:41
+          td Изменение в реестре
+          td Изменение в реестре
+          td 
+            .label-blue
+              span На проверке
+        tr( data-url="/pages/appeal-detail-public/" data-target="_self" )
+          td 34
+          td 18 мая 2021<br>15:12:41
+          td Изменение в реестре
+          td Изменение в реестре
+          td 
+            .label-blue
+              span На проверке
+        tr( data-url="/pages/appeal-detail-public/" data-target="_self" )
+          td 34
+          td 18 мая 2021<br>15:12:41
+          td Изменение в реестре
+          td Изменение в реестре
+          td 
+            .label-blue
+              span На проверке
+
+    hr.hr--xl
+
+    include ../../modules/pagination/include
+
+// end /components/appeal.history/

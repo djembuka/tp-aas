@@ -1,0 +1,60 @@
+doctype html
+html
+  head
+    title "Стандартная выписка по (индивидуальному) аудитору", форма от 07.06.2021
+    meta( charset="utf-8" )
+    
+  body
+    link( href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700" rel="stylesheet" )
+    link( href="/components/pdf/excerpt.css" rel="stylesheet" )
+
+    table.header
+      col( width="150" )
+      col( width="500" )
+      col( width="150" )
+      tr
+        td.aas-logo( rowspan="5" )
+          img( src="/template/images/logo-aas-small.svg" alt="СРО ААС" width="140" )
+        td.header-companyname Саморегулируемая организация аудиторов
+        td.ifac-logo( rowspan="5" )
+          img( src="/template/images/logo-ifac.svg" alt="СРО ААС" width="70" )
+      tr
+        td.header-companytitle Ассоциация «Содружество»
+      tr
+        td.header-membership член Международной Федерации Бухгалтеров (IFAC)
+      tr
+        td.header-inn (ОГРН 1097799010870 ИНН 7729440813 КПП 772901001)
+      tr
+        td.header-address 119192, г. Москва, Мичуринский проспект, дом 21, корпус 4.<br>т: +7 (495) 734-22-22, ф: +7 (495) 734-04-22, www.auditor-sro.org, info@auditor-sro.org
+
+    table.h1
+      tr
+        td.h1-title
+          b Распоряжение
+      tr
+        td.text-center.pb-4
+          b о возбуждении дисциплинарного производства<br>[наименование или ФИО], ОРНЗ [00000000000]
+
+    table.date-number
+      tr
+        td.date.pb-2 г. Москва, ДАТА
+        td.number.pb-2
+          b Дело [номер дела]
+
+    table.text.mb-4
+      tr
+        td.pb-1 Член СРО ААС, в отношении которого возбуждено дисциплинарное производство:
+      tr
+        td.pb-1
+          b [ФИО или Наименование], ОРНЗ [00000000000].
+      tr
+        td.pb-1 Основание возбуждения дисциплинарного производства: поступление в Дисциплинарную комиссию материалов о дисциплинарном нарушении — [наименование в род.пад. — Отчета, Акта, Заключения, Решения и пр.].
+      tr
+        td.pb-1 Дисциплинарное производство возбуждено в соответствии с п. 2, 3 ч. 2 ст. 39 Дисциплинарного кодекса СРО ААС.
+
+    table.signature( autosize="1" )
+      tr
+        td.occupation.text-left Председатель<br>Дисциплинарной комиссии СРО ААС
+        td.signature
+            img( src="" width="100" height="50" alt="")
+        td.fio Н. В. Черкасова 

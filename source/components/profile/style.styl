@@ -1,0 +1,198 @@
+@import '../../styl/component-include.styl'
+
+.b-profile
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-profile
+  
+  &__photo
+    background-color $line-color
+    border-radius 10px
+    height 200px
+    position relative
+    margin-bottom 110px
+
+    i
+      position absolute
+      top 30px
+      left 50%
+      font-style  normal
+      margin-left -119px
+      border-radius 51%
+      background-bg()
+      width 236px
+      height 236px
+      z-index 1
+
+      span
+        position absolute
+        top 148px
+        left calc(50% - 170px / 2)
+        right 0
+        height 48px
+        line-height 48px
+        border-radius 24px
+        text-align center
+        color #fff
+        font-size $16px
+        width 170px
+        z-index 2
+
+  &__button
+    height 48px
+
+    .circle-loader
+      display none
+      margin-top 5px
+
+    &.b-profile__button--loading
+
+      .btn
+        display none
+
+      .circle-loader
+        display flex
+
+  .b-collapse-block__head,
+  .text-muted.small,
+  .text-muted.small + p
+    font-family $roboto
+    
+  .b-collapse-block__body
+    padding-bottom 20px
+
+  table.table-responsive
+
+    @media( min-width 1200px )
+      display table
+      max-width 1000px
+      margin 0 auto
+
+.b-tabs
+
+  &__nav
+    border-bottom 1px solid #f2f2f2
+    font-size $14px
+    display flex
+    padding-bottom 14px
+    position relative
+
+    &__underline
+      position absolute
+      bottom -1px
+      left 0
+      width auto
+      border-top 1px solid #6F6F6F
+      transition(all .3s ease)
+
+    &__item
+      margin-right 40px
+      cursor pointer
+
+      &:last-child
+        margin-right 0
+
+      &.b-tab__nav__item--active
+        color #6F6F6F
+
+  &__tabs
+
+    &__item
+      display none
+
+      &.b-tabs__tabs__item--active
+        display block
+
+@media print
+
+  .b-collapse-block__head span,
+  .b-profile__photo,
+  .b-tabs__nav,
+  .b-profile__button
+    display none !important
+
+  .b-collapse-block
+    border-bottom none !important
+    /*break-after auto*/
+
+    &__head
+      padding 0 0 10px !important
+
+      a
+        text-underlineation none !important
+        color #000 !important
+        opacity 1 !important
+        line-height 1
+        margin-top 10px
+        margin-bottom 5px
+
+    &__body
+      display block !important
+      padding-bottom 0 !important
+
+      .small
+        font-size 1rem
+
+      .text-muted
+        color #000 !important
+        font-weight bold
+        margin 0 10px 0 0 !important
+        float left
+        line-height 1.2
+
+      p
+        color #000 !important
+        margin 0 0 5px !important
+        line-height 1.2
+
+        &:after
+          content ''
+          display block
+          clear both
+
+      hr
+        margin 0 !important
+
+        &.hr--line
+          border-top 0
+          display none
+
+      .row:last-of-type
+        margin-bottom 10px
+
+      /*p,
+      .col-lg-4,
+      .row
+        break-after avoid*/
+
+  .b-report__date
+    position static
+    top auto
+    right auto
+    font-size .9rem
+    color #000 !important
+    margin-bottom 20px !important
+
+  .b-status-label
+    padding 0
+    color #000 !important
+
+  
+
+

@@ -1,0 +1,34 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-payment-requisites-detail'
+  - var authorized = 'true'
+
+block title
+  title Членский взнос аудиторов за год | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/payment
+
+  hr
+
+  .container-fluid
+    
+    h1 Оплата взносов
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/payment
+          
+      article.col-12.col-md-9
+    
+        include ../../components/payment.requisites.detail/template
+  
+    

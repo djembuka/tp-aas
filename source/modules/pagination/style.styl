@@ -1,0 +1,54 @@
+@import '../../styl/component-include.styl'
+
+.b-pagination
+  font-family $roboto
+  
+  &-block
+    font-size .85rem
+
+    &.ph-block--animated
+      opacity 1
+      height auto
+    
+    a,
+    span
+      display inline-block
+      vertical-align top
+      margin 0 15px
+      
+      &.i-backward
+        margin-left 15px
+      
+      &.i-forward
+        margin-right 0
+      
+    span.i-active,
+    &__current
+      display inline-block
+      vertical-align top
+      pointer-events none
+
+      &,
+      &:hover,
+      &:active
+        color $text-color
+        opacity 1
+      
+    @media( max-width 575px )
+      text-align center
+      display flex
+      justify-content space-around
+      flex-wrap wrap
+    
+      a,
+      span
+        margin 0
+        padding 5px
+    
+        &.i-backward,
+        &.i-forward
+          width 100%
+          text-align center
+          
+          margin 0
+      

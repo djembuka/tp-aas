@@ -1,0 +1,10 @@
+<svg id="ClearButton" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Прямоугольник_166" data-name="Прямоугольник 166" width="16" height="16" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Сгруппировать_184" data-name="Сгруппировать 184" clip-path="url(#clip-path)">
+    <path id="Контур_315" data-name="Контур 315" d="M9.2,7.986l6.548-6.548A.842.842,0,1,0,14.562.247L8.013,6.8,1.465.247A.842.842,0,0,0,.274,1.438L6.822,7.986.247,14.562a.842.842,0,1,0,1.191,1.191L8.013,9.178l6.548,6.549a.842.842,0,0,0,1.191-1.191Z" transform="translate(0 0)" fill="#fff"/>
+  </g>
+</svg>

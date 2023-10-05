@@ -1,0 +1,118 @@
+// start /components/profile/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'profile'
+else
+  - var componentsArray = [ 'profile' ]
+  
+.b-profile.ph-block
+
+  .ph
+
+    .ph__photo
+      div
+    .ph__text
+      div
+      div
+      div
+
+  .ph-content( itemscope itemtype="https://schema.org/Person" )
+
+    .b-profile__photo
+      i( style="background-image: url( '/upload/portrait.jpg' );" title="Иванов Петр Валерьевич" )
+        span(style="background-color: #f00;") Исключен
+
+    .b-profile__status
+      h3 Статус
+      .b-status-label-block
+        .b-status-label( style="background-color: #ff3939; color: #fff;" ) Исключен
+        .b-status-label( style="background-color: #ff3939; color: #fff;" ) Членство приостановлено
+        .b-status-label Не читает уведомления
+
+    hr.hr--md
+
+    .b-tabs
+
+      .b-tabs__nav
+        .b-tabs__nav__underline
+        .b-tabs__nav__item(data-tab="tab1") Данные реестра
+        .b-tabs__nav__item(data-tab="tab2") История обращения
+
+      .b-tabs__tabs
+        .b-tabs__tabs__item(data-tab="tab1")
+
+          .b-profile__text( itemscope itemtype="https://schema.org/Person" )
+
+            .row
+              .col-sm-8
+                  h3 Профайл
+                  p Независимый член Правления, председатель Комиссии СРО ААС по наградам, председатель Рабочего органа Совета по аудиторской деятельности, председатель Правления Фонда НСФО, начальник Департамента международной отчетности Бухгалтерии ПАО ЛУКОЙЛ, Заслуженный экономист РФ.
+
+            hr
+
+            .b-profile__button
+              a.btn.btn-light.btn-link-color( href="" data-json="{id:'io789'}" )
+                span.icon( style="background-image: url( '/template/images/button-docs-icon.svg' );" )
+                span Подписать данные
+
+              .circle-loader(style="justify-content: flex-start;")
+                .circle.circle-1
+                .circle.circle-2
+                .circle.circle-3
+                .circle.circle-4
+                .circle.circle-5
+
+              script
+                | window.getPdfPaths = {
+                |   response: '/components/profile/response.json',
+                |   onMounted: '/components/profile/response.json',
+                | };
+
+              #getPdfModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="getPdfModalLabel" aria-hidden="true")
+                .modal-dialog
+                  .modal-content
+                    button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+                    .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+                      h3.text-center Документ создается
+
+                      hr
+
+                      p.text-center Процесс создания документа может занять некоторое время. Пожалуйста, дождитесь предложения загрузить файл на ваш компьютер.
+
+                      hr
+
+                      .progress-indicator
+                        .item.item-1
+                        .item.item-2
+                        .item.item-3
+                        .item.item-4
+                        .item.item-5
+
+            hr
+
+            hr.hr--line
+            hr
+
+            .row
+              .col-12.col-lg-4
+                .text-muted.small Номер аттестата
+                p К000223
+
+              hr.d-block.d-lg-none.w-100
+
+              .col-12.col-lg-4
+                .text-muted.small Место рождения
+                p Москва
+
+            hr.hr--line.hr--xs
+
+            include ../../components/profile/profile
+            
+        .b-tabs__tabs__item(data-tab="tab2")
+          
+          hr
+          
+          include ../../components/appeal.my/profile-out-history
+
+// end /components/profile/

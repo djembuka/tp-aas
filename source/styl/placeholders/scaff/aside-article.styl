@@ -1,0 +1,29 @@
+aside.col-3
+  flex 0 0 25%
+  max-width 25%
+  position relative
+  width 100%
+  padding-right 15px
+  padding-left 15px
+  
+  &.d-none.d-md-block
+  
+    @media( max-width 767px )
+      display none
+
+article.col-12
+  position relative
+  width 100%
+  padding-right 15px
+  padding-left 15px
+  
+  @media (min-width: 768px)
+    &.col-md-8
+      -ms-flex 0 0 66.666667%
+      flex 0 0 66.666667%
+      max-width 66.666667%
+
+    &.col-md-9
+      -ms-flex 0 0 75%
+      flex 0 0 75%
+      max-width 75%

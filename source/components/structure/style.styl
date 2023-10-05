@@ -1,0 +1,54 @@
+@import '../../styl/component-include.styl'
+
+.b-structure
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-structure__block
+
+  &.click-block > .b-committee__item
+    border-color $primary-color !important
+  
+  b, a
+    font-size $24px
+    margin-bottom 0
+
+  .b-structure__block
+    margin-bottom 33px
+    
+    b, a
+      font-size $18px
+
+    .b-structure__block
+      
+      b, a
+        font-size $16px
+
+.b-committee__item
+  margin-bottom 15px
+  transition( border-color .5s ease )
+
+  &.hover-head,
+  .b-structure__block.hover &
+  .b-structure__block.hover-block &
+    border-color #b3cff1
+
+  &.click-head,
+  .b-structure__block.click &,
+  .b-structure__block.click-block &
+    border-color $primary-color !important

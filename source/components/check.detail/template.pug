@@ -1,0 +1,55 @@
+// start /components/check.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'check.detail'
+else
+  - var componentsArray = [ 'check.detail' ]
+
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
+  
+.b-check-detail.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content 
+
+    .b-check-detail__tabs
+
+      .swiper-container
+        .swiper-wrapper
+          a.swiper-slide( class=tab === 'data' ? 'active' : '' href="/pages/check-detail/" data-tab="tab1" ) Общие данные
+          a.swiper-slide( class=tab === 'reports' ? 'active' : '' href="/pages/check-detail/reports.html" data-tab="tab2" ) Отчеты
+          a.swiper-slide( class=tab === 'registry' ? 'active' : '' href="/pages/check-detail/registry.html" data-tab="tab3" ) Реестр
+          a.swiper-slide( class=tab === 'employees' ? 'active' : tab === 'employee' ? 'active in' : '' href="/pages/check-detail/employees.html" data-tab="tab6" ) Сотрудники
+          a.swiper-slide( class=tab === 'changes' ? 'active' : '' href="/pages/check-detail/changes.html" data-tab="tab4" ) Изменения в реестре
+          a.swiper-slide( class=tab === 'appeals' ? 'active' : '' href="/pages/check-detail/appeals.html" data-tab="tab5" ) Жалобы
+
+      .b-check-detail__decor
+
+    hr
+    
+    .b-check-detail__block
+      hr
+      if tab === 'data'
+        include data
+      else if tab === 'reports'
+        include reports
+      else if tab === 'registry'
+        include registry
+      else if tab === 'employees'
+        include employees
+      else if tab === 'employee'
+        include employee
+      else if tab === 'changes'
+        include changes
+      else if tab === 'appeals'
+        include appeals
+
+// end /components/check.detail/

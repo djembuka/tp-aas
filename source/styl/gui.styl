@@ -1,0 +1,749 @@
+html,
+body
+  height 100%
+
+body
+  background #fff
+  font-family $open-sans
+  font-size 16px
+  color #3b3b3b
+  display flex
+  flex-direction column
+  height 100%
+
+  @media( max-width 767px )
+
+    .b-body-shutter
+      content ''
+      position fixed
+      top 0
+      left 0
+      width 100%
+      height 100%
+      background-color #074c86
+      opacity 0
+      transition( opacity .5s ease )
+      z-index -1
+
+    &.shutter .b-body-shutter
+      opacity .4
+      z-index 10
+
+.b-page-content
+  flex 1 0 auto
+
+.b-footer
+  flex 0 0 auto
+
+.b-bg
+  background-color #fafafa
+  border-top 1px solid #fafafa
+  border-bottom 1px solid #fafafa
+  
+.container-fluid
+
+  @media ( min-width 1200px )
+    max-width 1480px
+
+  @media ( min-width 768px )
+    padding-right 35px !important
+    padding-left 35px !important
+  
+a
+  transition( all .5s ease )
+
+  &,
+  &:hover,
+  &:focus,
+  &:active
+    color $link-color
+    text-decoration none
+    
+  &:hover
+    opacity .7
+
+small,
+.small
+  font-size $12px
+  line-height 14px
+
+p, dl, ol, ul
+  margin-bottom 1.25rem
+
+dl, ol, ul
+  padding-left 3rem
+  margin-top 1rem
+  font-family $roboto
+  font-weight 400
+
+li
+  margin-bottom 1rem
+
+  > ol,
+  > ul
+    margin-top 1rem
+
+ol
+  list-style none
+  counter-reset li
+  padding-left 3rem
+
+  > li:before
+    counter-increment li
+    content counters(li,".") ". "
+    margin-right 3px
+    
+ol.multy-level-3,
+ul.multy-level-3
+
+  > li
+    font-family $roboto
+    font-size $24px
+    font-weight $bold
+    line-height 1.5//36
+    
+    > ol,
+    > ul
+      
+      > li
+        font-family $roboto
+        font-size $18px
+        font-weight $bold
+        line-height 21px
+        
+        > ol,
+        > ul
+          
+          > li
+            font-family $open-sans
+            font-size 16px
+            font-weight $normal
+            line-height 1.5
+
+ol,
+ul
+  
+  li
+    position relative
+
+    &:before
+      position absolute
+      top 0
+      right 100%
+      z-index 1
+      
+ol.multy-level-2,
+ul.multy-level-2
+      
+  > li
+    font-family $roboto
+    font-size $18px
+    font-weight $bold
+    line-height 21px
+    
+    > ol,
+    > ul
+      
+      > li
+        font-family $open-sans
+        font-size 16px
+        font-weight $normal
+        line-height 1.5
+
+blockquote
+  margin 0 0 1.25rem 3rem
+  border-left 2px solid $primary-color
+  padding-left 20px
+  color #000
+
+button:focus
+  outline none
+
+.b-lead
+  font-size $24px
+  margin 1.25rem 0
+  
+  @media( max-width 575px )
+    font-size 1.2rem
+
+hr
+  margin-top 1rem
+  margin-bottom 1rem
+  border-top 1px solid transparent !important
+  
+  &.hr--xs
+    margin-top .25rem
+    margin-bottom .25rem
+  
+  &.hr--sm
+    margin-top .5rem
+    margin-bottom .5rem
+  
+  &.hr--md
+    margin-top .75rem
+    margin-bottom .75rem
+  
+  &.hr--sl
+    margin-top 1.25rem
+    margin-bottom 1.25rem
+  
+  &.hr--lg
+    margin-top 1.5rem
+    margin-bottom 1.5rem
+  
+  &.hr--xl
+    margin-top 2rem
+    margin-bottom 2rem
+  
+  &.hr--xxl
+    margin-top 2.5rem
+    margin-bottom 2.5rem
+  
+  &.hr--xxxl
+    margin-top 3rem
+    margin-bottom 3rem
+    
+  &.hr--line
+    border-top 1px solid $line-color !important
+
+h1,.h1,
+h2,.h2,
+h3,.h3,
+p,
+blockquote,
+ul,
+ol
+  max-width 770px
+  
+h1,.h1
+  font-family $roboto
+  font-size $38px
+  font-weight $bold
+  line-height 1.18//44
+  margin 0 0 1rem
+  overflow visible
+  height auto
+  letter-spacing -1px
+
+  &.h1--margin-right
+
+    @media( min-width 768px )
+      margin-right 250px !important
+
+  &.no-transition
+    transition(none)
+
+  &.ph-block--animated
+    color #3b3b3b
+    
+    &:after
+      background-color transparent
+      width auto
+      opacity 0
+      pointer-events none
+    
+  @media( max-width 767px )
+    font-size 1.4rem
+    line-height 1.6
+
+h2,.h2
+  font-family $roboto
+  font-size $32px
+  font-weight $bold
+  line-height 1.25//40
+  margin 2.5rem 0 1rem
+  overflow visible
+  height auto
+  letter-spacing -1px
+  
+  @media( max-width 767px )
+    font-size 1.2rem
+    line-height 1.4
+
+h3,.h3
+  font-family $roboto
+  font-size $24px
+  font-weight $bold
+  line-height 1.2
+  margin 2.5rem 0 1rem
+  overflow visible
+  height auto
+  letter-spacing -1px
+  
+  @media( max-width 767px )
+    font-size 1.2rem
+    line-height 1.2
+
+h4,.h4
+  font-family $roboto
+  font-size $18px
+  font-weight $bold
+  line-height 21px
+  margin 1.7rem 0 0.5rem
+  
+h5, .h5
+  margin 1.7rem 0 0.5rem
+  font-family $roboto
+  font-size $14px
+  font-weight $bold
+  
+h6, .h6
+  margin 1.7rem 0 0.5rem
+  font-family $roboto
+  font-size $12px
+  font-weight $bold
+
+h1,.h1,
+h2,.h2
+
+  &:first-child
+    margin-top 0
+
+.h1-flex-wrapper
+  display flex
+  justify-content space-between
+  align-items center
+  margin-bottom $16px
+
+  h1,
+  h2
+    margin-right $16px
+    margin-bottom 0 !important
+
+  .btn
+    display inline-block
+
+  @media(max-width 767px)
+    display block
+
+    .btn
+      display none
+
+.b-change-edit-info
+  font-size $11px
+  position relative
+
+  @media( max-width 767px )
+    margin-bottom 15px
+
+  &-text
+    position absolute
+    top 20px
+    right 0
+    text-align right
+    z-index 10
+
+    @media( max-width 767px )
+      position static
+      text-align left
+
+.b-h-badges
+  display flex
+  justify-content space-between
+  align-items flex-start
+  margin-bottom 1rem
+
+  @media( max-width 767px )
+    display block
+
+  .b-badges
+    white-space nowrap
+    text-align right
+    margin-top 7px
+
+    @media( max-width 767px )
+      white-space normal
+      text-align left
+      margin-top 0
+
+      .badge
+        margin 0 23px 10px 0
+
+  .badge
+    margin-left 23px
+
+.badge
+  font-size $14px
+  font-weight normal
+  height 34px
+  line-height 34px
+  white-space nowrap
+  padding 0 23px
+
+  &.badge-light
+    background-color $line-color
+
+.b-note-badge
+  height 16px
+  line-height 16px
+  min-width 16px
+  color #fff
+  border-radius 8px
+  font-size $11px
+  font-style normal
+  text-align center
+  padding 0 5px
+
+.b-status-label
+
+  &-block
+    display flex
+    align-items flex-start
+    justify-content flex-start
+    flex-wrap wrap
+
+  &
+    height 24px
+    padding 0 1rem
+    font-family $roboto
+    font-size $12px
+    text-align center
+    background-color #F2F2F2
+    color #000
+    border-radius 12px
+    margin-right 8px
+    margin-bottom 8px
+    display flex
+    align-items center
+    justify-content center
+    white-space nowrap
+
+.text-muted
+  color #6a6a6a !important
+  
+.text-semimuted
+  color #3b3b3b !important
+  
+.text-danger
+  color $danger-color !important
+  
+.text-success
+  color $success-color !important
+  
+.text-normal
+  color #F2762E
+  
+.bg-danger
+  background-color $danger-color !important
+  
+.bg-success
+  background-color $success-color !important
+
+[class^="label-"]
+  text-align center
+  line-height 1
+
+  span
+    border-radius 1px
+    display inline
+    font-size $14px
+
+.label-green span
+  color #74C37A
+  background-color #EFFFF0
+
+.label-red span
+  color #FF0000
+  background-color #FFF4F4
+
+.label-gray span
+  color #9B9B9B
+  background-color #F2F2F2
+
+.label-lightblue span
+  color #5F7696
+  background-color #F2F7FF
+
+.label-blue span
+  color #4375D8
+  background-color #F0F5FF
+
+.label-orange span
+  color #F2762E
+  background-color #FFF7F2
+
+label
+  font-family $roboto
+  
+.row div[id^="bx_incl_area_"]
+	display inherit
+	width 100%
+
+.b-tab
+  display inline-block
+  width 48px
+  height 48px
+  background-repeat no-repeat
+  background-position calc( 100% - 15px )
+  background-size 18px
+  flex-shrink 0
+
+  &-block
+    display flex
+    align-items flex-end
+
+    .b-float-label
+      display inline-block
+      vertical-align top
+      width 100%
+
+  &.tab-2
+    width 96px
+
+  &.tab-3
+    width 144px
+
+.ik_select
+  min-width 160px
+  width 100% !important
+
+  &_link
+  
+    &_text
+      height 48px
+      background-color $form-control-color
+      font-size $14px
+      line-height 48px
+      padding 0 0 0 15px
+      position relative
+      white-space nowrap
+      border-radius 3px
+      overflow hidden
+
+      &:after
+        content ''
+        display block
+        width 16px
+        height 16px
+        position absolute
+        top 16px
+        right 16px
+        background-bg()
+        z-index 1
+        background-image url(images/arrow-drop-down.svg)
+
+  &_dropdown
+    background-color #fff
+    border-radius 0 0 5px 5px
+    box-shadow 0 5px 5px #eee
+    border-top 1px solid #fff
+    padding 9px 0
+
+    ul
+      padding 5px 0
+      margin 0
+
+    li
+      list-style-type none
+      padding 12px 15px
+      margin 0
+      font-size $14px
+      line-height 1.2
+      cursor default
+      min-width 160px
+
+      &:hover
+        background-color $form-control-color
+        color #5F7696
+
+.span--num
+  position absolute
+  top 15px
+  right 15px
+  font-size $11px
+  color #9b9b9b
+  opacity 0
+  transition(opacity .2s ease )
+
+  + .input--num
+    padding-right 80px !important
+
+  &.show--num
+    opacity 1
+
+.b-input-hint
+  position absolute
+  top calc(100% + 1px + 3px)
+  left 0
+  width 100%
+  background #fff
+  box-shadow 0 5px 10px #0000000d
+  border-radius 0 0 5px 5px
+  font-size $14px
+  line-height 1.2
+  z-index 11
+
+  &__item
+    display flex
+    align-items center
+    justify-content flex-start
+    padding 20px
+
+    &:hover,
+    &.active
+      background-color $form-control-color
+      color #5F7696
+      cursor pointer
+
+    &:first-child
+      margin-top .5rem
+
+    &:last-child
+      margin-bottom .5rem
+
+  &__img
+    width 64px
+    height 64px
+    border-radius 51%
+    background-bg()
+    margin-right 30px
+
+  &__text
+    font-size $14px
+    pointer-events none
+
+.b-input-clear
+  position absolute
+  top 50%
+  right 10px
+  width 16px
+  height 16px
+  cursor pointer
+  // background url( '/local/templates/aas/images/cancel.svg' ) no-repeat center
+  // background-size 16px
+  margin-top -8px
+  z-index 1
+
+  &:before
+    content ''
+    position absolute
+    top 8px
+    right -2px
+    border-top 1px solid #5F7696
+    width 20px
+    transform(rotate(45deg))
+		z-index 10
+
+  &:after
+    content ''
+    position absolute
+    top 8px
+    right -2px
+    border-top 1px solid #5F7696
+    width 20px
+    transform(rotate(-45deg))
+    z-index 10
+
+.modal
+
+  &-frame
+    display none
+    transition( opacity .5s ease-out )
+    opacity 0
+
+    &.modal-frame--active
+      display block
+
+    &.modal-frame--animate
+      opacity 1
+
+  &--text
+  
+    .modal-body
+      width 100%
+      max-width 565px
+      margin 0 auto
+      padding-top 70px
+      padding-bottom 70px
+
+  &--alert
+    
+    .modal-dialog
+      box-shadow 0 5px 10px #FF000026
+
+  &-buttons
+
+    .btn
+      margin 0 8px
+
+      &:first-child
+        margin-left 0
+
+      &:last-child
+        margin-right 0 
+
+      @media (max-width: 575px)
+        margin 0 0 8px
+
+        &:last-child
+          margin-bottom 0
+
+  &-dialog
+    box-shadow 0 5px 10px #0000000d
+
+    @media (min-width: 576px)
+      max-width 800px
+
+  &-backdrop
+    background #fff
+
+    &.show
+      opacity .7
+
+  &-content
+    border-radius 7px
+    border 0
+
+  .close
+    position absolute
+    top 22px
+    right 22px
+    padding 0
+    background-repeat no-repeat
+    background-position center
+    background-size 16px
+    width 32px
+    height 32px
+    opacity 1
+    z-index 1
+
+  h3:first-child
+    margin-top 0
+
+figure
+  margin 0
+
+  img
+    width 100%
+
+.b-button-block
+  display flex
+  justify-content space-between
+  align-items center
+  padding 25px
+  background-color #FAFAFA
+  border-radius 10px
+
+  &__text
+    font-size $14px
+    margin-right 20px
+
+    h4
+      margin 0 0 1rem
+
+    p
+      margin 1rem 0 0
+
+  @media(max-width 767px)
+    display block
+
+    .btn
+      width 100%
+      margin-top 1rem
+
+.b-blue
+  background-color #F0F5FC
+
+.b-green
+  color #245A28
+  background-color #E1F8E2

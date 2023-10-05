@@ -1,0 +1,40 @@
+.b-profile
+
+  &.ph-block
+    position relative
+  
+  .ph
+
+    &__photo
+      background-color $line-color
+      height 200px
+      border-radius 10px
+      position relative
+      margin-bottom 136px
+
+      div
+        position absolute
+        top 30px
+        left 50%
+        margin-left -119px
+        width 238px
+        height 238px
+        border-radius 51%
+        border 1px solid #fff
+        background-color $line-color
+
+    &__text
+
+      div
+        height 30px
+        background-color $line-color
+        margin-bottom 57px
+        
+    &-content
+      position absolute
+      top 0
+      left 0
+      width 100%
+      transition( opacity .5s ease )
+      opacity 0
+      z-index 1

@@ -1,0 +1,39 @@
+@import '../../styl/component-include.styl'
+
+.b-form-error
+  box-shadow 0 5px 10px #f2762e29
+  padding 20px 35px
+  font-size $12px
+  line-height 16px
+  display flex
+  justify-content space-between
+  align-items center
+  margin-bottom 40px
+  border-radius 10px
+
+  &__icon
+    width 33px
+    height 38px
+    background-bg()
+
+    @media( max-width 400px )
+      display none
+
+     @media( max-width 1099px ) and ( min-width 768px )
+
+        .col-md-6 &
+          display none
+
+  &__text
+    width calc( 100% - 33px - 30px )
+
+    @media( max-width 400px )
+      width auto
+
+     @media( max-width 1099px ) and ( min-width 768px )
+
+      .col-md-6 &
+        width auto
+
+    p
+      margin 0 0 10px

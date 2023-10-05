@@ -1,0 +1,30 @@
+// start /components/switch-block/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'switch-block'
+else
+  - var componentsArray = [ 'switch-block' ]
+  
+.b-switch-blocks.ph-block
+
+  .ph
+    div
+
+  .ph-content
+
+    .b-switch-block
+      .b-switch-block__text
+        h4 Я хочу объявить о наличие вакансий в ООО «ТЕСТОВАЯ»
+        p Я хочу опубликовать свою информацию в списке аудиторов заинтересованных в получения работы в аудиторской организации. Ваши контактные данные (телефон и email из реестра) и будут опубликованы в списке аудиторов заинтересованных в поиске работы доступны в течение 30 дней.
+      .b-switch-block__switch.i-active( data-name="auditorSearch" data-url="response.json" )
+
+    hr
+    
+    .b-switch-block
+      .b-switch-block__text
+        h4 Я хочу объявить о наличие вакансий в ООО «Другая»
+        p Я хочу опубликовать свою информацию в <a href="">списке аудиторов</a> заинтересованных в получения работы в аудиторской организации. Ваши контактные данные (телефон и email из реестра) и будут опубликованы в списке аудиторов заинтересованных в поиске работы доступны в течение 30 дней.
+      .b-switch-block__switch.i-active( data-name="auditorSearch" data-url="response.json" )
+
+// end /components/switch-block/

@@ -1,0 +1,323 @@
+window.addEventListener('load', () => {
+  if (!window.Vue && !window.Vuex) return;
+
+  window.moderationSrcPath = '/template/images/';
+
+  Vue.use(Vuex);
+
+  const store = new Vuex.Store({
+    state: window.excerptsMultipleGenerateStore,
+    mutations: {
+      changeChecked(state, payload) {
+        state.employees[payload.itemIndex].checked = payload.checked;
+      },
+      changeSelect(state, payload) {},
+      changeStatus(state, status) {
+        state.status = status;
+      },
+      setGenerated(state, generated) {
+        state.generated = generated;
+      },
+    },
+  });
+
+  Vue.component('v-select', VueSelect.VueSelect);
+
+  //checkbox
+  Vue.component('formControlCheckbox', {
+    data() {
+      return {
+        checked: this.item.checked,
+      };
+    },
+    props: ['itemIndex', 'item'],
+    template: `
+            <label class="b-poll__form-control" :class="[{'i-active': checked}]">
+                <div class="b-poll__form-control__content">
+                    <div class="b-poll__form-control__text"><b v-html="item.label"></b><span v-html="item.note"></span></div>
+                </div>
+                <div class="b-poll__checkbox"><input type="checkbox" :name="item.name" v-model="checked" :value="item.value" class="filled-in" @change="change()"><span></span></div>
+            </label>
+        `,
+    methods: {
+      change() {
+        //commit mutation
+        this.$store.commit('changeChecked', {
+          checked: this.checked,
+          itemIndex: this.itemIndex,
+        });
+      },
+    },
+  });
+
+  //select
+  Vue.component('formControlSelect', {
+    data() {
+      return {
+        options: this.select.options,
+        selectedOption: this.select.options[0],
+      };
+    },
+    template: `
+            <div class="b-float-label-select-vc">
+                <label>Тип выписки</label>
+                <v-select :searchable="false" :options="options" :value="options[0]" class="form-control-select" @input="onSelect()" v-model="selectedOption"></v-select>
+                <input type="hidden" :name="select.name" :value="selectedOption.code" ref="hiddenInput">
+            </div>`,
+    props: ['select'],
+    methods: {
+      onSelect() {
+        //set select
+        store.commit('changeSelect', {
+          selected: this.selectedOption,
+        });
+        this.$refs.hiddenInput.value = this.selectedOption.code;
+      },
+    },
+  });
+
+  //checkbox
+  Vue.component('formBottomPanel', {
+    data() {
+      return {};
+    },
+    computed: {
+      checkedNum() {
+        return this.$store.state.employees.filter(
+          (employee) => employee.checked === true
+        ).length;
+      },
+      num() {
+        let word = this.declOfNum(this.checkedNum, [
+          'выписка',
+          'выписки',
+          'выписок',
+        ]);
+        return `${this.checkedNum} ${word}`;
+      },
+    },
+    template: `
+            <transition name="slide-fade">
+                <div class="b-poll__form-bottom-panel" v-if="checkedNum > 0">
+                    <div class="b-poll__form-bottom-panel__left">
+                        <div class="b-poll__form-bottom-panel__num">{{ num }}</div>
+                        <div class="b-poll__form-bottom-panel__select">
+                            <form-control-select :select="$store.state.bottomPanel.select"></form-control-select>
+                        </div>
+                    </div>
+                    <div class="b-poll__form-bottom-panel__button">
+                        <button class="btn btn-secondary" @click.prevent="clickBtn()">Сгенерировать выписки</button>
+                    </div>
+                </div>
+            </transition>
+        `,
+    methods: {
+      declOfNum(number, words) {
+        return words[
+          number % 100 > 4 && number % 100 < 20
+            ? 2
+            : [2, 0, 1, 1, 1, 2][number % 10 < 5 ? Math.abs(number) % 10 : 5]
+        ];
+      },
+      clickBtn() {
+        //show modal
+        $('#getExcerptModal').modal('show');
+        //show loading
+        this.$store.commit('changeStatus', 'loading');
+        //send request
+        this.generate();
+        //scroll to top
+        window.scrollTo(0, 0);
+        //reset checked
+        this.$store.state.employees.forEach((employee, index) => {
+          this.$store.commit('changeChecked', {
+            checked: false,
+            itemIndex: index,
+          });
+        });
+      },
+      generate() {
+        let formData = new FormData(
+          document.getElementById('excerptsMultipleGenerateForm')
+        );
+        (async () => {
+          let counter = 0;
+          do {
+            try {
+              let response;
+              if (counter === 0) {
+                response = await fetch(
+                  window.excerptsMultipleGeneratePaths.response,
+                  {
+                    method: 'POST',
+                    body: formData,
+                  }
+                );
+              } else {
+                response = await fetch(
+                  window.excerptsMultipleGeneratePaths.onMounted
+                );
+              }
+              counter++;
+              let result = await response.json();
+
+              if (result.STATUS === 'LOADING') {
+                await new Promise((r) => setTimeout(r, 15000));
+              } else if (result.STATUS !== 'Y') {
+                //hide modal
+                $('#getExcerptModal').modal('hide');
+                //hide loading
+                this.$store.commit('changeStatus', '');
+                //throw error
+                throw new Error('Ошибка');
+              } else if (result.GENERATED) {
+                setTimeout(() => {
+                  //mutate store
+                  this.$store.commit('setGenerated', result.GENERATED);
+                  //hide modal
+                  $('#getExcerptModal').modal('hide');
+                  //hide loading
+                  this.$store.commit('changeStatus', '');
+                }, 500);
+                return;
+              } else {
+                //hide modal
+                $('#getExcerptModal').modal('hide');
+                //hide loading
+                this.$store.commit('changeStatus', '');
+                break;
+              }
+            } catch (err) {
+              throw err;
+            }
+          } while (true);
+        })();
+      },
+    },
+  });
+
+  const App = {
+    el: '#excerptsMultipleGenerateApp',
+    store,
+    template: `
+        <div>
+            <div v-if="$store.state.status === 'loading'" class="b-loading-status">
+                <b>Подождите, пожалуйста...</b>
+                <div class="circle-loader">
+                    <div class="circle circle-1"></div>
+                    <div class="circle circle-2"> </div>
+                    <div class="circle circle-3"></div>
+                    <div class="circle circle-4"></div>
+                    <div class="circle circle-5"></div>
+                </div>
+            </div>
+            <div v-else>
+                <div v-if="$store.state.generated.fileURL">
+                    <h2>Сгенерированная выписка</h2>
+                    <div class="b-generated">
+                        <div class="b-generated__left">
+                            <a :href="$store.state.generated.fileURL">Архив с выписками</a>
+                            <span>{{ $store.state.generated.date }}</span>
+                        </div>
+                        <div class="b-generated__right">
+                            <a :href="$store.state.generated.fileURL" :style="'background-image: url(' +  $store.state.generated.fileIcon + ')'">{{ $store.state.generated.size }}</a>
+
+                            <div class="b-excerpts__more" v-if="$store.state.generated['pdf-sig']">
+                              <a class="b-excerpts__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')" @click="clickMoreBtn($event)"></a>
+                              <div class="b-excerpts__more__files" :class="{show: isMoreOpen}">
+                                <span>Для некоторых сервисов требуется формат PDF + .sig</span>
+                                <a v-if="$store.state.generated['pdf-sig'].pdf" :href="$store.state.generated['pdf-sig'].pdf.url" target="_blank" :style="'background-image: url(' +  $store.state.generated.fileIcon + ')'">pdf</a>
+                                <a v-if="$store.state.generated['pdf-sig'].sig" :href="$store.state.generated['pdf-sig'].sig.url" target="_blank" :style="'background-image: url(' +  $store.state.generated.fileIcon + ')'">sig</a>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2>Список сотрудников согласно реестру</h2>
+                    <form action="" method="POST" id="excerptsMultipleGenerateForm">
+                        <form-control-checkbox v-for="(person, index) in $store.state.employees" v-key="person.id" :item="{label: person.name, note: person.ornz, name: 'user[]', value: person.id}" :itemIndex="index"></form-control-checkbox>
+                        <form-bottom-panel></form-bottom-panel>
+                    </form>
+                </div>
+            </div>
+        </div>
+      `,
+    data() {
+      return {
+        isMoreOpen: false,
+      };
+    },
+    methods: {
+      clickMoreBtn(e) {
+        e.preventDefault();
+        this.isMoreOpen = !this.isMoreOpen;
+      },
+      hideMoreBtn() {
+        this.isMoreOpen = false;
+      },
+      async sendRequest() {
+        do {
+          try {
+            let response = await fetch(
+              window.excerptsMultipleGeneratePaths.onMounted
+            );
+            let result = await response.json();
+            if (result.STATUS === 'LOADING') {
+              await new Promise((r) => setTimeout(r, 15000));
+            } else if (result.STATUS !== 'Y') {
+              //hide loading
+              this.$store.commit('changeStatus', '');
+              throw new Error('Ошибка');
+            } else if (result.GENERATED) {
+              setTimeout(() => {
+                //mutate store
+                this.$store.commit('setGenerated', result.GENERATED);
+                //show loading
+                this.$store.commit('changeStatus', '');
+              }, 500);
+              return;
+            } else {
+              //hide modal
+              $('#getExcerptModal').modal('hide');
+              //hide loading
+              this.$store.commit('changeStatus', '');
+              break;
+            }
+          } catch (err) {
+            throw err;
+          }
+        } while (true);
+      },
+    },
+    mounted() {
+      if (this.$store.state.status === 'loading') {
+        this.sendRequest();
+      }
+    },
+  };
+
+  const app = new Vue(App);
+
+  //hide more
+  document.documentElement.addEventListener('click', (e) => {
+    if (
+      e.target.closest('.b-excerpts__more__files') ||
+      e.target.className.search('b-excerpts__more__files') !== -1 ||
+      e.target.className.search('b-excerpts__more__button') !== -1
+    ) {
+      return;
+    }
+    app.hideMoreBtn();
+  });
+});
+
+window.addEventListener('scroll', () => {
+  //bottom panel select
+  const panel = document.querySelector('.b-poll__form-bottom-panel');
+  if (panel.getBoundingClientRect().top < 168 + 86) {
+    panel.classList.add('i-bottom');
+  } else {
+    panel.classList.remove('i-bottom');
+  }
+});

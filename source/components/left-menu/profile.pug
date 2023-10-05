@@ -1,0 +1,84 @@
+// start /components/left-menu/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'left-menu'
+else
+  - var componentsArray = [ 'left-menu' ]
+
+link(rel="stylesheet" href="/components/notifications/style.css")
+  
+.b-left-menu.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .b-left-menu__item
+      span.active Новости СРО
+
+    .b-left-menu__item
+      a( href="" ) Официальные новости
+      
+    .b-left-menu__item
+      .b-left-menu__title.active
+        .nc(data-type="count")
+          span.notification.notification--count.notification--show
+            span 1
+        a( href="" ) Региональные новости<br>длинная строка
+        span.b-left-menu__title-plus
+      .b-left-menu__sub
+        a( href="" ) Центральное отделение
+        a( href="" ) Северо-Западное отделение
+        a( href="" ) Приволжское отделение
+        a( href="" )
+          .nc(data-type="count")
+            span.notification.notification--count.notification--show
+              span 1
+          | Южное отделение<br>длинная строка
+        a( href="" ) Волго-Донское отделение
+        a( href="" ) Уральское отделение
+        a( href="" ) Сибирское оделение
+        a( href="" )
+          .nc(data-type="count")
+            span.notification.notification--count.notification--show
+              span 1
+          | Дальневосточное отделение<br>длинная строка
+      
+    .b-left-menu__item.b-left-menu__item--show
+      .b-left-menu__title
+        .nc(data-type="count")
+          span.notification.notification--count.notification--show
+            span 1
+        a( href="" ) Региональные новости
+        span.b-left-menu__title-plus
+      .b-left-menu__sub.b-left-menu__sub--show
+        a( href="" ) Центральное отделение
+        a( href="" ) Северо-Западное отделение
+        a( href="" ) Приволжское отделение
+        a( href="" )
+          .nc(data-type="count")
+            span.notification.notification--count.notification--show
+              span 1
+          | Южное отделение
+        a( href="" ) Волго-Донское отделение
+        a( href="" ) Уральское отделение
+        a( href="" ) Сибирское оделение
+        a( href="" )
+          .nc(data-type="count")
+            span.notification.notification--count.notification--show
+              span 1
+          | Дальневосточное отделение
+        
+    .b-left-menu__item
+      a( href="" ) Подписки
+      
+    .b-left-menu__item
+      a( href="" ) Выйти
+
+// end /components/left-menu/

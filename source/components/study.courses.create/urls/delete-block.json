@@ -1,0 +1,5 @@
+{
+  "status": "success",
+  "errors": [{ "message": "Error on server" }],
+  "data": {}
+}

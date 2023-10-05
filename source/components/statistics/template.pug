@@ -1,0 +1,35 @@
+// start /components/statistics/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'statistics'
+else
+  - var componentsArray = [ 'statistics' ]
+  
+.b-statistics
+
+  .container-fluid
+
+    .row.justify-content-center
+
+      .col-4.col-sm-2.text-center
+        b( data-num="20359" )
+        small Членов СРО
+
+      .col-4.col-sm-2.text-center
+        b( data-num="3532" )
+        small Аудиторские организации
+
+      .col-4.col-sm-2.text-center
+        b( data-num="16769" )
+        small Аудиторы
+
+      .col-4.col-sm-2.text-center
+        b( data-num="525" )
+        small Индивидуальные аудиторы
+
+      .col-4.col-sm-2.text-center
+        b( data-num="68" )
+        small УМЦ и физ. Лица
+
+// end /components/statistics/

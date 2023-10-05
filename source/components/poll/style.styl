@@ -1,0 +1,274 @@
+@import '../../styl/component-include.styl'
+
+.b-poll
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-poll
+
+  &-ill
+    background-repeat no-repeat
+    background-position center
+    background-size cover
+    height 500px
+    border-radius 10px
+
+    @media( max-width 767px )
+      height 200px
+
+  &__questions
+
+    &__note
+      position relative
+      transition( color .3s ease )
+
+      div
+        position absolute
+        top -40px
+        right 0
+        font-size $12px
+        font-weight bold
+
+        @media( max-width 767px )
+          position static
+          margin-bottom 15px
+
+    &__info
+      background-color $secondary-color
+      min-width 158px
+      height 38px
+      line-height 38px
+      padding 0 15px
+      font-size $12px
+      font-weight bold
+      color #fff
+      text-align center
+      border-radius 19px
+      position fixed
+      top 150px
+      right 200px
+      opacity 0
+      transition( all .3s ease )
+      z-index 1000
+
+      &.i-show
+        opacity .8
+
+  &__form-control
+    border 1px solid #f5f5f5
+    border-radius 10px
+    padding 20px 40px 20px 20px
+    display flex
+    justify-content space-between
+    align-items center
+    cursor pointer
+    transition( all .3s ease )
+    min-height 110px
+
+    @media( max-width 767px )
+      padding-right 20px
+
+    &.i-active
+      border-color #74C37A
+
+    &.i-disabled
+      opacity .2
+      pointer-events none
+      cursor default
+
+    &__content
+      display flex
+      justify-content space-between
+      align-items center
+      margin-right 40px
+
+      @media( max-width 767px )
+        display block
+        margin-right 20px
+
+    &__img
+      width 80px
+      height 80px
+      border-radius 10px
+      margin-right 20px
+      background-repeat no-repeat
+      background-position center
+      background-size cover
+      flex-shrink 0
+
+      @media( max-width 767px )
+        display block
+        width 50%
+        height auto
+        padding-top 50%
+        margin-bottom 15px
+        margin-right 0
+
+    &__text
+      width 100%
+
+      b
+        display block
+        font-size $18px
+        margin-bottom 5px
+        line-height 1.2
+
+      span
+        display block
+        font-size $14px
+
+
+  &__checkbox
+    position relative
+    width 32px
+    height 32px
+    flex-shrink 0
+
+    [type="checkbox"]:not(:checked),
+    [type="checkbox"]:checked
+      position absolute
+      opacity 0
+      pointer-events none
+
+    [type="checkbox"]+span
+      position relative
+      padding-left 25px
+      cursor pointer
+      display block
+      height 25px
+      -webkit-user-select none
+      -moz-user-select none
+      -ms-user-select none
+      user-select none
+
+    [type="checkbox"].filled-in+span:before,
+    [type="checkbox"].filled-in+span:after
+      content: ''
+      left: 0
+      position: absolute
+      transition( all .25s )
+      z-index 1
+
+    [type="checkbox"].filled-in:not(:checked)+span:before
+      width 0
+      height 0
+      left 10px
+      top 14px
+
+    [type="checkbox"].filled-in:not(:checked)+span:after
+      height 32px
+      width 32px
+      background-color #f5f5f5
+      border-radius 5px
+      top 0px
+      z-index 0
+
+    [type="checkbox"].filled-in:checked+span:before
+      top: 7px
+      left: 6px
+      width: 20px
+      height: 15px
+      background embedurl('img/checkbox.svg') no-repeat center
+      background-size cover
+
+    [type="checkbox"].filled-in:checked+span:after
+      top 0
+      width 32px
+      height 32px
+      background-color #74C37A
+      border-radius 5px
+      z-index 0
+
+  &__radio
+    position relative
+    width 32px
+    height 32px
+    flex-shrink 0
+
+    [type="radio"]:not(:checked),
+    [type="radio"]:checked
+      position absolute
+      opacity 0
+      pointer-events none
+
+      &+span
+        position relative
+        cursor pointer
+        display block
+        -webkit-transition .28s ease
+        transition .28s ease
+        -webkit-user-select none
+        -moz-user-select none
+        -ms-user-select none
+        user-select none
+
+        &:before,
+        &:after
+          content ''
+          position absolute
+          left 0
+          top 0
+          width 32px
+          height 32px
+          transition( .28s ease )
+          z-index 0
+
+    [type="radio"]:checked+span:after,
+    [type="radio"].with-gap:checked+span:before,
+    [type="radio"].with-gap:checked+span:after
+      border 5px solid #74C37A
+
+    [type="radio"]:not(:checked)+span:before,
+    [type="radio"]:not(:checked)+span:after,
+    [type="radio"]:checked+span:before,
+    [type="radio"]:checked+span:after,
+    [type="radio"].with-gap:checked+span:before,
+    [type="radio"].with-gap:checked+span:after
+      border-radius 50%
+
+    [type="radio"].with-gap:checked+span:after
+      transform( scale(0.4))
+
+    [type="radio"]:checked+span:after,
+    [type="radio"].with-gap:checked+span:after
+      background-color #74C37A
+
+    [type="radio"]:not(:checked)+span:before,
+    [type="radio"]:not(:checked)+span:after
+      border 5px solid #f5f5f5
+      background-color #f5f5f5
+
+  &__submit
+    display flex
+    align-items center
+
+    .btn
+      margin-right 20px
+
+      @media( max-width 575px )
+        display block
+        width 100%
+
+    small
+      display block
+
+    @media( max-width 575px )
+      display block
+
+      small
+        margin-top 20px

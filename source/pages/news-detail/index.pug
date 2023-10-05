@@ -1,0 +1,59 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-news-detail'
+  - var authorized = 'true'
+
+block title
+  title News detail | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/include
+
+  hr
+
+  .container-fluid
+  
+    .row.justify-content-md-between
+          
+      article.col-12.col-lg-7
+        
+        include ../../components/news.detail/template
+        
+        hr
+        
+        script( src="https://yastatic.net/share2/share.js" )
+        .ya-share2( data-curtain data-services="vkontakte,facebook,odnoklassniki,messenger,telegram,twitter,viber,whatsapp,skype" )
+    
+        hr.hr--lg
+
+        h2 Документы по теме
+
+        include ../../modules/docs/include
+
+        hr
+
+        include ../../modules/articles/include
+
+        hr
+
+        h4 Тэги
+
+        include ../../modules/tags/include
+
+        hr.hr--lg
+        
+        include ../../components/news/connected
+
+        hr.hr--lg
+
+        a.btn.btn-light( href="/pages/news/" ) Все новости
+          
+      aside.col-4.d-none.d-lg-block
+  
+    

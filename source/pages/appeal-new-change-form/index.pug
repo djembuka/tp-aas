@@ -1,0 +1,34 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-appeal-new-change-form'
+  - var authorized = 'true'
+
+block title
+  title Изменение юридического адреса организации | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/include
+
+  hr
+
+  .container-fluid
+  
+    h1 Изменение юридического адреса организации
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/news
+          
+      article.col-12.col-md-9
+        
+        include ../../components/appeal.new.change-form/template
+  
+    

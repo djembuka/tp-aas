@@ -1,0 +1,63 @@
+// start /components/study.courses.for-employees.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'study.courses.for-employees.detail'
+else
+  - var componentsArray = [ 'study.courses.for-employees.detail' ]
+
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="https://unpkg.com/vue-select@latest" )
+link( rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js" )
+link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue-scrollto" )
+
+script( src="/components/study.courses.for-employees.detail/script-edit-form.js" )
+script( src="/components/study.courses.for-employees.detail/store-edit-form.js" )
+
+link( rel="stylesheet", href="/components/study.courses.for-employees.detail/style-edit-form.css" )
+
+script
+  | window.reportFormOZOPaths = {
+  |   addCompany: '/components/report-form-ozo/addCompany.json',
+  |   removeCompany: '/components/report-form-ozo/removeCompany.json',
+  |   autosave: '/components/report-form-ozo/removeCompany.json',
+  | };
+  
+.b-study-courses-for-employees-detail.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    hr.hr--md
+
+    .b-study-courses-for-employees-detail__tabs
+
+      .swiper-container
+        .swiper-wrapper
+          a.swiper-slide( class=tab === 'description' ? 'active' : '' href="/pages/study-courses-for-employees-detail/" data-tab="tab1" ) Описание курса
+          a.swiper-slide( class=tab === 'history' ? 'active' : '' href="/pages/study-courses-for-employees-detail/history.html" data-tab="tab2" ) История изменений
+      .b-study-courses-for-employees-detail__decor
+    
+    .b-study-courses-for-employees-detail__block
+      hr
+      if tab === 'description'
+        include description
+      else if tab === 'history'
+        include history
+
+// end /components/study.courses.for-employees.detail/

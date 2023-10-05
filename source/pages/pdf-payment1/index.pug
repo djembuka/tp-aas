@@ -1,0 +1,148 @@
+doctype html
+html
+  head
+    title Платёжное поручение
+    meta( charset="utf-8" )
+    link( href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Roboto:wght@500&display=swap" rel="stylesheet" )
+    
+  body
+    link( href="/components/pdf/payment.css" rel="stylesheet" )
+
+    table.table-800.mb-20
+      tr
+        td( width="150" ) &nbsp;
+        td( width="100" ) &nbsp;
+        td( width="150" ) &nbsp;
+        td( width="350" ) &nbsp;
+        td.border.text-center( width="50" ) 0401060
+      tr
+        td.border-top.text-center.text-8( width="150" ) Поступ. в банк плат.
+        td( width="100" ) &nbsp;
+        td.border-top.text-center.text-8( width="150" ) Списано со сч. плат.
+        td( width="350" ) &nbsp;
+        td( width="50" ) &nbsp;
+
+    table.table-800.mb-20
+      tr
+        td.text-12.text-bold( width="400" ) ПЛАТЕЖНОЕ ПОРУЧЕНИЕ №
+        td( width="150" ) &nbsp;
+        td( width="10" ) &nbsp;
+        td( width="150" ) &nbsp;
+        td( width="25" ) &nbsp;
+        td.border( width="25" ) &nbsp;
+      tr
+        td( width="400" ) &nbsp;
+        td.border-top.text-center.text-8( width="150" ) Дата
+        td( width="10" ) &nbsp;
+        td.border-top.text-center.text-8( width="150" ) Вид платежа
+        td( width="25" ) &nbsp;
+        td( width="25" ) &nbsp;
+
+    table.table-800
+      tr.height-60
+        td.border-bottom.border-right.vertical-middle( width="80" ) Сумма прописью
+        td.border-bottom.vertical-middle( width="720" ) &nbsp;
+
+    table.table-800
+      tr
+        td.border-right( width="450" )
+
+          table.table-100
+            tr.height-20
+              td.border-bottom.border-right( width="225" ) ИНН
+              td.border-bottom( width="225" ) КПП
+            tr.height-60
+              td( colspan="2" width="450" ) &nbsp;
+            tr.height-20
+              td.border-bottom( colspan="2" width="450" ) Плательщик
+            tr.height-40
+              td( colspan="2" width="450" ) &nbsp;
+            tr.height-20
+              td.border-bottom( colspan="2" width="450" ) Банк плательщика
+            tr.height-40
+              td( colspan="2" width="450" ) &nbsp;
+            tr.height-20
+              td.border-bottom( colspan="2" width="450" ) Банк получателя
+            tr.height-20
+              td.border-bottom.border-right( width="225" ) ИНН
+              td.border-bottom( width="225" ) КПП
+            tr.height-60
+              td( colspan="2" width="450" ) &nbsp;
+            tr.height-20
+              td( colspan="2" width="450" ) Получатель
+              
+        td( width="350" )
+
+          table.table-100
+            tr.height-40
+              td.border-bottom.border-right( width="80" ) Сумма
+              td.border-bottom( width="270" ) &nbsp;
+            tr.height-60
+              td.border-bottom.border-right( width="80" ) Сч. №
+              td( width="270" ) &nbsp;
+            tr.height-20
+              td.border-bottom.border-right( width="80" ) БИК
+              td( width="270" ) &nbsp;
+            tr.height-40
+              td.border-bottom.border-right( width="80" ) Сч. №
+              td( width="270" ) &nbsp;
+            tr.height-20
+              td.border-bottom.border-right( width="80" ) БИК
+              td( width="270" ) &nbsp;
+            tr.height-40
+              td.border-bottom.border-right( width="80" ) Сч. №
+              td( width="270" ) &nbsp;
+            tr.height-40
+              td.border-bottom.border-right( width="80" ) Сч. №
+              td.border-bottom( width="270" ) &nbsp;
+
+          table.table-100
+            tr.height-20
+              td.border-bottom.border-right( width="80" ) Сумма
+              td.border-right( width="90" ) &nbsp;
+              td.border-bottom.border-right( width="90" ) Срок плат.
+              td( width="90" ) &nbsp;
+            tr.height-20
+              td.border-bottom.border-right( width="80" ) Наз. пл.
+              td.border-right( width="90" ) &nbsp;
+              td.border-bottom.border-right( width="90" ) Очер. плат.
+              td( width="90" ) &nbsp;
+            tr.height-20
+              td.border-right( width="80" ) Код
+              td.border-right( width="90" ) &nbsp;
+              td.border-right( width="90" ) Рез. поле
+              td( width="90" ) &nbsp;
+
+    table.table-800
+      tr
+        td.border-bottom.border-right.border-top( width="200" ) &nbsp;
+        td.border-bottom.border-right.border-top( width="150" ) &nbsp;
+        td.border-bottom.border-right.border-top( width="50" ) &nbsp;
+        td.border-bottom.border-right.border-top( width="140" ) &nbsp;
+        td.border-bottom.border-right.border-top( width="120" ) &nbsp;
+        td.border-bottom.border-right.border-top( width="120" ) &nbsp;
+        td.border-bottom.border-top( width="40" ) &nbsp;
+
+    table.table-800
+      tr.height-60
+        td &nbsp;
+      tr.height-20
+        td.border-bottom Назначение платежа
+
+    table.table-800.mb-40
+      tr.height-20
+        td( width="270" ) &nbsp;
+        td.text-center( width="260" ) Подписи
+        td.text-center( width="270" ) Отметки банка
+
+    table.table-800
+      col( width="270" )
+      col( width="260" )
+      col( width="270" )
+      tr.height-20
+        td.text-cente( width="270" ) &nbsp;
+        td.border-bottom( width="260" ) &nbsp;
+        td.text-center( rowspan="2" width="270" ) &nbsp;
+      tr.height-60
+        td.text-center( width="270" ) М.П.
+        td.text-center.border-bottom( width="260" )

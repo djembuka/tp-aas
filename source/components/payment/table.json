@@ -1,0 +1,34 @@
+{
+  "cols": [],
+  "rows": [
+    {
+      "url": "/",
+      "target": "_self",
+      "data": {
+        "date": "05.06.2023",
+        "status": "<div class='label-blue'><span>Пополнение</span></div>",
+        "title": "ОРНЗ 21506024777. Пополнение лицевого счета Дмитрий Лимаренко за 2023 г. НДС не облагается.",
+        "summ": "+ 300 ₽"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_self",
+      "data": {
+        "date": "30.01.2023",
+        "status": "<div class='label-green'><span>Списание</span></div>",
+        "title": "Взнос за 4 квартала со скидкой",
+        "summ": "- 4 000 ₽"
+      }
+    },
+    {
+      "data": {
+        "date": "10.01.2023",
+        "status": "<div class='label-blue'><span>Пополнение</span></div>",
+        "title": "Ежеквартальный членский взнос за 3 квартал 2021 СРО ААС",
+        "summ": "+ 2 000 ₽"
+      }
+    }
+  ],
+  "pagination": "<div class=\"b-pagination-block text-right ph-block sys-pagination-aas ph-block--animated\"><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">1</a><span class=\"main-ui-pagination-page main-ui-pagination-active i-active\">2</span><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">3</a><a class=\"main-ui-pagination-page main-ui-pagination-dots\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=151\">...</a><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=298\">298</a><a class=\"main-ui-pagination-arrow main-ui-pagination-prev i-backward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">Предыдущая</a><a class=\"main-ui-pagination-arrow main-ui-pagination-next i-forward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">Следующая</a></div>"
+}

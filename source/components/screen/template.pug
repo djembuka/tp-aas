@@ -1,0 +1,5 @@
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'screen'
+else
+  - var componentsArray = [ 'screen' ]

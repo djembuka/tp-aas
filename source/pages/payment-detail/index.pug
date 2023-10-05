@@ -1,0 +1,38 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-payment-detail'
+  - var authorized = 'true'
+
+block title
+  title Детальная страница платежа | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/payment
+
+  hr
+
+  .container-fluid
+    
+    h1 Ежеквартальный членский взнос за 1 квартал СРО ААС
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/payment
+          
+      article.col-12.col-md-9
+
+        hr
+    
+        include ../../components/payment.detail/template
+
+        include ../../modules/appeal-item/payment-detail
+  
+    

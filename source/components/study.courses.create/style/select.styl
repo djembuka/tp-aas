@@ -1,0 +1,89 @@
+.form-control-select .vs__dropdown-toggle
+  background-color: $form-control-color
+  border 0
+  border-radius 3px
+
+.form-control-select .vs__search, .form-control-select .vs__search:focus
+  height 48px
+  margin 0
+  padding 0 15px
+  border 0
+
+.form-control-select .vs__dropdown-toggle
+  padding 0
+
+.form-control-select .vs__selected-options
+  padding 0
+
+.form-control-select .vs__selected
+  position absolute
+  pointer-events none
+  margin 0
+  padding 0
+  border 0
+  height 48px
+  line-height 48px
+  display inline-block
+  overflow hidden
+  text-overflow ellipsis
+  width 100%
+  white-space nowrap
+  padding 0 15px
+  z-index 1
+
+.form-control-select input[type=search]:focus:not([readonly])
+  border 0 !important
+
+.form-control-select .vs__dropdown-menu
+  padding 0
+  box-shadow 0 5px 5px #eee
+  border 0
+  border-radius 0 0 5px 5px
+
+.form-control-select .vs__dropdown-option
+  line-height 1.2
+  padding 12px 15px
+  white-space normal
+  color #3b3b3b
+  margin 0
+
+.form-control-select .vs__dropdown-option:hover
+  cursor pointer
+
+.form-control-select .vs__dropdown-option--highlight
+  background: $form-control-color;
+	color: #5F7696
+
+.form-control-select .vs__clear
+  display none !important
+
+.form-control-select input[type=search]
+  width 0
+
+.form-control-select .vs__actions
+  padding 0 15px 0 3px
+
+
+.b-float-label-select-vc
+  position relative
+    
+  label
+    color: #2b2b2b;
+    position: absolute;
+    top: 0;
+    left: 15px;
+    font-size: $11px;
+    cursor: text;
+    -webkit-transition: color .2s ease-out, -webkit-transform .2s ease-out;
+    transition: color .2s ease-out, -webkit-transform .2s ease-out;
+    transition: transform .2s ease-out, color .2s ease-out;
+    transition: transform .2s ease-out, color .2s ease-out, -webkit-transform .2s ease-out;
+    -webkit-transform-origin: 0% 100%;
+    transform-origin: 0% 100%;
+    text-align: initial;
+    transform( translateY(1rem))
+
+    &:not(.label-icon).active
+      transform( translateY(-22px))
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0

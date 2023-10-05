@@ -1,0 +1,386 @@
+@import '../../styl/component-include.styl'
+
+.b-check-detail
+
+  &__employees
+    display grid
+    grid-template-columns repeat(3, 1fr)
+    gap 20px 2rem
+
+    @media( max-width 1199px )
+      grid-template-columns repeat(2, 1fr)
+
+    @media( max-width 767px )
+      grid-template-columns repeat(1, 1fr)
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-check-detail
+  display block
+  overflow hidden
+
+  &__item
+    display none
+
+    &.active
+      display block
+
+  &__tabs
+    position relative
+    border-bottom 1px solid $line-color
+    padding-bottom 14px
+    font-size $14px
+    font-family $roboto
+
+    @media( max-width 650px )
+      transform( translateX( 100px ))
+      opacity 0
+      transition( all .5s ease )
+      
+      &.animate
+        opacity 1
+        transform( translate(0))
+    
+    a.swiper-slide
+      display inline-block
+      margin-right 30px
+      white-space nowrap
+      width auto !important
+
+      &.active
+        color #3b3b3b
+        pointer-events none
+
+        &.in
+          color $link-color
+          pointer-events auto
+
+    .swiper-container-initialized
+
+      a
+
+        &:hover
+          opacity 1
+
+  &__decor
+    position absolute
+    bottom -1px
+    left 0
+    border-top 1px solid #999
+
+  &__data
+    
+    .b-copy-icon
+      width 16px
+      height 16px
+      background-repeat no-repeat
+      background-position center
+      background-size contain
+      margin-left 16px
+      flex-shrink 0
+      -webkit-transition( opacity .2s linear )
+      transition( opacity .2s linear )
+      opacity 0
+      position relative
+
+      @media(max-width 767px)
+        display none
+
+      &__note
+        position absolute
+        top -31px
+        left 16px
+        background #F0F5FC
+        border-radius 3px
+        color #074C86
+        font-family $roboto
+        font-size $11px
+        line-height 29px
+        padding 0 10px
+        white-space nowrap
+        opacity 0
+        -webkit-transition( opacity .2s linear )
+        transition( opacity .2s linear )
+        pointer-events none
+
+        &.b-copy-icon__note--show
+          opacity 1
+
+    .table
+
+      table&
+        margin-bottom 0
+
+        @media (max-width: 575px)
+          th:nth-child(2),
+          td:nth-child(2)
+            display table-cell
+
+      tr:first-child
+
+        th,
+        td
+          border-top 1px solid $line-color
+
+      th
+        width 35%
+
+      td
+        display flex
+        align-items center
+        min-height 77px
+
+        &:hover
+        
+          .b-copy-icon
+            opacity 1
+
+  &__reports
+
+    .table thead
+
+      th
+        text-align center !important
+        width 200px
+
+        &:nth-child(2)
+          text-align left
+          width auto
+
+    td:first-child
+      text-align center
+
+  #checkDetailChangesFilter,
+  #checkDetailAppealsFilter
+    display flex
+    justify-content flex-start
+    padding 0 1px
+
+    > div
+      width calc((100% - 30px * 4) / 9 * 2)
+      margin-right 30px
+
+      &:first-child
+        width calc((100% - 30px * 4) / 9 * 1)
+
+      &:last-child
+        margin-right 0
+
+    @media( max-width 1199px )
+      flex-wrap wrap
+      justify-content space-between
+      
+      > div
+        width calc( (100% - 30px) / 2 )
+        margin 0 0 30px
+
+        &:first-child
+          width 100%
+      .mx-datepicker-range
+        width 100%
+
+    @media( max-width 767px )
+      flex-wrap wrap
+      
+      > div
+        width 100%
+        margin 0 0 30px
+
+        &:last-child
+          margin-bottom 0
+
+  &__changes,
+  &__appeals
+
+    .table thead
+
+      th
+        text-align center !important
+
+        &:first-child,
+        &:last-child
+          width 200px
+
+          @media(max-width 767px)
+            width auto
+
+    td
+      text-align center
+
+
+
+
+.form-control-wrapper
+  position relative
+
+.form-control-select + label
+  color #2b2b2b
+  position absolute
+  top 0
+  left 15px
+  font-size 0.69rem
+  cursor text
+  transition( transform 0.2s ease-out)
+  transform-origin 0% 100%
+  text-align initial
+  transform( translateY(-22px))
+
+.form-control-select .vs__dropdown-toggle {
+  background-color: $form-control-color;
+  border: 0;
+  border-radius: 3px;
+}
+.form-control-select .vs__search, .form-control-select .vs__search:focus {
+  height: 48px;
+  margin: 0;
+  padding: 0 15px;
+  border: 0;
+}
+.form-control-select input.vs__search[type=search], .form-control-select input.vs__search:focus[type=search] {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+.form-control-select .vs__dropdown-toggle {
+  padding: 0;
+}
+.form-control-select .vs__selected-options {
+  padding: 0;
+}
+.form-control-select .vs__selected {
+  position: absolute;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  height: 48px;
+  padding: 0 15px;
+  font-size $14px
+  z-index: 1;
+}
+.form-control-select input[type=search]:focus:not([readonly]) {
+  border: 0 !important;
+}
+.form-control-select .vs__dropdown-menu {
+  padding: 0;
+  box-shadow: 0 5px 5px #eee;
+  border: 0;
+  border-radius: 0 0 5px 5px;
+  font-size $14px
+}
+.form-control-select .vs__dropdown-option {
+  line-height 1.2
+  padding 12px 15px
+  white-space normal
+	color: #3b3b3b;
+  margin: 0;
+}
+.form-control-select .vs__dropdown-option:hover {
+	cursor: pointer
+}
+.form-control-select .vs__dropdown-option--highlight {
+  background: $form-control-color;
+	color: #5F7696
+
+}
+.form-control-select .vs__clear {
+  display: none !important;
+}
+.form-control-select input[type=search] {
+  width: 0;
+}
+.form-control-select .vs__actions {
+  padding: 0 15px 0 3px;
+}
+.form-control-select .vs__search
+  
+  &,
+  &:focus
+    font-size $14px
+
+.mx-input {
+  font-size: 0.88rem !important;
+  padding: 0 30px 0 15px !important;
+}
+.mx-icon-calendar {
+  width: 16px;
+  height: 16px;
+  background: url('/local/templates/aas/images/calendar.svg') no-repeat center;
+  background-size: cover;
+  cursor: pointer;
+  right: 15px !important;
+}
+.mx-icon-calendar svg {
+  display: none;
+}
+.b-check-plan .mx-datepicker {
+  width: 100% !important;
+}
+.mx-datepicker+label {
+  pointer-events: none;
+}
+
+.b-input-clear {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background: url( 'https://auditor-sro.org/local/templates/aas/images/cancel.svg' ) no-repeat center;
+  background-size: 16px;
+  margin-top: -8px;
+  z-index: 1;
+}
+
+.table
+  font-family $roboto
+  font-size $14px
+
+.b-employee-card
+  font-size $14px
+  display flex
+  justify-content space-between
+  padding 1rem
+  border 1px solid #f2f2f2
+  background-color #fff
+  cursor pointer
+
+  &__photo
+    width 73px
+    height 73px
+    border-radius 51%
+    background-bg()
+    flex-shrink 0
+
+  &__text
+    width calc( 100% - 1rem - 73px )
+
+  &__title
+    font-weight $bold
+    font-size $14px
+    font-family $roboto
+    margin-bottom 2px
+    line-height 1.2
+
+  &__ornz
+    margin-bottom 2px
+    font-size $12px
+
+  &__status
+    font-size $12px
+    

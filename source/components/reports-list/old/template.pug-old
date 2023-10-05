@@ -1,0 +1,100 @@
+// start /components/reports-list/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'reports-list'
+else
+  - var componentsArray = [ 'reports-list' ]
+  
+.b-reports-list.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-reports-list__item.message
+      a.b-reports-list__title( href="/pages/report-form/" ) Пора сдавать отчет
+      .b-reports-list__data
+        span Крайний срок: 22 марта 2021 (56 дней)
+        | <!--[if lte IE 9]><a class="btn btn-secondary btn-md" data-toggle="modal" data-target="#ieAlertModal">Необходимо сдать</a><![endif]-->
+        |	<!--[if gt IE 9]><a class="btn btn-secondary btn-md" href="/profile/reports/auditor/edit.php?edit=Y">Необходимо сдать</a><![endif]-->
+        |	<!--[if !IE]>-->
+        <a class="btn btn-secondary btn-md" href="/profile/reports/auditor/edit.php?edit=Y">Сдать отчет</a>
+        | <!--<![endif]-->
+
+        #ieAlertModal.modal--text.modal--alert.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+          .modal-dialog
+            .modal-content
+              button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+              .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+                h3.text-center Вы используете Internet Explorer 10
+
+                hr
+
+                p С 12 января 2016 года Microsoft перестала обновлять системы безопасности и осуществлять техническую поддержку старых версий Internet Explorer. При своевременном обновлении браузера система безопасности защищает данные на компьютерах пользователей от установки вредоносного ПО и хакерских атак.
+                
+                p Корректное отображение сайта и работа его сервисов в Microsoft Internet Explorer 10 и более ранних версиях, не гарантируется.
+                
+                p Для безопасной и надежной работы рекомендуем Вам использовать один из современных бесплатных браузеров:
+
+                hr
+
+                include ../../modules/browser-choice/include
+        
+
+    hr.hr--md
+
+    .b-reports-list__item
+      a.b-reports-list__title( href="/pages/report-form/" ) Отчет 2020
+      .b-reports-list__data
+        span Крайний срок: 22 марта 2021 (56 дней)
+        a.btn.btn-secondary.btn-md( href="/pages/report-form/" ) Сдать отчет
+
+    .b-reports-list__item
+      a.b-reports-list__title( href="/pages/report/" ) Отчет 2019 и очень длинное название отчёта за 2019 год
+      .b-reports-list__data
+        span Крайний срок: 18 марта 2020
+        a.text-success.b-reports-list__status( href="/pages/report/" ) Cдан
+        //-
+          a.btn.btn-secondary.btn-md( data-toggle="modal" data-target="#editConfirmModal" ) Редактировать
+
+          #editConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+            .modal-dialog
+              .modal-content
+                button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+                .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+                  h3.text-center Вы хотите отредактировать отчет?
+
+                  hr
+
+                  p Вы переходите в режим редактирования отчета. После внесения изменений в отчет вам необходимо сдать его, нажав на кнопку «Сдать отчет».
+                  
+                  p До тех пор, пока вы повторно не отправите отчет, он будет находиться в статусе «Необходимо сдать».
+
+                  hr
+
+                  .text-center.modal-buttons
+                    a.btn.btn-lg.btn-secondary( href="/pages/report-form/" ) Отредактировать
+                    button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+
+    .b-reports-list__item
+      a.b-reports-list__title( href="/pages/report/" ) Отчет 2019 и очень длинное название отчёта за 2019 год
+      .b-reports-list__data
+        span Крайний срок: 18 марта 2020
+        a.text-warning.b-reports-list__status( href="/pages/report/" ) Жёлтый
+
+    .b-reports-list__item
+      a.b-reports-list__title( href="/pages/report/" ) Отчет 2019 и очень длинное название отчёта за 2019 год
+      .b-reports-list__data
+        span Крайний срок: 18 марта 2020
+        a.text-danger.b-reports-list__status( href="/pages/report/" ) Красный
+
+// end /components/reports-list/

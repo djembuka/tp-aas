@@ -1,0 +1,94 @@
+@import '../../styl/component-include.styl'
+
+.b-gallery
+
+  &.ph-block
+    
+    &.ph-block--animated
+      height auto
+      background-color transparent
+
+      .swiper-container
+        opacity 1
+        
+.b-gallery
+  color #fff
+  font-family $roboto
+
+  .swiper-container
+    border-radius 10px
+    overflow hidden
+  
+  &__img
+    height 420px
+    background-bg()
+    border-radius 10px
+
+    &:before
+      content ''
+      display block
+      background-color #f2762e
+      border-radius 50%
+      position absolute
+      top calc( -750px / 2 + 420px / 2 )
+      left -750px
+      width 750px
+      height 750px
+      opacity 0.5
+      transition( all .7s ease-out )
+      z-index 1
+
+  &__slide-content
+    position absolute
+    top 5.5rem
+    left 7%
+    color #fff
+    max-width 500px
+    transform( translateX( 50px ))
+    opacity 0
+    z-index 10
+
+    .swiper-container-initialized &
+      transition( all .5s ease .7s )
+
+  &__heading
+    line-height 1.2
+    margin-bottom 20px
+    font-size 2.5rem
+    font-family $roboto
+    font-weight $bold
+    letter-spacing -1px
+
+    @media( max-width 767px)
+      font-size $24px
+      margin-bottom 10px
+
+  .btn-lg
+
+    @media( max-width 767px)
+      font-size $12px
+      line-height 38px
+      height 38px
+      min-width 158px
+
+  .swiper-slide
+    overflow hidden
+
+    &.swiper-slide-active
+
+      .b-gallery__slide-content
+        transform( translateX(0))
+        opacity 1
+
+      .b-gallery__img:before
+        left -65px
+        opacity 1
+
+        @media( max-width 767px)
+          left -400px
+
+        @media( max-width 575px )
+          left -500px
+
+  @media( max-width 767px)
+    font-size $14px

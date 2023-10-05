@@ -1,0 +1,48 @@
+// start /components/vacancies/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'vacancies'
+else
+  - var componentsArray = [ 'vacancies' ]
+  
+.b-vacancies.ph-block
+
+  .ph
+    .ph__table
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    h2 Вакансии организаций
+
+    table.table.table-responsive( data-result="/components/vacancies/result.json" )
+      thead
+        tr
+          th( data-field="name" ) Название организации
+          th( data-field="phone" ) Контактный телефон
+          th( data-field="email" ) Контактный emal
+      tbody
+        tr
+          td АКК ООО «СТАТУС-АУДИТ»
+          td (495) 280-03-77
+          td komkonaudit@mail.ru
+        tr
+          td АО «Аудит и Право АЛЬЯНС КОНСАЛТИНГ»
+          td (495) 280-03-77
+          td info@acig.ru
+        tr
+          td АО «Аудит и Право АЛЬЯНС КОНСАЛТИНГ»
+          td (926) 521-64-26
+          td info@acig.ru
+
+    hr.hr--xl
+
+    include ../../modules/pagination/include
+
+
+// end /components/vacancies/

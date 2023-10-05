@@ -1,0 +1,34 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-form-profile'
+  - var authorized = 'true'
+
+block title
+  title Редактирование анкеты | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/profile
+
+  hr
+
+  .container-fluid
+  
+    h1 Редактирование анкеты
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/form-profile
+          
+      article.col-12.col-md-8
+        
+        include ../../components/form.profile/template
+  
+    

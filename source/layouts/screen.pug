@@ -1,0 +1,32 @@
+block vars
+  - var page = 'screen'
+  - var authorized = 'true'
+
+doctype html
+html
+  head
+    block title
+      title Screen
+      
+    include includes/pwa/meta
+    
+  body
+
+    include ../components/screen/template
+      
+    block content
+
+      .container-fluid
+        h1 aas
+    
+    //- include page's styles and scripts
+    include includes/fonts
+    include includes/styles
+    //-include includes/scripts
+    
+    //- include styles and scripts for all page's components
+    if componentsArray
+      each componentName in componentsArray
+        link( rel="stylesheet", href="/components/" + componentName + "/style.css" )
+        script( src="/components/" + componentName + "/script.js" )
+

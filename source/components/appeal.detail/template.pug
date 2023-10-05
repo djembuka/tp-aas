@@ -1,0 +1,434 @@
+// start /components/appeal.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'appeal.detail'
+else
+  - var componentsArray = [ 'appeal.detail' ]
+
+#printTemplate( style="display: none;")
+
+  table.table-100.mb-100
+    col( width="50%" )
+    col( width="50%" )
+    tr
+      td
+      td
+
+        table.table-100
+          tr
+            td.text-right.text-11
+              b
+                i Обращение №1957ЛК240222<br>Приложение № 1
+          tr
+            td В СРО ААС<br>от аудиторской организации
+          tr
+            td
+              table.table-100
+                col
+                col( width="5" )
+                tr
+                  td.pb-3
+                    table.table-100
+                      tr
+                        td.border &nbsp;
+                  td.text-right.text-bottom ,
+          tr
+            td.text-center.text-11 (наименование)
+          tr
+            td
+              table.table-100
+                col( width="60" )
+                col
+                col( width="5" )
+                tr
+                  td.text-bottom ОРНЗ
+                  td.pb-3
+                    table.table-100
+                      tr
+                        td.border &nbsp;
+                  td.text-right.text-bottom ,
+          tr
+            td.text-right в лице
+          tr
+            td.border &nbsp;
+          tr
+            td.text-center.text-11 (должность, ФИО)
+  
+.b-appeal-detail.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content 
+
+    h3 Изменение сведений об учредителях (Участниках, акционерах) аудиторской организации, а также сведения о держателях реестров акционеров аудиторской организации, созданной в форме акционерного общества
+
+    hr
+
+    .row 
+      .col-lg-6 
+        table.table
+          tbody
+            tr
+              th Дата заявки
+              td 13.01.2021 13:08
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Номер заявки
+              td N3456
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Заявитель
+              td.table__icon-wrapper
+                a( href="/pages/profile/" ) Абросимова Наталия Александровна
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+                a.table__icon( href="file.pdf" style="background-image: url( '/template/images/pdf.svg' );" )
+            tr
+              th ОРНЗ
+              td
+                a( href="" ) 11782631892674
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+      .col-lg-6 
+        table.table
+          tbody
+            tr
+              th Статус
+              td
+                span.text-danger Отклонено
+            tr
+              th.b-appeal-detail__th-wide(colspan="2") 
+                b Комментарий
+                hr.hr--sm
+                .text-muted Закрыто поддержкой (14.03.2023 10:09:49)
+                hr.hr--sm
+                p Уважаемая Лариса Владимировна! Ваша жалоба с аналогичным содержанием ранее принята в работу и будет рассмотрена по существу Правлением СРО ААС на ближайшем заседании. Правление вправе приглашать заявителей жалоб, однако такое решение принимается самим Правлением при подготовке к рассмотрению в случае, когда письменных материалов может быть недостаточно для рассмотрения жалобы.<br>Если Правлением будет принято решение о приглашении Вас на заседание, Вы будете письменно уведомлены об этом.
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+    hr
+
+    .b-appeal-detail__data
+      h3 Данные для обработки
+      .b-appeal-detail__data-item
+        strong Strong
+        span maxim@twinpx.ru
+        span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+      .b-appeal-detail__data-item
+        strong Strong
+        span vt@twinpx.ru
+        span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+      h3 Документы, прикрепленные к обращению
+
+      .row 
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Справка-подтверждение (Приложение № 8а)
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Sparavka-moi
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+        hr.d-block.d-lg-none.w-100
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Документ, подтверждающий прекращение членства реорганизованной аудиторской организации в СРО
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Очень длинное название файла
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+        hr.w-100
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Готовый комплект документов в СРО ААС
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Zayvka_3456
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+    hr
+
+    .b-appeal-detail__data
+      h3
+        b Пояснение 1
+        span 31.08.2023 12:30:46 (Виктор (Программист))
+
+      .b-appeal-detail__data-item
+        span Уважаемая Лариса Владимировна! Ваша жалоба с аналогичным содержанием ранее принята в работу и будет рассмотрена по существу Правлением СРО ААС на ближайшем заседании.<br>Правление вправе приглашать заявителей жалоб, однако такое решение принимается самим Правлением при подготовке к рассмотрению в случае, когда письменных материалов может быть недостаточно для рассмотрения жалобы. Если Правлением будет принято решение о приглашении Вас на заседание, Вы будете письменно уведомлены об этом.
+        span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+      h3 Документы, прикрепленные к пояснению
+
+      .row 
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Пояснение
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/doc.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Название документа, который прикрепил сотрудник
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+        hr.d-block.d-lg-none.w-100
+
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Пояснение
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/doc.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Название документа, который прикрепил сотрудник
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+    hr
+
+    .b-appeal-detail__data
+      h3
+        b Пояснение 2
+        span 31.08.2023 12:30:46 (Виктор (Программист))
+
+      .b-appeal-detail__data-item
+        span Уважаемая Лариса Владимировна! Ваша жалоба с аналогичным содержанием ранее принята в работу и будет рассмотрена по существу Правлением СРО ААС на ближайшем заседании.<br>Правление вправе приглашать заявителей жалоб, однако такое решение принимается самим Правлением при подготовке к рассмотрению в случае, когда письменных материалов может быть недостаточно для рассмотрения жалобы. Если Правлением будет принято решение о приглашении Вас на заседание, Вы будете письменно уведомлены об этом.
+        span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+    hr
+
+    .b-appeal-detail__data
+      h3 Пояснения
+
+      .b-appeal-detail__data-item
+        span Уважаемая Лариса Владимировна! Ваша жалоба с аналогичным содержанием ранее принята в работу и будет рассмотрена по существу Правлением СРО ААС на ближайшем заседании.<br>Правление вправе приглашать заявителей жалоб, однако такое решение принимается самим Правлением при подготовке к рассмотрению в случае, когда письменных материалов может быть недостаточно для рассмотрения жалобы. Если Правлением будет принято решение о приглашении Вас на заседание, Вы будете письменно уведомлены об этом.
+        span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+      h3 Документы прикрепленные к пояснению
+
+      .row 
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Пояснение
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/doc.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Название документа, который прикрепил сотрудник
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+        hr.d-block.d-lg-none.w-100
+
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Пояснение
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/doc.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Название документа, который прикрепил сотрудник
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+      hr.w-100
+
+      .row 
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Пояснение
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/doc.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Название документа
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+        hr.d-block.d-lg-none.w-100
+                    
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Пояснение
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/doc.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Название документа, который прикрепил сотрудник
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+      hr.w-100
+
+      .row 
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Пояснение
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/doc.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Название документа, который прикрепил сотрудник
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+    hr
+
+    .b-appeal-detail__data
+      h3 Результат обращения
+
+      .b-appeal-detail__data-item
+        span Уважаемая Лариса Владимировна! Ваша жалоба с аналогичным содержанием ранее принята в работу и будет рассмотрена по существу Правлением СРО ААС на ближайшем заседании.<br>Правление вправе приглашать заявителей жалоб, однако такое решение принимается самим Правлением при подготовке к рассмотрению в случае, когда письменных материалов может быть недостаточно для рассмотрения жалобы. Если Правлением будет принято решение о приглашении Вас на заседание, Вы будете письменно уведомлены об этом.
+        span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+      h3 Документы, прикрепленные к обращению
+
+      .row 
+        .col-lg-6
+          .b-appeal-detail__file-card
+            .b-appeal-detail__file-card__title Название формы для файла
+
+            .b-docs-block__item( href="/pages/news/" )
+      
+              .b-docs-block__body
+              
+                a.b-docs-block__icon( href="/pages/news/" style="background-image: url( '/template/images/doc.svg' );" )
+                
+                span.b-docs-block__text
+                
+                  a( href="/pages/news/" ) Название документа, который прикрепил сотрудник
+                  
+                  span.b-docs-block__data
+                    span.text-muted 654 Кб .doc
+
+    hr
+
+    script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+    script( src="https://unpkg.com/vuex@3" )
+
+    script( src="https://unpkg.com/vue-select@latest")
+    link( rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css")
+
+    script( src="/components/appeal.detail/store.js" )
+
+    #changeStatus.row 
+      .col-sm-6 
+        h3 Изменение статуса
+        hr
+        #changeStatusForm
+
+      hr.d-block.d-sm-none.w-100
+      .col-sm-6 
+            
+        .print-content
+          h3.d-flex.align-items-center
+            span.pr-4 История изменения обращения
+            svg#iconPrint.flex-shrink-0(xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32")
+              rect(width="32" height="32" rx="10" fill="#f0f0f0")
+              g(transform="translate(-296 -184)")
+                g(transform="translate(300 188)")
+                  path(d="M0,5H9.5V3c0-2-.75-3-3-3H3C.75,0,0,1,0,3Z" transform="translate(7.25 2)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M8,0V4A2.652,2.652,0,0,1,5,7H3A2.652,2.652,0,0,1,0,4V0Z" transform="translate(8 15)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M18,3V8a2.652,2.652,0,0,1-3,3H13V8H5v3H3A2.652,2.652,0,0,1,0,8V3A2.652,2.652,0,0,1,3,0H15A2.652,2.652,0,0,1,18,3Z" transform="translate(3 7)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M10,0H0" transform="translate(7 15)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M0,0H3" transform="translate(7 11)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M0,0H24V24H0Z" fill="none" opacity="0")
+
+          hr
+          
+          p 13.01.2011 13:01 Обращение создано. Ожидает рассмотрения.
+          p 13.01.2011 14:37 Изменен статус «В работе».
+          p 13.01.2011 14:37 Добавлен комментарий.
+          p 13.01.2011 15:37 Изменен статус «Исполнено».
+
+    hr
+
+    .b-appeal-detail__explanation
+
+      h3 Пояснение
+      p У вас есть возможность предоставить ваши пояснения.
+
+      .row 
+        .col-sm-6 
+          #explanationForm
+
+    hr.hr--xxl.hr--line
+
+    a.btn.btn-serve.btn-md( href="" ) Вернуться к списку
+
+// end /components/appeal.detail/

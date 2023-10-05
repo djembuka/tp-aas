@@ -1,0 +1,15 @@
+// start /components/cookie-alert/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'cookie-alert'
+else
+  - var componentsArray = [ 'cookie-alert' ]
+
+link( rel="stylesheet" href="/template/css/animate.min.css")
+  
+#cookie-alert
+  p На сайте СРО ААС используются файлы cookie. Оставаясь на auditor-sro.org, вы принимаете <a href="">пользовательское соглашение</a>.
+  button.btn.btn-dark.btn-md Принимаю
+
+// end /components/cookie-alert/

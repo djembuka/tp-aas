@@ -1,0 +1,137 @@
+// start /components/comission/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'comission'
+else
+  - var componentsArray = [ 'comission' ]
+
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
+  
+.b-comission.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .b-comission-tabs
+
+      .b-comission-tabs__tabs
+
+        .swiper-container
+          .swiper-wrapper
+            a.swiper-slide.active( href="" ) Все
+            a.swiper-slide( href="" ) Состав
+            a.swiper-slide( href="" ) Новости
+            a.swiper-slide( href="" ) Мероприятия
+            a.swiper-slide( href="" ) Документы
+            a.swiper-slide( href="" ) Статьи
+            a.swiper-slide( href="" ) Протоколы
+        .b-comission-tabs__decor
+
+      hr
+
+      .b-comission-tabs__block
+
+        .swiper-container
+          .swiper-wrapper
+
+            .swiper-slide
+
+              h2 Все
+      
+              p Федеральным законом от 27 октября 2020 г. № 349-ФЗ внесены изменения в Федеральный закон «О развитии малого и среднего предпринимательства в Российской Федерации», которые, среди прочего, затрагивают порядок представления перечня обществ с ограниченной ответственностью аудиторскими организациями в ФНС России с целью ведения последней единого реестра субъектов малого и среднего предпринимательства .Департаментом регулирования бухгалтерского учета, финансовой отчетности, аудиторской деятельности, валютной сферы и негосударственных пенсионных фондов.
+
+            .swiper-slide
+    
+              h2 Председатель комитета
+              
+              include ../../modules/member-card/include
+    
+              hr
+              
+              include ../../modules/member-card/include
+    
+              hr.hr--lg
+              
+              h2 Члены комитета
+              
+              include ../../modules/member-card/include
+              
+              hr
+              
+              include ../../modules/member-card/include
+
+            .swiper-slide
+    
+              h2 Новости комиссии по контролю качества
+              
+              .b-news
+              
+                .row
+                  
+                  .col-12.col-sm-6
+                    p 48-я Международная yаучно-практическая онлайн конференция «Татуровско-Шереметовские чтения»
+                    .small.text-muted 8 сентября 2020
+                    
+                  hr.d-block.d-sm-none.w-100
+                  
+                  .col-12.col-sm-6
+                    p 48-я Международная yаучно-практическая онлайн конференция «Татуровско-Шереметовские чтения»
+                    .small.text-muted 8 сентября 2020
+                    
+                  hr.w-100
+                  
+                  .col-12.col-sm-6
+                    p 48-я Международная yаучно-практическая онлайн конференция «Татуровско-Шереметовские чтения»
+                    .small.text-muted 8 сентября 2020
+                    
+                  hr.d-block.d-sm-none.w-100
+                  
+                  .col-12.col-sm-6
+                    p 48-я Международная yаучно-практическая онлайн конференция «Татуровско-Шереметовские чтения»
+                    .small.text-muted 8 сентября 2020
+                    
+                hr
+                    
+                a.btn.btn-light( href="/pages/news/" ) Все новости 
+
+            .swiper-slide   
+          
+              h2 События связанные с комиссией по контролю качества
+              
+              include ../../components/events/two-cols
+
+            //-.swiper-slide  
+              
+              h2 Комиссии, комитеты и отделы
+              
+              include ../../modules/committee/include
+
+            .swiper-slide  
+              
+              h2 Документы комиссии
+              
+              include ../../modules/docs/open
+
+            .swiper-slide
+              
+              include ../../modules/articles/include
+
+            .swiper-slide
+
+              h2 Протоколы, повестки
+              
+              include ../../modules/protocol/open
+
+// end /components/comission/

@@ -1,0 +1,57 @@
+// start /components/excerpts-multiple-generate/
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="https://unpkg.com/vue-select@latest" )
+link( rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css" )
+
+script( src="/components/excerpts-multiple-generate/store.js" )
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'excerpts-multiple-generate'
+else
+  - var componentsArray = [ 'excerpts-multiple-generate' ]
+  
+.b-excerpts-multiple-generate.ph-block
+
+  .ph
+
+    .ph__input
+    .ph__person-card
+    .ph__items
+      div
+      div
+      div
+
+  .ph-content
+
+    #excerptsMultipleGenerateApp
+
+    #getExcerptModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+          .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+            h3.text-center Документ создается
+
+            hr
+
+            p.text-center Процесс создания документа может занять некоторое время. Пожалуйста, дождитесь предложения загрузить файл на ваш компьютер или вернитесь позже.
+
+            hr
+
+            .progress-indicator
+              .item.item-1
+              .item.item-2
+              .item.item-3
+              .item.item-4
+              .item.item-5
+
+            hr
+
+            .text-center.modal-buttons
+              button.btn.btn-light( data-dismiss="modal" ) Понятно, я вернусь позже
+
+// end /components/excerpts-multiple-generate/

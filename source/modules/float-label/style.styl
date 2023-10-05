@@ -1,0 +1,169 @@
+@import '../../styl/component-include.styl'
+
+.b-float-label
+  position relative
+
+  &--ornz
+
+    input
+      padding-right 2rem !important
+
+  &__progressbar
+    width 0%
+    height 100%
+    transition(width .5s linear)
+    position absolute
+    top 0
+    left 0
+    background-color #4375D8
+    color #fff
+    font-size 11px
+    display flex
+    justify-content space-between
+    align-items center
+    border-radius 5px
+    overflow hidden
+    z-index 1
+
+    &.minimal
+      transition(width 1s linear)
+
+    span
+      padding 0 15px
+      text-overflow ellipsis
+      overflow hidden
+
+    span:last-child
+      width 100%
+      text-align right
+
+  &__big-label
+    font-size $14px
+    line-height 21px
+    margin-bottom 10px
+
+  .password-invisible
+    position absolute
+    top 19px
+    right 14px
+    cursor pointer
+    z-index 1
+    
+
+    div
+      background-bg()
+      width 16px
+      height 10px
+    
+      &:first-child
+        display none
+
+    &.inverse
+
+      div:first-child
+        display block
+
+      div:last-child
+        display none
+  
+  input:not([type=checkbox]),
+  input:not([type=radio]),
+  textarea
+    background-color: $form-control-color;
+    border: none;
+    border-radius: 3px;
+    outline: none;
+    height: 3rem;
+    width: 100%;
+    font-size: $14px;
+    margin: 0;
+    padding: 0 15px;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #3b3b3b;
+    transition( outline .3s ease-in)
+    
+    &:focus:not([readonly]),
+    &.active
+      border-bottom 0
+      box-shadow none
+      outline 1px solid #4F74D1
+    
+      &~label
+        transform( translateY(-22px))
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0
+        
+  textarea
+    height 130px
+    padding 15px
+    display block
+    scrollbar-color #4F74D1 $form-control-color
+    scrollbar-width thin
+
+    &::-webkit-scrollbar
+      width 4px
+      height 4px
+      background-color $form-control-color
+
+    &::-webkit-scrollbar-thumb
+      background-color #4F74D1
+      border-radius 2px
+      cursor pointer
+
+    &::-webkit-scrollbar-thumb:hover
+      background-color #4F74D1
+    
+  label
+    color: #2b2b2b;
+    position: absolute;
+    top: 0;
+    left: 15px;
+    font-size: $11px;
+    cursor: text;
+    -webkit-transition: color .2s ease-out, -webkit-transform .2s ease-out;
+    transition: color .2s ease-out, -webkit-transform .2s ease-out;
+    transition: transform .2s ease-out, color .2s ease-out;
+    transition: transform .2s ease-out, color .2s ease-out, -webkit-transform .2s ease-out;
+    -webkit-transform-origin: 0% 100%;
+    transform-origin: 0% 100%;
+    text-align: initial;
+    transform( translateY(1rem))
+    line-height 1
+    margin-bottom 0
+
+    &:not(.label-icon).active
+      transform( translateY(-20px))
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0
+
+  &.invalid
+  
+    input:not([type=checkbox]),
+    input:not([type=radio]),
+    textarea
+      background-color #ffe5e5
+      color $danger-color
+
+      &:focus
+        outline 1px solid $danger-color
+
+    input[type=text]:focus:not([readonly])+label,
+    input[type=tel]:focus:not([readonly])+label,
+    label
+      color $danger-color
+
+    .b-input-clear
+
+      &:before,
+      &:after
+        border-color $danger-color
+
+  .btn-delete
+    position absolute
+    top 8px
+    right -52px
+    z-index 1
+
+  select 
+    width 100px

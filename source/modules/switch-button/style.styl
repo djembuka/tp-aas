@@ -1,0 +1,56 @@
+@import '../../styl/component-include.styl'
+
+.b-switch-button
+  width calc( 158px * 2 )
+  height 38px
+  background-color #f2f2f2
+  border-radius 7px
+  position relative
+  
+  @media( min-width 576px )
+    display inline-block
+  
+  span
+    display inline-block
+    line-height 38px
+    font-size $12px
+    width 158px
+    height 38px
+    text-align center
+    cursor pointer
+    position relative
+    transition( color .3s ease )
+    user-select none
+    color #9b9b9b
+    z-index 2
+    
+    &:first-child
+      color #fff
+      cursor default
+    
+  &:before
+    content ''
+    position absolute
+    top 0
+    left 0
+    width 158px
+    height 38px
+    border-radius 7px
+    background-color $primary-color
+    transition( left .3s ease )
+    z-index 1
+    
+  &.inverse
+  
+    &:before
+      left 158px
+    
+    span
+    
+      &:first-child
+        color #000
+        cursor pointer
+    
+      &:last-child
+        color #fff
+        cursor default

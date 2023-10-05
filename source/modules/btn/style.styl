@@ -1,0 +1,500 @@
+@import '../../styl/component-include.styl'
+
+.btn
+  font-family $roboto
+  font-weight 200
+  font-size $12px
+  line-height 48px
+  height 48px
+  border-radius 7px
+  padding-top 0
+  padding-bottom 0
+  min-width 158px
+  transition( all .5s ease )
+  display inline-flex
+  align-items center
+  justify-content center
+  white-space nowrap
+
+  button&
+    border none
+    
+  &:hover
+    opacity .7
+
+  .icon
+    display inline-block
+    width 24px
+    height 24px
+    background-bg()
+    margin-right 10px
+    vertical-align text-bottom
+
+  &.btn-sm .icon
+    width 16px
+    height 16px
+  
+  &-primary
+    
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+      background-color $primary-color
+      border-color $primary-color
+      
+    &.focus,
+    &:focus
+      box-shadow none
+
+    &:not(:disabled):not(.disabled)
+
+      &.active,
+      &:active
+        background-color $primary-color
+        border-color $primary-color
+
+        &:focus
+          box-shadow none
+      
+  &-secondary
+    
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+      background-color $secondary-color
+      border-color $secondary-color
+      
+    &.focus,
+    &:focus
+      box-shadow none
+
+    &:not(:disabled):not(.disabled)
+
+      &.active,
+      &:active
+        background-color $secondary-color
+        border-color $secondary-color
+
+        &:focus
+          box-shadow none
+  
+  &-light
+    
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+      color #3b3b3b
+      background-color #f0f0f0
+      border-color #f0f0f0
+      
+    &.focus,
+    &:focus
+      box-shadow none
+
+    &:not(:disabled):not(.disabled)
+
+      &.active,
+      &:active
+        color $primary-color
+        background-color #f0f0f0
+        border-color #f0f0f0
+
+        &:focus
+          box-shadow none
+  
+  &-dark
+    
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+      color #fff
+      background-color #0A355A
+      border-color #0A355A
+      
+    &.focus,
+    &:focus
+      box-shadow none
+
+    &:not(:disabled):not(.disabled)
+
+      &.active,
+      &:active
+        color $primary-color
+        background-color #0A355A
+        border-color #0A355A
+
+        &:focus
+          box-shadow none
+  
+  &-success
+    
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+      color #fff
+      background-color $success-color
+      border-color $success-color
+      
+    &.focus,
+    &:focus
+      box-shadow none
+
+    &:not(:disabled):not(.disabled)
+
+      &.active,
+      &:active
+        color #fff
+        background-color $success-color
+        border-color $success-color
+
+        &:focus
+          box-shadow none
+  
+  &-danger
+    
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+      color #fff
+      background-color $danger-color
+      border-color $danger-color
+      
+    &.focus,
+    &:focus
+      box-shadow none
+
+    &:not(:disabled):not(.disabled)
+
+      &.active,
+      &:active
+        color #fff
+        background-color $danger-color
+        border-color $danger-color
+
+        &:focus
+          box-shadow none
+  
+  &-serve
+    
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+      color #5F7696
+      background-color $form-control-color
+      border-color $form-control-color
+      
+    &.focus,
+    &:focus
+      box-shadow none
+
+    &:not(:disabled):not(.disabled)
+
+      &.active,
+      &:active
+        color #fff
+        background-color $form-control-color
+        border-color $form-control-color
+
+        &:focus
+          box-shadow none
+  
+  &[disabled],
+  &.disabled
+    pointer-events none
+    opacity 1
+    
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+      color #D5D5D5
+      background-color #F4F4F4
+      border-color #F4F4F4
+      
+    &.focus,
+    &:focus
+      box-shadow none
+
+  &-link-color
+    border none
+
+    &.btn-light
+      background-color #fafafa
+
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+    &.btn-light:not(:disabled):not(.disabled).active,
+    &.btn-light:not(:disabled):not(.disabled):active
+      color #F2762E
+    
+    &:hover,
+    &.focus,
+    &:focus,
+    &.btn-light:not(:disabled):not(.disabled).active,
+    &.btn-light:not(:disabled):not(.disabled):active
+      background-color #FFF9F0
+
+  &-blue-color
+    border none
+
+    &.btn-light
+      background-color #fafafa
+
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+    &.btn-light:not(:disabled):not(.disabled).active,
+    &.btn-light:not(:disabled):not(.disabled):active
+      color #5F7696
+    
+    &:hover,
+    &.focus,
+    &:focus,
+    &.btn-light:not(:disabled):not(.disabled).active,
+    &.btn-light:not(:disabled):not(.disabled):active
+      background-color #F2F7FF
+
+  &-gray-color
+    border none
+
+    &.btn-light
+      background-color #fafafa
+
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+    &.btn-light:not(:disabled):not(.disabled).active,
+    &.btn-light:not(:disabled):not(.disabled):active
+      color #9B9B9B
+    
+    &:hover,
+    &.focus,
+    &:focus,
+    &.btn-light:not(:disabled):not(.disabled).active,
+    &.btn-light:not(:disabled):not(.disabled):active
+      background-color #FFFFFF
+
+  &-red-color
+    border none
+
+    &.btn-light
+      background-color #fafafa
+
+    &,
+    &:hover,
+    &.focus,
+    &:focus,
+    &.disabled,
+    &:disabled
+    &.btn-light:not(:disabled):not(.disabled).active,
+    &.btn-light:not(:disabled):not(.disabled):active
+      color #FF0000
+    
+    &:hover,
+    &.focus,
+    &:focus,
+    &.btn-light:not(:disabled):not(.disabled).active,
+    &.btn-light:not(:disabled):not(.disabled):active
+      background-color #FFF7F7
+    
+  &-lg
+    line-height 60px
+    height 60px
+    font-size $16px
+    min-width 250px
+    
+  &-md
+    line-height 38px
+    height 38px
+    
+  &-sm
+    line-height 30px
+    height 30px
+    min-width 0
+    padding 0 17px
+    border-radius 3px
+    font-weight $normal
+    
+  &-tag
+    font-size: $12px
+    font-weight normal
+    height 28px
+    line-height 28px
+    min-width auto
+    padding 0 8px
+    background-color #fafafa
+    border-radius 3px
+
+    &,
+    &:hover,
+    &:focus,
+    &:active
+      color #9b9b9b
+
+.btn--load-circle
+  position relative
+  cursor default
+  pointer-events none
+
+  &,
+  &:hover,
+  &:focus,
+  &:active,
+  &:not(:disabled):not(.disabled).active,
+  &:not(:disabled):not(.disabled):active,
+  & a
+    color transparent !important
+
+  &:after
+    content ""
+    position absolute
+    height 30px
+    width 30px
+    top calc(50% - 15px)
+    right calc(50% - 15px)
+    animation circle 1.3s infinite linear 
+    border 2px solid #fff
+    border-radius 50%
+    border-right-color transparent
+
+@keyframes circle
+  0%
+    transform( rotate(0))
+  100%
+    transform( rotate(360deg))
+
+.btn-delete
+  display inline-block
+  width 32px
+  height 32px
+  background-image url('images/btn-delete.svg');
+  background-bg()
+  cursor pointer
+  transition( opacity .5s ease )
+
+  button&
+    border none
+
+  &:hover
+    opacity .7
+
+  &.btn--load-circle
+    background-image none
+    background-color #e03e41
+    border-radius 10px
+
+    &:after
+      width 20px
+      height 20px
+      top calc(50% - 10px)
+      right calc(50% - 10px)
+
+
+//new style
+.btn-remove
+  display inline-flex
+  justify-content center
+  align-items center
+  width 38px
+  height 38px
+  background #FAFAFA
+  cursor pointer
+  transition( background .3s ease )
+  border-radius 10px
+
+  button&
+    border none
+
+  svg
+
+    path
+      fill #9b9b9b
+      transition( fill .3s ease )
+
+  &:hover
+  
+    svg
+
+      path
+        fill #FF0000
+
+  &:active
+    background #FF0000
+  
+    svg
+
+      path
+        fill #fff
+
+.btn-edit,
+.btn-icon
+  display inline-flex
+  justify-content center
+  align-items center
+  width 38px
+  height 38px
+  background #FAFAFA
+  cursor pointer
+  transition( background .3s ease )
+  border-radius 10px
+
+  button&
+    border none
+
+  svg
+
+    path
+      fill none
+      stroke #9b9b9b
+      stroke-linecap round
+      stroke-linejoin round
+      stroke-width 1.5
+      transition( fill .3s ease )
+
+  &:hover
+  
+    svg
+
+      path
+        stroke #FF9300
+
+  &:active
+    background #FF9300
+  
+    svg
+
+      path
+        stroke #fff

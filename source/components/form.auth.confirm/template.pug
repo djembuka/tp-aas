@@ -1,0 +1,44 @@
+// start /components/form.auth.confirm/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'form.auth.confirm'
+else
+  - var componentsArray = [ 'form.auth.confirm' ]
+  
+.b-form-auth.ph-block
+
+  .ph
+
+    .ph__block
+
+      .ph-col
+        div
+        div
+        div
+        div
+        div
+
+
+  .ph-content
+
+    .b-form-auth__block
+
+      .row
+
+        .col-12.col-md-6.b-validate-form
+
+          h3 Введите код подтвеждения
+          
+          form( action="/pages/form-result/" method="GET" )
+            
+            .b-float-label
+
+              input#CODE( type="text" autocomplete="off" )
+              label( for="CODE" ) Код подтверждения
+              
+            hr
+
+            button.btn.btn-secondary.btn-lg( type="submit" ) Войти
+
+// end /components/form.auth.confirm/

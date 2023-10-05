@@ -1,0 +1,107 @@
+@import '../../styl/component-include.styl'
+
+.b-poll-list
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-poll-list
+
+  &__item
+    border-bottom 1px solid $line-color
+    padding 1.25rem 1.5rem
+
+    &:hover
+      background-color #fcfcfc
+
+    @media( max-width 575px )
+      padding-left 0
+      padding-right 0
+
+  &__content
+    display flex
+    justify-content space-between
+    align-items center
+
+    @media( max-width 575px )
+      display block
+
+  &__title
+    font-family $roboto
+    font-weight $bold
+    width 50%
+    margin-right 20px
+
+    @media( max-width 575px )
+      width 100%
+
+  &__data
+    font-size $16px
+    font-family $roboto
+    display flex
+    justify-content flex-end
+    align-items center
+
+    span
+      margin-right 38px
+      white-space nowrap
+
+    .btn
+      min-width 158px
+
+    @media( max-width 1100px )
+      
+      &,
+      span
+        display block
+        text-align right
+        margin-right 0
+
+      span
+        margin-bottom 10px
+
+    @media( max-width 575px )
+
+      &,
+      span
+        text-align left
+
+      span
+        margin-top 10px
+
+  &__note
+    font-size $12px
+    margin-top 15px
+    width 50%
+
+    @media( max-width 575px )
+      width 100%
+
+  &__status
+    background-repeat no-repeat
+    background-position 3px center
+    background-size 32px
+    width 158px
+    height 38px
+    border 1px solid $success-color
+    color $success-color
+    border-radius 19px
+    font-size $12px
+    line-height 36px
+    padding 0 12px 0 38px
+    text-align center
+    display inline-block

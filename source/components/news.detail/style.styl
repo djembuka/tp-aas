@@ -1,0 +1,72 @@
+@import '../../styl/component-include.styl'
+
+.b-news-detail
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-news-detail
+  
+  aside
+    position relative
+
+.b-sidenote
+  font-size $14px
+  display flex
+  justify-content space-between
+  padding 20px 20px 15px 40px
+  border 1px solid #f2f2f2
+  position absolute
+  top 0
+  left 15px
+  background-color #fff
+  width calc( 100% - 30px )
+  cursor pointer
+  transition( border-color .5s ease )
+  z-index 1
+
+  &.open
+    border-color #b3cff1
+
+  article &
+    display none
+
+  aside &
+    display flex
+
+  &__photo
+    width 73px
+    height 73px
+    border-radius 51%
+    background-bg()
+
+  &__text
+    width calc( 100% - 55px - 73px )
+
+  &__title
+    font-weight $bold
+    font-size $18px
+    font-family $roboto
+    margin-bottom 10px
+    line-height 1.2
+
+  &__status
+    margin-bottom 10px
+
+  &__description
+    display none
+    

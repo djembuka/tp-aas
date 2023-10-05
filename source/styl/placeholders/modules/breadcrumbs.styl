@@ -1,0 +1,22 @@
+.b-breadcrumbs
+  position relative
+  color #fff
+  overflow hidden
+  min-height 24px
+
+  a,
+  span
+    opacity 0
+    transition( opacity .5s ease )
+  
+  &:after
+    content ''
+    display block
+    position absolute
+    top 0
+    left 0
+    height 15px
+    background-color $placeholder-color
+    width 200px
+    transition( all .5s ease )
+    z-index 1

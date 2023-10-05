@@ -1,0 +1,163 @@
+window.addEventListener('load', () => {
+  //icon print
+  document.getElementById('iconPrint').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.print();
+  });
+
+  //icon copy
+  const copyToClipboard = (str, elem) => {
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+      str = str.trim();
+      navigator.clipboard.writeText(str);
+      if (elem) {
+        let span = document.createElement('span');
+        span.classList.add('b-copy-icon__note');
+        span.innerText = 'Скопировано в буфер';
+        elem.querySelector('.b-copy-icon').appendChild(span);
+        setTimeout(() => {
+          span.classList.add('b-copy-icon__note--show');
+        }, 0);
+        setTimeout(() => {
+          span.classList.remove('b-copy-icon__note--show');
+        }, 1000);
+        setTimeout(() => {
+          span.remove();
+        }, 1500);
+      }
+      return;
+    }
+    return Promise.reject('The Clipboard API is not available.');
+  };
+
+  if (window.matchMedia('(min-width: 768px)').matches) {
+    //table
+    document
+      .querySelectorAll('.b-appeal-detail table.table td')
+      .forEach((td) => {
+        td.addEventListener('click', () => {
+          copyToClipboard(td.textContent, td);
+        });
+      });
+
+    //data
+    document.querySelectorAll('.b-appeal-detail__data-item').forEach((item) => {
+      item.addEventListener('click', () => {
+        let span = item.querySelector('span');
+        copyToClipboard(span.textContent, item);
+      });
+    });
+  }
+
+  //Vue app form
+  if (!window.Vue) return;
+
+  Vue.component('v-select', VueSelect.VueSelect);
+
+  new Vue({
+    el: '#changeStatusForm',
+    data() {
+      return {
+        ...window.appealDetailData,
+        isLoading: false,
+        initialCode: null,
+      };
+    },
+    computed: {
+      textareaActive() {
+        return !!this.textarea.value;
+      },
+      buttonDisabled() {
+        return this.select.codeToShowTextarea.find(
+          (elem) => elem === this.select.selectedOption.code
+        )
+          ? !this.textarea.value
+          : false;
+      },
+    },
+    template: `
+      <div>
+        <form :action="this.form.action" :method="this.form.method">
+          <div class="form-control-wrapper">
+            <v-select :searchable="false" :options="select.options" :value="select.options[0]" class="form-control-select" @input="onSelect()" v-model="select.selectedOption"></v-select>
+            <label>{{select.label}}</label>
+            <input type="hidden" :name="select.name" v-model="select.selectedOption.code">
+          </div>
+          <hr>
+          <div v-if="select.codeToShowTextarea.find((elem) => elem === select.selectedOption.code)">
+            <div class="b-float-label" :class="{invalid: textarea.invalid}">
+              <textarea :name="textarea.name" autocomplete="off" required="required" v-model="textarea.value"></textarea>
+              <label :class="{active: textareaActive}">{{textarea.label}}</label>
+            </div>
+            <hr>
+          </div>
+          <div class="row">
+            <div class="col-xl-6">
+              <a href="" class="btn btn-secondary btn-lg" :class="{'btn--load-circle': isLoading}" :disabled="buttonDisabled" @click.prevent="changeStatus">{{button.text}}</a>
+            </div>
+            <hr class="d-block d-xl-none w-100">
+            <div class="col-xl-6 muted small d-flex align-items-center">{{button.message}}</div>
+          </div>
+          <div class="modal--text modal fade" id="changeStatusConfirmModal" tabindex="-1" aria-labelledby="changeStatusConfirmModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );"></button>
+                <div class="modal-body">
+                  <div v-html="modal.html"></div>
+                  <div class="text-center modal-buttons">
+                    <button :name="button.name" class="btn btn-lg btn-secondary" type="submit">{{button.confirm}}</button>
+                    <button class="btn btn-lg btn-light" data-dismiss="modal">{{button.dismiss}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="modal--text modal fade" id="changeStatusAlertModal" tabindex="-1" aria-labelledby="changeStatusAlertModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );"></button>
+              <div class="modal-body">
+                <div v-html="alert.html"></div>
+                <div class="text-center modal-buttons">
+                  <button class="btn btn-lg btn-secondary" @click.prevent="reload">{{alert.button}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`,
+    methods: {
+      onSelect() {},
+      reload() {
+        window.location.href = window.location.href;
+      },
+      async changeStatus() {
+        try {
+          this.isLoading = true;
+          const response = await fetch(this.form.fetchCurrentStatus);
+          const result = await response.json();
+          if (
+            result &&
+            result.STATUS === 'Y' &&
+            (result.CURRENT || result.CURRENT === '')
+          ) {
+            this.isLoading = false;
+            if (result.CURRENT === this.initialCode) {
+              //show confirm modal
+              $('#changeStatusConfirmModal').modal('show');
+            } else {
+              //show alert modal
+              $('#changeStatusAlertModal').modal('show');
+            }
+          }
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    mounted() {
+      this.initialCode = this.select.selectedOption.code;
+    },
+  });
+});

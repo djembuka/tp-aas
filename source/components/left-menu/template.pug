@@ -1,0 +1,44 @@
+// start /components/left-menu/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'left-menu'
+else
+  - var componentsArray = [ 'left-menu' ]
+  
+.b-left-menu.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .b-left-menu__item
+      a( href="" ) Анкета
+      
+    .b-left-menu__item
+      a.active( href="" ) Отчёт о заседании управления организации содружества независимых аудиторов
+      .b-left-menu__sub
+        a( href="" ) Основные сведения
+        span Контакты
+        a( href="" )
+          .nc( data-type="count" data-url="/components/notifications/response.json" data-id="7" )
+          | Численность персонала
+        a( href="" ) Объём услуг
+        a( href="" ) Характеристика организаций
+        a( href="" ) Аудиторские заключения
+        a( href="" ) Участие в сетях
+        a( href="" ) Руководство
+        a( href="" ) Сотрудники
+        
+    .b-left-menu__item
+      a( href="" ) Вебинары<br>и трансляции
+      
+    .b-left-menu__item
+      a( href="" ) Выйти
+
+// end /components/left-menu/

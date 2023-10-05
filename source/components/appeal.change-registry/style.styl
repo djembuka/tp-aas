@@ -1,0 +1,70 @@
+@import '../../styl/component-include.styl'
+
+.b-appeal-change-registry
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-appeal-change-registry
+  
+  &__select
+
+    label
+      font-size $11px
+      color #2b2b2b
+      padding-left 15px
+      display block
+      margin-bottom 5px
+
+
+.b-appeal-blocks
+  display flex
+  justify-content space-between
+  flex-wrap wrap
+
+  &:after
+    content ''
+
+  &:after,
+  .b-appeal-block-item
+    width calc( (100% - 30px * 2) / 3 )
+
+    @media( max-width 1199px )
+      width calc( (100% - 30px) / 2 )
+
+    @media( max-width 575px )
+      width 100%
+
+.b-appeal-block-item
+  border-radius 10px
+  background-color #FAFAFA
+  padding 25px
+  display grid
+  grid-template-rows 1fr 38px
+  min-height 290px
+  margin-bottom 30px
+
+  &__title
+    font-size $20px
+    font-weight $bold
+    font-family $roboto
+    margin-bottom 20px
+    line-height 1.2
+
+  &__text
+    font-size $14px
+    padding-bottom 25px

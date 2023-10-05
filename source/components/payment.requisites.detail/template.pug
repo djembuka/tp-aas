@@ -1,0 +1,98 @@
+// start /components/payment.requisites.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'payment.requisites.detail'
+else
+  - var componentsArray = [ 'payment.requisites.detail' ]
+  
+.b-payment-requisites-detail.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .row
+
+      .col-12.col-lg-6
+
+        h2 Инструкция по оплате членского взноса за год
+        p Для оплаты членского взноса у вас есть несколько вариантов:
+
+        h3 1. Скачать платежное поручение
+
+        include ../../modules/docs/single-simple
+
+        .b-payment-requisites-detail__print
+
+          h3
+            div
+              span 2.
+              | 
+              | Заполнить платежное поручение самостоятельно
+
+            button.btn-icon
+              svg(xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32")
+                g(transform="translate(-296 -184)")
+                  g(transform="translate(300 188)")
+                    path(d="M0,5H9.5V3c0-2-.75-3-3-3H3C.75,0,0,1,0,3Z" transform="translate(7.25 2)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                    path(d="M8,0V4A2.652,2.652,0,0,1,5,7H3A2.652,2.652,0,0,1,0,4V0Z" transform="translate(8 15)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                    path(d="M18,3V8a2.652,2.652,0,0,1-3,3H13V8H5v3H3A2.652,2.652,0,0,1,0,8V3A2.652,2.652,0,0,1,3,0H15A2.652,2.652,0,0,1,18,3Z" transform="translate(3 7)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                    path(d="M10,0H0" transform="translate(7 15)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                    path(d="M0,0H3" transform="translate(7 11)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                    path(d="M0,0H24V24H0Z" fill="none" opacity="0")
+
+          table.table
+            tbody
+              tr
+                th Получатель
+                td СРО ААС
+              tr
+                th ИНН
+                td 7729440813
+              tr
+                th КПП
+                td 772901001
+              tr
+                th Банк получателя
+                td Акционерное общество «Райффайзенбанк», г. Москва
+              tr
+                th БИК
+                td 7729440813
+              tr
+                th К/С
+                td 30101810200000000700
+              tr
+                th Р/С
+                td 40822810000000000002
+
+
+        h3 3. Оплатить с помощью QR кода
+
+        .b-payment-requisites-detail__qr
+          img(src="/upload/portrait.jpg" alt="")
+          p Откройте банковское приложение, наведите найдите иконку оплаты с помощью QR кода: наведите камеру, проверьте автоматически заполненые реквизиты и оплатите.
+
+      hr.hr--md.d-block.d-lg-none.w-100
+
+      .col-12.col-lg-6
+
+        .b-payment-requisites-detail__uip
+          .b-payment-requisites-detail__h4 Ваш УИП:
+          .b-payment-requisites-detail__num 888 888 888 999 999 999 178 978
+            span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          
+        .b-payment-requisites-detail__summ 
+          div
+            span Сумма:
+            | 3 000 рублей
+          div
+            span Срок:
+            | 1 год
+
+// end /components/payment.requisites.detail/

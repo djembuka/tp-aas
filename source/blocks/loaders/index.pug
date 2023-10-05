@@ -1,0 +1,24 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'blocks-loaders'
+  - var authorized = 'true'
+
+block title
+  title Blocks | Loaders | AAS
+
+block content
+
+  .container-fluid
+  
+    h1 Индикаторы загрузки
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/template
+          
+      article.col-12.col-md-8
+
+        

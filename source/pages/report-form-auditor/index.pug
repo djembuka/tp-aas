@@ -1,0 +1,36 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-report-form-auditor'
+  - var authorized = 'true'
+
+block title
+  title Сдать отчет аудитора | Pages | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/registry
+
+  hr
+
+  .container-fluid
+  
+    h1 Сдать отчет аудитора
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/registry
+          
+      article.col-12.col-md-8
+
+        p The scripts are in aas/vue apps/report-form-auditor__latest/...
+        
+        include ../../components/report-form-auditor/template
+  
+    

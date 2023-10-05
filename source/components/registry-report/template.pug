@@ -1,0 +1,80 @@
+// start /components/registry-report/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'registry-report'
+else
+  - var componentsArray = [ 'registry-report' ]
+  
+.b-registry-report.ph-block
+
+  .ph
+    .ph__table
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    table.table.table-responsive( data-result="/components/registry/result.json" )
+      thead
+        tr
+          th( data-field="name" ) ФИО
+          th( data-field="ornz" ) ОРНЗ
+          th( data-field="date" ) Дата сдачи
+          th( data-field="status" ) Статус
+          th
+      tbody
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Савельева Людмила Викторовна
+          td 20606017533
+          td 31.11.2020
+          td.normal На рассмотрении
+          td 
+            a.btn.btn-secondary.btn-sm( href="" ) Проверить отчет
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Широкова Ольга Владимировна
+          td 20406000014
+          td 31.11.2020
+          td.text-success Принят
+          td 
+            a.btn.btn-secondary.btn-sm( href="" ) Проверить отчет
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Ушаков Алексей Вячеславович
+          td 20406000036
+          td 31.11.2020
+          td.text-danger Отклонен
+          td 
+            a.btn.btn-secondary.btn-sm( href="" ) Проверить отчет
+
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Пасичниченко Елена Владимировна
+          td 20806000042
+          td 31.11.2020
+          td.normal На рассмотрении
+          td 
+            a.btn.btn-secondary.btn-sm( href="" ) Проверить отчет
+
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Ушаков Андрей Вячеславович
+          td 20306000057
+          td 31.11.2020
+          td.normal На рассмотрении
+          td 
+            a.btn.btn-secondary.btn-sm( href="" ) Проверить отчет
+
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Махнёва Вера Александровна
+          td 20306010960
+          td 31.11.2020
+          td.normal На рассмотрении
+          td 
+            a.btn.btn-secondary.btn-sm( href="" ) Проверить отчет
+
+    hr.hr--xl
+
+    include ../../modules/pagination/include
+
+// end /components/registry-report/

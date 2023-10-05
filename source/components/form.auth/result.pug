@@ -1,0 +1,33 @@
+// start /components/form.auth/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'form.auth'
+else
+  - var componentsArray = [ 'form.auth' ]
+  
+.b-form-result.ph-block
+
+  .ph
+
+    .ph__block
+      div
+      div
+      div
+      div
+      div
+
+
+  .ph-content
+
+    .b-form-result__block.text-center
+
+      h3 Проверьте вашу почту
+
+      p Контрольная строка, а также ваши регистрационные данные были высланы на email. Пожалуйста, дождитесь письма, так как контрольная строка изменяется при каждом запросе.
+
+      hr.hr--lg
+
+      a.btn.btn-light( href="/" ) Вернуться на главную
+
+// end /components/form.auth/

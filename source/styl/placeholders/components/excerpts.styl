@@ -1,0 +1,54 @@
+.b-excerpts
+
+  &.ph-block
+    position relative
+  
+  .ph
+
+    &__input
+      background-color $placeholder-color
+      width 100%
+      max-width 530px
+      height 48px
+      margin-bottom 2rem
+      border-radius 5px
+
+    &__person-card
+      background-color $placeholder-color
+      height 120px
+      border-radius 10px
+      margin-bottom 2.5rem
+
+    &__items
+      display flex
+      justify-content space-between
+
+      div
+        background-color $placeholder-color
+        padding-top calc((100% - 30px * 2) / 3 * .7)
+        border-radius 10px
+        width calc((100% - 30px * 2) / 3)
+
+        @media(max-width 1250px)
+          width calc((100% - 30px) / 2)
+          padding-top calc((100% - 30px) / 2 * .7)
+
+          &:nth-child(3)
+            display none
+
+        @media(max-width 676px)
+          width 100%
+          padding-top 70%
+
+          &:nth-child(2),
+          &:nth-child(3)
+            display none
+        
+    &-content
+      position absolute
+      top 0
+      left 0
+      width 100%
+      transition( opacity .5s ease )
+      opacity 0
+      z-index 1

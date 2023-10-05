@@ -1,0 +1,55 @@
+// start /components/excerpts/
+
+script( src="https://unpkg.com/vue@next" )
+script( src="https://unpkg.com/vuex@4" )
+
+script( src="/components/excerpts/store.js" )
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'excerpts'
+else
+  - var componentsArray = [ 'excerpts' ]
+  
+.b-excerpts.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    #excerptsApp
+
+    #getExcerptModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+          .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+            h3.text-center Документ создается
+
+            hr
+
+            p.text-center Процесс создания документа может занять некоторое время. Пожалуйста, дождитесь предложения загрузить файл на ваш компьютер или вернитесь за ней позже.
+
+            hr
+
+            .progress-indicator
+              .item.item-1
+              .item.item-2
+              .item.item-3
+              .item.item-4
+              .item.item-5
+
+            hr
+
+            .text-center.modal-buttons
+              button.btn.btn-light.btn-lg( data-dismiss="modal" ) Понятно, я вернусь позже
+
+// end /components/excerpts/

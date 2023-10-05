@@ -1,0 +1,65 @@
+@import '../../styl/component-include.styl'
+
+.b-news-tabs
+  display block
+  overflow hidden
+
+  &__tabs
+    position relative
+    border-bottom 1px solid $line-color
+    padding-bottom 14px
+    font-size $14px
+    font-family $roboto
+
+    @media( max-width 650px )
+      transform( translateX( 100px ))
+      opacity 0
+      transition( all .5s ease )
+      
+      &.animate
+        opacity 1
+        transform( translate(0))
+    
+    a.swiper-slide
+      display inline-block
+      margin-right 30px
+      white-space nowrap
+      width auto !important
+
+      &,
+      &:hover,
+      &:focus,
+      &:active
+        color #6f6f6f
+
+      &.active
+        color #3b3b3b
+        pointer-events none
+
+    .swiper-container-initialized
+
+      a
+
+        &:hover
+          opacity 1
+
+  &__decor
+    position absolute
+    bottom -1px
+    left 0
+    border-top 1px solid #999
+    transition( all .5s ease )
+      
+  div.swiper-slide
+    background-color #fff
+    height auto
+    font-family $roboto
+
+    a
+
+      &,
+      &:hover,
+      &:focus,
+      &:active
+        color #3b3b3b
+      

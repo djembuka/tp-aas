@@ -1,0 +1,89 @@
+// start /components/news/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'news'
+else
+  - var componentsArray = [ 'news' ]
+  
+.b-news.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+  
+    .b-news__wrapper
+
+      .b-news__item
+      
+        .b-news__item__data
+          b Сегодня.
+          | 
+          | 10 сентября 2020 15:45
+        hr.hr--md
+        h2
+          a( href="/pages/news-detail/" ) Учётная политика, изменения в бухгалтерских оценках, ошибки (IAS8). Другие виды оценок и обесценение активов (IAS2, IAS36, IFRS 4,IFRS13)
+        p.b-lead Пресс-релиз Круглого стола прошедшего в дистанционном режиме на тему: «Финансовые инструменты (IAS 32, IAS 39, IFRS 7, IFRS 9): представление, раскрытие информации, признание и оценка»
+        
+      hr.hr--xl.hr--line
+
+      .b-news__item
+      
+        .b-news__item__data 10 сентября 2020 15:45
+        hr.hr--md
+        h2
+          a( href="/pages/news-detail/" ) Учётная политика, изменения в бухгалтерских оценках, ошибки (IAS8). Другие виды оценок и обесценение активов (IAS2, IAS36, IFRS 4,IFRS13)
+        p.b-lead Пресс-релиз Круглого стола прошедшего в дистанционном режиме на тему: «Финансовые инструменты (IAS 32, IAS 39, IFRS 7, IFRS 9): представление, раскрытие информации, признание и оценка»
+        
+      hr.hr--xl.hr--line
+      
+      .row
+        
+        .col-12.col-sm-6
+          .b-news__item
+            p
+              a( href="/pages/news-detail" ) Учётная политика, изменения в бухгалтерских оценках, ошибки (IAS8). Другие виды оценок и обесценение активов (IAS2, IAS36, IFRS 4,IFRS13)
+            .text-muted.small 10 сентября 2020
+            
+        .col-12.d-block.d-sm-none
+          hr.hr--xl.hr--line
+        
+        .col-12.col-sm-6
+          .b-news__item
+            p
+              a( href="/pages/news-detail" ) Учётная политика, изменения в бухгалтерских оценках, ошибки (IAS8). Другие виды оценок и обесценение активов (IAS2, IAS36, IFRS 4,IFRS13)
+            .text-muted.small 10 сентября 2020
+            
+      hr.hr--xl.hr--line
+      
+      .row
+        
+        .col-12.col-sm-6
+          .b-news__item
+            p
+              a( href="/pages/news-detail" ) Учётная политика, изменения в бухгалтерских оценках, ошибки (IAS8). Другие виды оценок и обесценение активов (IAS2, IAS36, IFRS 4,IFRS13)
+            .text-muted.small 10 сентября 2020
+            
+        .col-12.d-block.d-sm-none
+          hr.hr--xl.hr--line
+        
+        .col-12.col-sm-6
+          .b-news__item
+            p
+              a( href="/pages/news-detail" ) Учётная политика, изменения в бухгалтерских оценках, ошибки (IAS8). Другие виды оценок и обесценение активов (IAS2, IAS36, IFRS 4,IFRS13)
+            .text-muted.small 10 сентября 2020
+            
+      hr.hr--xl.hr--line
+          
+    include ../../modules/pagination/include        
+
+// end /components/news/

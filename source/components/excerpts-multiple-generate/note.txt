@@ -1,0 +1,2 @@
+script.txt -> script.js
+Закомментировать method, body для fetch, иначе не работает на локальном.

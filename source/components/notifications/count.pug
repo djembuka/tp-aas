@@ -1,0 +1,12 @@
+// start /components/notifications/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'notifications'
+else
+  - var componentsArray = [ 'notifications' ]
+
+span.notification.notification--count
+  span 99
+
+// end /components/notifications/

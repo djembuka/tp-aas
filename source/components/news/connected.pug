@@ -1,0 +1,43 @@
+// start /components/news/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'news'
+else
+  - var componentsArray = [ 'news' ]
+  
+.b-news.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+  
+    h2 Связанные новости
+    
+    .row
+      
+      .col-12.col-sm-6
+        .b-news__item
+          p
+            a( href="/pages/news-detail" ) Учётная политика, изменения в бухгалтерских оценках, ошибки (IAS8). Другие виды оценок и обесценение активов (IAS2, IAS36, IFRS 4,IFRS13)
+          .text-muted.small 10 сентября 2020
+          
+      .col-12.d-block.d-sm-none
+        hr.hr--xl.hr--line
+      
+      .col-12.col-sm-6
+        .b-news__item
+          p
+            a( href="/pages/news-detail" ) Учётная политика, изменения в бухгалтерских оценках, ошибки (IAS8). Другие виды оценок и обесценение активов (IAS2, IAS36, IFRS 4,IFRS13)
+          .text-muted.small 10 сентября 2020
+
+// end /components/news/

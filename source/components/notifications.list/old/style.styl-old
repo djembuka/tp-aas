@@ -1,0 +1,138 @@
+@import '../../styl/component-include.styl'
+
+.b-notifications-list
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-notifications-list
+
+  .font-weight-bold
+    transition( all .5s ease )
+
+    &,
+    &:hover,
+    &:focus,
+    &:active
+      color $link-color
+      text-decoration none
+      
+    &:hover
+      opacity .7
+
+  .ph-content.content--load-circle
+    position relative
+
+    &:before
+      content ''
+      display block
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+      background-color #ffffff88
+
+    &:after
+      content ""
+      position absolute
+      height 70px
+      width 70px
+      top calc(50% - 35px)
+      right calc(50% - 35px)
+      animation circle 1.3s infinite linear 
+      border 4px solid $primary-color
+      border-radius 50%
+      border-right-color transparent
+
+  table.table
+    font-family $roboto
+
+    th,
+    td
+      font-size $14px
+      text-align center
+      vertical-align middle
+      border-top none
+      border-bottom 1px solid $line-color
+      cursor pointer
+
+      &.asc,
+      &.desc
+        background-color #f2e4d866
+
+      @media( max-width 1399px )
+
+        &:nth-child(6)
+          display none
+
+      @media( max-width 1199px )
+
+        &:nth-child(5)
+          display none
+
+      @media( max-width 991px )
+
+        &:nth-child(4)
+          display none
+
+      @media( max-width 575px )
+
+        &:nth-child(2)
+          display none
+
+    th
+      padding-right 35px
+      padding-left 35px
+      cursor default
+
+      &:first-child
+        text-align left
+        padding-left 1.5rem
+
+    td
+      width 150px
+
+      &:first-child
+        text-align left
+        width auto
+        max-width 150px
+
+        div
+          text-overflow ellipsis
+          overflow hidden
+          white-space nowrap
+        
+      &:last-child
+        padding-left 0
+        padding-right 0
+
+    tbody
+
+      tr
+        cursor pointer
+        transition( background-color .5s ease )
+      
+        &:hover
+          background-color #fcfcfc
+
+        &.b-notifications-list--tainted
+          background-color #FDFCF4
+          color #636A0E
+
+          td:first-child
+            font-weight $bold

@@ -1,0 +1,384 @@
+header.b-header.ph-block
+
+  .b-header-fixed-wrapper
+
+    if notifications
+      .nc( data-type="top" data-url="/components/notifications/response.json" data-id="4" )
+
+    .container-fluid
+
+      .b-header__top
+        
+          .b-header__logo
+            a.b-header__logo-aas( href="/" )
+              img( src="/template/images/logo-aas.svg" width="80" height="56" alt="СРО ААС" )
+              
+            span.b-header__slogan.d-none.d-md-block Саморегулируемая организация аудиторов<br>АССОЦИАЦИЯ «СОДРУЖЕСТВО»
+            
+            a.b-header__logo-ifac.d-none.d-md-block( href="/" )
+              img( src="/template/images/logo-ifac.svg" width="85" height="30" alt="IFAC" )
+            
+          .b-header__profile
+          
+            if authorized
+              .nc( data-type="count" data-url="/components/notifications/response.json" data-id="5" )
+              a.d-none.d-md-block( href="/pages/profile/" )
+                i( style="background-image: url( '/upload/portrait.jpg' );" )
+                span Иванов Пётр Васильевич
+            else
+              a.btn.btn-secondary.d-none.d-md-block( href="/pages/form-auth/" ) Личный кабинет
+              
+            a.b-header__profile-icon.d-inline-block.d-md-none( href="/profile/" style="background-image: url( '/template/images/profile.svg' );" )
+            a.b-header__menu-icon.d-inline-block.d-md-none( href="#" style="background-image: url( '/template/images/menu.svg' );" )
+        
+      .b-header__bottom
+        .b-header__menu
+          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+            .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
+            span
+              a(href="/about/") СРО ААС
+            .b-header__menu-dropdown.wide.ready.bx-nav-2-lvl-wrap
+
+              .b-header__menu-dropdown__wrap
+
+                .b-header__menu-dropdown__text-column
+
+                  .b-header__menu-dropdown__wrap
+
+                    .b-header__menu-dropdown__column
+                  
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+
+                        a(href="/about/structure/") Структура СРО ААС
+
+                        .b-header__menu-dropdown__sub
+                          
+                          a.bx-nav-3-lvl(href="/about/structure/sezd/") Съезд
+                          
+                          a.bx-nav-3-lvl(href="/about/structure/pravlenie/") Правление
+                          
+                          a.bx-nav-3-lvl(href="/about/structure/generalnyy-direktor/") Генеральный директор
+                          
+                          a.bx-nav-3-lvl(href="/about/structure/regions/") Территориальные отделения
+                          
+                          a.bx-nav-3-lvl(href="/about/structure/committee/") Комитеты и комиссии
+
+                    .b-header__menu-dropdown__column
+                  
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/documents/") Документы
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/strategiya-razvitiya/") Стратегия развития
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/fond/") Компенсационный фонд
+
+                    .b-header__menu-dropdown__column
+                  
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/otchet/") Отчетность
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/iski/") Иски и заявления
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/nagrady/") Награды
+
+                  .b-header__menu-dropdown__wrap.b-header__menu-dropdown__icons
+
+                    .b-header__menu-dropdown__column
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/structure/" style="background-image: url(/template/images/more-btn.svg)") Вступить в СРО ААС
+                    .b-header__menu-dropdown__column
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/structure/" style="background-image: url(/template/images/more-btn.svg)") Оплатить взносы
+                    .b-header__menu-dropdown__column
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/structure/" style="background-image: url(/template/images/more-btn.svg)") Выписка из реестра
+
+                .b-header__menu-dropdown__column
+                  
+                  a.b-header__menu-dropdown__b(href="")
+                    img( src="/upload/gallery/1.jpg" alt="" )
+          
+          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+            .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
+            span
+              a(href="/reestr/") Реестры
+            .b-header__menu-dropdown.wide.ready.bx-nav-2-lvl-wrap
+
+              .b-header__menu-dropdown__wrap
+
+                .b-header__menu-dropdown__text-column
+
+                  .b-header__menu-dropdown__wrap
+
+                    .b-header__menu-dropdown__column
+
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/reestr/auditory/") Аудиторы
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/reestr/organizatsiy/") Аудиторские организации
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/reestr/reestr-vydannykh-sro-aas-kvalifikatsionnykh-attestatov-auditora/") Выданные КАА
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/reestr/reestr-annulirovannykh-sro-aas-kvalifikatsionnykh-attestatov-auditora/") Аннулированные КАА
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/reestr/mery-distsiplinarnogo-vozdeystviya-k-chlenam-sro-aas/") Дисциплинарные меры к аудиторам
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/reestr/mery-distsiplinarnogo-vozdeystviya-k-chlenam-sro-aas-organizatsiy/") Дисциплинарные меры к организациям
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/reestr/reestr-auditorov-prekrativshikh-chlenstvo-v-sro-aas/") Аудиторы прекратившие членство
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/reestr/reestr-auditorskikh-organizatsiy-prekrativshikh-chlenstvo-v-sro-aas/") Организации прекратившие членство
+
+                    .b-header__menu-dropdown__column
+                  
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/documents/") Документы
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/strategiya-razvitiya/") Стратегия развития
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/fond/") Компенсационный фонд
+
+                    .b-header__menu-dropdown__column
+                  
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/otchet/") Отчетность
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/iski/") Иски и заявления
+                      
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/nagrady/") Награды
+
+                  .b-header__menu-dropdown__wrap.b-header__menu-dropdown__icons
+
+                    .b-header__menu-dropdown__column
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/structure/" style="background-image: url(/template/images/more-btn.svg)") Вступить в СРО ААС
+                    .b-header__menu-dropdown__column
+                      .b-header__menu-dropdown__item.bx-nav-2-lvl
+                        a(href="/about/structure/" style="background-image: url(/template/images/more-btn.svg)") Оплатить взносы
+
+                .b-header__menu-dropdown__column
+                  
+                  a.b-header__menu-dropdown__b(href="")
+                    img( src="/upload/gallery/1.jpg" alt="" )
+          
+          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+            .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
+            span
+              a(href="/activity/") Саморегулирование
+          
+          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+            .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
+            span
+              a(href="/help_aas/") Аудиторам
+
+          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+            .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
+            span
+              a(href="/pc/") Пресс-Центр
+
+          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+            .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
+            span
+              a(href="/events/") Мероприятия
+        
+        .b-header__search.d-none.d-md-block
+          form( action="" method="GET" )
+            a.b-header__search-icon( href="" style="background-image: url( '/template/images/search.svg' );" )
+            a.b-header__cancel-icon( href="" style="background-image: url( '/template/images/cancel.svg' );" )
+            div
+              input( type="text" name="search" value="" )
+              
+      .b-header__profile-menu
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Мероприятия
+
+          .b-header__menu-dropdown.bx-nav-2-lvl-wrap
+              
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/vebinary/")
+                | Вебинары
+            
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/zasedanie/")
+                | Заседания
+            
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/konferentsiya/")
+                | Конференции
+
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Повышение квалификации
+            
+          .b-header__menu-dropdown.bx-nav-2-lvl-wrap
+              
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/vebinary/")
+                | Вебинары
+            
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/zasedanie/")
+                | Заседания
+            
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/konferentsiya/")
+                | Конференции
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+            
+          .b-header__menu-dropdown.bx-nav-2-lvl-wrap
+              
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/vebinary/")
+                | Вебинары
+            
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/zasedanie/")
+                | Заседания
+            
+            .b-header__menu-dropdown__item.bx-nav-2-lvl
+              a(href="/events/konferentsiya/")
+                | Конференции
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+                
+        .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-arrow.d-block.d-md-none
+          span
+            a(href="/events/") Контроль качества
+              
+        //-a( href="/pages/profile/" ) Контроль качества
+        //-a( href="/pages/profile/" ) Повышение квалификации
+        //-a( href="/pages/profile/" ) Подтверждение повышения квалификации
+        //-span Аттестация аудиторов
+        //-a( href="/pages/profile/" ) Дисциплинарное производство
+        //-a( href="/pages/profile/" ) Международное сотрудничество
+        //-a( href="/pages/profile/" ) МФБ (IFAC)
+          em.b-note-badge( style="background-color: #f00;" ) !
+        //-a( href="/pages/profile/" ) ICAEW
+
+//-.container-fluid
+
+  .b-header__menu-dropdown
+
+    .b-header__menu-dropdown__item
+      a( href="" ) Структура СРО ААС
+      .b-header__menu-dropdown__sub
+        a( href="" ) Съезд
+        a( href="" ) Правление
+        a( href="" ) Генеральный директор
+        a( href="" ) Территориальные отделения
+        a( href="" ) Комитеты и комиссии
+
+    .b-header__menu-dropdown__item
+      a( href="" ) Документы
+        
+    .b-header__menu-dropdown__item
+      a( href="" ) Стратегия развития
+        
+    .b-header__menu-dropdown__item
+      a( href="" ) Компенсационный фонд
+        
+    .b-header__menu-dropdown__item
+      a( href="" ) Отчетность
+      .b-header__menu-dropdown__sub
+        a( href="" ) Отчет в Минфин
+        a( href="" ) Отчетность в Федеральное казначейство
+        a( href="" ) Отчетность СРО ААС
+        a( href="" ) Отчетность аудиторов
+        
+    .b-header__menu-dropdown__item
+      a( href="" ) Иски и заявления
+        
+    .b-header__menu-dropdown__item
+      a( href="" ) Награды
+        
+    .b-header__menu-dropdown__item
+      a( href="" ) Фирменная символика
+        
+    .b-header__menu-dropdown__item
+      a( href="" ) Контакты

@@ -1,0 +1,34 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-check-plan'
+  - var authorized = 'true'
+
+block title
+  title План проверок | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/check
+
+  hr
+
+  .container-fluid
+  
+    h1 План проверок
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/check
+          
+      article.col-12.col-md-9
+        
+        include ../../components/check.plan/template
+  
+    

@@ -1,0 +1,646 @@
+window.addEventListener('load', () => {
+  if (!window.Vue && !window.Vuex) return;
+
+  Vue.use(Vuex);
+
+  const store = new Vuex.Store({
+    state: {
+      tableHtml: '',
+      id: undefined,
+      type: '',
+      status: '',
+      start: '',
+      end: '',
+      selectedOptionStatus: { label: 'Все' },
+      selectedOptionType: { label: 'Все' },
+      page: '1',
+      sorting: {
+        field: '',
+        sortType: '',
+      },
+    },
+    mutations: {
+      changeProp(state, payload) {
+        state[payload.prop] = payload.value;
+      },
+      changeSelectedOption(state, payload) {
+        state[`selectedOption${payload.type}`] = { label: payload.label };
+      },
+    },
+  });
+
+  Vue.component('v-select', VueSelect.VueSelect);
+  Vue.component('date-picker', DatePicker);
+
+  Vue.component('form-control-date', {
+    template: `<div class="b-float-label" data-src="${window.inboxSrcPath}calendar.svg">
+      <date-picker :lang="lang" v-model="dateRange" value-type="X" range format="DD.MM.YYYY" @open="openInput" @close="closeInput" @clear="closeInput" @input="inputDateRange"></date-picker>
+      <label for="DATE" :class="{ active: isActive }">Дата</label>
+    </div>`,
+    data() {
+      return {
+        isActive: !!store.state.start,
+        dateRange: [`${store.state.start}`, `${store.state.end}`],
+        lang: {
+          // the locale of formatting and parsing function
+          formatLocale: {
+            // MMMM
+            months: [
+              'Январь',
+              'Февраль',
+              'Март',
+              'Апрель',
+              'Май',
+              'Июнь',
+              'Июль',
+              'Август',
+              'Сентябрь',
+              'Октябрь',
+              'Ноябрь',
+              'Декабрь',
+            ],
+            // MMM
+            monthsShort: [
+              'Янв',
+              'Фев',
+              'Мар',
+              'Апр',
+              'Май',
+              'Июн',
+              'Июл',
+              'Авг',
+              'Сен',
+              'Окт',
+              'Ноя',
+              'Дек',
+            ],
+            // dddd
+            weekdays: [
+              'Воскресенье',
+              'Понедельник',
+              'Вторник',
+              'Среда',
+              'Четверг',
+              'Пятница',
+              'Суббота',
+            ],
+            // ddd
+            weekdaysShort: ['Вск', 'Пнд', 'Втр', 'Сре', 'Чтв', 'Птн', 'Суб'],
+            // dd
+            weekdaysMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            // first day of week
+            firstDayOfWeek: 1,
+            // first week contains January 1st.
+            firstWeekContainsDate: 1,
+            // format 'a', 'A'
+            meridiem(h, _, isLowercase) {
+              const word = h < 12 ? 'AM' : 'PM';
+              return isLowercase ? word.toLocaleLowerCase() : word;
+            },
+            // parse ampm
+            meridiemParse: /[ap]\.?m?\.?/i,
+            // parse ampm
+            isPM(input) {
+              return `${input}`.toLowerCase().charAt(0) === 'p';
+            },
+          },
+          // the calendar header, default formatLocale.weekdaysMin
+          days: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+          // the calendar months, default formatLocale.monthsShort
+          months: [
+            'Январь',
+            'Февраль',
+            'Март',
+            'Апрель',
+            'Май',
+            'Июнь',
+            'Июль',
+            'Август',
+            'Сентябрь',
+            'Октябрь',
+            'Ноябрь',
+            'Декабрь',
+          ],
+          // the calendar title of year
+          yearFormat: 'YYYY',
+          // the calendar title of month
+          monthFormat: 'MMMM',
+          // the calendar title of month before year
+          monthBeforeYear: true,
+        },
+      };
+    },
+    methods: {
+      openInput() {
+        this.isActive = true;
+      },
+      closeInput() {
+        if (!this.dateRange[0] && !this.dateRange[1]) {
+          this.isActive = false;
+        }
+      },
+      reset() {
+        this.dateRange = [];
+        this.closeInput();
+        store.commit('changeProp', { prop: 'start', value: this.dateRange[0] });
+        store.commit('changeProp', { prop: 'end', value: this.dateRange[1] });
+      },
+      inputDateRange() {
+        //reset page
+        store.commit('changeProp', { prop: 'page', value: 1 });
+        //set start&end
+        store.commit('changeProp', { prop: 'start', value: this.dateRange[0] });
+        store.commit('changeProp', { prop: 'end', value: this.dateRange[1] });
+        //render table
+        this.$emit('rendertable');
+        //set URL
+        this.$emit('seturl');
+      },
+    },
+  });
+
+  Vue.component('form-control-type', {
+    data() {
+      return {
+        options: window.selectTypeData.options || [
+          {
+            label: 'Все',
+            code: '',
+          },
+        ],
+        selectedOption: this.$store.state.selectedOptionType ||
+          window.selectTypeData.selected || {
+            label: 'Все',
+            code: '',
+          },
+      };
+    },
+    template: `<div class="form-control-wrapper">
+      <v-select :searchable="false" :options="options" :value="options[0]" class="form-control-select" @input="onSelect()" v-model="selectedOption"></v-select>
+      <label>Тип обращения</label>
+    </div>`,
+    props: ['status'],
+    methods: {
+      onSelect() {
+        //reset page
+        this.$store.commit('changeProp', { prop: 'page', value: 1 });
+        //set status
+        this.$store.commit('changeProp', {
+          prop: 'type',
+          value: this.selectedOption.code,
+        });
+        //render table
+        this.$emit('rendertable');
+        //set URL
+        this.$emit('seturl');
+      },
+    },
+  });
+
+  Vue.component('form-control-status', {
+    data() {
+      return {
+        options: window.selectStatusData.options || [
+          {
+            label: 'Все',
+            code: '',
+          },
+        ],
+        selectedOption: store.state.selectedOptionStatus ||
+          window.selectStatusData.selected || {
+            label: 'Все',
+            code: '',
+          },
+      };
+    },
+    template: `<div class="form-control-wrapper">
+      <v-select :searchable="false" :options="options" :value="options[0]" class="form-control-select" @input="onSelect()" v-model="selectedOption"></v-select>
+      <label>Статус обращения</label>
+    </div>`,
+    props: ['status'],
+    methods: {
+      onSelect() {
+        //reset page
+        store.commit('changeProp', { prop: 'page', value: 1 });
+        //set status
+        store.commit('changeProp', {
+          prop: 'status',
+          value: this.selectedOption.code,
+        });
+        //render table
+        this.$emit('rendertable');
+        //set URL
+        this.$emit('seturl');
+      },
+    },
+  });
+
+  Vue.component('form-control-fio', {
+    data() {
+      return {
+        inputText: '',
+        hover: false,
+        isActive: false,
+      };
+    },
+
+    props: {
+      code: String,
+      label: String,
+    },
+
+    computed: {
+      isClearable() {
+        return this.inputText !== '' && this.hover ? true : false;
+      },
+    },
+
+    template: `<div class="b-float-label" @mouseover="hover=true;" @mouseout="hover=false;">
+      <input :id="'inbox-filter-' + code" type="text" name="FIO" required="" autocomplete="off" v-model="inputText" @input="changeInput" @blur="blurInput($event)">
+      <label :for="'inbox-filter-' + code" :class="{active: isActive}">{{label}}</label>
+      <div class="b-input-clear" @click="clearInput($event)" v-show="isClearable"></div>
+    </div>`,
+
+    methods: {
+      changeInput() {
+        if (this.inputText.length >= 1) {
+          this.getTableData();
+        } else if (store.state[this.code]) {
+          store.commit('changeProp', { prop: this.code, value: undefined });
+          this.getTableData(false);
+        }
+      },
+      blurInput(e) {
+        if (e.target.value !== '') {
+          this.isActive = true;
+        } else {
+          this.isActive = false;
+        }
+      },
+      clearInput(e) {
+        if (e) {
+          e.preventDefault();
+        }
+        this.inputText = '';
+        this.isActive = false;
+        this.getTableData();
+      },
+      reset() {
+        this.inputText = '';
+        this.isActive = false;
+        store.commit('changeProp', {
+          prop: this.code,
+          value: undefined,
+        });
+      },
+      getTableData(setQueryFlag) {
+        //reset page
+        store.commit('changeProp', { prop: 'page', value: 1 });
+        //set query
+        if (setQueryFlag !== false) {
+          store.commit('changeProp', {
+            prop: this.code,
+            value: this.inputText || undefined,
+          });
+        }
+        //render Table
+        this.$emit('rendertable');
+        //set URL
+        this.$emit('seturl');
+      },
+    },
+  });
+
+  Vue.component('my-filter', {
+    template: `
+      <div id="my-filter">
+        <form-control-fio @rendertable="renderTable" @seturl="seturl" ref="id" code="id" label="Номер (ID)"></form-control-fio>
+        <form-control-type @rendertable="renderTable" @seturl="seturl" :status="$store.state.status" ref="status"></form-control-type>
+        <form-control-status @rendertable="renderTable" @seturl="seturl" :status="$store.state.status" ref="status"></form-control-status>
+        <form-control-date @rendertable="renderTable" @seturl="seturl" ref="date"></form-control-date>
+      </div>`,
+    methods: {
+      renderTable() {
+        //render table
+        this.$emit('rendertable');
+      },
+      seturl() {
+        this.$emit('seturl');
+      },
+    },
+  });
+
+  Vue.component('my-table', {
+    data() {
+      return {
+        sorting: {
+          field: '',
+          sortType: '',
+        },
+      };
+    },
+    template: `<div id="inbox-table" class="b-registry-report">
+      <div v-if="$store.state.tableHtml.rows">
+        <table class="table table-responsive">
+          <thead>
+            <tr>
+              <th v-for="col in tableHtml.cols" :class="col.sortType" @click="sortTable($event, col.field, col.sortType)">{{col.title}}</th>
+            </tr>
+          </thead>
+          <tbody v-if="tableHtml.new">
+            <tr v-for="row in tableHtml.new" class="tr--new" :data-id="row.data.id" :data-url="row.url" :title="row.title" :data-target="row.target" @click="clickTr($event)">
+              <td v-for="(value, name) in row.data" v-html="value" :class="sorting.field === name ? sorting.sortType : ''"></td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr v-for="row in tableHtml.rows" :data-id="row.data.id" :data-url="row.url" :title="row.title" :data-target="row.target" @click="clickTr($event)">
+              <td v-for="(value, name) in row.data" v-html="value" :class="sorting.field === name ? sorting.sortType : ''"></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <div v-html="tableHtml.pagination" @click="clickPagination($event)"></div>
+      </div>
+      <div v-else>Нет данных.</div>
+    </div>`,
+    computed: {
+      tableHtml() {
+        const tableHtml = this.$store.state.tableHtml;
+        if (typeof tableHtml === 'object') {
+          const sortedCol = tableHtml.cols.filter((col) => col.sortType);
+          if (sortedCol.length) {
+            this.sorting = {
+              field: sortedCol[0].field,
+              sortType: sortedCol[0].sortType,
+            };
+          }
+        }
+        return tableHtml;
+      },
+    },
+    methods: {
+      sortTable(e, field, sortType) {
+        sortType = sortType === 'asc' ? 'desc' : 'asc';
+        this.$store.commit('changeProp', {
+          prop: 'sorting',
+          value: { field, sortType },
+        });
+
+        //render table
+        this.$emit('rendertable');
+        //set url
+        this.$emit('seturl');
+      },
+      clickTr(event) {
+        if (
+          event.target.classList.contains('.btn-remove') ||
+          event.target.closest('.btn-remove')
+        ) {
+          return;
+        }
+        event.preventDefault();
+        let url = event.target.closest('tr').getAttribute('data-url');
+        let target = event.target.closest('tr').getAttribute('data-target');
+        if (!url) return;
+        if (target === '_self') {
+          window.location.href = url;
+        } else if (target === '_blank') {
+          window.open(url, 'new');
+        }
+      },
+      clickPagination(e) {
+        e.preventDefault();
+        if (e.target.getAttribute('href')) {
+          //reset page
+          let page = parseQuery(e.target.getAttribute('href')).PAGEN_1;
+          this.$store.commit('changeProp', { prop: 'page', value: 1 * page });
+          //render Table
+          this.$emit('rendertable');
+          //set URL
+          this.$emit('seturl');
+        }
+      },
+    },
+  });
+
+  const app = new Vue({
+    el: '#appealMy',
+    store,
+    methods: {
+      renderTable() {
+        (async () => {
+          const requestObj = {};
+          if (this.$store.state.id) {
+            requestObj.id = this.$store.state.id;
+          }
+          if (this.$store.state.type) {
+            requestObj[window.selectTypeData.name] = this.$store.state.type;
+          }
+          if (this.$store.state.status) {
+            requestObj[window.selectStatusData.name] = this.$store.state.status;
+          }
+          if (this.$store.state.start) {
+            requestObj.start = this.$store.state.start;
+          }
+          if (this.$store.state.end) {
+            requestObj.end = this.$store.state.end;
+          }
+          if (this.$store.state.sorting.field) {
+            requestObj.sortField = this.$store.state.sorting.field;
+          }
+          if (this.$store.state.sorting.sortType) {
+            requestObj.sortType = this.$store.state.sorting.sortType;
+          }
+          if (this.$store.state.page) {
+            requestObj.PAGEN_1 = this.$store.state.page;
+          }
+
+          const response = await fetch(
+            `${window.myScriptURL.getTable.split('?')[0]}${getQuery(
+              requestObj,
+              window.myScriptURL.getTable
+            )}`,
+            {
+              headers: {
+                Authentication: 'secret',
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          } else {
+            let result = await response.json();
+            //table data
+            this.$store.commit('changeProp', {
+              prop: 'tableHtml',
+              value: result,
+            });
+            //scroll
+            window.scrollTo({
+              top:
+                document.querySelector('#appealMy').getBoundingClientRect()
+                  .top +
+                window.scrollY -
+                190,
+              behavior: 'smooth',
+            });
+          }
+        })();
+      },
+      seturl() {
+        const queryObj = {};
+        if (this.$store.state.id) {
+          queryObj.id = this.$store.state.id;
+        }
+        if (this.$store.state.type) {
+          queryObj[window.selectTypeData.name] = this.$store.state.type;
+        }
+        if (this.$store.state.status) {
+          queryObj[window.selectStatusData.name] = this.$store.state.status;
+        }
+        if (this.$store.state.start) {
+          queryObj.start = this.$store.state.start;
+        }
+        if (this.$store.state.end) {
+          queryObj.end = this.$store.state.end;
+        }
+        if (this.$store.state.sorting.field) {
+          queryObj.sortField = this.$store.state.sorting.field;
+        }
+        if (this.$store.state.sorting.sortType) {
+          queryObj.sortType = this.$store.state.sorting.sortType;
+        }
+        if (this.$store.state.page) {
+          queryObj.PAGEN_1 = this.$store.state.page;
+        }
+
+        window.history.pushState(
+          '',
+          '',
+          getQuery(queryObj, window.location.href)
+        );
+      },
+    },
+
+    beforeMount() {
+      //set store variables
+      const queryObject = parseQuery(window.location.search);
+      for (let key in queryObject) {
+        switch (key) {
+          case 'id':
+            this.$store.commit('changeProp', {
+              prop: key,
+              value: queryObject[key] || undefined,
+            });
+            break;
+          case window.selectTypeData.name:
+            this.$store.commit('changeProp', {
+              prop: 'type',
+              value: queryObject[key] || '',
+            });
+            break;
+          case window.selectStatusData.name:
+            this.$store.commit('changeProp', {
+              prop: 'status',
+              value: queryObject[key] || '',
+            });
+            break;
+          case 'start':
+            this.$store.commit('changeProp', {
+              prop: 'start',
+              value: queryObject[key] || '',
+            });
+            break;
+          case 'end':
+            this.$store.commit('changeProp', {
+              prop: 'end',
+              value: queryObject[key] || '',
+            });
+            break;
+          case 'sortField':
+            this.$store.commit('changeProp', {
+              prop: 'sorting',
+              value: {
+                field: queryObject.sortField || '',
+                sortType: queryObject.sortType || '',
+              },
+            });
+            break;
+          case 'sortType':
+            this.$store.commit('changeProp', {
+              prop: 'sorting',
+              value: {
+                field: queryObject.sortField || '',
+                sortType: queryObject.sortType || '',
+              },
+            });
+            break;
+          case 'PAGEN_1':
+            this.$store.commit('changeProp', {
+              prop: 'page',
+              value: queryObject[key] || '',
+            });
+            break;
+        }
+      }
+
+      //set status to the status select
+      const selectedStatus = window.selectStatusData.options.filter(
+        (optionObj) => optionObj.code === this.$store.state.status
+      );
+      this.$store.commit('changeSelectedOption', {
+        type: 'Status',
+        label: selectedStatus[0].label,
+      });
+      //set type to the type select
+      const selectedType = window.selectTypeData.options.filter(
+        (optionObj) => optionObj.code === this.$store.state.type
+      );
+      this.$store.commit('changeSelectedOption', {
+        type: 'Type',
+        label: selectedType[0].label,
+      });
+    },
+    mounted() {
+      const textInputs = ['id'];
+      textInputs.forEach((code) => {
+        if (this.$store.state[code]) {
+          this.$refs.filter.$refs[code].inputText = this.$store.state[code];
+          this.$refs.filter.$refs[code].isActive = true;
+        }
+      });
+      //render the table
+      this.renderTable();
+    },
+  });
+
+  function getQuery(queryObject, url) {
+    var result = [];
+    var urlQueryObject = {};
+    var assignedObject;
+
+    if (url.split('?')[1] !== undefined) {
+      urlQueryObject = parseQuery(url.split('?')[1]);
+    }
+
+    assignedObject = Object.assign(urlQueryObject, queryObject);
+
+    for (var k in assignedObject) {
+      result.push(k + '=' + assignedObject[k]);
+    }
+    return '?' + result.join('&');
+  }
+
+  function parseQuery(queryString) {
+    var query = {};
+
+    var arr = queryString.split('?');
+    var pairs = arr[arr.length - 1].split('&');
+    for (var i = 0; i < pairs.length; i++) {
+      var pair = pairs[i].split('=');
+      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
+  }
+});

@@ -1,0 +1,69 @@
+// start /components/appeal.new.change-form.public/
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js" )
+link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue-scrollto" )
+script( src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js" )
+
+script( src="/components/appeal.new.change-form.public/store.js" )
+
+script
+  | window.appealNewChangeFormPaths = {
+  |   autosave: '/components/appeal.new.change-form/removeCompany.json',
+  | };
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'appeal.new.change-form.public'
+else
+  - var componentsArray = [ 'appeal.new.change-form.public' ]
+
+.b-appeal-new-change-form-public.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    h3 Изменение сведений об учредителях (Участниках, акционерах) аудиторской организации, а также сведения о держателях реестров акционеров аудиторской организации, созданной в форме акционерного общества
+
+    p Подробное описание заполнения формы с <a href="">пояснением</a> о том, какие поля надо заполнять и как они должны выглядеть. Описанием может быть довольно большим.
+
+    form(action="" method="GET")
+
+      .b-appeal-new-change-form__hidden 
+        input(type="hidden", name="SOME" value="") 
+
+      #appealNewChangeForm
+
+      #submitConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="submitConfirmModalLabel" aria-hidden="true")
+        .modal-dialog
+          .modal-content
+            button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+            .modal-body
+              h3.text-center Вы хотите отредактировать отчет?
+
+              hr
+
+              p Вы переходите в режим редактирования отчета. После внесения изменений в отчет вам необходимо сдать его, нажав на кнопку «Сдать отчет».
+              
+              p До тех пор, пока вы повторно не отправите отчет, он будет находиться в статусе «Необходимо сдать».
+
+              hr
+
+              .text-center.modal-buttons
+                input.btn.btn-secondary.btn-lg( type="submit" name="iblock_submit" value="Отправить" )
+                button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+
+// end /components/appeal.new.change-form.public/

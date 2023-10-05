@@ -1,0 +1,24 @@
+{
+  "STATUS": "Y",
+  "MESSAGE": "Ошибка, сервер занят.",
+  "DATA": {
+    "title": "Выписка-99-ФC/21",
+    "date": "22 апреля 2021 17:30:12",
+    "files": {
+      "pdf": {
+        "url": "/upload/example.pdf",
+        "size": "8.07 Мб"
+      },
+      "pdf-sig": {
+        "pdf": {
+          "url": "/upload/example.pdf",
+          "size": "8.07 Мб"
+        },
+        "sig": {
+          "url": "/pages/excerpt2/",
+          "size": "1.07 Мб"
+        }
+      }
+    }
+  }
+}

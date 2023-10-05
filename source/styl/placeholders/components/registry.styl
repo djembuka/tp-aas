@@ -1,0 +1,49 @@
+.b-registry
+
+  &.ph-block
+    position relative
+  
+  .ph
+
+    &__form
+      display flex
+      justify-content space-between
+      margin 23px 0 90px
+
+      @media( max-width 575px )
+        display block
+
+      div:first-child
+        width calc( 100% - 178px )
+        background-color $placeholder-color
+        border-radius 5px
+        height 48px
+
+        @media( max-width 575px )
+          width 100%
+          margin-bottom 15px
+
+      div:last-child
+        width 158px
+        background-color $placeholder-color
+        border-radius 7px
+        height 48px
+
+    &__table
+
+      div
+        height 7px
+        margin-bottom 15px
+        background-color $placeholder-color
+
+        &:last-child
+          width 70%
+  
+    &-content
+      position absolute
+      top 0
+      left 0
+      width 100%
+      transition( opacity .5s ease )
+      opacity 0
+      z-index 1

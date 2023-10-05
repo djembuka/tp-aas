@@ -1,0 +1,249 @@
+// start /components/events.tabs/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'events.tabs'
+else
+  - var componentsArray = [ 'events.tabs' ]
+
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
+  
+.b-events-tabs
+
+  .b-events-tabs__tabs
+
+    .swiper-container
+      .swiper-wrapper
+        a.swiper-slide.active( href="" ) Все мероприятия
+        a.swiper-slide( href="" ) Онлайн
+        a.swiper-slide( href="" ) Круглые столы
+        a.swiper-slide( href="" ) Конференции
+    .b-events-tabs__decor
+
+  hr
+  
+  .b-events-tabs__block
+
+    .swiper-container
+      .swiper-wrapper
+
+        .swiper-slide
+          
+          .row
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top( style="background-image: url( '/upload/events/1.jpeg' );" )
+                  .b-events-tabs__date 14 сентября
+                  .b-events-tabs__year 2020
+                  a.b-events-tabs__tag( href="/pages/events/" ) Онлайн
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новые ПБУ в 2020 году»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+                
+
+            hr.d-block.d-sm-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top( style="background-image: url( '/upload/events/2.jpeg' );" )
+                  .b-events-tabs__date 18 сентября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новации налогового законодательства-2020: изменения, основные проблемы и способы их решения»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное
+
+            hr.d-block.d-lg-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 25 сентября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новые ПБУ в 2020 году».
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Отделение
+
+            hr.d-block.d-sm-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 5 ноября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Цифровая экономика: перспективы аудита и безопасности бизнеса»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+
+        .swiper-slide
+          
+          .row
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top( style="background-image: url( '/upload/events/1.jpeg' );" )
+                  .b-events-tabs__date 18 сентября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новации налогового законодательства-2020: изменения, основные проблемы и способы их решения»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+
+            hr.d-block.d-sm-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 25 сентября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новые ПБУ в 2020 году».
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное
+
+            hr.d-block.d-lg-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 5 ноября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Цифровая экономика: перспективы аудита и безопасности бизнеса»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+                  
+            hr.d-block.d-sm-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 14 сентября
+                  .b-events-tabs__year 2020
+                  a.b-events-tabs__tag( href="/pages/events/" ) Онлайн
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новые ПБУ в 2020 году»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+
+        .swiper-slide
+          
+          .row
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 25 сентября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новые ПБУ в 2020 году».
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+
+            hr.d-block.d-sm-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 5 ноября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Цифровая экономика: перспективы аудита и безопасности бизнеса»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+                  
+            hr.d-block.d-lg-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 14 сентября
+                  .b-events-tabs__year 2020
+                  a.b-events-tabs__tag( href="/pages/events/" ) Онлайн
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новые ПБУ в 2020 году»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+
+            hr.d-block.d-sm-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top( style="background-image: url( '/upload/events/2.jpeg' );" )
+                  .b-events-tabs__date 18 сентября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новации налогового законодательства-2020: изменения, основные проблемы и способы их решения»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+
+        .swiper-slide
+          
+          .row
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 5 ноября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Цифровая экономика: перспективы аудита и безопасности бизнеса»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+                  
+            hr.d-block.d-sm-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 14 сентября
+                  .b-events-tabs__year 2020
+                  a.b-events-tabs__tag( href="/pages/events/" ) Онлайн
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новые ПБУ в 2020 году»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+                
+
+            hr.d-block.d-lg-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top( style="background-image: url( '/upload/events/1.jpeg' );" )
+                  .b-events-tabs__date 18 сентября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новации налогового законодательства-2020: изменения, основные проблемы и способы их решения»
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+                    a.b-events-tabs__link( href="" ) Дальневостовчное отделение
+
+            hr.d-block.d-sm-none.w-100
+
+            .col-12.col-sm-6.col-lg-3
+              .b-events-tabs__item
+                .b-events-tabs__top
+                  .b-events-tabs__date 25 сентября
+                  .b-events-tabs__year 2020
+                .b-events-tabs__bottom
+                  a.b-events-tabs__title( href="/pages/events-detail/" ) Круглый стол в дистанционном формате на тему: «Новые ПБУ в 2020 году».
+                  .b-events-tabs__btn
+                    a.btn.btn-secondary.btn-sm( href="/pages/events-detail/" ) Принять участие
+
+// end /components/events.tabs/

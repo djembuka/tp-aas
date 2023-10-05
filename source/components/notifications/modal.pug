@@ -1,0 +1,17 @@
+// start /components/notifications/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'notifications'
+else
+  - var componentsArray = [ 'notifications' ]
+
+#notModal.modal.fade(tabindex="-1" aria-labelledby="notModalLabel" aria-hidden="true")
+  .modal-dialog
+    .modal-content.notification.notification--modal
+      button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+      .notification__h3 Внимание
+      .notification__p Если Вы читаете это сообщение, значит нам нужно сообщить вам важную новость поэтому обратите на нее внимание.
+      a.btn.btn-lg.notification__clear( href="" data-dismiss="modal" ) Понятно
+
+// end /components/notifications/

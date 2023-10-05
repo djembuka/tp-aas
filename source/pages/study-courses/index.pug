@@ -1,0 +1,34 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-study-courses'
+  - var authorized = 'true'
+
+block title
+  title УМЦ | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/study
+
+  hr
+
+  .container-fluid
+  
+    h1 Автономная некоммерческая организация дополнительного профессионального образования (повышение квалификации) учебно-методический центр «Премиум»
+
+    hr
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/study
+          
+      article.col-12.col-md-9
+  
+        include ../../components/study.courses/template

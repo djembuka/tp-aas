@@ -1,0 +1,35 @@
+{
+  "cols": [
+    { "field": "id", "title": "Номер (ID)", "sortType": "asc" },
+    { "field": "date", "title": "Дата создания" },
+    { "field": "type", "title": "Подтип обращения" },
+    { "field": "status", "title": "Статус" }
+  ],
+  "rows": [
+    {
+      "data": {
+        "id": "34",
+        "date": "18 мая 2021",
+        "type": "Изменение адреса официального сайта в сети Интернет",
+        "status": "<div class='label-blue'><span>На проверке</span></div>"
+      }
+    },
+    {
+      "data": {
+        "id": "35",
+        "date": "18 мая 2021",
+        "type": "Изменение адреса официального сайта в сети Интернет",
+        "status": "<div class='label-blue'><span>На проверке</span></div>"
+      }
+    },
+    {
+      "data": {
+        "id": "36",
+        "date": "18 мая 2021",
+        "type": "Изменение адреса официального сайта в сети Интернет",
+        "status": "<div class='label-blue'><span>На проверке</span></div>"
+      }
+    }
+  ],
+  "pagination": "<div class=\"b-pagination-block text-right ph-block sys-pagination-aas ph-block--animated\"><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">1</a><span class=\"main-ui-pagination-page main-ui-pagination-active i-active\">2</span><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">3</a><a class=\"main-ui-pagination-page main-ui-pagination-dots\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=151\">...</a><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=298\">298</a><a class=\"main-ui-pagination-arrow main-ui-pagination-prev i-backward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">Предыдущая</a><a class=\"main-ui-pagination-arrow main-ui-pagination-next i-forward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">Следующая</a></div>"
+}

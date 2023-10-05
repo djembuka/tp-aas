@@ -1,0 +1,51 @@
+// start /components/left-menu/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'left-menu'
+else
+  - var componentsArray = [ 'left-menu' ]
+  
+.b-left-menu.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .b-left-menu__item
+      a( href="" ) Данные реестра
+      .b-left-menu__sub
+        a( href="" ) Данные для публикации на сайте
+        
+    .b-left-menu__item
+      a( href="" ) Документы
+
+    .b-left-menu__item
+      a( href="" ) Модерация отчетов
+      .b-left-menu__sub
+        a( href="" ) Отчеты аудиторов
+        a( href="" ) Отчеты инд. аудиторов
+        a( href="" ) Отчеты организаций
+
+    .b-left-menu__item
+      a( href="" ) Отчеты
+      .b-left-menu__sub
+        a( href="" ) Отчеты аудитора
+        a( href="" ) Отчеты инд. аудитора
+        a( href="" ) Отчеты ООО «Тестовая»
+
+    .b-left-menu__item
+      a.active( href="" ) Выписки
+      .b-left-menu__sub
+        span Выписка аудитора
+        a( href="" ) Выписка ООО «Тестовая»
+      
+    .b-left-menu__item
+      a( href="" ) Выйти
+
+// end /components/left-menu/

@@ -1,0 +1,212 @@
+window.onload = function () {
+  //excerpt vue application
+
+  if (!window.Vue && !window.Vuex) return;
+
+  const store = Vuex.createStore({
+    state() {
+      return window.excerptStore;
+    },
+    mutations: {
+      changeState(state, payload) {
+        state.blocks[payload.index].state = payload.state;
+      },
+      changeProp(state, payload) {
+        state.blocks[payload.index][payload.prop] = payload.value;
+      },
+    },
+  });
+
+  const excerptsApp = Vue.createApp({
+    data() {
+      return {};
+    },
+    template: `
+      <excerpt-block v-for="(block, index) in $store.state.blocks" :index='index' :block="block"></excerpt-block>
+    `,
+    methods: {},
+  });
+
+  excerptsApp.use(store);
+
+  //excerpt block component
+  excerptsApp.component('excerpt-block', {
+    props: ['index', 'block'],
+    template: `
+      <div class="b-excerpts__block">
+
+        <excerpt-head :index="index" :text="block.text" :btnUrl="block.btnUrl"></excerpt-head>
+
+        <hr class="hr--md">
+
+        <excerpt-item v-if="block.state==='excerpt'" :index="index" :title="block.title" :date="block.date" :files="block.files"></excerpt-item>
+
+        <div class="b-excerpts__empty" v-else-if="block.state==='empty'" v-html="block.text.empty"></div>
+
+        <div class="b-excerpts__error" v-else-if="block.state==='error'" v-html="block.text.error"></div>
+
+        <div class="b-excerpts__loader" v-else-if="block.state==='loading'">
+          <b v-html="block.text.loading"></b>
+          <div class="circle-loader">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"> </div>
+            <div class="circle circle-3"></div>
+            <div class="circle circle-4"></div>
+            <div class="circle circle-5"></div>
+          </div>
+        </div>
+        
+        <hr class="hr--xl">
+
+      </div>
+    `,
+  });
+
+  //excerpt head component
+  excerptsApp.component('excerpt-head', {
+    props: ['index', 'text', 'btnUrl'],
+    template: `
+      <div class="b-excerpts__head">
+        <div class="b-excerpts__title" v-html="text.head"></div>
+        <div class="b-excerpts__data"><a class="btn btn-secondary btn-md" href="#" data-toggle="modal" data-target="#getExcerptModal" @click.prevent="clickHeadBtn($event)">{{text.btn}}</a></div>
+      </div>
+    `,
+    methods: {
+      clickHeadBtn(e) {
+        //show modal
+        $('#getExcerptModal').modal('show');
+
+        //send request
+        this.sendRequest();
+      },
+      sendRequest() {
+        (async () => {
+          try {
+            //change block's state to loading
+            store.commit('changeState', {
+              index: this.index,
+              state: 'loading',
+            });
+
+            //get json
+            let response = await fetch(this.btnUrl);
+            let excerpt = await response.json();
+
+            //close modal
+            setTimeout(() => {
+              $('#getExcerptModal').modal('hide');
+            }, 500);
+
+            if (excerpt.STATUS !== 'Y') {
+              //show error message
+              store.commit('changeState', {
+                index: this.index,
+                state: 'error',
+              });
+              store.commit('changeProp', {
+                index: this.index,
+                prop: 'error',
+                value: excerpt.MESSAGE,
+              });
+              return;
+            }
+
+            //change block's state to excerpt
+            store.commit('changeState', {
+              index: this.index,
+              state: 'excerpt',
+            });
+
+            //fill store
+            store.commit('changeProp', {
+              index: this.index,
+              prop: 'title',
+              value: excerpt.DATA.title,
+            });
+            store.commit('changeProp', {
+              index: this.index,
+              prop: 'date',
+              value: excerpt.DATA.date,
+            });
+            store.commit('changeProp', {
+              index: this.index,
+              prop: 'files',
+              value: excerpt.DATA.files,
+            });
+
+            //download the excerpt immediately
+            if (excerpt.DATA.files.pdf.url) {
+              window.open(excerpt.DATA.files.pdf.url);
+            }
+          } catch (err) {
+            if (window.console) {
+              throw err;
+            }
+          }
+        })();
+      },
+    },
+    mounted() {
+      if (store.state.blocks[this.index].state === 'loading') {
+        this.sendRequest();
+      }
+    },
+  });
+
+  //excerpt item component
+  excerptsApp.component('excerpt-item', {
+    data() {
+      return {};
+    },
+    props: ['index', 'title', 'date', 'files'],
+    template: `
+      <div class="b-excerpts__item">
+        <div class="b-excerpts__title">
+          <a :href="files.pdf.url" v-html="title"></a>
+          <span>{{date}}</span>
+        </div>
+        <div class="b-excerpts__data">
+          <a class="b-excerpts__file" target="_blank" :href="files.pdf.url" style="background-image: url('/template/images/pdf.svg')">{{files.pdf.size}}</a>
+          <div class="b-excerpts__more" v-if="files['pdf-sig']">
+            <a class="b-excerpts__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')" @click="clickMoreBtn($event)"></a>
+            <div class="b-excerpts__more__files" :class="{show: $store.state.blocks[index].isMoreOpen}">
+              <span>Для некоторых сервисов требуется формат PDF + .sig</span>
+              <a :href="files['pdf-sig'].pdf.url" target="_blank" style="background-image: url('/template/images/pdf.svg')">pdf</a>
+              <a :href="files['pdf-sig'].sig.url" target="_blank" style="background-image: url('/template/images/sig.svg')">sig</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+    methods: {
+      clickMoreBtn(e) {
+        e.preventDefault();
+        store.commit('changeProp', {
+          index: this.index,
+          prop: 'isMoreOpen',
+          value: !store.state.blocks[this.index].isMoreOpen,
+        });
+      },
+    },
+  });
+
+  excerptsApp.mount('#excerptsApp');
+
+  //hide more
+  document.documentElement.addEventListener('click', (e) => {
+    if (
+      e.target.closest('.b-excerpts__more__files') ||
+      e.target.className.search('b-excerpts__more__files') !== -1 ||
+      e.target.className.search('b-excerpts__more__button') !== -1
+    ) {
+      return;
+    }
+    store.state.blocks.forEach((block, index) => {
+      store.commit('changeProp', {
+        index: index,
+        prop: 'isMoreOpen',
+        value: false,
+      });
+    });
+  });
+};

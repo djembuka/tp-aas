@@ -1,0 +1,1175 @@
+(function ($) {
+  'use strict';
+
+  $(function () {
+    var regExp = {
+      email: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i,
+      date: /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[012])\.\d{4}$/i,
+    };
+
+    //open modal
+    /*if (document.getElementById('ieAlertModal')) {
+      $('#ieAlertModal').modal('show');
+      $('#ieAlertModal').on('hide.bs.modal', function (event) {
+        window.location.href = window.backUrl;
+      });
+    }*/
+
+    //upload file
+    const modalContent = document.querySelector('#uploadModal .modal-content');
+    document
+      .getElementById('uploadFileInput')
+      .addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        let error;
+
+        //size
+        error =
+          file.size >= 1e7 ? 'Размер вашего файла превышает 10 Мб.' : error;
+
+        //extention
+        const filename = file.name;
+        const fileExt = filename.substring(filename.lastIndexOf('.'));
+        const accept = e.target.getAttribute('accept').split(',');
+
+        error = accept.some((acc) => fileExt === acc.trim())
+          ? error
+          : 'Формат вашего файла не соответствует формату оригинального файла с сайта Министерства финансов.';
+
+        if (error) {
+          modalContent.classList.remove(
+            'modal-content--step1',
+            'modal-content--step2'
+          );
+          modalContent.classList.add('modal-content--step3');
+          modalContent.querySelector('.step3 p').textContent = error;
+        } else {
+          modalContent.classList.remove(
+            'modal-content--step1',
+            'modal-content--step3'
+          );
+          modalContent.classList.add('modal-content--step2');
+          sendFile(file);
+        }
+
+        e.target.value = null;
+      });
+
+    let uploadFileController;
+
+    async function sendFile(file) {
+      uploadFileController = new AbortController();
+      //create form data
+      const formData = new FormData();
+      formData.append('file', file);
+
+      //response
+      let response, result;
+
+      try {
+        response = await fetch(window.uploadFile, {
+          signal: uploadFileController.signal,
+          method: 'POST',
+          headers: {
+            Authorization: 'token',
+          },
+          body: formData,
+        });
+
+        result = await response.json();
+        //fill the form
+        if (
+          typeof result === 'object' &&
+          result.STATUS === 'Y' &&
+          result.DATA
+        ) {
+          let formControl;
+          for (let key in result.DATA) {
+            formControl = document.querySelector(`[name="${key}"]`);
+            if (formControl) {
+              formControl.value = result.DATA[key];
+              inputValidation(formControl);
+              //set active label
+              formControl.parentNode
+                .querySelector('label')
+                .classList.add('active');
+            }
+          }
+
+          //open collapse
+          document.querySelectorAll('.b-collapse-block').forEach((block) => {
+            if (!block.classList.contains('slide')) {
+              block.querySelector('.b-collapse-block__head').click();
+            }
+          });
+          //save to localStorage
+          saveOpenedCollapsed();
+
+          //autosave the form
+          formAutosaveRequest();
+
+          //close modal
+          setTimeout(() => {
+            $('#uploadModal').modal('hide');
+          }, 500);
+        } else if (
+          typeof result === 'object' &&
+          result.STATUS === 'N' &&
+          result.MESSAGE
+        ) {
+          modalContent.classList.remove(
+            'modal-content--step1',
+            'modal-content--step2'
+          );
+          modalContent.classList.add('modal-content--step3');
+          modalContent.querySelector('.step3 p').textContent = result.MESSAGE;
+        }
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    $('#uploadModal').on('hide.bs.modal', function () {
+      //cancel uploading
+      if (
+        typeof uploadFileController === 'object' &&
+        uploadFileController.abort
+      ) {
+        uploadFileController.abort();
+      }
+      //clean input
+      document.getElementById('uploadFileInput').value = null;
+      //show step1
+      modalContent.classList.remove(
+        'modal-content--step2',
+        'modal-content--step3'
+      );
+      modalContent.classList.add('modal-content--step1');
+    });
+
+    //open collapsed
+    var openedLS = window.localStorage.getItem('collapseOpened');
+    if (openedLS && openedLS.length > 0) {
+      openedLS = openedLS.split(',');
+      document
+        .querySelectorAll('.b-collapse-block')
+        .forEach(function (block, index) {
+          if (
+            (openedLS[index] * 1 === 1 &&
+              block.className.search('slide') === -1) ||
+            (openedLS[index] * 1 === 0 &&
+              block.className.search('slide') !== -1)
+          ) {
+            block.querySelector('.b-collapse-block__head').click();
+          }
+        });
+    }
+
+    //save opened collapsed
+    document
+      .querySelectorAll('.b-collapse-block__head')
+      .forEach(function (head) {
+        head.addEventListener('click', function (e) {
+          saveOpenedCollapsed();
+        });
+      });
+
+    //calendar click event
+    document.addEventListener('click', function (e) {
+      if (e.target.className.search('bx-calendar-cell') >= 0) {
+        activeDateFieldLabel.classList.add('active');
+      }
+    });
+
+    //add fieldset
+    var ornzAutocomplete = function (ornzAutocompleteBlock) {
+      ornzAutocompleteBlock
+        .querySelectorAll('[data-ornzautocomplete]')
+        .forEach(function (input) {
+          input.addEventListener('keyup', function (e) {
+            if (
+              input.value.length < 5 ||
+              (input.getAttribute('data-ornzautocomplete') === 'companyname' &&
+                input.value.length < 9)
+            ) {
+              return;
+            }
+
+            //get html for the hint
+            $.ajax({
+              url: ornzAutocompleteBlock.getAttribute('data-hint-url'),
+              type: ornzAutocompleteBlock.getAttribute('data-method'), //GET
+              dataType: 'json',
+              data: { str: input.value },
+              success: function (data) {
+                if (data && typeof data === 'object') {
+                  if (data.SUCCESS === 'Y') {
+                    input.closest('.b-float-label').classList.remove('invalid');
+                    input
+                      .closest('.b-float-label')
+                      .querySelector('.b-input-hint').innerHTML = data.HTML;
+                  } else {
+                    input.closest('.b-float-label').classList.add('invalid');
+                    input
+                      .closest('.b-float-label')
+                      .querySelector('.b-input-hint').innerHTML = '';
+                  }
+                }
+              },
+              error: ajaxError,
+            });
+          });
+        });
+
+      //fieldset complete form
+      var companyObject = {};
+      ornzAutocompleteBlock
+        .querySelectorAll('.b-input-hint')
+        .forEach(function (hint) {
+          hint.addEventListener('click', function (e) {
+            if (e.target.matches('a')) {
+              e.preventDefault();
+            }
+
+            //fill the companyObject
+            companyObject.ornz = hint
+              .querySelector('.b-input-hint__item')
+              .getAttribute('data-ornz');
+            companyObject.name = hint
+              .querySelector('.b-input-hint__item')
+              .getAttribute('data-name');
+
+            //fill the inputs
+            ornzAutocompleteBlock
+              .querySelectorAll('.b-float-label')
+              .forEach(function (elem) {
+                elem.querySelector('label').classList.add('active');
+                if (
+                  elem
+                    .querySelector('input[type=text]')
+                    .getAttribute('data-ornzautocomplete') === 'companyname'
+                ) {
+                  elem.querySelector('input[type=text]').value =
+                    companyObject.name;
+                } else {
+                  elem.querySelector('input[type=text]').value =
+                    companyObject.ornz;
+                }
+              });
+
+            //clear hint
+            hint.innerHTML = '';
+          });
+        });
+    };
+
+    document.querySelectorAll('.b-ornz-autocomplete').forEach(ornzAutocomplete);
+
+    //add fieldset
+    document
+      .querySelectorAll('.b-add-fieldset-block')
+      .forEach(function (fieldsetBlock) {
+        var button = fieldsetBlock.querySelector('button');
+
+        //blur event
+        fieldsetBlock.querySelectorAll('input').forEach(function (input) {
+          input.addEventListener('blur', function (e) {
+            var input = e.target;
+            formAutosaveRequest(input.closest('form'));
+          });
+        });
+
+        //change event
+        fieldsetBlock.querySelectorAll('select').forEach(function (select) {
+          select
+            .closest('.b-float-label')
+            .querySelector('.ik-custom-class')
+            .addEventListener('click', function (e) {
+              formAutosaveRequest(e.target.closest('form'));
+            });
+        });
+
+        //add fieldset
+        button.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          var num = fieldsetBlock.querySelectorAll(
+            '.b-add-fieldset-block__item'
+          ).length;
+          var div = document.createElement('div');
+
+          div.className = 'b-add-fieldset-block__item new';
+
+          $.ajax({
+            url: fieldsetBlock.getAttribute('data-url'),
+            type: fieldsetBlock.getAttribute('data-method'), //GET
+            dataType: 'json',
+            data: { num: num },
+            success: function (data) {
+              if (data && typeof data === 'object') {
+                if (data.SUCCESS === 'Y') {
+                  div.innerHTML = data.HTML;
+                  button.before(div);
+
+                  //calendar icon
+                  div
+                    .querySelectorAll('.calendar-icon')
+                    .forEach(function (iconImg) {
+                      var src = iconImg
+                        .closest('.b-float-label')
+                        .getAttribute('data-src');
+                      iconImg.src = src;
+                      iconImg.classList.add('show');
+
+                      iconImg.addEventListener('click', function () {
+                        activeDateFieldLabel = iconImg
+                          .closest('.b-float-label')
+                          .querySelector('label');
+                      });
+                    });
+
+                  //select
+                  $(div).find('select').ikSelect({
+                    equalWidths: true,
+                    ddCustomClass: 'ik-custom-class',
+                  });
+
+                  //ornz autocomplete
+                  div
+                    .querySelectorAll('.b-ornz-autocomplete')
+                    .forEach(function (ornzAutocompleteBlock) {
+                      ornzAutocomplete(ornzAutocompleteBlock);
+                    });
+
+                  //blur event
+                  div.querySelectorAll('input').forEach(function (input) {
+                    input.addEventListener('blur', function (e) {
+                      var input = e.target;
+                      formAutosaveRequest(input.closest('form'));
+                      //float label
+                      var label = input.parentNode.querySelector('label');
+                      if (input.value !== '') {
+                        label.classList.add('active');
+                      } else {
+                        label.classList.remove('active');
+                      }
+                    });
+                    input.addEventListener('keyup', function () {
+                      restartFormAutosaveTimeout();
+                    });
+                  });
+
+                  //change event
+                  div.querySelectorAll('select').forEach(function (select) {
+                    select
+                      .closest('.b-float-label')
+                      .querySelector('.ik-custom-class')
+                      .addEventListener('click', function (e) {
+                        formAutosaveRequest(e.target.closest('form'));
+                      });
+                  });
+
+                  //effect
+                  setTimeout(function () {
+                    div.classList.add('show');
+                    setTimeout(function () {
+                      div.classList.add('height-auto');
+                      div.classList.add('visible');
+                      setTimeout(function () {
+                        div.classList.remove('new');
+                      }, 1000);
+                    }, 300);
+                  }, 50);
+
+                  //autosave
+                  formAutosaveRequest();
+                }
+              }
+            },
+            error: ajaxError,
+          });
+        });
+
+        //delete fieldset
+        fieldsetBlock.addEventListener('click', function (e) {
+          if (e.target.matches('.btn-delete')) {
+            e.preventDefault();
+
+            var item = e.target.closest('.b-add-fieldset-block__item');
+            var del_fieldset_id = item
+              .querySelector('.b-add-fieldset-block__wrapper')
+              .getAttribute('data-hl');
+
+            item.classList.remove('visible');
+            setTimeout(function () {
+              item.classList.remove('show');
+              setTimeout(function () {
+                item.remove();
+                //rename controls
+                fieldsetBlock
+                  .querySelectorAll('.b-add-fieldset-block__item')
+                  .forEach(function (item, index) {
+                    //name attribute
+                    item.querySelectorAll('[name]').forEach(function (control) {
+                      var name = control
+                        .getAttribute('name')
+                        .replace(/\[\d*?\]$/, '[' + index + ']');
+                      control.setAttribute('name', name);
+                    });
+
+                    //for attribute
+                    item.querySelectorAll('[for]').forEach(function (control) {
+                      var forAttr = control
+                        .getAttribute('for')
+                        .replace(/_\d*?$/, '_' + index);
+                      control.setAttribute('for', forAttr);
+                    });
+
+                    //id attribute
+                    item.querySelectorAll('[id]').forEach(function (control) {
+                      var id = control
+                        .getAttribute('id')
+                        .replace(/_\d*?$/, '_' + index);
+                      control.setAttribute('id', id);
+                    });
+                  });
+                formAutosaveRequest(
+                  fieldsetBlock.closest('form'),
+                  0,
+                  del_fieldset_id
+                );
+              }, 300);
+            }, 300);
+          }
+        });
+      });
+
+    //add input
+    document.querySelectorAll('.b-add-input-block').forEach(function (block) {
+      var button = block.querySelector('button');
+      var nameArray = block
+        .querySelector('.b-float-label input')
+        .getAttribute('id')
+        .split('_');
+
+      //add control
+      button.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        var num = block.querySelectorAll('.b-float-label').length;
+        var controlName = nameArray[0] + '[' + nameArray[1] + '][' + num + ']';
+        var controlId = nameArray[0] + '_' + nameArray[1] + '_' + num;
+        var controlLable = block.querySelector(
+          '.b-float-label label'
+        ).textContent;
+        var div = document.createElement('div');
+
+        div.className = 'b-add-input-block__item new';
+        div.innerHTML =
+          '<div class="b-float-label"><input id="' +
+          controlId +
+          '" type="text" name="' +
+          controlName +
+          '" value="" autocomplete="off"><label for="' +
+          controlId +
+          '">' +
+          controlLable +
+          '</label><a href="" class="btn-delete"></a></div><hr>';
+        button.before(div);
+
+        //blur event
+        var input = div.querySelector('input');
+        input.addEventListener('blur', function (e) {
+          var input = e.target;
+          fieldAutosaveRequest(input);
+          //float label
+          var label = input.parentNode.querySelector('label');
+          if (input.value !== '') {
+            label.classList.add('active');
+          } else {
+            label.classList.remove('active');
+          }
+        });
+        input.addEventListener('keyup', function () {
+          restartFormAutosaveTimeout();
+        });
+
+        //effect
+        setTimeout(function () {
+          div.classList.add('show');
+          setTimeout(function () {
+            div.classList.add('visible');
+            setTimeout(function () {
+              div.classList.remove('new');
+            }, 1000);
+          }, 300);
+        }, 50);
+      });
+
+      //delete input
+      block.addEventListener('click', function (e) {
+        if (e.target.matches('.btn-delete')) {
+          e.preventDefault();
+
+          var item = e.target.closest('.b-add-input-block__item');
+
+          item.classList.remove('visible');
+          setTimeout(function () {
+            item.classList.remove('show');
+            setTimeout(function () {
+              item.remove();
+              //rename controls
+              block
+                .querySelectorAll('.b-add-input-block__item')
+                .forEach(function (item, index) {
+                  var num = index + 1;
+                  var controlName =
+                    nameArray[0] + '[' + nameArray[1] + '][' + num + ']';
+                  var controlId = nameArray[0] + '_' + nameArray[1] + '_' + num;
+                  item.querySelector('input').setAttribute('id', controlId);
+                  item.querySelector('input').setAttribute('name', controlName);
+                  item.querySelector('label').setAttribute('for', controlId);
+                });
+              formAutosaveRequest(block.closest('form'));
+            }, 300);
+          }, 300);
+        }
+      });
+    });
+
+    //staff table events
+    document.querySelectorAll('.b-staff-table').forEach(function (tableBlock) {
+      //delete tr
+      tableBlock.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        if (e.target.matches('.btn-delete')) {
+          e.stopPropagation();
+
+          var btn = e.target;
+          var tr = btn.closest('tr');
+          var tbody = tr.closest('tbody');
+          var table = tr.closest('table');
+
+          //send ajax
+          staffMembersAutosaveRequest(btn);
+
+          //remove td in tr
+          tr.style.height = tr.clientHeight + 'px';
+          tr.classList.add('removing');
+
+          setTimeout(function () {
+            tr.querySelectorAll('td').forEach(function (td) {
+              td.remove();
+            });
+            tr.style.height = '0px';
+            setTimeout(function () {
+              tr.remove();
+
+              //remove thead if needed
+              if (!tbody.querySelectorAll('tr').length) {
+                table.closest('.b-staff-table').classList.add('hide');
+              }
+            }, 300);
+          }, 300);
+        }
+      });
+    });
+
+    //staff modal
+    document.querySelectorAll('.b-member-modal').forEach(function (staffModal) {
+      staffModal.querySelectorAll('input').forEach(function (input, index) {
+        input.addEventListener('keyup', function (e) {
+          if (
+            (index === 0 && input.value.length < 9) ||
+            (index === 1 && input.value.length < 5)
+          ) {
+            return;
+          }
+
+          //get html for the hint
+          $.ajax({
+            url: input.closest('.modal-body').getAttribute('data-hint-url'),
+            type: input.closest('.modal-body').getAttribute('data-method'), //GET
+            dataType: 'json',
+            data: { str: input.value },
+            success: function (data) {
+              if (data && typeof data === 'object') {
+                if (data.SUCCESS === 'Y') {
+                  input.closest('.b-float-label').classList.remove('invalid');
+                  input
+                    .closest('.b-float-label')
+                    .querySelector('.b-input-hint').innerHTML = data.HTML;
+                } else {
+                  input.closest('.b-float-label').classList.add('invalid');
+                  input
+                    .closest('.b-float-label')
+                    .querySelector('.b-input-hint').innerHTML = '';
+                }
+              }
+            },
+            error: ajaxError,
+          });
+        });
+      });
+
+      //staff modal complete form
+      var companyObject = {};
+      staffModal.querySelectorAll('.b-input-hint').forEach(function (hint) {
+        hint.addEventListener('click', function (e) {
+          if (e.target.matches('a')) {
+            e.preventDefault();
+          }
+
+          //get member's info
+          $.ajax({
+            url: hint.closest('.modal-body').getAttribute('data-info-url'),
+            type: hint.closest('.modal-body').getAttribute('data-method'), //GET
+            dataType: 'json',
+            data: {
+              id: hint
+                .querySelector('.b-input-hint__item')
+                .getAttribute('data-id'),
+            },
+            success: function (data) {
+              if (data && typeof data === 'object') {
+                if (data.SUCCESS === 'Y') {
+                  //fill the memeberObject
+                  companyObject.ornz = data.ORNZ;
+                  companyObject.fio = data.FIO;
+                  companyObject.html = data.HTML;
+                  companyObject.url = data.URL;
+
+                  //fill the inputs
+                  staffModal
+                    .querySelectorAll('.b-float-label')
+                    .forEach(function (elem, index) {
+                      elem.querySelector('label').classList.add('active');
+                      if (index === 0) {
+                        elem.querySelector('input[type=text]').value =
+                          data.ORNZ;
+                      } else {
+                        elem.querySelector('input[type=text]').value = data.FIO;
+                      }
+                    });
+
+                  //clear hint
+                  hint.innerHTML = '';
+                } else {
+                }
+              }
+            },
+            error: ajaxError,
+          });
+        });
+      });
+
+      //staff modal add the member
+      staffModal.querySelector('.btn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        //clean inputs
+        staffModal
+          .querySelectorAll('input[type=text]')
+          .forEach(function (input) {
+            input.value = '';
+            input
+              .closest('.b-float-label')
+              .querySelector('label')
+              .classList.remove('active');
+          });
+
+        if (!Object.keys(companyObject).length) {
+          return;
+        }
+
+        //show the table
+        var table = document
+          .querySelector(
+            '[data-target = "#' + staffModal.getAttribute('id') + '"]'
+          )
+          .closest('.b-collapse-block__body')
+          .querySelector('.b-staff-table.added');
+        table.classList.remove('hide');
+
+        //add tr
+        var tr = document.createElement('tr');
+        tr.setAttribute('data-url', companyObject.url);
+        tr.innerHTML = companyObject.html;
+
+        table.querySelector('tbody').appendChild(tr);
+        companyObject = {};
+
+        //autosave
+        formAutosaveRequest();
+      });
+    });
+
+    var activeDateFieldLabel;
+    if (document.querySelector('.calendar-icon')) {
+      activeDateFieldLabel = document
+        .querySelector('.calendar-icon')
+        .closest('.b-float-label')
+        .querySelector('label');
+    }
+
+    //calendar icon
+    document.querySelectorAll('.calendar-icon').forEach(function (iconImg) {
+      var src = iconImg.closest('.b-float-label').getAttribute('data-src');
+      iconImg.src = src;
+      iconImg.classList.add('show');
+
+      iconImg.addEventListener('click', function () {
+        activeDateFieldLabel = iconImg
+          .closest('.b-float-label')
+          .querySelector('label');
+      });
+    });
+
+    //complete inputs
+    document
+      .querySelectorAll('.b-complete-link')
+      .forEach(function (completeLink) {
+        completeLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          completeInput(completeLink);
+          fieldAutosaveRequest(
+            completeLink
+              .closest('.row')
+              .querySelector('.b-float-label input, .b-float-label textarea')
+          );
+          restartFormAutosaveTimeout();
+          resetClearButton(
+            completeLink
+              .closest('.b-collapse-block__body')
+              .querySelectorAll('.b-report-form__buttons .btn ')[1]
+          );
+        });
+      });
+
+    //buttons
+    document
+      .querySelectorAll('.b-report-form__buttons')
+      .forEach(function (buttonsBlock) {
+        var bodyElem = buttonsBlock.closest('.b-collapse-block__body');
+        var buttons = buttonsBlock.querySelectorAll('.btn');
+        var completeButton = buttons[0];
+        var clearButton = buttons[1];
+
+        //complete button
+        completeButton.addEventListener('click', function (e) {
+          e.preventDefault();
+          bodyElem
+            .querySelectorAll('.b-complete-link')
+            .forEach(function (completeLink) {
+              completeInput(completeLink);
+            });
+          formAutosaveRequest(buttonsBlock.closest('form'));
+          resetClearButton(clearButton);
+        });
+
+        //clear button
+        clearButton.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          if (clearButton.className.search('return') === -1) {
+            //clear button
+
+            bodyElem
+              .querySelectorAll('.b-float-label input, .b-float-label textarea')
+              .forEach(function (input) {
+                window.localStorage.setItem(input.name, input.value);
+                input.value = '';
+                input
+                  .closest('.b-float-label')
+                  .querySelector('label')
+                  .classList.remove('active');
+              });
+            setClearButton(clearButton);
+          } else {
+            //return button
+
+            bodyElem
+              .querySelectorAll('.b-float-label input, .b-float-label textarea')
+              .forEach(function (input) {
+                var value = window.localStorage.getItem(input.name);
+                if (!value) {
+                  return;
+                }
+                input.value = value;
+                input
+                  .closest('.b-float-label')
+                  .querySelector('label')
+                  .classList.add('active');
+              });
+            resetClearButton(clearButton);
+          }
+
+          formAutosaveRequest(buttonsBlock.closest('form'));
+        });
+      });
+
+    //save form
+    document
+      .querySelectorAll(
+        '.b-report-form input[ name ], .b-report-form textarea[ name ]'
+      )
+      .forEach(function (input) {
+        input.addEventListener('blur', function (e) {
+          //send ajax
+          fieldAutosaveRequest(input);
+          resetClearButton(
+            input
+              .closest('.b-collapse-block__body')
+              .querySelectorAll('.b-report-form__buttons .btn ')[1]
+          );
+        });
+        input.addEventListener('keyup', function () {
+          restartFormAutosaveTimeout();
+        });
+      });
+
+    //check the form on page load
+    if (isFormValid()) {
+      document.querySelector('.b-report-form__submit').classList.add('valid');
+      document
+        .querySelector('.b-report-form__submit .btn')
+        .removeAttribute('disabled');
+    }
+
+    //validation
+    document
+      .querySelectorAll('.b-report-form [ required ]')
+      .forEach(function (input) {
+        if (input.getAttribute('type') === 'checkbox') {
+          input.addEventListener('change', function (e) {
+            inputValidation(input);
+          });
+        } else {
+          input.addEventListener('blur', function (e) {
+            inputValidation(input);
+          });
+        }
+      });
+
+    //scroll to the first invalid field
+    document
+      .querySelector('.b-report-form__submit a')
+      .addEventListener('click', function (e) {
+        e.preventDefault();
+        var fieldIndex = null;
+        document
+          .querySelectorAll('.b-report-form [required]')
+          .forEach(function (input, index) {
+            if (fieldIndex !== null) {
+              return;
+            }
+            if (!isInputValid(input)) {
+              fieldIndex = index;
+            }
+          });
+
+        //focus
+        var field = document.querySelectorAll('.b-report-form [required]')[
+          fieldIndex
+        ];
+        if (fieldIndex !== null && field) {
+          setInvalid(field);
+
+          if (
+            field.closest('.b-collapse-block').className.search('slide') === -1
+          ) {
+            field
+              .closest('.b-collapse-block')
+              .querySelector('.b-collapse-block__head')
+              .click();
+            setTimeout(function () {
+              field.focus();
+            }, 500);
+          } else {
+            field.focus();
+          }
+        }
+      });
+
+    function isInputValid(input) {
+      var validFlag = false;
+      var inputValue = input.value.trim();
+
+      if (inputValue !== '') {
+        validFlag = true;
+
+        if (
+          (input.getAttribute('type') === 'email' &&
+            !inputValue.match(regExp.email)) ||
+          (input.getAttribute('kl_ab.original_type') &&
+            input.getAttribute('kl_ab.original_type') === 'email' &&
+            !inputValue.match(regExp.email)) ||
+          (input.getAttribute('type') === 'checkbox' && !input.checked) ||
+          (input.parentNode.querySelector('img.calendar-icon') &&
+            !inputValue.match(regExp.date))
+        ) {
+          validFlag = false;
+        }
+      }
+
+      return validFlag;
+    }
+
+    function inputValidation(input) {
+      //is valid
+      var validFlag = isInputValid(input);
+
+      //highlight input
+      if (validFlag === true) {
+        removeInvalid(input);
+      } else {
+        setInvalid(input);
+      }
+
+      //hightlight block
+      if (input.closest('.b-collapse-block__body')) {
+        if (validFlag === true) {
+          var invalidLength = input
+            .closest('.b-collapse-block__body')
+            .querySelectorAll('.b-float-label.invalid').length;
+          if (invalidLength > 0) {
+            input.closest('.b-collapse-block').classList.add('invalid');
+          } else {
+            input.closest('.b-collapse-block').classList.remove('invalid');
+          }
+        } else {
+          input.closest('.b-collapse-block').classList.add('invalid');
+        }
+      }
+
+      //highlight form
+      if (validFlag === true) {
+        if (isFormValid()) {
+          document
+            .querySelector('.b-report-form__submit')
+            .classList.add('valid');
+          document
+            .querySelector('.b-report-form__submit .btn')
+            .removeAttribute('disabled');
+        } else {
+          document
+            .querySelector('.b-report-form__submit')
+            .classList.remove('valid');
+          document
+            .querySelector('.b-report-form__submit .btn')
+            .setAttribute('disabled', 'disabled');
+        }
+      } else {
+        document
+          .querySelector('.b-report-form__submit')
+          .classList.remove('valid');
+        document
+          .querySelector('.b-report-form__submit .btn')
+          .setAttribute('disabled', 'disabled');
+      }
+    }
+
+    function isFormValid() {
+      var flag = true;
+
+      document
+        .querySelectorAll('.b-report-form [ required ]')
+        .forEach(function (input) {
+          if (
+            input.value.trim() === '' ||
+            (input.getAttribute('type') === 'email' &&
+              !input.value.match(regExp.email)) ||
+            (input.getAttribute('type') === 'checkbox' && !input.checked)
+          ) {
+            flag = false;
+          }
+        });
+
+      return flag;
+    }
+
+    function setClearButton(clearButton) {
+      if (!clearButton) return;
+      clearButton.classList.add('return');
+    }
+
+    function resetClearButton(clearButton) {
+      if (!clearButton) return;
+      clearButton.classList.remove('return');
+    }
+
+    function completeInput(completeLink) {
+      var input = completeLink
+        .closest('.row')
+        .querySelector('.b-float-label input, .b-float-label textarea');
+      input.value = completeLink.textContent;
+      completeLink
+        .closest('.row')
+        .querySelector('.b-float-label label')
+        .classList.add('active');
+      inputValidation(input);
+      if (input.getAttribute('type') === 'tel') {
+        IMask(input, {
+          mask: '+{7} (000) 000 00 00',
+        });
+      }
+    }
+
+    function staffMembersAutosaveRequest(btn, cnt) {
+      var memberId = btn.closest('tr').getAttribute('data-url');
+      var counter = cnt || 0;
+      var id;
+
+      if (document.getElementById('element_id')) {
+        id = document.getElementById('element_id').value;
+      }
+
+      $.ajax({
+        url: btn.closest('form').getAttribute('data-ajax-url'),
+        type: btn.closest('form').getAttribute('method'), //GET
+        dataType: 'json',
+        data: { member: memberId, element_id: id },
+        success: function (data) {
+          if (data && typeof data === 'object' && data.SUCCESS) {
+            if (data.SUCCESS !== 'Y' && counter < 3) {
+              fieldAutosaveRequest(btn, ++counter);
+              restartFormAutosaveTimeout();
+            } else if (data.SUCCESS === 'Y' && typeof data.DATE === 'string') {
+              //showAutocompleteTime( data.DATE );
+            }
+          }
+        },
+        error: ajaxError,
+      });
+    }
+
+    function fieldAutosaveRequest(input, cnt) {
+      var counter = cnt || 0;
+      var data = {};
+
+      //check if this is .b-add-input-block
+      if (input.closest('.b-add-input-block')) {
+        input
+          .closest('.b-add-input-block')
+          .querySelectorAll('.b-float-label input')
+          .forEach(function (inp) {
+            data[inp.getAttribute('name')] = inp.value;
+          });
+      } else {
+        data[input.getAttribute('name')] = input.value;
+      }
+
+      if (document.getElementById('element_id')) {
+        data.element_id = document.getElementById('element_id').value;
+      }
+
+      $.ajax({
+        url: input.closest('form').getAttribute('data-ajax-url'),
+        type: input.closest('form').getAttribute('method'), //GET
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+          if (data && typeof data === 'object' && data.SUCCESS) {
+            if (data.SUCCESS !== 'Y' && counter < 3) {
+              fieldAutosaveRequest(input, ++counter);
+            } else if (data.SUCCESS === 'Y' && typeof data.DATE === 'string') {
+              //showAutocompleteTime( data.DATE );
+            }
+          }
+        },
+        error: function (a, b, c) {
+          if (window.console) {
+            console.log(a);
+            console.log(b);
+            console.log(c);
+          }
+        },
+      });
+    }
+
+    function saveOpenedCollapsed() {
+      //save opened blocks
+      var collapseOpenedValue = [];
+      document.querySelectorAll('.b-collapse-block').forEach(function (block) {
+        if (block.className.search('slide') === -1) {
+          collapseOpenedValue.push(0);
+        } else {
+          collapseOpenedValue.push(1);
+        }
+      });
+      window.localStorage.setItem('collapseOpened', collapseOpenedValue);
+    }
+
+    //autosave
+    var formAutosaveTimeoutId;
+
+    function restartFormAutosaveTimeout() {
+      if (formAutosaveTimeoutId) {
+        clearTimeout(formAutosaveTimeoutId);
+      }
+      formAutosaveTimeoutId = setTimeout(function () {
+        var form = document.querySelector('.b-report-form form');
+        formAutosaveRequest(form);
+      }, 120000);
+    }
+
+    function formAutosaveRequest(form, cnt, del_id) {
+      var form = form || document.querySelector('.b-report-form form');
+      var counter = cnt || 0;
+
+      //send request
+      $.ajax({
+        url: form.getAttribute('data-ajax-url'),
+        type: form.getAttribute('method'), //GET
+        dataType: 'json',
+        data: $(form).serialize() + '&del_fieldset_id=' + del_id,
+        success: function (data) {
+          if (data && typeof data === 'object' && data.SUCCESS) {
+            if (data.SUCCESS !== 'Y' && counter < 3) {
+              formAutosaveRequest(form, ++counter);
+            } else if (data.SUCCESS === 'Y' && typeof data.DATE === 'string') {
+              showAutocompleteTime(data.DATE);
+            }
+          }
+        },
+        error: function (a, b, c) {
+          if (window.console) {
+            console.log(a);
+            console.log(b);
+            console.log(c);
+          }
+        },
+      });
+    }
+
+    function showAutocompleteTime(date) {
+      document.querySelector('.b-report-form__autosave-text span').textContent =
+        date;
+    }
+
+    function setInvalid(input) {
+      if (input.getAttribute('type') === 'checkbox') {
+        input.closest('.b-checkbox').classList.add('invalid');
+      } else {
+        input.closest('.b-float-label').classList.add('invalid');
+      }
+    }
+
+    function removeInvalid(input) {
+      if (input.getAttribute('type') === 'checkbox') {
+        input.closest('.b-checkbox').classList.remove('invalid');
+      } else {
+        input.closest('.b-float-label').classList.remove('invalid');
+      }
+    }
+
+    function ajaxError(a, b, c) {
+      if (window.console) {
+        console.log(a);
+        console.log(b);
+        console.log(c);
+      }
+    }
+  });
+})(jQuery);

@@ -1,0 +1,51 @@
+// start /components/poll-result/
+
+script( src="/components/poll-result/store.js" )
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'poll-result'
+else
+  - var componentsArray = [ 'poll-result' ]
+
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
+  
+.b-poll-result.ph-block
+
+  .ph
+
+    .ph__text
+      .ph__num-blocks
+        div
+        div
+        div
+      .ph__ill
+        div
+        div
+        div
+        div
+        div
+
+  .ph-content
+
+    .b-poll-result__tabs
+
+      .swiper-container
+        .swiper-wrapper
+          a.swiper-slide.active( href="" data-tab="result" ) Все
+          a.swiper-slide( href="" data-tab="registry" ) Активные
+      .b-poll-result__decor
+
+    hr
+    
+    .b-poll-result__block
+      .b-poll-result__item.active(data-tab="result")
+        hr
+        include ./result
+
+      .b-poll-result__item(data-tab="registry")
+        hr
+        include ./registry
+
+// end /components/poll/

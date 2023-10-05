@@ -1,0 +1,97 @@
+// start /components/registry-excerpt/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'registry-excerpt'
+else
+  - var componentsArray = [ 'registry-excerpt' ]
+  
+.b-registry-excerpt.ph-block
+
+  .ph
+    .ph__table
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    table.table.table-responsive( data-result="/components/registry-excerpt/result.json" )
+      thead
+        tr
+          th( data-field="name" ) ФИО
+          th( data-field="ornz" ) ОРНЗ
+          th( data-field="date" ) Дата выписки
+          th( data-field="status" ) Статус
+          th( data-field="type" ) Тип выписки
+          th
+      tbody
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Савельева Людмила Викторовна
+          td 20606017533
+          td 18 мая 2021 15:12:41
+          td
+            .label-green
+              span Успешно создана выписка
+          td Упрощенная выписка аудитора
+          td 
+            include ../../modules/pdf-icon/include
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Савельева Людмила Викторовна
+          td 20606017533
+          td 18 мая 2021 15:12:41
+          td
+            .label-blue
+              span Успешно
+          td Упрощенная выписка аудитора
+          td 
+            include ../../modules/pdf-icon/include
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Савельева Людмила Викторовна
+          td 20606017533
+          td 18 мая 2021 15:12:41
+          td
+            .label-lightblue
+              span Ошибка
+          td Упрощенная выписка аудитора
+          td 
+            include ../../modules/pdf-icon/include
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Савельева Людмила Викторовна
+          td 20606017533
+          td 18 мая 2021 15:12:41
+          td
+            .label-red
+              span Ошибка
+          td Упрощенная выписка аудитора
+          td 
+            include ../../modules/pdf-icon/include
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Савельева Людмила Викторовна
+          td 20606017533
+          td 18 мая 2021 15:12:41
+          td
+            .label-orange
+              span Ошибка
+          td Упрощенная выписка аудитора
+          td 
+            include ../../modules/pdf-icon/include
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td Савельева Людмила Викторовна
+          td 20606017533
+          td 18 мая 2021 15:12:41
+          td
+            .label-gray
+              span Ошибка
+          td Упрощенная выписка аудитора
+          td 
+            include ../../modules/pdf-icon/include
+
+    hr.hr--xl
+
+    include ../../modules/pagination/include
+
+
+// end /components/registry-excerpt/

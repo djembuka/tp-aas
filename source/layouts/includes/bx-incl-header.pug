@@ -1,0 +1,101 @@
+header.b-header.ph-block
+
+  .b-header-fixed-wrapper
+
+    .container-fluid
+
+      .b-header__top
+        
+          .b-header__logo
+            a.b-header__logo-aas( href="/" )
+              img( src="/template/images/logo-aas.svg" width="80" height="56" alt="СРО ААС" )
+              
+            span.b-header__slogan.d-none.d-md-block Саморегулируемая организация аудиторов<br>АССОЦИАЦИЯ «СОДРУЖЕСТВО»
+            
+            a.b-header__logo-ifac.d-none.d-md-block( href="/" )
+              img( src="/template/images/logo-ifac.svg" width="85" height="30" alt="IFAC" )
+            
+          .b-header__profile
+          
+            if authorized
+              a.d-none.d-md-block( href="/pages/profile/" )
+                i( style="background-image: url( '/upload/portrait.jpg' );" )
+                span Иванов Пётр Васильевич
+            else
+              a.btn.btn-secondary.d-none.d-md-block( href="/pages/form-auth/" ) Личный кабинет
+              
+            a.b-header__profile-icon.d-inline-block.d-md-none( href="/profile/" style="background-image: url( '/template/images/profile.svg' );" )
+            a.b-header__menu-icon.d-inline-block.d-md-none( href="#" style="background-image: url( '/template/images/menu.svg' );" )
+        
+      .b-header__bottom
+
+        #bx_incl_area_5
+            
+          .b-header__menu
+            .b-header__menu-item.active( data-dropdown="true" )
+              .b-header__menu-arrow.d-block.d-md-none( style="background-image: url( '/template/images/arrow-right.svg' );" )
+              span
+                a( href="/pages/about/" ) СРО ААС  
+              .b-header__menu-dropdown
+                a( href="" ) Контроль качества
+                a( href="" ) Повышение квалификации
+                a( href="" ) Подтверждение повышения квалификации
+                i Аттестация аудиторов
+                a( href="" ) Дисциплинарное производство
+                a( href="" ) Международное сотрудничество
+                a( href="" ) МФБ (IFAC)
+                a( href="" ) ICAEW
+                a( href="" ) Обсуждаем проекты международных стандартов и документов
+                a( href="" ) Обсуждаем проекты нормативных актов
+                a( href="" ) Участие в общественных организациях
+                a( href="" ) Противодействие коррупции и легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма
+                a( href="" ) Профилактика нарушений обязательных требований
+              
+            .b-header__menu-item
+              span
+                i Реестр
+            .b-header__menu-item( data-dropdown="true" )
+              .b-header__menu-arrow.d-block.d-md-none( style="background-image: url( '/template/images/arrow-right.svg' );" )
+              span
+                i Членство 
+              .b-header__menu-dropdown
+                a( href="" ) Контроль качества
+                a( href="" ) Повышение квалификации
+                a( href="" ) Подтверждение повышения квалификации
+                a( href="" ) Аттестация аудиторов
+                a( href="" ) Дисциплинарное производство
+                a( href="" ) Международное сотрудничество
+                a( href="" ) МФБ (IFAC)
+                a( href="" ) ICAEW
+                
+            .b-header__menu-item
+              span
+                a( href="/pages/self-regulation/" ) Саморегулирование
+            .b-header__menu-item
+              span
+                a( href="/pages/auditors/" ) Аудиторам
+            .b-header__menu-item
+              span
+                a( href="/pages/news/" ) Пресс-Центр
+            .b-header__menu-item
+              span
+                a( href="/pages/events/" ) Мероприятия
+
+        #bx_incl_area_6
+          
+          .b-header__search.d-none.d-md-block
+            form( action="" method="GET" )
+              a.b-header__search-icon( href="" style="background-image: url( '/template/images/search.svg' );" )
+              a.b-header__cancel-icon( href="" style="background-image: url( '/template/images/cancel.svg' );" )
+              div
+                input( type="text" name="search" value="" )
+              
+      .b-header__profile-menu
+        a( href="/pages/profile/" ) Контроль качества
+        a( href="/pages/profile/" ) Повышение квалификации
+        a( href="/pages/profile/" ) Подтверждение повышения квалификации
+        span Аттестация аудиторов
+        a( href="/pages/profile/" ) Дисциплинарное производство
+        a( href="/pages/profile/" ) Международное сотрудничество
+        a( href="/pages/profile/" ) МФБ (IFAC)
+        a( href="/pages/profile/" ) ICAEW

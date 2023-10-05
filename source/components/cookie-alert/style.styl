@@ -1,0 +1,66 @@
+@import '../../styl/component-include.styl'
+
+#cookie-alert
+  display flex
+  justify-content space-between
+  align-items center
+  padding 20px
+  background-color $primary-color
+  border-radius 10px
+  position fixed
+  top auto
+  bottom 100px
+  left 100px
+  max-width 600px
+  opacity 0
+  transform( translateY(50px))
+  transition( transform .5s ease )
+  z-index -1
+
+  @media print
+    display none !important
+
+  @media( max-width 767px )
+    left 15px
+    bottom 15px
+
+  @media( max-width 575px )
+    display block
+    left 15px
+    bottom 15px
+    width calc( 100% - 30px )
+    max-width 100%
+
+  &.i-show
+    opacity 1
+    transform( translateY(0))
+    z-index 10000
+
+    &.i-hide
+      opacity 0
+      transition( opacity .5s ease )
+
+  p
+    margin 0
+    font-size $12px
+    color #CDDBE7
+    width calc( 100% - 158px - 20px )
+
+    a
+
+      &,
+      &:active,
+      &:focus,
+      &:hover
+        color #fff
+
+    @media( max-width 575px )
+      width 100%
+      margin-bottom 15px
+
+  .btn
+    width 158px
+    font-size $12px
+
+    @media( max-width 575px )
+      width 100%

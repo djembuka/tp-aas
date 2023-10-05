@@ -1,0 +1,15 @@
+extends ../../layouts/screen
+
+block vars
+  - var page = 'pages-poll-result-screen'
+
+block title
+  title Результаты голосования на экране | Pages | AAS
+
+block content
+
+  .container-fluid
+
+    img.b-screen-logo(src="/template/images/logo-aas-small.svg" width="54" height="54" alt="")
+
+    include ../../components/poll-result/screen

@@ -1,0 +1,35 @@
+// start /components/study.courses.for-employees/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'study.courses.for-employees'
+else
+  - var componentsArray = [ 'study.courses.for-employees' ]
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="https://unpkg.com/vue-select@latest")
+link( rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css")
+
+script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js")
+link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css")
+
+script( src="/components/study.courses.for-employees/store.js" )
+  
+.b-study-courses-for-employees.ph-block
+
+  .ph
+
+    .ph__title
+    
+    .ph__num-blocks
+      div
+      div
+      div
+
+  .ph-content 
+  
+    #studyCoursesForEmployees
+
+// end /components/study.courses.for-employees/

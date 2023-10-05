@@ -1,0 +1,68 @@
+@import '../../styl/component-include.styl'
+
+.b-switch-blocks
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-switch-block
+  background-color #FAFAFA
+  border-radius 10px
+  padding 20px 30px
+  display flex
+  justify-content space-between
+  align-items center
+
+  &__text
+    width 70%
+    font-size $14px
+
+    h4
+      margin-top 0
+
+    p
+      margin-top 1rem
+      margin-bottom 0
+
+  &__switch
+    background-color #FFFFFF
+    width 63px
+    height 32px
+    border-radius 16px
+    position relative
+    cursor pointer
+    transition( background-color .2s ease-in )
+
+    &:before
+      content ''
+      display block
+      background-color #E5E5E5
+      width 30px
+      height 30px
+      position absolute
+      top 1px
+      left 1px
+      border-radius 50%
+      transition( all .2s ease-in )
+      z-index 10
+
+    &.i-active
+      background-color #E7F8E8
+    
+      &:before
+        background-color #74C37A
+        left 32px

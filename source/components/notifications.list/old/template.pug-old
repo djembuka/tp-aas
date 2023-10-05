@@ -1,0 +1,68 @@
+// start /components/notifications.list/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'notifications.list'
+else
+  - var componentsArray = [ 'notifications.list' ]
+
+.b-notifications-list.ph-block
+
+  .ph
+    .ph__table
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    table.table( data-result="/components/registry/result.json" )
+      thead
+        tr
+          th( data-field="title" ) Заголовок уведомления
+          th( data-field="status" ) Статус
+          th( data-field="date" ) Создано
+      tbody
+        tr.b-notifications-list--tainted( data-url="/pages/profile/" data-target="_self" )
+          td 
+            div Оплата членского взноса за 4 квартал 2021
+          td Не прочитано и просрочено
+          td 31.11.2020
+
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td 
+            div Пора сдавать отчет «Годовой отчет индивидуального аудитора и аудиторской организации за прошедший Годовой отчет индивидуального аудитора и аудиторской организации за прошедший
+          td Прочитано 13.11.2020
+          td 13.11.2020
+
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td 
+            div Пора сдавать отчет «Годовой отчет индивидуального аудитора и аудиторской организации за прошедший Годовой отчет индивидуального аудитора и аудиторской организации за прошедший
+          td 
+          td 01.10.2020
+
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td 
+            div Пора сдавать отчет «Годовой отчет индивидуального аудитора и аудиторской организации за прошедший Годовой отчет индивидуального аудитора и аудиторской организации за прошедший
+          td 
+          td 01.10.2020
+
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td 
+            div Пора сдавать отчет «Годовой отчет индивидуального аудитора и аудиторской организации за прошедший Годовой отчет индивидуального аудитора и аудиторской организации за прошедший
+          td 
+          td 01.10.2020
+
+        tr( data-url="/pages/profile/" data-target="_self" )
+          td 
+            div Пора сдавать отчет «Годовой отчет индивидуального аудитора и аудиторской организации за прошедший Годовой отчет индивидуального аудитора и аудиторской организации за прошедший
+          td 
+          td 01.10.2020
+
+    hr.hr--xl
+
+    include ../../modules/pagination/include
+
+// end /components/notifications.list/

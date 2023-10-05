@@ -1,0 +1,158 @@
+// start /components/study.courses.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'study.courses.detail'
+else
+  - var componentsArray = [ 'study.courses.detail' ]
+
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="https://unpkg.com/vue-select@latest" )
+link( rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js" )
+link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue-scrollto" )
+
+script( src="/components/study.courses.detail/script-edit-form.js" )
+script( src="/components/study.courses.detail/store-edit-form.js" )
+
+link( rel="stylesheet", href="/components/study.courses.detail/style-edit-form.css" )
+
+script
+  | window.reportFormOZOPaths = {
+  |   addCompany: '/components/report-form-ozo/addCompany.json',
+  |   removeCompany: '/components/report-form-ozo/removeCompany.json',
+  |   autosave: '/components/report-form-ozo/removeCompany.json',
+  | };
+  
+.b-study-courses-detail.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .b-scd-status
+      .label-gray 
+        span Черновик
+
+    .b-scd-buttons 
+
+      a.btn.btn-light.btn-link-color(href="" data-toggle="modal" data-target="#editConfirmModal" )
+        span.icon( style="background-image: url( '/template/images/icon-edit.svg' );" )
+        span Отредактировать
+
+      label#scdCheckButton.btn.btn-light.btn-blue-color(href="" data-url="dfg.json" data-id="345")
+        span.icon( style="background-image: url( '/template/images/icon-task-square.svg' );" )
+        span Отправить на проверку
+
+      label.btn.btn-light.btn-gray-color(href="" data-toggle="modal" data-target="#archiveConfirmModal" )
+        span.icon( style="background-image: url( '/template/images/icon-archive.svg' );" )
+        span Архивировать
+
+      a.btn.btn-light.btn-red-color(href="" data-toggle="modal" data-target="#deleteConfirmModal" )
+        span.icon( style="background-image: url( '/template/images/icon-remove.svg' );" )
+        span Удалить
+
+    #editConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-body
+            h3.text-center Вы хотите отредактировать курс
+            hr
+            p.text-center После редактирования курса вам необходимо заново отправить курс на модерацию сотрудникам СРО ААС. До изменения статуса на «Опубликован» курс не будет доступен для пользователей в списке курсов на сайте СРО ААС.
+            hr
+
+            .text-center.modal-buttons
+              button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+              a.btn.btn-lg.btn-secondary( href="?id=456" ) Продолжить
+
+    #checkConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-body
+            h3.text-center Вы отправляете курс на проверку
+            hr
+            p.text-center После отправки курс на проверку вы не сможете внести в него правки до окончания проверки. Автоматически будет создано обращение с данными, которые вы указали. Вы можете следить за обращение в разделе «Мои обращения».
+            hr
+
+            form( action="" method="POST" )
+              input(type="hidden" value="")
+              .text-center.modal-buttons
+                .btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+                button.btn.btn-lg.btn-secondary( type="submit" id="send-appeal" name="SEND_APPEAL" value="Y" ) Продолжить
+
+    #archiveConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-body
+            h3.text-center Вы хотите перенести курс в архив
+            hr
+            p.text-center Архивирование курса переведет его в архив без возможности вернуть курс в активный статус. Это означает, что курс больше не актуален.
+            hr
+
+            form( action="" method="POST" )
+              input(type="hidden" value="")
+              .text-center.modal-buttons
+                .btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+                button.btn.btn-lg.btn-secondary( type="submit" id="send-archive" name="SEND_ARCHIVE" value="Y" ) Продолжить
+
+    #cancelConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="cancelConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-body
+            h3.text-center Вы хотите отменить курс
+            hr
+            p.text-center Для отмены курса вам необходимо отправить обращение в СРО ААС. Обратите внимание, что  после отмены курса вы не сможете вернуть его в активный статус или отредактировать его.
+            hr
+
+            form( action="" method="POST" )
+              input(type="hidden" value="")
+              .text-center.modal-buttons
+                .btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+                button.btn.btn-lg.btn-secondary( type="submit" id="send-cancel" name="SEND_CANCEL" value="Y" ) Продолжить
+
+    #deleteConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-body
+            h3.text-center Вы хотите отменить курс
+            hr
+            p.text-center Для отмены <a href="">курса</a> вам необходимо отправить обращение в СРО ААС, после отмены вы не сможете вернуть его в активное состояние или отредактировать его.
+            hr
+
+            .text-center.modal-buttons
+              button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+              a.btn.btn-lg.btn-secondary( href="?id=456" ) Продолжить
+
+    hr.hr--md
+
+    .b-study-courses-detail__tabs
+
+      .swiper-container
+        .swiper-wrapper
+          a.swiper-slide.active( href="" data-tab="tab1" ) Описание курса
+          a.swiper-slide( href="" data-tab="tab2" ) История изменений
+      .b-study-courses-detail__decor
+    
+    .b-study-courses-detail__block
+      .b-study-courses-detail__item.active(data-tab="tab1")
+        hr
+        include ../../components/study.courses.detail/description
+
+      .b-study-courses-detail__item(data-tab="tab2")
+        hr
+        include ../../components/study.courses.detail/history
+
+// end /components/study.courses.detail/

@@ -1,0 +1,72 @@
+@import '../../styl/component-include.styl'
+
+.b-notifications-detail
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-notifications-detail
+
+  &__panel 
+    display flex
+    align-items center
+    justify-content flex-start
+    flex-wrap wrap
+    background-color #FAFAFA
+    border-radius 10px
+    font-family $roboto
+    font-size $14px
+    min-height 45px
+    padding 5px 1rem
+
+    &-item
+      padding 3px 0
+      margin-right 2rem
+      display flex
+      align-items center
+      justify-content flex-start
+      flex-wrap wrap
+      position relative
+
+      &:last-child
+        margin-right 0
+
+      b
+        font-weight $bold
+        margin-left 2rem
+
+      img
+        position absolute
+        top 50%
+        transform(translateY(-50%))
+        left 0
+        z-index 10
+
+  @media (max-width: 575px)
+    h3:first-child
+      margin-top 0
+
+  table.table
+    margin-bottom 0
+
+    th
+      width 35%
+
+    @media (max-width: 575px)
+      th:nth-child(2),
+      td:nth-child(2)
+        display table-cell

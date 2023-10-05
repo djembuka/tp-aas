@@ -1,0 +1,34 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-events'
+  - var authorized = 'true'
+
+block title
+  title События | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/include
+
+  hr
+
+  .container-fluid
+  
+    h1 Мероприятия
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/events
+          
+      article.col-12.col-md-8
+        
+        include ../../components/events/template
+  
+    

@@ -1,0 +1,47 @@
+// start /components/poll-list/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'poll-list'
+else
+  - var componentsArray = [ 'poll-list' ]
+  
+.b-poll-list.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-poll-list__item
+      .b-poll-list__content
+        a.b-poll-list__title( href="/pages/poll/" ) Название голосования может быть большим, а может быть очень маленьким
+        .b-poll-list__data
+          span До 22 апреля 2021 (56 дней)
+          a.btn.btn-secondary.btn-md( href="/pages/poll/" ) Голосовать
+      .b-poll-list__note Короткое описание опроса или голосования с пояснением, может занимать несколько строк.
+
+    .b-poll-list__item
+      .b-poll-list__content
+        a.b-poll-list__title( href="/pages/poll/" ) Название голосования
+        .b-poll-list__data
+          span До 29 cентября 2021 (288 дней)
+          a.btn.btn-secondary.btn-md( href="/pages/poll/" ) Голосовать
+      .b-poll-list__note Короткое описание опроса или голосования с пояснением, может занимать несколько строк.
+
+    .b-poll-list__item
+      .b-poll-list__content
+        a.b-poll-list__title( href="/pages/poll/" ) Название голосования может быть большим, а может быть очень маленьким
+        .b-poll-list__data
+          span До 22 марта 2021 (56 дней)
+          .b-poll-list__status( style="background-image: url('/template/images/poll-status.svg');") 21 марта 2021
+      .b-poll-list__note Короткое описание опроса или голосования с пояснением, может занимать несколько строк.
+
+// end /components/poll-list/

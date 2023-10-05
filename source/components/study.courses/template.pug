@@ -1,0 +1,36 @@
+// start /components/study.courses/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'study.courses'
+else
+  - var componentsArray = [ 'study.courses' ]
+  
+.b-study-courses.ph-block 
+
+  .ph
+    
+    .ph__num-blocks
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-num-blocks
+      a.b-num-block.b-num-block--counter(href="")
+        .b-num-block__data
+          i Курсов
+          b 185
+      a.b-num-block.b-num-block--counter(href="")
+        .b-num-block__data
+          i Активных курсов
+          b 15
+      a.b-num-block.b-num-block--counter(href="")
+        .b-num-block__data
+          i На проверке
+          b 1
+
+    include ../../modules/appeal-item/include
+
+// end /components/study.courses/

@@ -1,0 +1,172 @@
+@import '../../styl/component-include.styl'
+
+.b-report
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-report
+
+  &__panel
+    background-color #FAFAFA
+    border-radius 10px
+    padding 20px 25px 20px 32px
+    min-height 96px
+    display flex
+    justify-content space-between
+    align-items center
+    font-family $roboto
+    font-size $14px
+
+    @media(max-width 767px)
+      padding 15px 15px 15px 20px
+
+    &__data
+      display flex
+      justify-content flex-start
+      align-items center
+      flex-wrap wrap
+      background-repeat no-repeat
+      background-position left center
+      background-size 24px
+      padding-left 37px
+
+      @media(max-width 767px)
+        background none !important
+        padding-left 0
+
+      div
+        margin-right 2rem
+
+    &__download
+      display flex
+      justify-content flex-end
+      align-items center
+
+      span
+        width 45px
+        height 51px
+        background-repeat no-repeat
+        background-position center
+        background-size contain
+        margin-left 10px
+        flex-shrink 0
+
+      
+  .b-collapse-block__head,
+  .text-muted.small,
+  .text-muted.small + p
+    font-family $roboto
+    
+  .b-collapse-block__body
+    padding-bottom 20px
+
+  &__date
+    position absolute
+    top -42px
+    right 0
+
+    @media(max-width 575px)
+      position static
+      top auto
+      right auto
+
+  &-buttons
+
+    .btn
+      min-width 200px
+      margin-right 10px
+      margin-bottom 10px
+
+      &:last-child
+        margin-right 0
+
+      @media(max-width 575px)
+
+        &
+          margin-right 0
+          width 100%
+
+@media print
+
+  .b-body-shutter,
+  #bx-panel-back,
+  #bx-panel,
+  .b-header,
+  .b-breadcrumbs,
+  aside.d-md-block,
+  .b-left-menu,
+  .b-footer,
+  .b-collapse-block__head span
+    display none !important
+
+  h1
+    margin 0 0 10px !important
+
+  article.col-md-8
+    width 100% !important
+    max-width 100% !important
+    flex none !important
+
+  .b-collapse-block
+    border-bottom none
+
+    &__head
+      padding 0 0 10px !important
+
+      a
+        text-decoration none
+        color #000 !important
+        opacity 1 !important
+
+    &__body
+      display block !important
+      padding-bottom 0 !important
+
+      .small
+        font-size 1rem
+
+      .text-muted
+        color #000 !important
+        font-weight bold
+        margin 0 10px 0 0 !important
+        float left
+        line-height 1.2
+
+      p
+        color #000 !important
+        margin 0 0 5px !important
+        line-height 1.2
+
+        &:after
+          content ''
+          display block
+          clear both
+
+      hr
+        margin 0 !important
+
+      .row
+        margin-bottom 10px
+
+  .b-report__date
+    position static
+    top auto
+    right auto
+    font-size .9rem
+    color #000 !important
+    margin-bottom 20px !important

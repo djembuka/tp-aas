@@ -1,0 +1,12 @@
+// start /components/docs-to-sign/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'docs-to-sign'
+else
+  - var componentsArray = [ 'docs-to-sign' ]
+
+#docToSignModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="docToSignModalLabel" aria-hidden="true")
+  .modal-dialog
+
+// end /components/docs-to-sign/

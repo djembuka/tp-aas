@@ -1,0 +1,13 @@
+<svg id="IconsXLS" xmlns="http://www.w3.org/2000/svg" width="23.177" height="32" viewBox="0 0 23.177 32">
+  <g id="Сгруппировать_148" data-name="Сгруппировать 148">
+    <path id="Контур_256" data-name="Контур 256" d="M28.171,8.7V29.869a2.062,2.062,0,0,1-2.062,2.063H7.056a2.062,2.062,0,0,1-2.062-2.063V1.994A2.062,2.062,0,0,1,7.056-.068H19.407Z" transform="translate(-4.994 0.068)" fill="#288c0a"/>
+  </g>
+  <path id="Контур_257" data-name="Контур 257" d="M20.6,8.506l7.569,3.118V8.7L23.88,7.429Z" transform="translate(-4.994 0.068)" fill="#0e5429"/>
+  <path id="Контур_258" data-name="Контур 258" d="M28.171,8.7h-6.7a2.062,2.062,0,0,1-2.062-2.063v-6.7Z" transform="translate(-4.994 0.068)" fill="#cef4ae"/>
+  <g id="Сгруппировать_199" data-name="Сгруппировать 199" transform="translate(5.029 11.693)">
+    <rect id="Прямоугольник_119" data-name="Прямоугольник 119" width="13.119" height="1.458" rx="0.729" transform="translate(0 2.577)" fill="#fff"/>
+    <rect id="Прямоугольник_121" data-name="Прямоугольник 121" width="7.853" height="1.458" rx="0.729" transform="translate(0 9.089)" fill="#fff"/>
+    <rect id="Прямоугольник_182" data-name="Прямоугольник 182" width="13.119" height="1.458" rx="0.729" transform="translate(2.511 13.119) rotate(-90)" fill="#fff"/>
+    <rect id="Прямоугольник_184" data-name="Прямоугольник 184" width="7.288" height="1.458" rx="0.729" transform="translate(9.149 7.29) rotate(-90)" fill="#fff"/>
+  </g>
+</svg>

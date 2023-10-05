@@ -1,0 +1,136 @@
+// start /components/appeal.stamp/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'appeal.stamp'
+else
+  - var componentsArray = [ 'appeal.stamp' ]
+  
+.b-appeal-stamp.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    p Сервис обращений позволит вам отправить обращение СРО ААС и сэкономить ваше время, а также ускорить обработку вашего обращения.
+
+    h2 Подпись и печать (для ИП и юридических лиц)
+
+    p Для того, чтобы воспользоваться сервисом вам необходимо отсканировать вашу подпись, а для юридических лиц и ИП нужно отсканировать печать. Загрузить их в поля ниже. Это позволит вам автоматически создавать и подписывать заявления в СРО ААС.
+
+    hr
+
+    .b-appeal-stamp__form
+      form( action="/pages/appeal-stamp/response.json" method="" enctype="multipart/form-data" data-redirect="/pages/appeal-stamp/" )
+
+        .b-appeal-stamp__block
+
+          .b-appeal-stamp__item.default
+
+            input( type="file" name="SIGN" id="signInput" )
+            label( for="signInput" )
+
+              b
+                span.default.filled.error Изображение подписи
+                span.hover Перетащите подпись
+
+              .b-appeal-stamp__item__img( style="background-image: url('/components/appeal.stamp/images/sign.svg');" data-default="/components/appeal.stamp/images/sign.svg" )
+                
+                svg.hover(xmlns='http://www.w3.org/2000/svg' width='32' height='35.119' viewBox='0 0 32 35.119')
+                  path(id='Контур_317' data-name='Контур 317' d='M42.707,30.156,29.314,16.763a2.609,2.609,0,0,0-3.687,0L12.233,30.156A2.606,2.606,0,1,0,15.92,33.84l8.943-8.94V48.512a2.607,2.607,0,1,0,5.213,0V24.9l8.943,8.94a2.606,2.606,0,1,0,3.687-3.684Z' transform='translate(-11.47 -16)' fill='#4375d8')
+
+                .b-appeal-stamp__item__error.error
+
+              .small
+                span.default.error Загрузить другую
+                span.hover Перетащите в область
+                span.clear.filled( title="Очистить" )
+
+          .b-appeal-stamp__item.default
+
+            input( type="file" name="STAMP" id="stampInput" )
+            label( for="stampInput" )
+
+              b
+                span.default.filled.error Изображение печати
+                span.hover Перетащите печать
+
+              .b-appeal-stamp__item__img( style="background-image: url('/components/appeal.stamp/images/stamp.svg');" data-default="/components/appeal.stamp/images/stamp.svg")
+                
+                svg.hover(xmlns='http://www.w3.org/2000/svg' width='32' height='35.119' viewBox='0 0 32 35.119')
+                  path(id='Контур_317' data-name='Контур 317' d='M42.707,30.156,29.314,16.763a2.609,2.609,0,0,0-3.687,0L12.233,30.156A2.606,2.606,0,1,0,15.92,33.84l8.943-8.94V48.512a2.607,2.607,0,1,0,5.213,0V24.9l8.943,8.94a2.606,2.606,0,1,0,3.687-3.684Z' transform='translate(-11.47 -16)' fill='#4375d8')
+
+                .b-appeal-stamp__item__error.error
+
+              .small
+                span.default.error Загрузить другую
+                span.hover Перетащите в область
+                span.clear.filled( title="Очистить" )
+
+          .b-appeal-stamp__item.current
+
+            input( type="file" name="STAMP2" id="stampInput2" )
+            label( for="stampInput2" )
+
+              b
+                span.default.filled.error Изображение печати ООО "Твин пикс"
+                span.hover Перетащите печать
+
+              .b-appeal-stamp__item__img( style="background-image: url('/components/appeal.stamp/images/1.jpg');" data-default="/components/appeal.stamp/images/stamp.svg")
+                
+                svg.hover(xmlns='http://www.w3.org/2000/svg' width='32' height='35.119' viewBox='0 0 32 35.119')
+                  path(id='Контур_317' data-name='Контур 317' d='M42.707,30.156,29.314,16.763a2.609,2.609,0,0,0-3.687,0L12.233,30.156A2.606,2.606,0,1,0,15.92,33.84l8.943-8.94V48.512a2.607,2.607,0,1,0,5.213,0V24.9l8.943,8.94a2.606,2.606,0,1,0,3.687-3.684Z' transform='translate(-11.47 -16)' fill='#4375d8')
+
+                .b-appeal-stamp__item__error.error
+
+              .small
+                span.default.error Загрузить другую
+                span.hover Перетащите в область
+                span.clear.filled( title="Очистить" )
+
+          .b-appeal-stamp__item.default
+          
+            input( type="file" name="STAMP3" id="stampInput3" )
+            label( for="stampInput3" )
+
+              b
+                span.default.filled.error Изображение печати ОАО "Аудитор-про Сыновья и Ко"
+                span.hover Перетащите печать
+
+              .b-appeal-stamp__item__img( style="background-image: url('/components/appeal.stamp/images/stamp.svg');" data-default="/components/appeal.stamp/images/stamp.svg")
+                
+                svg.hover(xmlns='http://www.w3.org/2000/svg' width='32' height='35.119' viewBox='0 0 32 35.119')
+                  path(id='Контур_317' data-name='Контур 317' d='M42.707,30.156,29.314,16.763a2.609,2.609,0,0,0-3.687,0L12.233,30.156A2.606,2.606,0,1,0,15.92,33.84l8.943-8.94V48.512a2.607,2.607,0,1,0,5.213,0V24.9l8.943,8.94a2.606,2.606,0,1,0,3.687-3.684Z' transform='translate(-11.47 -16)' fill='#4375d8')
+
+                .b-appeal-stamp__item__error.error
+
+              .small
+                span.default.error Загрузить другую
+                span.hover Перетащите в область
+                span.clear.filled( title="Очистить" )
+
+        button.btn.btn-secondary.btn-lg( type="submit" ) Отправить
+
+    hr
+
+    h2 Инструкция о сервисе
+
+    p На текущий момент сервис позволяет подать цифровое обращение в СРО ААС, следить за ходом его выполнения.
+
+    h3 Раздел «Создать обращение»
+
+    p Выберите тип обращения следуйте внимательно инструкциям. Вы можете: внести изменение в реестр, подать жалобу.
+
+    h3 Раздел «Мои обращения»
+
+    p Следите в таблице за своими обращениями, используя удобный фильтр.
+
+// end /components/appeal.stamp/

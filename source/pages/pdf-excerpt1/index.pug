@@ -1,0 +1,148 @@
+doctype html
+html
+  head
+    title "Стандартная выписка по (индивидуальному) аудитору", форма от 07.06.2021
+    meta( charset="utf-8" )
+    
+  body
+    link( href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700" rel="stylesheet" )
+    link( href="/components/pdf/excerpt.css" rel="stylesheet" )
+
+    table.header
+      col( width="150" )
+      col( width="500" )
+      col( width="150" )
+      tr
+        td.aas-logo( rowspan="5" )
+          img( src="/template/images/logo-aas-small.svg" alt="СРО ААС" width="140" )
+        td.header-companyname Саморегулируемая организация аудиторов
+        td.ifac-logo( rowspan="5" )
+          img( src="/template/images/logo-ifac.svg" alt="СРО ААС" width="70" )
+      tr
+        td.header-companytitle Ассоциация «Содружество»
+      tr
+        td.header-membership член Международной Федерации Бухгалтеров (IFAC)
+      tr
+        td.header-inn (ОГРН 1097799010870 ИНН 7729440813 КПП 772901001)
+      tr
+        td.header-address 119192, г. Москва, Мичуринский проспект, дом 21, корпус 4.<br>т: +7 (495) 734-22-22, ф: +7 (495) 734-04-22, www.auditor-sro.org, info@auditor-sro.org
+
+    table.h1
+      tr
+        td.h1-title ВЫПИСКА
+      tr
+        td.p из реестра аудиторов и аудиторских организаций<br>Саморегулируемой организации аудиторов Ассоциации «Содружество» (СРО ААС)
+
+    table.date-number
+      tr
+        td.date «9» апреля  2021 г.
+        td.number № 450-ФС/21
+
+    table.text
+      tr
+        td.text( style="padding-bottom: 15px;") Настоящая выписка содержит сведения об индивидуальном аудиторе
+      tr
+        td.fio
+          b ДАННЫЕ
+      tr
+        td.note фамилия, имя, отчество (при наличии)
+
+    table.certificate
+      tr
+        td Дата и номер решения о приеме в члены СРО ААС: <b>20.05.2004 г., № 66</b><br>Дата вступления в силу решения о приеме в члены СРО ААС: <b>23.07.1995 г</b><br>Дата включения в Реестр аудиторов и аудиторских организаций СРО ААС: <b>08.08.2020 г.</b><br>Членство в СРО ААС приостановлено с <b>02.02.2010 г. на 180 дней</b>.
+
+    table.ornz
+      tr
+        td( align="center" )
+          b ОРНЗ
+
+    table.ornz-num
+      tr
+        td 2
+        td 2
+        td 1
+        td 0
+        td 6
+        td 0
+        td 2
+        td 1
+        td 3
+        td 5
+        td 4
+
+    table.table-data 
+      col( width="40" )
+      col( width="300" )
+      col( width="460" )
+      tbody
+        tr 
+          td( colspan="3" ) Сведения об индивидуальном аудиторе:
+        tr.border 
+          td( align="center" ) 1
+          td Фамилия, имя, отчество (при наличии)
+          td ДАННЫЕ
+        tr.border 
+          td( align="center" ) 2
+          td Фамилия, имя, отчество (при наличии) на иностранном языке
+          td ДАННЫЕ
+        tr.border 
+          td( align="center" ) 3
+          td Сведения о государственной регистрации индивидуального предпринимателя (ОГРНИП)
+          td ДАННЫЕ
+        tr.border 
+          td( align="center" ) 4
+          td Область аудита (тип КАА)
+          td ДАННЫЕ
+
+      tbody
+        tr 
+          td( colspan="3" ) Сведения о квалификационных аттестатах индивидуального аудитора: 
+
+        tr.border 
+          td( align="center" colspan="3" )
+            b 1
+        tr.border 
+          td( align="center" ) 1
+          td Номер аттестата
+          td ДАННЫЕ
+        tr.border 
+          td( align="center" ) 2
+          td Дата принятия решения о выдаче аттестата
+          td ДАННЫЕ 
+        tr.border 
+          td( align="center" ) 3
+          td Наименование органа (организации), выдавшей аттестат
+          td ДАННЫЕ 
+
+        tr 
+          td( colspan="3" ) Сведения о членстве в других СРО аудиторов: 
+        tr.border 
+          td( align="center" colspan="3" )
+            b 1
+        tr.border 
+          td( align="center" ) 1
+          td Наименование СРО
+          td ДАННЫЕ
+        tr.border 
+          td( align="center" ) 2
+          td ОРНЗ
+          td ДАННЫЕ
+        tr.border 
+          td( align="center" ) 3
+          td Дата начала периода
+          td ДАННЫЕ
+        tr.border 
+          td( align="center" ) 4
+          td Дата окончания периода
+          td ДАННЫЕ
+
+    table.issue-date
+      tr
+        td Выписка сформирована по состоянию на <b>«5» февраля 2021 года</b>.
+
+    table.signature( autosize="1" )
+      tr
+        td.occupation Генеральный директор СРО ААС
+        td.signature
+          img( src="/template/images/signature-stamp.png" alt="" width="280" )
+        td.fio Носова О.А.

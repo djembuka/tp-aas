@@ -1,0 +1,149 @@
+{
+  "status": "success",
+  "errors": [{ "message": "Error on server" }],
+  "data": {
+    "block": [
+      {
+        "id": "block125",
+        "controls": [
+          {
+            "name": "BLOCK_TITLE",
+            "label": "Название блока",
+            "value": "",
+            "type": "text",
+            "required": true,
+            "invalid": false
+          },
+          {
+            "name": "PROGRAMM",
+            "label": "Программа СРО ААС",
+            "type": "ornz",
+            "value": "",
+            "required": true,
+            "invalid": false
+          }
+        ]
+      },
+      {
+        "id": "block125",
+        "lessons": [
+          {
+            "controls": [
+              {
+                "name": "LESSON_TITLE",
+                "label": "Название занятия",
+                "value": "",
+                "type": "textarea",
+                "required": true,
+                "invalid": false
+              },
+              {
+                "name": "LESSON_DATE",
+                "label": "Выберите дату",
+                "value": "",
+                "type": "date",
+                "required": true,
+                "invalid": false
+              },
+              {
+                "name": "TEACHER_NAME",
+                "label": "Преподаватель",
+                "value": "",
+                "type": "text",
+                "required": true,
+                "invalid": false
+              },
+              {
+                "name": "TASK_TEACHER_BIOGRAPHY",
+                "label": "Биография и регалии преподавателя",
+                "value": "",
+                "type": "textarea",
+                "required": false,
+                "invalid": false
+              },
+              {
+                "name": "LESSON_TYPE",
+                "label": "Тип занятия",
+                "value": [
+                  {
+                    "label": "Очное",
+                    "code": "ochno"
+                  },
+                  {
+                    "label": "Заочное",
+                    "code": "zaochno"
+                  },
+                  {
+                    "label": "Дистанционное",
+                    "code": "distant"
+                  }
+                ],
+                "selected": { "label": "Дистанционное", "code": "distant" },
+                "type": "select",
+                "required": true,
+                "invalid": false
+              },
+              {
+                "name": "TASK_DISCIPLINE",
+                "label": "Дисциплина",
+                "value": [
+                  {
+                    "label": "Основы правового регулирования имущественных отношений",
+                    "code": "1"
+                  },
+                  {
+                    "label": "Основы правового регулирования",
+                    "code": "2"
+                  },
+                  {
+                    "label": "Основы имущественных отношений",
+                    "code": "3"
+                  }
+                ],
+                "selected": {
+                  "label": "Основы правового регулирования имущественных отношений",
+                  "code": "1"
+                },
+                "type": "select",
+                "required": true,
+                "invalid": false
+              },
+              {
+                "name": "LESSON_ADDRESS",
+                "label": "Адрес занятия",
+                "value": "",
+                "type": "text",
+                "required": true,
+                "invalid": false
+              },
+              {
+                "name": "LESSON_START",
+                "label": "Время начала",
+                "value": "",
+                "type": "time",
+                "required": true,
+                "invalid": false
+              },
+              {
+                "name": "LESSON_END",
+                "label": "Время окончания",
+                "value": "",
+                "type": "time",
+                "required": true,
+                "invalid": false
+              },
+              {
+                "name": "LESSON_HOURS",
+                "label": "Количество часов",
+                "value": "",
+                "type": "text",
+                "required": true,
+                "invalid": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

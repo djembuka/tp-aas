@@ -1,0 +1,28 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-form-result'
+  - var authorized = 'true'
+
+block title
+  title Результат отправки формы | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/form-auth
+
+  hr
+
+  .container-fluid
+  
+    h1 Авторизация
+  
+  .container-fluid
+        
+    include ../../components/form.auth/result
+  
+    

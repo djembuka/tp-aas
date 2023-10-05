@@ -1,0 +1,56 @@
+// start /components/form.profile/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'form.profile'
+else
+  - var componentsArray = [ 'form.profile' ]
+  
+.b-form-profile.ph-block
+
+  .ph
+  
+    .ph__block
+      .ph__photo
+        .ph__fileupload
+        .ph__text
+
+  .ph-content
+  
+    .b-form-profile__block
+      
+      form( action="/pages/profile/" method="GET" )
+            
+        .b-form-profile__photo
+          
+          label.b-form-profile__fileupload( for="PERSONAL_PHOTO" style="background-image: url( '/template/images/profile.svg' );" )
+            .b-form-profile__photo-img
+            .b-form-profile__photo-delete
+            .b-form-profile__photo-note Нажмите и загрузите
+            input#PERSONAL_PHOTO( type="file" name="PHOTO" )
+            input#PERSONAL_PHOTO_del( type="checkbox" name="PERSONAL_PHOTO_del" value="Y" )
+            
+          .b-form-profile__photo-text
+          
+            .h4 Ваше фото
+            p Это фото будет доступно на вашей публичной странице, поэтому обязательно позаботьтесь о его качестве. Рекомендуем размер не менее 500×500 px. Также оно не должно весить более 3 мб.
+            
+        hr
+            
+        .b-float-label.invalid
+
+          input#EMAIL( type="email" autocomplete="off" name="EMAIL" )
+          label( for="EMAIL" ) Email для уведомлений
+
+        hr
+
+        .b-float-label
+
+          textarea#MESSAGE( rows="10" cols="10" name="TEXT" )
+          label( for="MESSAGE" autocomplete="off" ) Текст
+          
+        hr
+
+        button.btn.btn-secondary.btn-lg( type="submit" ) Сохранить
+  
+// end /components/form.profile/

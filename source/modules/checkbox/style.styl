@@ -1,0 +1,118 @@
+.b-checkbox
+  max-width 700px
+
+  [type="checkbox"]
+  
+    &:not(:checked),
+    &:checked
+      position absolute
+      opacity 0
+      pointer-events none
+
+    &+span
+      position relative
+      padding-left 44px
+      cursor pointer
+      display inline-block
+      min-height 25px
+      -webkit-user-select none
+      -moz-user-select none
+      -ms-user-select none
+      user-select none
+
+    &.filled-in
+    
+      &+span
+        font-size 0.625rem
+
+        &:before,
+        &:after
+          content ''
+          left 0
+          position absolute
+          -webkit-transition border .25s, background-color .25s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s
+          transition border .25s, background-color .25s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s
+          z-index 1
+
+      &:not(:checked)
+      
+        &+span:before
+          width 0
+          height 0
+          border 3px solid transparent
+          left 6px
+          top 10px
+          -webkit-transform rotateZ(37deg)
+          transform rotateZ(37deg)
+          -webkit-transform-origin 100% 100%
+          transform-origin 100% 100%
+
+        &+span:after
+          height 24px
+          width 24px
+          background-color #f2f2f2
+          top 0px
+          border-radius 5px
+          z-index 0
+
+      &:checked+span
+      
+        &:before
+          top 4px
+          left 3px
+          width 8px
+          height 13px
+          border-top 2px solid transparent
+          border-left 2px solid transparent
+          border-right 2px solid #003B78
+          border-bottom 2px solid #003B78
+          -webkit-transform rotateZ(37deg)
+          transform rotateZ(37deg)
+          -webkit-transform-origin 100% 100%
+          transform-origin 100% 100%
+
+        &:after
+          top 0
+          width 24px
+          height 24px
+          background-color #f2f2f2
+          z-index 0
+
+      &.tabbed
+      
+        &:focus+span:after
+          border-radius 2px
+          border-color #5a5a5a
+          background-color rgba(0,0,0,0.1)
+
+        &:checked:focus+span:after
+          border-radius 2px
+          background-color #26a69a
+          border-color #26a69a
+
+      &:disabled:not(:checked)+span
+      
+        &:before
+          background-color transparent
+          border 2px solid transparent
+
+        &:after
+          border-color transparent
+          background-color #949494
+
+      &:disabled:checked+span
+      
+        &:before
+          background-color transparent
+
+        &:after
+          background-color #949494
+          border-color #949494
+
+  &.invalid
+
+    [type="checkbox"].filled-in:not(:checked)+span
+      color #f00
+    
+      &:after
+        background-color: #f00

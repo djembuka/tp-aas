@@ -1,0 +1,48 @@
+block vars
+  - var page = 'main'
+  - var authorized = 'true'
+
+doctype html
+html
+  head
+    block title
+      title aas
+      
+    include includes/meta
+
+    link( href="/template/placeholders/" + page + ".css" rel="stylesheet" )
+    
+  body
+
+    | <!--[if lte IE 9]><style>html{overflow:hidden;}#ie{font-family:Arial;background-color:#fff;position:fixed;top:0;left:0;width:100%;height:100%;text-align:center;z-index:100000;}#ie-h{margin-bottom:30px;font-size:14pt;font-weight:bold;}#ie-text{width: 550px;margin:70px auto 40px;}#browser-choice{margin:0 auto;width:532px;text-align:left;}#browser-choice a{display:inline-block;background-color:#fafafa;margin:0 8px 20px;width:250px;font-size:10.5pt;padding:14px;text-align:center;}#browser-choice a:hover{opacity:1}#browser-choice a img{margin-right:10px;vertical-align:top;}#browser-choice a span{color:#3b3b3b;display:inline-block;vertical-align:top;line-height:32px;}</style><div id="ie"><div id="ie-text"><div id="ie-h">Вы используете Internet Explorer 10</div><p>С 12 января 2016 года Microsoft перестала обновлять системы безопасности и осуществлять техническую поддержку старых версий Internet Explorer. При своевременном обновлении браузера система безопасности защищает данные на компьютерах пользователей от установки вредоносного ПО и хакерских атак.</p><p>Корректное отображение сайта и работа его сервисов в Microsoft Internet Explorer 10 и более ранних версиях, не гарантируется.</p><p>Для безопасной и надежной работы рекомендуем Вам использовать один из современных бесплатных браузеров:</p></div><div id="browser-choice"><a href=""><img src="/template/images/chrome.gif" width="32" height="32" alt=""><span>Google Chrome</span></a><a href=""><img src="/template/images/firefox.gif" width="32" height="32" alt=""><span>Mozilla Firefox</span></a><a href=""><img src="/template/images/yandex-browser.gif" width="32" height="32" alt=""><span>Яндекс Браузер</span></a></div></div><![endif]-->
+
+    .b-body-shutter
+
+    .b-page-content
+  
+      //include ../components/bitrix-panel/template
+      
+      include includes/header
+      
+      block content
+
+        .container-fluid
+          h1 aas
+
+      hr.hr--lg
+    
+    include includes/footer
+    
+    include ../components/cookie-alert/template
+    
+    //- include page's styles and scripts
+    include includes/fonts
+    include includes/styles
+    include includes/scripts
+    
+    //- include styles and scripts for all page's components
+    if componentsArray
+      each componentName in componentsArray
+        link( rel="stylesheet", href="/components/" + componentName + "/style.css" )
+        script( src="/components/" + componentName + "/script.js" )
+

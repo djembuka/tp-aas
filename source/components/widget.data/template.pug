@@ -1,0 +1,49 @@
+// start /components/widget.data/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'widget.data'
+else
+  - var componentsArray = [ 'widget.data' ]
+    
+.b-widget-code.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    p Для того, чтобы данные размещенные на вашем сайте не приходилось постоянно следить за актуальностью данных на сайте, мы подготовили для вас удобный виджет, который добавит на ваш сайт актуальные данные из реестра СРО ААС.
+    
+    p Что нужно сделать:
+    
+    ol
+      li Нажмите «Получить код»;
+      li Скопируйте код;
+      li Вставьте код в веб-страницу вашего сайта или отправьте веб-мастеру.
+
+    hr
+    
+    .b-widget-code-block
+      span.b-copy-icon( style="background-image: url('/template/images/copy.svg')")
+      h4 Скопируйте код виджета
+      hr.hr--md
+      pre
+        | &lt;script&gt;
+        |    (function(w,d,u){
+        |       var s=d.createElement("script");s.async=true;s.src=u+"?"+(Date.now()/60000|0);
+        |       var h=d.getElementsByTagName("script")[0];h.parentNode.insertBefore(s,h);
+        |    })(window,document,"https://corp.2px.ru/upload/crm/site_button/loader_5_bngxvv.js");
+        | &lt;/script&gt;
+      hr.hr--md
+      button.btn.btn-dark.btn-md Скопировать
+
+// end /components/widget.data/

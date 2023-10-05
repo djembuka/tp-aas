@@ -1,0 +1,40 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'blocks-preappeal-popup'
+  - var authorized = 'true'
+
+block title
+  title Обращение Popup | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/registry
+
+  hr
+
+  .container-fluid
+  
+    h1 Обращение Popup
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/news
+          
+      article.col-12.col-md-9
+        
+        p Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente aperiam facere ad blanditiis tenetur voluptatem nemo quidem magni minus? At libero, consectetur possimus reiciendis, mollitia illum veritatis nisi, voluptatum eveniet accusamus fugiat quas obcaecati culpa consequuntur ex aspernatur qui quibusdam earum vero. Magni, corporis voluptatem? Ratione sunt debitis nesciunt repellat sequi, aliquam maxime tempore quibusdam vero incidunt accusamus molestiae consequuntur amet in neque dicta totam reprehenderit quod odit repudiandae odio vitae! Delectus, ratione cum! Ratione, facere accusantium pariatur rem laborum vel totam, cum eum itaque ipsa quasi corporis repudiandae explicabo dolores molestias eaque ipsum voluptates aliquid tenetur ea voluptate ducimus tempora quis illum? Eveniet molestiae impedit omnis, expedita vel exercitationem adipisci natus nesciunt placeat magnam voluptatem iste autem, dolorum illo hic quo quisquam ratione, dignissimos odio? Dolore consectetur, in sint, porro odit iste aperiam, aliquid sapiente sequi iusto nulla tempore. Repellendus, doloremque quisquam numquam blanditiis, error, non beatae molestias fugiat ad ipsa odio esse possimus totam labore nulla placeat? Illo cum vel labore modi ratione porro vitae placeat, tenetur quaerat quo quas eius id velit deserunt accusantium eum earum sequi fugit suscipit dolorum amet dolores deleniti aut. Velit architecto deleniti nisi voluptas, quas, ratione, iste quam fuga impedit eius eos?
+
+        hr
+
+        button.btn.btn-primary.btn-lg( data-toggle="modal" data-target="#preappealModal" ) Открыть Popup
+
+        include ../../components/preappeal-popup/template
+  
+    

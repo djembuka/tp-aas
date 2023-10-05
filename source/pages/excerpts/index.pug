@@ -1,0 +1,34 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-excerpts'
+  - var authorized = 'true'
+
+block title
+  title Выписки | Pages | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/excerpts
+
+  hr
+
+  .container-fluid
+  
+    h1 Выписки
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/excerpts
+          
+      article.col-12.col-md-9
+        
+        include ../../components/excerpts/template
+  
+    

@@ -1,0 +1,85 @@
+.b-form-auth
+
+  &.ph-block
+    position relative
+  
+  .ph
+
+    &__block
+      border 1px solid $line-color
+      padding 100px 0 110px
+      display flex
+      justify-content space-between
+      flex-wrap wrap
+
+    &-col
+      width calc( 50% + 15px )
+      padding 0 calc( (100% + 30px) * .1 )
+
+      &:nth-child(1)
+        margin-left -15px
+
+      &:nth-child(2)
+        margin-right -15px
+
+      div
+        background-color $placeholder-color
+        height 7px
+        margin-bottom 10px
+
+        &:first-child
+          height 25px
+          margin-bottom 30px
+
+        &:last-child
+          width 70%
+
+      @media( max-width 767px )
+        width calc( 100% + 30px )
+        margin 0 -15px
+
+        &:nth-child(2)
+          display none
+        
+    &-content
+      position absolute
+      top 0
+      left 0
+      width 100%
+      transition( opacity .5s ease )
+      opacity 0
+      z-index 0
+
+.b-form-result
+
+  &.ph-block
+    position relative
+  
+  .ph
+
+    &__block
+      border 1px solid $line-color
+      padding 130px 0
+
+      div
+        background-color $placeholder-color
+        height 7px
+        margin 0 auto 10px
+        max-width 750px
+
+        &:first-child
+          height 25px
+          margin-bottom 30px
+          max-width 300px
+
+        &:last-child
+          max-width 300px
+        
+    &-content
+      position absolute
+      top 0
+      left 0
+      width 100%
+      transition( opacity .5s ease )
+      opacity 0
+      z-index 0

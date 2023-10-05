@@ -1,0 +1,26 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'blocks-gallery'
+  - var authorized = 'true'
+
+block title
+  title Blocks | Gallery | AAS
+
+block content
+
+  .container-fluid
+
+    link( rel="stylesheet", href="/template/css/swiper.min.css" )
+    script( src="/template/js/swiper.min.js" )
+
+    p Если много картинок
+
+      include ../../modules/content-gallery/include
+
+    br
+
+    p Если одна картинка
+
+      figure
+        img( src="/upload/gallery/3.jpg" alt="" )

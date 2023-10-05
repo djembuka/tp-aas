@@ -1,0 +1,36 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'blocks-vue-form'
+  - var authorized = 'true'
+
+block title
+  title Blocks | Vue form  | AAS
+
+block content
+
+  script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+  script( src="https://unpkg.com/vuex@3" )
+
+  script( src="https://unpkg.com/vue-select@latest" )
+  link( rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css" )
+
+  script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js" )
+  link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css" )
+
+  script( src="https://cdn.jsdelivr.net/npm/vue-scrollto" )
+  script( src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js" )
+
+  script( src="/blocks/vue-form/include/script-edit-form.js" )
+  script( src="/blocks/vue-form/include/store-edit-form.js" )
+
+  link( rel="stylesheet", href="/blocks/vue-form/include/style-edit-form.css" )
+
+  script
+    | window.reportFormOZOPaths = {
+    |   addCompany: '/components/report-form-ozo/addCompany.json',
+    |   removeCompany: '/components/report-form-ozo/removeCompany.json',
+    |   autosave: '/components/report-form-ozo/removeCompany.json',
+    | };
+
+  #editStudyCourseForm

@@ -1,0 +1,250 @@
+window.addEventListener('load', function () {
+  document
+    .querySelectorAll('.b-appeal-stamp__form')
+    .forEach(function (formElem) {
+      var form = formElem.querySelector('form');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(form);
+        for (key in filesDropped) {
+          formData.append(key, filesDropped[key]);
+        }
+        //send request
+        (async () => {
+          try {
+            let response = await fetch(form.getAttribute('action'), {
+              method: form.getAttribute('method'),
+              body: formData,
+            });
+            let result = await response.json();
+            if (result.STATUS === 'Y') {
+              window.location = form.getAttribute('data-redirect');
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+      });
+
+      //show hide button
+      var button = formElem.querySelector('button');
+      var filesDropped = {};
+
+      formElem
+        .querySelectorAll('.b-appeal-stamp__item')
+        .forEach(function (itemElem) {
+          var input = itemElem.querySelector('input[type=file]');
+          var img = itemElem.querySelector('.b-appeal-stamp__item__img');
+          var errorElem = itemElem.querySelector(
+            '.b-appeal-stamp__item__error'
+          );
+
+          //clear img
+          var clear = itemElem.querySelector('.clear');
+          clear.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            //clear input
+            input.value = '';
+
+            //clear class
+            itemElem.classList.remove('filled');
+            itemElem.classList.remove('error');
+            itemElem.classList.add('default');
+
+            //clear image
+            img.style.backgroundImage =
+              'url("' + img.getAttribute('data-default') + '")';
+
+            //hideButton();
+          });
+
+          //img preview
+          input.addEventListener('change', function (e) {
+            var input = this;
+
+            if (!input.files || !input.files[0]) {
+              //hideButton();
+              return;
+            }
+
+            //validation
+            var error = getError(input.files[0]);
+
+            if (error) {
+              itemElem.classList.remove('default');
+              itemElem.classList.remove('current');
+              itemElem.classList.remove('filled');
+              itemElem.classList.add('error');
+
+              errorElem.textContent = error;
+
+              //hideButton();
+              return;
+            }
+
+            //preview
+            showPreview(input.files[0]);
+          });
+
+          //drag&drop file
+
+          //body
+          var dropZone = itemElem;
+          var currentClass = [];
+
+          dropZone.addEventListener('drag', cancelEvent);
+          dropZone.addEventListener('dragstart', cancelEvent);
+          dropZone.addEventListener('dragend', cancelEvent);
+          dropZone.addEventListener('dragover', cancelEvent);
+          dropZone.addEventListener('dragenter', cancelEvent);
+          dropZone.addEventListener('dragleave', cancelEvent);
+          dropZone.addEventListener('drop', cancelEvent);
+
+          dropZone.addEventListener('dragover', () => {
+            dropZone.classList.add('filled');
+            dropZone.classList.remove('default');
+            dropZone.classList.remove('current');
+            dropZone.classList.remove('error');
+          });
+
+          dropZone.addEventListener('dragenter', () => {
+            if (!currentClass.length) {
+              currentClass = Array(...dropZone.classList).filter(function (
+                cls
+              ) {
+                return cls !== 'b-appeal-stamp__item';
+              });
+            }
+            dropZone.classList.add('filled');
+            dropZone.classList.remove('default');
+            dropZone.classList.remove('current');
+            dropZone.classList.remove('error');
+          });
+
+          dropZone.addEventListener('dragleave', (e) => {
+            //label
+            let dxLabel = e.pageX - getCoords(dropZone).left;
+            let dyLabel = e.pageY - getCoords(dropZone).top;
+
+            if (
+              dxLabel < 0 ||
+              dxLabel > dropZone.clientWidth ||
+              dyLabel < 0 ||
+              dyLabel > dropZone.clientHeight
+            ) {
+              dropZone.classList.remove('filled');
+              currentClass.forEach(function (cls) {
+                dropZone.classList.add(cls);
+              });
+              currentClass = [];
+              return;
+            }
+          });
+
+          dropZone.addEventListener('drop', (e) => {
+            currentClass = [];
+            dropZone.classList.add('filled');
+            dropZone.classList.remove('default');
+            dropZone.classList.remove('current');
+            dropZone.classList.remove('error');
+
+            //validation
+            var error = getError(e.dataTransfer.files[0]);
+
+            if (error) {
+              itemElem.classList.remove('default');
+              itemElem.classList.remove('current');
+              itemElem.classList.remove('filled');
+              itemElem.classList.add('error');
+
+              errorElem.textContent = error;
+
+              //hideButton();
+              return;
+            }
+
+            //preview
+            showPreview(e.dataTransfer.files[0]);
+
+            filesDropped[input.getAttribute('name')] = e.dataTransfer.files[0];
+          });
+
+          function getError(file) {
+            var error;
+            var validSize = 10e6;
+            var validExtReg = /gif|jpg|jpeg|png|tiff|webp|heic/gi;
+
+            if (file.size > validSize) {
+              error = 'Размер файла превышает 10Мб';
+            } else if (
+              !validExtReg.test(
+                file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase()
+              )
+            ) {
+              error = 'Загружайте изображения GIF JPG PNG TIFF WEBP HEIC';
+            }
+
+            return error;
+          }
+
+          function showPreview(file) {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            img.classList.add('btn--load-circle');
+
+            reader.onload = function (e) {
+              img.classList.remove('btn--load-circle');
+              //add filled
+              itemElem.classList.remove('default');
+              itemElem.classList.remove('current');
+              itemElem.classList.remove('error');
+              itemElem.classList.add('filled');
+              img.style.backgroundImage = 'url("' + e.target.result + '")';
+
+              //show button
+              /*var showButtonFlag = true;
+              formElem
+                .querySelectorAll('.b-appeal-stamp__item')
+                .forEach(function (i) {
+                  if (
+                    !(
+                      i.classList.contains('filled') ||
+                      i.classList.contains('current')
+                    )
+                  ) {
+                    showButtonFlag = false; //at least one
+                  }
+                });
+              if (showButtonFlag) {
+                showButton();
+              }*/
+            };
+          }
+        });
+
+      /*function showButton() {
+        button.style.display = 'inline-block';
+      }
+
+      function hideButton() {
+        button.style.display = 'none';
+      }*/
+
+      function cancelEvent(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      function getCoords(elem) {
+        const box = elem.getBoundingClientRect();
+
+        return {
+          top: box.top + scrollY,
+          left: box.left + scrollX,
+        };
+      }
+    });
+});

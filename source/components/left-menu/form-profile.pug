@@ -1,0 +1,31 @@
+// start /components/left-menu/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'left-menu'
+else
+  - var componentsArray = [ 'left-menu' ]
+  
+.b-left-menu.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+      
+    .b-left-menu__item
+      a.active( href="" ) Анкета
+      .b-left-menu__sub
+        span Редактирование данных
+        
+    .b-left-menu__item
+      a( href="" ) Подписки
+      
+    .b-left-menu__item
+      a( href="" ) Выйти
+
+// end /components/left-menu/

@@ -1,0 +1,38 @@
+// start /components/left-menu/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'left-menu'
+else
+  - var componentsArray = [ 'left-menu' ]
+  
+.b-left-menu.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .b-left-menu__item
+      a( href="" ) Персональные данные по реестру
+      .b-left-menu__sub
+        a( href="" ) Данные для публикации на сайте
+
+    .b-left-menu__item
+      a.active( href="" ) Отчеты
+      .b-left-menu__sub
+        span Сдать отчет
+          em.b-note-badge( style="background-color: #f00;" ) !
+        a( href="" ) Сдать отчет
+        
+    .b-left-menu__item
+      a( href="" ) Подписки
+      
+    .b-left-menu__item
+      a( href="" ) Выйти
+
+// end /components/left-menu/

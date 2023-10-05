@@ -1,0 +1,42 @@
+// start /components/profile/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'profile.company'
+else
+  - var componentsArray = [ 'profile.company' ]
+  
+.b-profile-company.ph-block
+
+  .ph
+
+    .ph__photo
+      div
+    .ph__text
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-profile-company__photo
+      i( style="background-image: url( '/upload/portrait.jpg' );" title="Иванов Петр Валерьевич" )
+        span(style="background-color: #f00;") Исключен
+
+    .b-profile-company__text
+
+      .row
+        .col-sm-8
+          h3 Название компании
+          p Независимый член Правления, председатель Комиссии СРО ААС по наградам, председатель Рабочего органа Совета по аудиторской деятельности, председатель Правления Фонда НСФО, начальник Департамента международной отчетности Бухгалтерии ПАО ЛУКОЙЛ, Заслуженный экономист РФ.
+
+      hr.hr--line
+      hr
+
+      h3 Доступ от имени Название компании
+
+      hr.hr--xs
+      
+      include ../../modules/staff-block/include
+
+// end /components/profile/

@@ -1,0 +1,136 @@
+// start /components/report/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'report'
+else
+  - var componentsArray = [ 'report' ]
+  
+.b-report.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-report__text
+
+      .b-collapse-block.open.slide
+        .b-collapse-block__head
+          a( href="" ) Основные сведения
+          span
+        .b-collapse-block__body
+
+          .row
+            .col-12.col-lg-4
+              .text-muted.small Наименование организации
+              p ООО «Аудит»
+              .text-muted.small ОРНЗ
+              p 10206015186
+              .text-muted.small Почтовый адрес
+              p 121552, г. Москва, ул. Крылатская, д. 5, стр. 1
+              .text-muted.small Фактический адрес
+              p 121552, г. Москва, ул. Крылатская, д. 5, стр. 1
+
+            hr.d-block.d-lg-none.w-100
+
+            .col-12.col-lg-4
+              .text-muted.small Email
+              p Москва
+              .text-muted.small ОКПО
+              p Москва
+              .text-muted.small ОГРН
+              p Москва
+              .text-muted.small Проводит аудит ОЗО
+              p Нет
+              .text-muted.small ФИО подписывающего отчёт
+              p Иванов Иван Иванович
+
+            hr.d-block.d-lg-none.w-100
+
+            .col-12.col-lg-4
+              .text-muted.small Дата подписания отчёта
+              p 29906002124
+              .text-muted.small Дата сдачи отчёта в Минфин России
+              p 12.10.2009 № 4
+
+      .b-collapse-block.open.slide
+        .b-collapse-block__head
+          a( href="" ) Сотрудники
+          span
+        .b-collapse-block__body
+
+          .b-staff-table
+
+              table.table.table--sm.table--center
+                thead
+                  tr
+                    th.asc( data-field="name" ) ФИО
+                    th( data-field="ornz" ) ОРНЗ
+                    th( data-field="type" ) Тип договора
+                tbody
+                  tr( data-url="/pages/profile/" )
+                    td.asc Савельева Людмила Викторовна
+                    td 20606017533
+                    td Основной
+                  tr( data-url="/pages/profile/" )
+                    td.asc Широкова Ольга Владимировна
+                    td 20406000036
+                    td По совместительству
+                    input( type="hidden" name="staff-member-id" value="2" )
+                  tr( data-url="/pages/profile/" )
+                    td.asc Ушаков Алексей Вячеславович
+                    td 20406000036
+                    td
+                    input( type="hidden" name="staff-member-id" value="3" )
+
+      .b-collapse-block
+        .b-collapse-block__head
+          a( href="" ) Численность персонала
+          span
+        .b-collapse-block__body
+
+      .b-collapse-block
+        .b-collapse-block__head
+          a( href="" ) Объём услуг
+          span
+        .b-collapse-block__body
+
+      .b-collapse-block
+        .b-collapse-block__head
+          a( href="" ) Характеристика организаций
+          span
+        .b-collapse-block__body
+
+      .b-collapse-block
+        .b-collapse-block__head
+          a( href="" ) Аудиторские заключения
+          span
+        .b-collapse-block__body
+
+      .b-collapse-block
+        .b-collapse-block__head
+          a( href="" ) Участие в сетях
+          span
+        .b-collapse-block__body
+
+      .b-collapse-block
+        .b-collapse-block__head
+          a( href="" ) Руководство
+          span
+        .b-collapse-block__body
+
+      .b-collapse-block
+        .b-collapse-block__head
+          a( href="" ) Сотрудники
+          span
+        .b-collapse-block__body
+
+// end /components/report/

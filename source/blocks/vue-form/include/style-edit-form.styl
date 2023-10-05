@@ -1,0 +1,27 @@
+@import '../../styl/component-include.styl'
+
+/*control*/
+.b-add-fieldset-block__wrapper
+  display flex
+  justify-content space-between
+  flex-wrap wrap
+
+.b-add-fieldset-block__control
+  margin-bottom 2rem
+  width calc(50% - 15px)
+
+  &:nth-of-type(7)
+    margin-bottom 0
+
+  @media (max-width: 575px)
+    width 100%
+
+    &:nth-of-type(7)
+      margin-bottom 2rem
+
+@import './style/collapse-vue-component.styl'
+@import './style/checkbox-vue-component.styl'
+@import './style/add-fieldset-block.styl'
+@import './style/select.styl'
+@import './style/datepicker.styl'
+@import './style/transition.styl'

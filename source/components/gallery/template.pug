@@ -1,0 +1,49 @@
+// start /components/gallery/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'gallery'
+else
+  - var componentsArray = [ 'gallery' ]
+  
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
+  
+.b-gallery.ph-block
+      
+  .swiper-container( data-delay="5000" )
+    .swiper-wrapper
+
+      .swiper-slide
+        .b-gallery__img( style="background-image: url( '/upload/gallery/3.jpg' );" alt="" )
+        .b-gallery__slide-content
+          .b-gallery__heading Новости СРО ААС<br>Большой анонс
+          p Москва 18 сентября.<br>С 11:00 до 14:00
+          hr.hr--lg
+          a.btn.btn-primary.btn-lg( href="" ) Принять участие
+
+      .swiper-slide
+        .b-gallery__img( style="background-image: url( '/upload/gallery/4.jpg' );" alt="" )
+        .b-gallery__slide-content
+          .b-gallery__heading Фоторепортаж<br>с конференции
+          p Москва 18 сентября.<br>С 11:00 до 14:00
+          hr.hr--lg
+          button.btn.btn-primary.btn-lg Принять участие
+
+      .swiper-slide
+        .b-gallery__img( style="background-image: url( '/upload/gallery/5.jpg' );" alt="" )
+        .b-gallery__slide-content
+          .b-gallery__heading Встреча<br>представителей
+          p Москва 18 сентября.<br>С 11:00 до 14:00
+          hr.hr--lg
+          a.btn.btn-primary.btn-lg( href="" ) Принять участие
+
+      .swiper-slide
+        .b-gallery__img( style="background-image: url( '/upload/gallery/6.jpg' );" alt="" )
+        .b-gallery__slide-content
+          .b-gallery__heading Лучший бухгалтер
+          p Москва 18 сентября.<br>С 11:00 до 14:00
+          hr.hr--lg
+          a.btn.btn-primary.btn-lg( href="" ) Принять участие
+            
+// end /components/gallery/

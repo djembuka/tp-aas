@@ -1,0 +1,59 @@
+@import '../../styl/component-include.styl'
+
+.title-search
+
+  &-result
+    font-size $14px
+    line-height 17px
+    width 100% !important
+    left 0 !important
+    z-index 1000
+
+  &-wrapper
+    background-color #fff
+    border-radius 0 0 5px 5px
+    box-shadow 3px 3px 5px #0000000d
+    border 1px solid $line-color
+    padding-top 10px
+    
+  &-body
+    height 250px
+    overflow hidden
+
+  &-item
+    padding 10px 20px
+
+    &.selected
+      background-color rgba( 242,228,216,.4 )
+
+    i
+      background-bg()
+      width 64px
+      height 64px
+      border-radius 51%
+      margin-right 30px
+
+    a
+      display flex
+      justify-content flex-start
+      align-items center
+
+      &,
+      &:hover,
+      &:focus,
+      &:active
+        color #3b3b3b
+
+    small
+      display block
+      margin-top 4px
+
+  &-all
+    font-size $14px
+    margin-top 10px
+    border-top 1px solid $placeholder-color
+    
+    a
+      display block
+      padding 30px 20px
+      

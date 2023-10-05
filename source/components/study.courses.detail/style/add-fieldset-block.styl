@@ -1,0 +1,46 @@
+@import '../../../styl/component-include.styl'
+
+.b-add-fieldset-block__item
+  position relative
+
+  .btn-delete
+    position absolute
+    top 0
+    right 0
+
+    @media (max-width: 575px)
+      position static
+      width 100%
+      background-size contain
+      background-color #ff0000
+      border-radius 10px
+
+.b-add-fieldset-block__item
+  opacity 0
+  transition( all .3s ease )
+
+  &.height-auto
+    height auto !important
+
+  &.visible
+    opacity 1
+
+  input:not([type=checkbox]),
+  input:not([type=radio]),
+  textarea,
+  .ik_select_link_text
+    transition( background-color 1s ease )
+
+  label
+    transition( all .2s ease )
+
+  &.new
+
+    input:not([type=checkbox]),
+    input:not([type=radio]),
+    textarea,
+    .ik_select_link_text
+      background-color #e7f8e8
+
+    label
+      color #74c37a

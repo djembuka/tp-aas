@@ -1,0 +1,26 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-profile'
+  - var authorized = 'true'
+
+block title
+  title Личный кабинет другого аудитора | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/profile
+
+  hr
+
+  .container-fluid
+  
+    h1 Иванов Петр Валерьевич
+
+    include ../../components/profile/out
+  
+    

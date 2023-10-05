@@ -1,0 +1,40 @@
+.b-appeal-new  
+
+  &.ph-block
+    position relative
+  
+  .ph
+    display flex
+    justify-content space-between
+
+    @media(max-width 575px)
+      display block
+    
+    div
+      background-color $placeholder-color
+      width calc((100% - 30px * 2) / 3)
+      padding-top calc((100% - 30px * 2) / 3)
+      border-radius 10px
+
+      @media(max-width 1023px)
+        width calc((100% - 30px) / 2)
+        padding-top calc((100% - 30px) / 3)
+
+        &:first-child
+          display none
+
+      @media(max-width 575px)
+        width auto
+        padding-top 100%
+
+        &:last-child
+          display none
+        
+    &-content
+      position absolute
+      top 0
+      left 0
+      width 100%
+      transition( opacity .5s ease )
+      opacity 0
+      z-index 0

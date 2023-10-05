@@ -1,0 +1,166 @@
+@import '../../styl/component-include.styl'
+
+.b-appeal-history
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-appeal-history
+  
+  &__form
+
+    form
+      display flex
+      justify-content space-between
+      align-items flex-end
+
+      @media( max-width 575px )
+        display block
+
+  .b-form
+
+    &-field
+      width calc( 100% - 178px )
+
+      label
+        font-size $10px
+        display block
+        margin-bottom 8px
+
+      @media( max-width 575px )
+        width 100%
+
+  input.b-form-input
+    background-color $line-color
+    border-radius 5px
+    padding 10px 15px
+    height 48px
+    line-height 28px
+    font-size $14px
+    border 0
+    width 100%
+
+    &::selection
+      background-color $secondary-color
+      color #fff
+    
+    &[type=search]:focus
+      outline none
+      border-bottom 0
+
+  input[type="search"]
+    -webkit-appearance textfield
+    -moz-box-sizing border-box
+    -webkit-box-sizing border-box
+    box-sizing border-box
+
+  table.table
+    font-family $roboto
+
+    th,
+    td
+      font-size $14px
+      text-align center
+      vertical-align middle
+      border-top none
+      border-bottom 1px solid $line-color
+      cursor pointer
+
+      &.asc,
+      &.desc
+        background-color #f2e4d866
+
+      // @media( max-width 1399px )
+
+      //   &:nth-child(6)
+      //     display none
+
+      // @media( max-width 1199px )
+
+      //   &:nth-child(5)
+      //     display none
+
+      // @media( max-width 991px )
+
+      //   &:nth-child(4)
+      //     display none
+
+      // @media( max-width 575px )
+
+      //   &:nth-child(2)
+      //     display none
+
+    th
+      padding-right 35px
+      padding-left 35px
+
+      &:first-child
+        padding-left 1.5rem
+
+      &.asc,
+      &.desc
+        color $secondary-color-2
+        position relative
+
+        &:before
+          content ''
+          width 17px
+          height 17px
+          border-radius 51%
+          position absolute
+          top 50%
+          right 15px
+          margin-top -8px
+          background-color #EA5E21
+          z-index 1
+
+        &:after
+          content ''
+          width 5px
+          height 5px
+          border-right 1px solid #fff
+          border-bottom 1px solid #fff
+          transform( rotate( 45deg ))
+          position absolute
+          top 50%
+          right 21px
+          margin-top -3px
+          z-index 2
+
+      &.asc
+
+        &:after
+          transform( rotate( -135deg ))
+          margin-top -1px
+
+    td
+
+      &.normal
+        color $secondary-color-2
+        
+      &:last-child
+        padding-left 0
+        padding-right 0
+
+    tbody
+
+      tr
+        cursor pointer
+        transition( background-color .5s ease )
+      
+        &:hover
+          background-color #fcfcfc

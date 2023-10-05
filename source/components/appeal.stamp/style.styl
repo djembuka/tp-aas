@@ -1,0 +1,168 @@
+@import '../../styl/component-include.styl'
+
+.b-appeal-stamp
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-appeal-stamp
+  text-align left
+
+  /*button
+    display none*/
+
+  &__block
+    display flex
+    justify-content flex-start
+    align-items stretch
+    flex-wrap wrap
+    margin-right -30px
+
+  &__item
+    max-width 390px
+    width calc(50% - 15px)
+    margin 0 30px 30px 0
+    position relative
+
+    input
+      opacity 0
+      pointer-events none
+      width 0
+      height 0
+      position absolute
+      top 0
+      left 0
+      z-index -1
+  
+    label
+      display block
+      text-align center
+      background-color #F0F5FC
+      border-radius 10px
+      padding 33px 33px 48px
+      cursor pointer
+      margin-bottom 0
+      height 100%
+
+    &.filled label
+      background-color #4375D8
+      color #fff
+
+    &.error label
+      background-color #FFEAEA
+
+      &,
+      .small
+        color #FF0000
+
+    b
+      font-family $roboto
+      font-size $16px
+      font-weight $bold
+
+      span
+        display none
+
+    &__img
+      max-width 250px
+      height 150px
+      background-repeat no-repeat
+      background-position center
+      background-size contain
+      margin 50px auto
+      display flex
+      justify-content center
+      align-items center
+
+      &.btn--load-circle
+        background-image none !important
+
+      svg
+        display none
+
+    &__error
+      display none
+
+    .small
+      display inline-block
+      height 14px
+      color #06417c
+
+      &:hover
+        opacity .7
+
+      span
+        display none
+
+    .clear
+      position relative
+      width 20px
+      height 20px
+      margin 0 auto
+      
+      &:before,
+      &:after
+        content ''
+        display block
+        width 20px
+        border-top 2px solid #fff
+        transform( rotate(45deg))
+        position absolute
+        top 0
+        left 0
+
+      &:after
+        transform( rotate(135deg))
+
+    &.default,
+    &.current
+
+      &:not(:hover) .default,
+      &:not(:hover) .current
+        display block
+
+    &:hover
+
+      &:not(.filled):not(.error) .hover
+        display block
+
+      &:not(.filled):not(.error) .b-appeal-stamp__item__img
+        background-image none !important
+
+    &.filled
+
+      .filled
+        display block
+
+    &.error
+
+      .b-appeal-stamp__item__img
+        background-image none !important
+
+      .error
+        display block
+
+  @media( max-width 991px )
+
+    &__block
+      display block
+
+    &__item
+      width 100%
+      margin-right 0
+
+

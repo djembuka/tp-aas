@@ -1,0 +1,45 @@
+{
+  "cols": [
+    { "field": "id", "title": "Номер (ID)", "sortType": "asc" },
+    { "field": "date", "title": "Дата создания" },
+    { "field": "type", "title": "Тип обращения" },
+    { "field": "status", "title": "Статус" },
+    { "field": "", "title": "" }
+  ],
+  "rows": [
+    {
+      "data": {
+        "id": "34",
+        "date": "18 мая 2021<br>15:12:41",
+        "type": "Изменение в реестре",
+        "status": "<div class='label-green'><span>На рассмотрении</span></div>",
+        "button": "<a href='' class='multy-control-wrapper__remove btn-remove'><svg xmlns='http://www.w3.org/2000/svg' width='16.251' height='20' viewBox='0 0 16.251 20'><g transform='translate(0 -3.343)'><path  d='M24.7,11.1H21.264v-.626A1.875,1.875,0,0,0,19.39,8.6h-2.5a1.875,1.875,0,0,0-1.874,1.874V11.1H11.576a1.562,1.562,0,0,0-1.561,1.563v1.25a.624.624,0,0,0,.624.624h15a.625.625,0,0,0,.626-.624v-1.25A1.563,1.563,0,0,0,24.7,11.1Zm-8.438-.626a.625.625,0,0,1,.624-.624h2.5a.625.625,0,0,1,.624.624V11.1h-3.75Z' transform='translate(-10.015 -5.258)' fill='#9b9b9b'/><path d='M10.941,13.909a.2.2,0,0,0-.2.2l.516,10.822a1.873,1.873,0,0,0,1.873,1.786h9.492A1.873,1.873,0,0,0,24.5,24.935l.516-10.822a.2.2,0,0,0-.2-.2Zm9.44,1.561a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Z' transform='translate(-9.822 -3.378)' fill='#9b9b9b'/></g></svg></a>"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_self",
+      "title": "Обращение 35",
+      "data": {
+        "id": "35",
+        "date": "18 мая 2021<br>15:12:41",
+        "type": "Изменение в реестре",
+        "status": "<div class='label-blue'><span>На проверке</span></div>",
+        "button": "<a href='' class='multy-control-wrapper__remove btn-remove'><svg xmlns='http://www.w3.org/2000/svg' width='16.251' height='20' viewBox='0 0 16.251 20'><g transform='translate(0 -3.343)'><path  d='M24.7,11.1H21.264v-.626A1.875,1.875,0,0,0,19.39,8.6h-2.5a1.875,1.875,0,0,0-1.874,1.874V11.1H11.576a1.562,1.562,0,0,0-1.561,1.563v1.25a.624.624,0,0,0,.624.624h15a.625.625,0,0,0,.626-.624v-1.25A1.563,1.563,0,0,0,24.7,11.1Zm-8.438-.626a.625.625,0,0,1,.624-.624h2.5a.625.625,0,0,1,.624.624V11.1h-3.75Z' transform='translate(-10.015 -5.258)' fill='#9b9b9b'/><path d='M10.941,13.909a.2.2,0,0,0-.2.2l.516,10.822a1.873,1.873,0,0,0,1.873,1.786h9.492A1.873,1.873,0,0,0,24.5,24.935l.516-10.822a.2.2,0,0,0-.2-.2Zm9.44,1.561a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Z' transform='translate(-9.822 -3.378)' fill='#9b9b9b'/></g></svg></a>"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_blank",
+      "title": "Обращение 36",
+      "data": {
+        "id": "36",
+        "date": "18 мая 2021<br>15:12:41",
+        "type": "Изменение в реестре",
+        "status": "<div class='label-gray'>Черновик</span></div>",
+        "button": "<a href='' class='multy-control-wrapper__remove btn-remove'><svg xmlns='http://www.w3.org/2000/svg' width='16.251' height='20' viewBox='0 0 16.251 20'><g transform='translate(0 -3.343)'><path  d='M24.7,11.1H21.264v-.626A1.875,1.875,0,0,0,19.39,8.6h-2.5a1.875,1.875,0,0,0-1.874,1.874V11.1H11.576a1.562,1.562,0,0,0-1.561,1.563v1.25a.624.624,0,0,0,.624.624h15a.625.625,0,0,0,.626-.624v-1.25A1.563,1.563,0,0,0,24.7,11.1Zm-8.438-.626a.625.625,0,0,1,.624-.624h2.5a.625.625,0,0,1,.624.624V11.1h-3.75Z' transform='translate(-10.015 -5.258)' fill='#9b9b9b'/><path d='M10.941,13.909a.2.2,0,0,0-.2.2l.516,10.822a1.873,1.873,0,0,0,1.873,1.786h9.492A1.873,1.873,0,0,0,24.5,24.935l.516-10.822a.2.2,0,0,0-.2-.2Zm9.44,1.561a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Z' transform='translate(-9.822 -3.378)' fill='#9b9b9b'/></g></svg></a>"
+      }
+    }
+  ],
+  "pagination": "<div class=\"b-pagination-block text-right ph-block sys-pagination-aas ph-block--animated\"><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">1</a><span class=\"main-ui-pagination-page main-ui-pagination-active i-active\">2</span><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">3</a><a class=\"main-ui-pagination-page main-ui-pagination-dots\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=151\">...</a><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=298\">298</a><a class=\"main-ui-pagination-arrow main-ui-pagination-prev i-backward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">Предыдущая</a><a class=\"main-ui-pagination-arrow main-ui-pagination-next i-forward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">Следующая</a></div>"
+}

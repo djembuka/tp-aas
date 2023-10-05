@@ -1,0 +1,32 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-study-courses-create'
+  - var authorized = 'true'
+
+block title
+  title Создание курса УМЦ | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/study
+
+  hr
+
+  .container-fluid
+  
+    h1 Создать курс
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/study
+          
+      article.col-12.col-md-9
+
+        include ../../components/study.courses.create/template

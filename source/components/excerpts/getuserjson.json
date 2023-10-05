@@ -1,0 +1,23 @@
+[
+  {
+    "ID": "1849",
+    "FIO": "\u0421\u0430\u0432\u0435\u043b\u044c\u0435\u0432\u0430 \u0412\u0430\u043b\u0435\u043d\u0442\u0438\u043d\u0430 \u0410\u043d\u0434\u0440\u0435\u0435\u0432\u043d\u0430",
+    "ORNZ": "21006004116",
+    "PHOTO": "background-image: url(/template/images/nopic.svg);",
+    "TYPE": "auditor"
+  },
+  {
+    "ID": "710",
+    "FIO": "\u0421\u0430\u0432\u0435\u043b\u044c\u0435\u0432\u0430 \u0412\u0435\u0440\u0430 \u0418\u0432\u0430\u043d\u043e\u0432\u043d\u0430",
+    "ORNZ": "29506009184",
+    "PHOTO": "background-image: url(/template/images/nopic.svg);",
+    "TYPE": "firm"
+  },
+  {
+    "ID": "10945",
+    "FIO": "\u0421\u0430\u0432\u0435\u043b\u044c\u0435\u0432\u0430 \u0418\u0440\u0438\u043d\u0430 \u0412\u0430\u043b\u0435\u043d\u0442\u0438\u043d\u043e\u0432\u043d\u0430",
+    "ORNZ": "22006014748",
+    "PHOTO": "background-image: url(/template/images/nopic.svg);",
+    "TYPE": "auditor"
+  }
+]

@@ -1,0 +1,32 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-excerpts-multiple-generate'
+  - var authorized = 'true'
+
+block title
+  title Выписки на всех сотрудников организации | Pages | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/profile
+
+  hr
+
+  .container-fluid
+  
+    h1 Выписка на сотрудников организации Универс-аудит
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/profile
+          
+      article.col-12.col-md-8
+        
+        include ../../components/excerpts-multiple-generate/template

@@ -1,0 +1,81 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-main'
+  - var authorized = 'true'
+
+block title
+  title Главная | aas
+
+block content
+
+  .b-bg
+
+    hr
+
+    include ../../modules/quick-links/include
+
+    hr
+
+    .container-fluid
+
+      include ../../components/gallery/template
+
+    hr
+
+    include ../../components/inform-blocks/template
+
+    hr
+
+    include ../../components/statistics/template
+
+    hr
+
+  hr
+
+  .container-fluid
+
+    h2 Новости
+  
+    include ../../components/news.tabs/template
+
+    hr.hr--lg
+
+    h4 Тэги
+
+    include ../../modules/tags/include
+
+    hr
+
+    a.btn.btn-light( href="/pages/news/" ) Все новости
+
+  hr
+  
+  .b-bg
+    
+    hr
+  
+    .container-fluid
+
+      h2 Мероприятия
+    
+      include ../../components/events.tabs/template
+
+      hr
+
+      a.btn.btn-light( href="/pages/events/" ) Все мероприятия
+      
+    hr
+
+  hr
+
+  .container-fluid
+
+    h2 Партнеры
+
+    include ../../components/partners/template
+
+  hr
+
+
+      

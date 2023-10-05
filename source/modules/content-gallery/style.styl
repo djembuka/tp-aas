@@ -1,0 +1,40 @@
+@import '../../styl/component-include.styl'
+
+.b-content-gallery
+  position relative
+  
+  img
+    width 100%
+
+  .swiper-pagination-bullet
+    background-color #fff
+    opacity .3
+
+    &-active
+      background-color #fff
+      opacity 1
+      
+  .swiper-button-next,
+  .swiper-button-prev
+    width 64px
+    height 64px
+    margin-top -32px
+    color $primary-color
+    background-color #fff
+    border-radius 51%
+    box-shadow 0 3px 6px #00000029
+    left -32px
+    
+    &:after
+      font-size $16px
+      font-weight bold
+      
+    &:focus
+      outline none
+      
+    @media( max-width 767px )
+      display none
+      
+  .swiper-button-next
+    right -32px
+    left auto

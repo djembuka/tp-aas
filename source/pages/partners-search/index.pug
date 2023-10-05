@@ -1,0 +1,38 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-partners-search'
+  - var authorized = 'true'
+
+block title
+  title Поиск партнера | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/registry
+
+  hr
+
+  .container-fluid
+    
+    h1 Поиск партнера
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/registry
+          
+      article.col-12.col-md-8
+    
+        include ../../components/switch-block/partners-search
+
+        hr
+    
+        include ../../components/partners.search/template
+  
+    

@@ -1,0 +1,22 @@
+extends ../../layouts/pwa
+
+block vars
+  - var page = 'pages-poll-result-pwa'
+  - var authorized = 'true'
+
+block title
+  title PWA результат голосования | Pages | AAS
+
+block content
+
+  .container-fluid
+
+    img.b-pwa-logo(src="/template/images/logo-aas-small.svg")
+  
+    h1.text-success Спасибо, ваш голос учтен!
+    
+    p Спасибо за участие в голосование ваше голос учтен. Вы сможете увидеть результаты и ваш выбор в личном кабинете СРО ААС.
+  
+    h1.text-danger Ошибка, что-то пошло не так, пожалуйста обновите страницу!
+    
+    p Спасибо за участие в голосование ваше голос учтен. Вы сможете увидеть результаты и ваш выбор в личном кабинете СРО ААС.

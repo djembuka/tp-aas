@@ -1,0 +1,38 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-auditor-search'
+  - var authorized = 'true'
+
+block title
+  title Поиск аудитора | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/registry
+
+  hr
+
+  .container-fluid
+    
+    h1 Поиск аудитора
+    
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/registry
+          
+      article.col-12.col-md-8
+    
+        include ../../components/switch-block/auditor-search
+
+        hr
+    
+        include ../../components/auditor.search/template
+  
+    

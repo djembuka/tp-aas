@@ -1,0 +1,27 @@
+// start /components/structure/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'structure'
+else
+  - var componentsArray = [ 'structure' ]
+  
+.b-structure.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    include ../../modules/committee/structure
+
+
+// end /components/structure/

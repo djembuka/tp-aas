@@ -1,0 +1,269 @@
+@import '../../styl/component-include.styl'
+
+.b-registry-excerpt
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-registry-excerpt
+  
+  &__form
+
+    form
+      display flex
+      justify-content space-between
+      align-items flex-end
+
+      @media( max-width 575px )
+        display block
+
+  .b-form
+
+    &-field
+      width calc( 100% - 178px )
+
+      label
+        font-size $10px
+        display block
+        margin-bottom 8px
+
+      @media( max-width 575px )
+        width 100%
+
+  input.b-form-input
+    background-color $line-color
+    border-radius 5px
+    padding 10px 15px
+    height 48px
+    line-height 28px
+    font-size $14px
+    border 0
+    width 100%
+
+    &::selection
+      background-color $secondary-color
+      color #fff
+    
+    &[type=search]:focus
+      outline none
+      border-bottom 0
+
+  input[type="search"]
+    -webkit-appearance textfield
+    -moz-box-sizing border-box
+    -webkit-box-sizing border-box
+    box-sizing border-box
+
+  table.table
+    font-family $roboto
+
+    th
+      cursor pointer
+
+    th,
+    td
+      font-size $14px
+      text-align center
+      vertical-align middle
+      border-top none
+      border-bottom 1px solid $line-color
+
+      &.asc,
+      &.desc
+        background-color #f2e4d866
+
+      // @media( max-width 1399px )
+
+      //   &:nth-child(6)
+      //     display table-cell
+
+      // @media( max-width 1199px )
+
+      //   &:nth-child(5)
+      //     display none
+
+      // @media( max-width 991px )
+
+      //   &:nth-child(4)
+      //     display none
+
+      // @media( max-width 575px )
+
+      //   &:nth-child(2)
+      //     display none
+
+    th
+      padding-right 35px
+      padding-left 35px
+
+      &:first-child
+        text-align left
+        padding-left 1.5rem
+
+      &.asc,
+      &.desc
+        color $secondary-color-2
+        position relative
+
+        &:before
+          content ''
+          width 17px
+          height 17px
+          border-radius 51%
+          position absolute
+          top 50%
+          right 15px
+          margin-top -8px
+          background-color #EA5E21
+          z-index 1
+
+        &:after
+          content ''
+          width 5px
+          height 5px
+          border-right 1px solid #fff
+          border-bottom 1px solid #fff
+          transform( rotate( 45deg ))
+          position absolute
+          top 50%
+          right 21px
+          margin-top -3px
+          z-index 2
+
+      &.asc
+
+        &:after
+          transform( rotate( -135deg ))
+          margin-top -1px
+
+    td
+
+      &.normal
+        color $secondary-color-2
+
+      &:first-child
+        text-align left
+        
+      &:last-child
+        padding-left 0
+        padding-right 0
+
+    tbody
+
+      tr
+        cursor pointer
+        transition( background-color .5s ease )
+      
+        &:hover
+          background-color #fcfcfc
+
+.text-normal
+  color #F2762E
+
+/*Form/
+.b-input-hint__item:hover,
+.b-input-hint__item.active
+    background-color #F2E4D84D
+    cursor pointer
+
+.b-input-hint__text
+    pointer-events none
+
+.b-input-clear
+    position absolute
+    top 50%
+    right 10px
+    width 16px
+    height 16px
+    cursor pointer
+    background url( '/local/templates/aas/images/cancel.svg' ) no-repeat center
+    background-size 16px
+    margin-top -8px
+    z-index 1
+
+.form-control-select
+    .vs__dropdown-toggle
+        background-color #f2f2f2
+        border 0
+        border-radius 3px
+        padding 0
+    .vs__selected-options
+        padding 0
+    .vs__selected
+        position absolute
+        pointer-events none
+        margin 0
+        padding 0
+        border 0
+        height 48px
+        padding 0 15px
+        z-index 1
+    input[type=search]:focus
+        &:not([readonly])
+            border 0 !important
+    .vs__dropdown-menu
+        padding 9px 0
+        box-shadow 0 5px 5px #eee
+        border 0
+        border-radius 0 0 5px 5px
+    .vs__dropdown-option
+        line-height 48px
+        padding 0 15px
+        color #3b3b3b
+        margin 0
+        &:hover
+            cursor pointer
+    .vs__dropdown-option--highlight
+        background rgba(242,228,216,0.302)
+        color #f39442
+    .vs__clear
+        display none !important
+    input[type=search]
+        width 0
+    .vs__open-indicator
+        fill transparent
+        width 16px
+        height 16px
+        background url('/local/templates/aas/images/arrow-drop-down.svg') no-repeat center
+        background-size cover
+    .vs__actions
+        padding 0 15px 0 3px
+
+.form-control-select .vs__search, .form-control-select .vs__search:focus
+    height 48px
+    margin 0
+    padding 0 15px
+    border 0
+
+.mx-input
+    font-size 0.88rem !important
+    padding 0 30px 0 15px !important
+
+.mx-icon-calendar
+    width 16px
+    height 16px
+    background url('/local/templates/aas/images/calendar.svg') no-repeat center
+    background-size cover
+    cursor pointer
+    right 15px
+    svg
+        display none
+
+.mx-datepicker
+    width 100%
+    & + label
+        pointer-events none

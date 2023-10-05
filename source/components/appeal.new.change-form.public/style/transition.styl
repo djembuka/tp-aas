@@ -1,0 +1,93 @@
+.fade-enter-active,
+.fade-leave-active
+  transition( opacity .5s )
+
+.fade-enter,
+.fade-leave-to
+  opacity 0
+
+
+.list-enter {
+  opacity 0
+  color #74C37A
+}
+.list-enter .b-float-label label,
+.list-enter .b-float-label--file label a {
+  color #74C37A
+}
+.list-enter .b-float-label input:not([type=checkbox]),
+.list-enter .b-float-label input:not([type=radio]),
+.list-enter .b-float-label textarea,
+.list-enter .b-float-label--file label {
+  background-color #E7F8E8
+}
+.list-enter .b-float-label--file .a {
+  fill: #aedeb1;
+}
+.list-enter .b-float-label--file .b {
+  fill: #87c38a;
+}
+.list-enter .b-float-label--file .c {
+  fill: #d4f5d6;
+}
+.list-enter .b-float-label--file .d {
+  fill: #fff;
+}
+.list-enter-to {
+  opacity 1
+  olor #2b2b2b
+}
+.list-enter-to .b-float-label label {
+  color #2b2b2b
+}
+.list-enter-to .b-float-label--file label a {
+  color #06417c
+}
+.list-enter-to .b-float-label input:not([type=checkbox]),
+.list-enter-to .b-float-label input:not([type=radio]),
+.list-enter-to .b-float-label textarea,
+.list-enter-to .b-float-label--file label {
+  background-color #f0f5fc
+}
+.list-enter-to .b-float-label--file .a {
+  fill: #c3cfdd;
+}
+.list-enter-to .b-float-label--file .b {
+  fill: #a3b2c1;
+}
+.list-enter-to .b-float-label--file .c {
+  fill: #d3e0ea;
+}
+.list-enter-to .b-float-label--file .d {
+  fill: #fff;
+}
+/*.list-enter-active {
+  transition: opacity .3s ease-in, color 5s linear;
+}
+.list-enter-active .b-float-label label,*/
+.list-enter-active .b-float-label--file label a {
+  transition(color 5s linear)
+}
+.list-enter-active .b-float-label input:not([type=checkbox]),
+.list-enter-active .b-float-label input:not([type=radio]),
+.list-enter-active .b-float-label textarea,
+.list-enter-active .b-float-label--file label {
+  transition( background-color 5s ease)
+}
+.list-enter-active .b-float-label--file .a,
+.list-enter-active .b-float-label--file .b,
+.list-enter-active .b-float-label--file .c,
+.list-enter-active .b-float-label--file .d {
+  transition( fill 5s ease)
+}
+.list-leave {
+  opacity 1
+  margin-top 0
+}
+.list-leave-to {
+  opacity 0
+  margin-top -70px
+}
+.list-leave-active {
+  transition( all .3s linear)
+}

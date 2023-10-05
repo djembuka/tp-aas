@@ -1,0 +1,833 @@
+window.onload = function () {
+  if (!window.Vue && !window.Vuex) return;
+
+  window.moderationSrcPath = '/template/images/';
+
+  Vue.use(Vuex);
+  Vue.use(VueScrollTo);
+
+  const store = new Vuex.Store({
+    state: window.reportFormOZOStore,
+    mutations: {
+      changeChecked(state, payload) {
+        state.formBlocks[0].controls[payload.index].checked = payload.checked;
+      },
+      changeRadio(state, payload) {
+        state.formBlocks[1].controls.forEach(
+          (control) => (control.checked = false)
+        );
+        state.formBlocks[1].controls[payload.index].checked = true;
+      },
+      changeSelect2(state, payload) {
+        state.formBlocks[2].controls[payload.index].selected = payload.selected;
+      },
+      addCompany(state, payload) {
+        //add fields
+        let newCompany = {};
+        newCompany.id = payload.companyId;
+        newCompany.hidden = payload.hidden.map((elem) => {
+          return { name: elem.name, value: elem.value };
+        });
+        newCompany.controls = [];
+        state.audiOZOList.template.controls.forEach((control) => {
+          if (control.type === 'text' || control.type === 'date') {
+            newCompany.controls.push({
+              name: control.name,
+              label: control.label,
+              value: '',
+              type: control.type,
+            });
+          } else if (control.type === 'select') {
+            let v = [];
+            control.value.forEach((val) => {
+              v.push({
+                label: val.label,
+                code: val.code,
+              });
+            });
+
+            newCompany.controls.push({
+              name: control.name,
+              label: control.label,
+              value: v,
+              selected: v[0],
+              type: control.type,
+            });
+          }
+        });
+        state.audiOZOList.companies.push(newCompany);
+      },
+      removeCompany(state, payload) {
+        state.audiOZOList.companies.splice(payload.index, 1);
+      },
+      changeSelect(state, payload) {
+        state.audiOZOList.companies[payload.fieldsetBlockIndex].controls[
+          payload.controlIndex
+        ].selected = payload.selected;
+      },
+      changeDate(state, payload) {
+        state.audiOZOList.companies[payload.fieldsetBlockIndex].controls[
+          payload.controlIndex
+        ].value = payload.value;
+      },
+      changeTextControl(state, payload) {
+        state.audiOZOList.companies[payload.fieldsetBlockIndex].controls[
+          payload.controlIndex
+        ].value = payload.value;
+      },
+      changeAutosaveTimeoutId(state, payload) {
+        state.autosaveTimeoutId = payload;
+      },
+      setInvalid(state, payload) {
+        switch (payload) {
+          case '#collapse1':
+            state.formBlocks[0].invalid = true;
+            break;
+          case '#collapse2':
+            state.formBlocks[1].invalid = true;
+            break;
+          case '#agreement':
+            state.agreement.invalid = true;
+            break;
+        }
+      },
+    },
+  });
+
+  Vue.component('v-select', VueSelect.VueSelect);
+  Vue.component('date-picker', DatePicker);
+
+  //hidden fields
+  Vue.component('hiddenFields', {
+    data() {
+      return {};
+    },
+    template: `
+      <div>
+        <input v-for="field in $store.state.hidden" :key="generateKey()" type="hidden" :name="field.name" :value="field.value">
+      </div>
+    `,
+    methods: {
+      toggleBody() {
+        //set slide class for the main div
+        this.slide = !this.slide;
+        //slide body
+        this.open = !this.open;
+      },
+      generateKey() {
+        return Date.now() * Math.random();
+      },
+    },
+  });
+
+  //checkbox
+  Vue.component('formControlCheckbox', {
+    data() {
+      return {
+        checked: this.control.checked,
+      };
+    },
+    props: ['index', 'control'],
+    template: `<label class="b-form-control-vc" :class="{'i-active': checked}">
+      <div class="b-form-control-vc__content">
+        <div class="b-form-control-vc__text"><b v-html="control.title"></b><span v-html="control.text"></span></div>
+      </div>
+      <div class="b-checkbox-vc"><input type="checkbox" :name="control.name" v-model="checked" class="filled-in" @change="change()"><span></span></div>
+    </label>`,
+    methods: {
+      change() {
+        //set control change
+        store.commit('changeChecked', {
+          index: this.index,
+          checked: this.checked,
+        });
+        //autosave the control
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.reportFormOZOPaths.autosave}?name=${this.control.name}&checked=${this.checked}&element_id=${store.state.reportId}`
+            );
+            let result = await response.json();
+            if (result.STATUS !== 'Y') {
+              throw new Error('Ошибка автосохранения');
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+        //autosave whole form
+        this.$emit('autosave');
+      },
+    },
+  });
+
+  //radio
+  Vue.component('formControlRadio', {
+    data() {
+      return {
+        checked: this.control.checked,
+      };
+    },
+    props: ['index', 'control'],
+    template: `<label class="b-form-control-vc" :class="{'i-active': checked}">
+      <div class="b-form-control-vc__content">
+        <div class="b-form-control-vc__text"><b v-html="control.title"></b><span v-html="control.text"></span></div>
+      </div>
+      <div class="b-radio-vc"><input type="radio" :name="control.name" :checked="checked" :value="control.value" class="with-gap" @change="change"><span></span></div>
+    </label>
+    `,
+    methods: {
+      change(e) {
+        //highlight
+        if (e.target.checked) {
+          e.target
+            .closest('.row')
+            .querySelectorAll('label')
+            .forEach(function (label) {
+              //set inactive
+              label.classList.remove('i-active');
+            });
+          e.target.closest('label').classList.add('i-active');
+        }
+
+        //set checked
+        this.checked = true;
+
+        //set question as active
+        store.commit('changeRadio', {
+          index: this.index,
+        });
+
+        //show the form if it is the first radio
+        this.$emit('set-form-active', this.index);
+
+        //show empty form if there are no companies yet
+        if (this.index === 0 && !store.state.audiOZOList.companies.length) {
+          this.$emit('addFieldsetBlock');
+        }
+
+        //autosave
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.reportFormOZOPaths.autosave}?name=${this.control.name}&value=${this.control.value}&element_id=${store.state.reportId}`
+            );
+            let result = await response.json();
+            if (result.STATUS !== 'Y') {
+              throw new Error('Ошибка автосохранения');
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+        //autosave whole form
+        this.$emit('autosave');
+      },
+    },
+  });
+
+  //select
+  Vue.component('formControlSelect2', {
+    data() {
+      return {
+        options: this.control.value || [
+          {
+            label: '',
+            code: '',
+          },
+        ],
+        selectedOption: this.control.selected || {
+          label: '',
+          code: '',
+        },
+      };
+    },
+    template: `<div class="b-float-label-select-vc">
+      <v-select :searchable="false" :options="options" :value="options[0]" class="form-control-select" @input="onSelect()" v-model="selectedOption"></v-select>
+      <input type="hidden" :name="control.name" :value="selectedOption.code" ref="hiddenInput">
+    </div>`,
+    props: ['control', 'index'],
+    methods: {
+      onSelect() {
+        //set select
+        store.commit('changeSelect2', {
+          index: this.index,
+          selected: this.selectedOption,
+        });
+        this.$refs.hiddenInput.value = this.selectedOption.code;
+        //autosave
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.reportFormOZOPaths.autosave}?name=${this.control.name}&value=${this.selectedOption.code}&element_id=${store.state.reportId}`
+            );
+            let result = await response.json();
+            if (result.STATUS !== 'Y') {
+              throw new Error('Ошибка автосохранения');
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+        //autosave whole form
+        this.$emit('autosave');
+      },
+    },
+  });
+
+  //collapse block 2
+  Vue.component('collapseBlock2', {
+    data() {
+      return {
+        slide: true,
+        open: true,
+        formIsActive: store.state.formBlocks[1].controls[0].checked,
+      };
+    },
+    template: `
+    <div class="b-collapse-vc" :class="{slide: slide, open: open}" id="collapse2">
+      <div class="b-collapse-vc__head" @click.stop.prevent="toggleBody()">
+        <a href="" @click.prevent>
+          <i>{{$store.state.formBlocks[1].title}}</i>
+          <i class="text-danger">Не заполнены обязательные поля</i>
+        </a>
+        <span></span>
+      </div>
+      <transition @enter="enter" @leave="leave" :css="false">
+        <div class="b-collapse-vc__body" v-if="slide">
+          <div class="row">
+            <div class="col-sm-6" v-for="(control, index) in $store.state.formBlocks[1].controls" :key="generateKey(index)">
+              <form-control-radio :index="index" :control="control" @set-form-active="setFormActive" @autosave="autosave" @addFieldsetBlock="addFieldsetBlock"></form-control-radio>
+            </div>
+          </div>
+          <transition name="fade">
+            <div v-show="formIsActive">
+              <h3>{{$store.state.audiOZOList.title}}</h3>
+              <p>{{$store.state.audiOZOList.text}}</p>
+              <hr class="hr--line hr--lg">
+              <div class="b-add-fieldset-block">
+
+                <div class="b-add-fieldset-block__item show visible" v-for="(company, index) in $store.state.audiOZOList.companies" :key="generateKey(index)" :id="'company'+index">
+                  <h4>Организация {{index+1}}</h4>
+                  <hr>
+                  <div class="b-add-fieldset-block__wrapper">
+
+                    <input v-for="(hiddenField, hiddenIndex) in company.hidden" :key="generateKey(hiddenIndex)" type="hidden" :name="hiddenField.name" :value="hiddenField.value">
+
+                    <div v-for="(formControl, controlIndex) in company.controls" class="b-add-fieldset-block__control" :key="generateKey(controlIndex)">
+                      <form-control-date v-if="formControl.type==='date'" :formControl="formControl" :fieldsetBlockIndex="index" :controlIndex="controlIndex" :required="formIsActive" @autosave="autosave"></form-control-date>
+                      <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" :fieldsetBlockIndex="index" :controlIndex="controlIndex" :required="formIsActive" @autosave="autosave"></form-control-select>
+                      <form-control v-else :formControl="formControl" :fieldsetBlockIndex="index" :controlIndex="controlIndex" :required="formIsActive" @autosave="autosave"></form-control>
+                    </div>
+
+                  </div>
+                  <transition name="fade">
+                    <a class="btn-delete" href="" v-if="$store.state.audiOZOList.companies.length>1" @click.prevent="deleteFieldsetBlock(index, company)"></a>
+                  </transition>
+                  <hr class="hr--xl hr--line">
+                  <hr class="d-block d-xl-none">
+                </div>
+                <button class="btn btn-success btn-md" @click.prevent="addFieldsetBlock()">Добавить</button>
+              </div>
+
+            </div>
+          </transition>
+        </div>
+      </transition>
+    </div>
+    `,
+    methods: {
+      //transition
+      enter: function (el, done) {
+        Velocity(el, 'slideDown', {
+          easing: 'ease',
+          duration: 500,
+        });
+      },
+      leave: function (el, done) {
+        Velocity(el, 'slideUp', {
+          easing: 'ease',
+          duration: 500,
+        });
+      },
+
+      toggleBody() {
+        //set slide class for the main div
+        this.slide = !this.slide;
+        //slide body
+        this.open = !this.open;
+      },
+      setFormActive(index) {
+        this.formIsActive = !index;
+      },
+      addFieldsetBlock() {
+        //send request
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.reportFormOZOPaths.addCompany}?blockId=${store.state.reportId}`
+            );
+            let result = await response.json();
+            if (result.STATUS === 'Y') {
+              //add company
+              store.commit('addCompany', {
+                companyId: result.DATA.companyId,
+                hidden: result.DATA.hidden,
+              });
+            } else {
+              throw new Error('Ошибка при добавлении организации.');
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+      },
+      deleteFieldsetBlock(index, company) {
+        //remove company
+        store.commit('removeCompany', { index: index });
+        //send info
+        if (company.id) {
+          (async () => {
+            try {
+              let response = await fetch(
+                `${window.reportFormOZOPaths.removeCompany}?blockId=${store.state.reportId}&companyId=${company.id}`
+              );
+              let result = await response.json();
+              if (result.STATUS !== 'Y') {
+                throw new Error('Ошибка при удалении организации.');
+              }
+            } catch (err) {
+              throw err;
+            }
+          })();
+        }
+      },
+      generateKey(index) {
+        return Date.now() * Math.random() + index;
+      },
+      autosave() {
+        this.$emit('autosave');
+      },
+    },
+  });
+
+  //form control
+  Vue.component('formControl', {
+    data() {
+      return {
+        controlValue: this.formControl.value,
+        isActive: this.formControl.value === '' ? false : true,
+        isInvalid: false,
+      };
+    },
+    props: ['formControl', 'fieldsetBlockIndex', 'controlIndex', 'required'],
+    template: `
+      <div class="b-float-label" :class="{invalid: isInvalid}">
+        <input :id="'PROPERTY_'+formControl.name+'_'+fieldsetBlockIndex" type="text" :name="'PROPERTY['+formControl.name+']['+fieldsetBlockIndex+']'" autocomplete="off" :required="required" @blur="blurControl()" @input="inputControl()" v-model="controlValue">
+        <label :for="'PROPERTY_'+formControl.name+'_'+fieldsetBlockIndex" :class="{active: isActive}">{{formControl.label}} *</label>
+      </div>
+    `,
+    methods: {
+      inputControl() {
+        //validate
+        if (!!this.controlValue) {
+          this.isInvalid = false;
+        }
+        //set value
+        store.commit('changeTextControl', {
+          fieldsetBlockIndex: this.fieldsetBlockIndex,
+          controlIndex: this.controlIndex,
+          value: this.controlValue,
+        });
+      },
+      blurControl() {
+        if (this.controlValue !== '') {
+          this.isActive = true;
+        } else {
+          this.isActive = false;
+        }
+        //validate
+        if (this.required && !this.controlValue) {
+          this.isInvalid = true;
+        } else {
+          this.isInvalid = false;
+        }
+        //autosave
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.reportFormOZOPaths.autosave}?name=PROPERTY[${
+                this.formControl.name
+              }][${this.fieldsetBlockIndex}]&value=${
+                this.formControl.value
+              }&company_id=${
+                store.state.audiOZOList.companies[this.fieldsetBlockIndex].id
+              }`
+            );
+            let result = await response.json();
+            if (result.STATUS !== 'Y') {
+              throw new Error('Ошибка автосохранения');
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+        //autosave whole form
+        this.$emit('autosave');
+      },
+    },
+  });
+
+  //form control select
+  Vue.component('form-control-select', {
+    data() {
+      return {
+        options: this.formControl.value || [
+          {
+            label: '',
+            code: '',
+          },
+        ],
+        selectedOption: this.formControl.selected || {
+          label: '',
+          code: '',
+        },
+      };
+    },
+    template: `<div class="b-float-label-select-vc" ref="selectTemplate">
+      <label class="active">{{formControl.label}} *</label>
+      <v-select :searchable="false" :options="options" :value="options[0]" class="form-control-select" @input="onSelect()" v-model="selectedOption"></v-select>
+      <input type="hidden" :name="'PROPERTY['+formControl.name+']['+fieldsetBlockIndex+']'" :value="selectedOption.code" ref="hiddenInput">
+    </div>`,
+    props: ['formControl', 'fieldsetBlockIndex', 'controlIndex'],
+    methods: {
+      onSelect() {
+        //set select
+        store.commit('changeSelect', {
+          fieldsetBlockIndex: this.fieldsetBlockIndex,
+          controlIndex: this.controlIndex,
+          selected: this.selectedOption,
+        });
+        this.$refs.hiddenInput.value = this.selectedOption.code;
+        //autosave
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.reportFormOZOPaths.autosave}?name=PROPERTY[${
+                this.formControl.name
+              }][${this.fieldsetBlockIndex}]&value=${
+                this.selectedOption.code
+              }&company_id=${
+                store.state.audiOZOList.companies[this.fieldsetBlockIndex].id
+              }`
+            );
+            let result = await response.json();
+            if (result.STATUS !== 'Y') {
+              throw new Error('Ошибка автосохранения');
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+        //autosave whole form
+        this.$emit('autosave');
+      },
+    },
+  });
+
+  //form control date
+  Vue.component('form-control-date', {
+    template: `<div class="b-float-label" data-src="${window.moderationSrcPath}calendar.svg" :class="{invalid: isInvalid}">
+      <date-picker :lang="lang" :input-attr="inputAttr" valueType="format" v-model="date" value-type="X" format="DD.MM.YYYY" @open="openInput" @close="closeInput" @clear="closeInput" @input="inputDate" @blur="blurInput"></date-picker>
+      <label :for="'PROPERTY_'+formControl.name+'_'+fieldsetBlockIndex" :class="{ active: isActive }">{{formControl.label}}</label>
+    </div>`,
+    data() {
+      return {
+        inputAttr: {
+          id: `PROPERTY_${this.formControl.name}_${this.fieldsetBlockIndex}`,
+          name: `PROPERTY[${this.formControl.name}][${this.fieldsetBlockIndex}]`,
+        },
+        isActive: !!this.formControl.value,
+        isInvalid: false,
+        date: this.formControl.value,
+        lang: {
+          // the locale of formatting and parsing function
+          formatLocale: {
+            // MMMM
+            months: [
+              'Январь',
+              'Февраль',
+              'Март',
+              'Апрель',
+              'Май',
+              'Июнь',
+              'Июль',
+              'Август',
+              'Сентябрь',
+              'Октябрь',
+              'Ноябрь',
+              'Декабрь',
+            ],
+            // MMM
+            monthsShort: [
+              'Янв',
+              'Фев',
+              'Мар',
+              'Апр',
+              'Май',
+              'Июн',
+              'Июл',
+              'Авг',
+              'Сен',
+              'Окт',
+              'Ноя',
+              'Дек',
+            ],
+            // dddd
+            weekdays: [
+              'Воскресенье',
+              'Понедельник',
+              'Вторник',
+              'Среда',
+              'Четверг',
+              'Пятница',
+              'Суббота',
+            ],
+            // ddd
+            weekdaysShort: ['Вск', 'Пнд', 'Втр', 'Сре', 'Чтв', 'Птн', 'Суб'],
+            // dd
+            weekdaysMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            // first day of week
+            firstDayOfWeek: 1,
+            // first week contains January 1st.
+            firstWeekContainsDate: 1,
+            // format 'a', 'A'
+            meridiem(h, _, isLowercase) {
+              const word = h < 12 ? 'AM' : 'PM';
+              return isLowercase ? word.toLocaleLowerCase() : word;
+            },
+            // parse ampm
+            meridiemParse: /[ap]\.?m?\.?/i,
+            // parse ampm
+            isPM(input) {
+              return `${input}`.toLowerCase().charAt(0) === 'p';
+            },
+          },
+          // the calendar header, default formatLocale.weekdaysMin
+          days: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+          // the calendar months, default formatLocale.monthsShort
+          months: [
+            'Январь',
+            'Февраль',
+            'Март',
+            'Апрель',
+            'Май',
+            'Июнь',
+            'Июль',
+            'Август',
+            'Сентябрь',
+            'Октябрь',
+            'Ноябрь',
+            'Декабрь',
+          ],
+          // the calendar title of year
+          yearFormat: 'YYYY',
+          // the calendar title of month
+          monthFormat: 'MMMM',
+          // the calendar title of month before year
+          monthBeforeYear: true,
+        },
+      };
+    },
+    props: ['formControl', 'fieldsetBlockIndex', 'controlIndex', 'required'],
+    methods: {
+      openInput() {
+        this.isActive = true;
+      },
+      closeInput() {
+        if (!this.date) {
+          this.isActive = false;
+          this.isInvalid = true;
+        }
+      },
+      blurInput() {
+        //validate
+        if (this.required && !this.date) {
+          this.isInvalid = true;
+        } else {
+          this.isInvalid = false;
+        }
+      },
+      inputDate() {
+        if (this.date) {
+          this.isInvalid = false;
+        }
+        store.commit('changeDate', {
+          fieldsetBlockIndex: this.fieldsetBlockIndex,
+          controlIndex: this.controlIndex,
+          value: this.date,
+        });
+        //autosave
+        this.autosave();
+      },
+      autosave() {
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.reportFormOZOPaths.autosave}?name=${
+                this.inputAttr.name
+              }&value=${this.date}&company_id=${
+                store.state.audiOZOList.companies[this.fieldsetBlockIndex].id
+              }`
+            );
+            let result = await response.json();
+            if (result.STATUS !== 'Y') {
+              throw new Error('Ошибка автосохранения');
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+        //autosave whole form
+        this.$emit('autosave');
+      },
+    },
+  });
+
+  //submit button
+  Vue.component('submitButton', {
+    data() {
+      return {
+        checked: store.state.agreement.checked,
+      };
+    },
+    template: `
+      <div>
+        <div class="b-checkbox" id="agreement" :class="{invalid: $store.state.agreement.invalid}">
+          <label>
+            <input class="filled-in" type="checkbox" required="" :name="$store.state.agreement.name" :value="$store.state.agreement.value" :checked="checked" v-model="checked"><span v-html="$store.state.agreement.text"></span>
+          </label>
+        </div>
+        <hr class="hr--lg">
+        <div class="b-report-form-ozo__submit">
+          <input type="submit" name="iblock_submit" class="btn btn-secondary btn-lg" value="Сдать отчет" :disabled="isDisabled">
+          <small class="text-muted" v-if="isDisabled">Вы не закончили заполнение обязательных полей. <a href="#" @click.prevent="clickContinue()">Продолжить</a></small>
+        </div>
+      </div>
+    `,
+    computed: {
+      isDisabled() {
+        let requireds = true;
+        if (store.state.formBlocks[1].controls[0].checked === true) {
+          requireds = store.state.audiOZOList.companies.every((company) => {
+            return company.controls.every((control) => !!control.value);
+          });
+        }
+
+        return !(
+          store.state.formBlocks[0].controls.some(
+            (control) => control.checked === true
+          ) &&
+          store.state.formBlocks[1].controls.some(
+            (control) => control.checked === true
+          ) &&
+          requireds &&
+          this.checked
+        );
+      },
+    },
+    methods: {
+      clickContinue() {
+        let elem;
+        if (
+          !store.state.formBlocks[0].controls.some(
+            (control) => control.checked === true
+          )
+        ) {
+          elem = '#collapse1';
+        } else if (
+          !store.state.formBlocks[1].controls.some(
+            (control) => control.checked === true
+          )
+        ) {
+          elem = '#collapse2';
+        } else {
+          store.state.audiOZOList.companies.forEach((company, index) => {
+            company.controls.forEach((control) => {
+              if (!control.value && !elem) {
+                elem = `#company${index}`;
+              }
+            });
+          });
+        }
+
+        if (!elem && !store.state.agreement.checked) {
+          elem = '#agreement';
+        }
+
+        //scroll to
+        if (elem && document.querySelector(elem)) {
+          this.$scrollTo(elem, 500, {
+            offset: -180,
+          });
+
+          //highlight invalid
+          store.commit('setInvalid', elem);
+        }
+      },
+    },
+  });
+
+  const App = {
+    el: '#editStudyCourseForm',
+    store,
+    template: `
+      <div>
+        <hidden-fields></hidden-fields>
+        <collapse-block-2 @autosave="timeoutAutosave"></collapse-block-2>
+
+        <hr class="hr--lg">
+
+        <submit-button @autosave="timeoutAutosave"></submit-button>
+
+      </div>
+    `,
+    methods: {
+      timeoutAutosave() {
+        //autosave whole form
+        clearTimeout(store.state.autosaveTimeoutId);
+        store.commit(
+          'changeAutosaveTimeoutId',
+          setTimeout(() => {
+            this.autosave();
+          }, 5000)
+        );
+      },
+      autosave(form, cnt) {
+        var form = form || document.querySelector('.b-report-form-ozo form');
+        var counter = cnt || 0;
+
+        //send request
+        (async () => {
+          try {
+            let response = await fetch(
+              `${window.reportFormOZOPaths.autosave}`,
+              { method: 'POST', body: new FormData(form) }
+            );
+            let result = await response.json();
+            if (result.STATUS !== 'Y' && counter < 3) {
+              this.autosave(form, ++counter);
+            }
+          } catch (err) {
+            throw err;
+          }
+        })();
+      },
+    },
+    mounted() {
+      this.timeoutAutosave();
+    },
+  };
+
+  const app = new Vue(App);
+};

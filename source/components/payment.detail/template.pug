@@ -1,0 +1,49 @@
+// start /componentspayment.detail/payment.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'payment.detail'
+else
+  - var componentsArray = [ 'payment.detail' ]
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="/components/payment.detail/store.js" )
+  
+.b-payment-detail.ph-block
+
+  .ph
+    
+    .ph__num-blocks
+      div
+
+  .ph-content 
+  
+    .row 
+      .col-lg-6 
+        table.table
+          tbody
+            tr
+              th Дата
+              td 13.01.2023
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Название
+              td Ежеквартальный членский взнос за 1 квартал СРО ААС
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+      .col-lg-6 
+        table.table
+          tbody
+            tr
+              th Статус
+              td
+                span.label-gray
+                  span Черновик
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+            tr
+              th Сумма
+              td 1 000 ₽
+                span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+// end /components/payment.detail/

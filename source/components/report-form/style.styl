@@ -1,0 +1,421 @@
+@import '../../styl/component-include.styl'
+
+.b-report-form
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+        
+h1
+  width calc( 100% - 260px )
+
+#uploadFileInput
+  position absolute
+  top 0
+  left 0
+  width 1px
+  height 1px
+  z-index -1
+
+#uploadModal
+
+  .modal-buttons label span
+    display none
+
+  .step1,
+  .step2,
+  .step3
+    display none
+
+  .modal-content.modal-content--step1 .step1,
+  .modal-content.modal-content--step2 .step2,
+  .modal-content.modal-content--step3 .step3
+    display block
+
+  .modal-content.modal-content--step2 .modal-buttons label
+    display none
+
+  .modal-content.modal-content--step3 .modal-buttons label span
+    display block
+    
+.b-report-form
+
+  &__upload
+    background-color #FAFAFA
+    border-radius 10px
+    padding 20px
+    display flex
+    justify-content space-between
+    align-items center
+
+    span
+      font-family $roboto
+      font-size $16px
+      font-weight $bold
+
+  &__text
+    position relative
+
+  &__autosave-text
+    position absolute
+    top -42px
+    right 0
+
+    @media( max-width 767px )
+      position static
+      text-align right
+      
+  .b-collapse-block__head,
+  .text-muted.small,
+  .text-muted.small + p
+    font-family $roboto
+
+  .b-collapse-block
+  
+    &.invalid
+      border-bottom-color $danger-color
+
+  .b-collapse-block__head
+
+    a
+      justify-content flex-start
+      align-items center
+    
+      i
+        font-style normal
+
+        &:first-child
+          margin-right 50px
+
+        &:last-child
+          font-size $14px
+          font-weight normal
+          display none
+
+      @media( max-width 991px )
+        display block
+        
+        i
+
+          &:first-child
+            margin-right 0
+
+          &:last-child
+            margin-top 10px
+
+  .b-collapse-block.invalid .b-collapse-block__head a i:last-child
+    display inline
+
+    @media( max-width 991px )
+      display block
+      
+  .b-collapse-block__body
+    padding-bottom 2rem
+
+  &__buttons
+    display flex
+    justify-content space-between
+    align-items center
+
+    div:first-child
+      margin-right 50px
+      white-space nowrap
+
+    div:last-child
+      line-height 1rem
+
+    .btn
+      margin-right 10px
+
+      &:last-child
+        min-width 125px
+      
+        span
+
+          &:last-child
+            display none
+
+        &.return
+
+          span
+
+            &:first-child
+              display none
+
+            &:last-child
+              display inline
+
+    @media( max-width 991px )
+      display block
+
+      div:first-child
+        margin-right 0
+        margin-bottom .5rem
+
+  &__submit
+    display flex
+    align-items center
+
+    .btn
+      margin-right 20px
+
+    small
+      display block
+
+    @media( max-width 575px )
+      display block
+
+      small
+        margin-top 10px
+
+    &.valid
+      
+      small
+        display none
+
+  .bx-calendar
+    font-family $roboto
+
+  img.calendar-icon
+    vertical-align top
+    cursor pointer
+    width 16px
+    height 16px
+    margin 0
+    box-sizing content-box
+    border 1px solid transparent
+    position absolute
+    top 16px
+    right 16px
+    opacity 0
+    z-index 1
+
+    &.show
+      opacity 1
+
+.b-complete-link
+
+  .icon
+    display inline-block
+    width 16px
+    height 16px
+    background-bg()
+    margin-left 10px
+    vertical-align text-bottom
+    opacity 0
+    transition( opacity .2s ease )
+
+    @media( max-width 991px )
+      display none
+
+  &:hover
+
+    .icon
+      opacity 1
+
+.b-staff-table
+
+  &.hide
+    display none
+
+  table.table
+    font-family $roboto
+    width 100%
+
+    th,
+    td
+      border-top none
+      border-bottom 1px solid $line-color
+      cursor pointer
+
+      &.asc,
+      &.desc
+        background-color #f2e4d866
+
+      &:last-child
+        padding-right 0
+        text-align right
+
+    th
+      padding-right 35px
+      padding-left 35px
+
+      &:first-child
+        text-align left
+        padding-left 1.5rem
+
+      &:nth-child(1)
+        width 35%
+
+      &:nth-child(2)
+        width 25%
+
+      &:nth-child(3)
+        width 25%
+
+      &.asc,
+      &.desc
+        color $secondary-color-2
+        position relative
+
+        &:before
+          content ''
+          width 17px
+          height 17px
+          border-radius 51%
+          position absolute
+          top 50%
+          right 15px
+          margin-top -8px
+          background-color #EA5E21
+          z-index 1
+
+        &:after
+          content ''
+          width 5px
+          height 5px
+          border-right 1px solid #fff
+          border-bottom 1px solid #fff
+          transform( rotate( 45deg ))
+          position absolute
+          top 50%
+          right 21px
+          margin-top -3px
+          z-index 2
+
+      &.asc
+
+        &:after
+          transform( rotate( -135deg ))
+          margin-top -1px
+
+    td
+
+      &:first-child
+        text-align left
+
+    tbody
+
+      tr
+        transition( all .3s ease )
+
+        &.removing
+          opacity 0
+          transform( translateX( -100px ))
+        
+.b-member-modal
+  
+  .modal-body
+    width 100%
+    max-width 530px
+    margin 0 auto
+    padding-top 70px
+    padding-bottom 70px
+
+  .b-float-label
+    position relative
+
+    label
+      em
+        font-style normal
+        display none
+
+    &.invalid
+
+      label
+        em
+          display inline
+
+.b-add-input-block__item
+  opacity 0
+  height 0
+  transition( all .3s ease )
+
+  &.show
+    height 81px
+
+  &.visible
+    opacity 1
+
+  input:not([type=checkbox]),
+  input:not([type=radio]),
+  textarea
+    transition( background-color 1s ease )
+
+  label
+    transition( all .2s ease )
+
+  &.new
+
+    input:not([type=checkbox]),
+    input:not([type=radio]),
+    textarea
+      background-color #e7f8e8
+
+    label
+      color #74c37a
+
+.b-add-fieldset-block__wrapper
+  position relative
+
+  .btn-delete
+    position absolute
+    top 7px
+    right 0
+
+    @media (max-width: 1199px)
+      position static
+      width 100%
+      background-size contain
+      background-color #ff0000
+      border-radius 10px
+
+.b-add-fieldset-block__item
+  opacity 0
+  height 0
+  transition( all .3s ease )
+
+  &.show
+    height calc(481px + 20px)
+
+    @media(max-width: 1199px)
+      height calc(820px + 0.5rem + 1px)
+
+  &.height-auto
+    height auto !important
+
+  &.visible
+    opacity 1
+
+  input:not([type=checkbox]),
+  input:not([type=radio]),
+  textarea,
+  .ik_select_link_text
+    transition( background-color 1s ease )
+
+  label
+    transition( all .2s ease )
+
+  &.new
+
+    input:not([type=checkbox]),
+    input:not([type=radio]),
+    textarea,
+    .ik_select_link_text
+      background-color #e7f8e8
+
+    label
+      color #74c37a

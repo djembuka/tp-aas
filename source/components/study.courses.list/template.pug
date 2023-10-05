@@ -1,0 +1,97 @@
+// start /components/study.courses.list/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'study.courses.list'
+else
+  - var componentsArray = [ 'study.courses.list' ]
+
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
+  
+.b-study-courses-list.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    .h1-flex-wrapper
+      h2 Список курсов УМЦ Название
+      a.btn.btn-secondary.btn-md.hidden-sm.hidden-xs( href="" ) Создать курс
+
+    hr
+
+    .b-study-courses-list__tabs
+
+      .swiper-container
+        .swiper-wrapper
+          a.swiper-slide.active( href="" data-tab="tab1" ) Все
+          a.swiper-slide( href="" data-tab="tab2" ) Активные
+          a.swiper-slide( href="" data-tab="tab3" ) Архивные
+          a.swiper-slide( href="" data-tab="tab4" ) На проверке
+          a.swiper-slide( href="" data-tab="tab5" ) Черновики
+      .b-study-courses-list__decor
+
+    hr
+    
+    .b-study-courses-list__block
+      .b-study-courses-list__item.active(data-tab="tab1")
+        hr
+        include ../../components/study.courses.list/all
+
+      .b-study-courses-list__item(data-tab="tab2")
+        hr
+        include ../../components/study.courses.list/active
+
+      .b-study-courses-list__item(data-tab="tab3")
+        hr
+        include ../../components/study.courses.list/archive
+
+      .b-study-courses-list__item(data-tab="tab4")
+        hr
+        include ../../components/study.courses.list/check
+
+      .b-study-courses-list__item(data-tab="tab5")
+        hr
+        include ../../components/study.courses.list/draft
+
+    hr.hr--lg
+
+    .b-button-block
+      .b-button-block__text
+        h4 Создать новый курс
+        p Используйте мастер создания нового курса для быстро добавления и публикации учебного курса.
+      a.btn.btn-secondary.btn-lg(href="") Создать курс
+
+    #editConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-body
+            h3.text-center Вы хотите отредактировать курс
+            hr
+            p.text-center После редактирования <a href="">курса</a> вам необходимо заново отправить курс на модерацию сотрудникам СРО ААС. До изменения статуса на «Опубликован» курс не будет доступен в списке курсов на сайте СРО ААС.
+            hr
+
+            .text-center.modal-buttons
+              button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+              a.btn.btn-lg.btn-secondary( href="" ) Продолжить
+
+    #deleteConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-body
+            h3.text-center Вы хотите отменить курс
+            hr
+            p.text-center Для отмены <a href="">курса</a> вам необходимо отправить обращение в СРО ААС, после отмены вы не сможете вернуть его в активное состояние или отредактировать его.
+            hr
+
+            .text-center.modal-buttons
+              button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+              a.btn.btn-lg.btn-secondary( href="" ) Продолжить
+
+// end /components/study.courses.list/

@@ -1,0 +1,803 @@
+// start /components/report-form/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'report-form'
+else
+  - var componentsArray = [ 'report-form' ]
+  
+.b-report-form.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    | <!--[if lte IE 9]><a class="btn btn-secondary btn-md" data-toggle="modal" data-target="#ieAlertModal">Необходимо сдать</a><![endif]-->
+
+    script
+      | window.backUrl = '/pages/profile';
+      | window.uploadFile = '/components/report-form/upload-file.json';
+
+    #ieAlertModal.modal--text.modal--alert.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+          .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+            h3.text-center Вы используете Internet Explorer 10
+
+            hr
+
+            p С 12 января 2016 года Microsoft перестала обновлять системы безопасности и осуществлять техническую поддержку старых версий Internet Explorer. При своевременном обновлении браузера система безопасности защищает данные на компьютерах пользователей от установки вредоносного ПО и хакерских атак.
+            
+            p Корректное отображение сайта и работа его сервисов в Microsoft Internet Explorer 10 и более ранних версиях, не гарантируется.
+            
+            p Для безопасной и надежной работы рекомендуем Вам использовать один из современных бесплатных браузеров:
+
+            hr
+
+            include ../../modules/browser-choice/include
+
+    #uploadModal.modal--text.modal--alert.modal.fade(tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content.modal-content--step1
+          button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+          .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+
+            .step1
+              h3.text-center Прикрепить файл
+
+              hr
+
+              p.text-center Выберите файл, который вы скачали на сайте министерства финансов. Обратите внимание, что изменение этого файла приведет к невозможности загрузить данные в форму.
+
+            .step2
+              h3.text-center Обработка файла
+
+              hr
+              
+              .progress-indicator
+                .item.item-1
+                .item.item-2
+                .item.item-3
+                .item.item-4
+                .item.item-5
+
+            .step3
+              h3.text-center.text-danger Файл не может быть обработан
+
+              hr
+
+              p.text-center Формат вашего файла не соответствует формату оригинального файла с сайта Министерства финансов.
+
+            hr.hr--xxxl
+
+            .text-center.modal-buttons
+              input#uploadFileInput( type="file" accept=".xlsx" )
+              label.btn.btn-lg.btn-secondary( for="uploadFileInput" href="/pages/report-form/" ) Загрузить<span> другой</span>
+              button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+
+    .b-report-form__text
+
+      form( action="" method="GET" data-ajax-url="/components/report-form/response.json" )
+
+        input#element_id( type="hidden" value="123" )
+
+        .b-report-form__autosave-text.small.text-muted Последнее сохранение
+          | 
+          span 13 апреля 2020 14:53
+
+        .b-form-error
+          .b-form-error__icon( style="background-image: url( '/template/images/warning.svg' );" )
+          .b-form-error__text
+            p Личный кабинет доступен только физическим лицам. Информация о компании доступна в личном кабинете «Единоличного органа управления» СРО (генерального директора).
+            a( href="" ) Подробнее
+
+        .b-report-form__upload
+          span Загрузить данные из отчета 2НДФЛ
+          .btn.btn-dark.btn-md( data-toggle="modal" data-target="#uploadModal" ) Загрузить файл
+
+        div
+
+          .b-report-form__buttons
+            div
+              a.btn.btn-primary.btn-sm( href="" )
+                span.icon( style="background-image: url( '/template/images/copywhite.svg' );" )
+                | Заполнить из реестра
+              a.btn.btn-light.btn-sm( href="" )
+                span Очистить поля
+                span Вернуть поля
+            div
+              small.text-muted Вы можете использовать данные, уже указанные в реестре, и автоматически заполнить поля форм.
+                
+          hr.hr--lg
+
+          .row.align-items-center
+
+            .col-lg-6.col-12
+
+              .b-float-label.active
+
+                input#COMPANYNAME( type="text" name="COMPANYNAME" value="ООО «Компания + Я»" required autocomplete="off" )
+                label( for="COMPANYNAME" ) Наименование организации *
+
+            hr.hr--xs.d-block.d-lg-none.w-100
+
+            .col-lg-6.col-12.small
+              span.text-muted Данные из реестра: 
+              a.b-complete-link( href="" ) ООО &laquo;Компания + Я&raquo;
+                span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+                
+          hr
+
+        .b-collapse-block.open.slide
+          .b-collapse-block__head
+            a( href="" )
+              i Основные сведения
+              i.text-danger Не заполнены обязательные поля
+            span
+          .b-collapse-block__body
+
+            .b-report-form__buttons
+              div
+                a.btn.btn-primary.btn-sm( href="" )
+                  span.icon( style="background-image: url( '/template/images/copywhite.svg' );" )
+                  | Заполнить из реестра
+                a.btn.btn-light.btn-sm( href="" )
+                  span Очистить поля
+                  span Вернуть поля
+              div
+                small.text-muted Вы можете использовать данные, уже указанные в реестре, и автоматически заполнить поля форм.
+                  
+            hr.hr--lg
+
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label.active
+
+                  input#COMPANYNAME( type="text" name="COMPANYNAME" value="ООО «Компания + Я»" required autocomplete="off" )
+                  label( for="COMPANYNAME" ) Наименование организации *
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-muted Данные из реестра: 
+                a.b-complete-link( href="" ) ООО &laquo;Компания + Я&raquo;
+                  span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+                  
+            hr
+            
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  textarea#POSTADDRESS( row="10" cols="10" name="POSTADDRESS" required autocomplete="off")
+                  label( for="POSTADDRESS" ) Почтовый адрес *
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-muted Данные из реестра: 
+                a.b-complete-link( href="" ) 125252
+                  span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+              
+            hr
+            
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  textarea#ADDRESS( row="10" cols="10" name="ADDRESS" required autocomplete="off")
+                  label( for="ADDRESS" ) Фактический адрес *
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-muted Данные из реестра: 
+                a.b-complete-link( href="" ) Улица Строителей
+                  span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+              
+            hr
+            
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  input#FIO( type="text" name="FIO" required autocomplete="off")
+                  label( for="FIO" ) ФИО подписывающего отчет *
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-muted Данные из реестра: 
+                a.b-complete-link( href="" ) Петров Иван Валерьевич
+                  span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+              
+            hr
+            
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  input#WORK_PHONE( type="tel" name="WORK_PHONE" required autocomplete="off")
+                  label( for="WORK_PHONE" ) Телефон рабочий *
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-muted Данные из реестра: 
+                a.b-complete-link( href="" ) +7 (903) 1262626
+                  span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+              
+            hr
+            
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  input#EMAIL( type="email" name="EMAIL" required autocomplete="off")
+                  label( for="EMAIL" ) Email *
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-muted Данные из реестра: 
+                a.b-complete-link( href="" ) maxim@twinpx.ru
+                  span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+              
+            hr
+            
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  input#OKPO( type="text" name="OKPO" autocomplete="off" )
+                  label( for="OKPO" ) ОКПО
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-muted Данные из реестра: 
+                a.b-complete-link( href="" ) 78978979879879798979789
+                  span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+              
+            hr
+            
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  input#OGRN( type="text" name="OGRN" autocomplete="off" )
+                  label( for="OGRN" ) ОГРН
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-muted Данные из реестра: 
+                a.b-complete-link( href="" ) 1231231231321312313123
+                  span.icon( style="background-image: url( '/template/images/copy.svg' );" )
+              
+            hr
+            
+            .row
+
+              .col-md-6.col-12
+
+                .b-float-label( data-src="/template/images/calendar.svg" )
+
+                  input#SIGNINGDATE( type="text" name="SIGNINGDATE" required)
+                  img.calendar-icon( src="" alt="Выбрать дату в календаре" onclick="" border="0" autocomplete="off" )
+                  label( for="SIGNINGDATE" ) Дата подписания *
+
+              hr.d-block.d-md-none.w-100
+
+              .col-md-6.col-12
+            
+                .b-float-label( data-src="/template/images/calendar.svg" )
+
+                  input#COMPLETIONDATE( type="text" name="COMPLETIONDATE" required autocomplete="off")
+                  img.calendar-icon( src="" alt="Выбрать дату в календаре" onclick="" border="0" )
+                  label( for="COMPLETIONDATE" ) Дата сдачи отчета в Минфин России *
+              
+            hr
+
+        .b-collapse-block.open.slide
+          .b-collapse-block__head
+            a( href="" )
+              i Руководство
+              i.text-danger Не заполнены обязательные поля
+            span
+          .b-collapse-block__body
+
+            .b-staff-table
+
+              table.table.table--sm.table--center.table-responsive( data-result="/components/registry-report/result.json" )
+                thead
+                  tr
+                    th.asc( data-field="name" ) ФИО
+                    th( data-field="ornz" ) ОРНЗ
+                    th( data-field="type" ) Тип договора
+                    th
+                tbody
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="1" )
+                    td.asc Савельева Людмила Викторовна
+                    td 20606017533
+                    td Основной
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="2" )
+                    td.asc Широкова Ольга Владимировна
+                    td 20406000036
+                    td По совместительству
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="3" )
+                    td.asc Ушаков Алексей Вячеславович
+                    td 20406000036
+                    td
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+
+            .b-staff-table.added.hide
+              h3 Добавленные
+
+              table.table.table--sm.table--center.table-responsive( data-result="/components/registry-report/result.json" )
+                thead
+                  tr
+                    th.asc( data-field="name" ) ФИО
+                    th( data-field="ornz" ) ОРНЗ
+                    th( data-field="type" ) Тип договора
+                    th
+                tbody
+
+            button.btn.btn-success( type="button" data-toggle="modal" data-target="#addLeaderModal" ) Добавить руководство
+
+            #addLeaderModal.b-member-modal.modal.fade(tabindex="-1" aria-labelledby="addLeaderModalLabel" aria-hidden="true")
+              .modal-dialog
+                .modal-content
+                  button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+                  .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+                    h3.text-center Добавить руководителя
+
+                    hr.hr--xl
+
+                    .b-float-label
+                      input#leaderORNZ( type="text" autocomplete="off" )
+                      label( for="leaderORNZ" ) ОРНЗ
+                        em не найден
+                      .b-input-hint
+
+                    hr
+
+                    .b-float-label
+                      input#leaderFIO( type="text" autocomplete="off" )
+                      label( for="leaderFIO" ) ФИО
+                        em не найден
+                      .b-input-hint
+
+                    hr.hr--xl
+
+                    .text-center
+                      button.btn.btn-lg.btn-secondary( data-dismiss="modal" ) Добавить
+
+        .b-collapse-block.open.slide
+          .b-collapse-block__head
+            a( href="" )
+              i Сотрудники
+              i.text-danger Не заполнены обязательные поля
+            span
+          .b-collapse-block__body
+
+            .b-staff-table
+
+              table.table.table--sm.table--center.table-responsive( data-result="/components/registry-report/result.json" )
+                thead
+                  tr
+                    th.asc( data-field="name" ) ФИО
+                    th( data-field="ornz" ) ОРНЗ
+                    th( data-field="type" ) Тип договора
+                    th
+                tbody
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="1" )
+                    td.asc Савельева Людмила Викторовна
+                    td 20606017533
+                    td Основной
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="2" )
+                    td.asc Широкова Ольга Владимировна
+                    td 20406000036
+                    td По совместительству
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="3" )
+                    td.asc Ушаков Алексей Вячеславович
+                    td 20406000036
+                    td
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+
+            .b-staff-table.added
+              h3 Добавленные
+
+              table.table.table--sm.table--center.table-responsive( data-result="/components/registry-report/result.json" )
+                thead
+                  tr
+                    th.asc( data-field="name" ) ФИО
+                    th( data-field="ornz" ) ОРНЗ
+                    th( data-field="type" ) Тип договора
+                    th
+                tbody
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="1" )
+                    td.asc Савельева Людмила Викторовна
+                    td 20606017533
+                    td Основной
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="2" )
+                    td.asc Широкова Ольга Владимировна
+                    td 20406000036
+                    td По совместительству
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+                  tr( data-url="/pages/profile/" )
+                    input( type="hidden" name="staff-member-id" value="3" )
+                    td.asc Ушаков Алексей Вячеславович
+                    td 20406000036
+                    td
+                    td
+                      a.btn-delete( style="background-image: url( '/template/images/btn-delete.svg' );" )
+
+            button.btn.btn-success( type="button" data-toggle="modal" data-target="#addStaffMemberModal" ) Добавить сотрудника
+
+            #addStaffMemberModal.b-member-modal.modal.fade(tabindex="-1" aria-labelledby="addStaffMemberModalLabel" aria-hidden="true")
+              .modal-dialog
+                .modal-content
+                  button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+                  .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+                    h3.text-center Добавить аудитора
+
+                    hr.hr--xl
+
+                    .b-float-label
+                      input#modalORNZ( type="text" autocomplete="off" )
+                      label( for="modalORNZ" ) ОРНЗ
+                        em не найден
+                      .b-input-hint
+
+                    hr
+
+                    .b-float-label
+                      input#modalFIO( type="text" autocomplete="off" )
+                      label( for="modalFIO" ) ФИО
+                        em не найден
+                      .b-input-hint
+
+                    hr.hr--xl
+
+                    .text-center
+                      button.btn.btn-lg.btn-secondary( data-dismiss="modal" ) Добавить
+
+        .b-collapse-block.open.slide
+          .b-collapse-block__head
+            a( href="" )
+              i Объём оказанных услуг
+              i.text-danger Не заполнены обязательные поля
+            span
+          .b-collapse-block__body
+
+            h4 Отчетный год
+
+            hr
+
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  span.span--num тыс. руб.
+                  input#SERVICE1.input--num( type="text" name="SERVICE1" value="" autocomplete="off" )
+                  label( for="SERVICE1" ) Объем услуг за отчетный период
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-semimuted Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ratione, dolorum sed suscipit et sequi, aspernatur alias quo voluptas mollitia rerum excepturi obcaecati reprehenderit corporis veritatis corrupti facilis hic
+              
+            hr
+
+            .row.align-items-center
+
+              .col-lg-6.col-12.b-tab-block
+
+                .b-tab( style="background-image: url( /template/images/tab.svg );")
+
+                .b-float-label
+
+                  input#SERVICE2.input--num( type="text" name="SERVICE2" value="" autocomplete="off" )
+                  label( for="SERVICE2" ) В том числе: обязательный аудит
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small.b-tab-block
+                .b-tab.d-block.d-lg-none
+                span.text-semimuted Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ratione, dolorum sed suscipit et sequi, aspernatur alias quo voluptas mollitia rerum excepturi obcaecati reprehenderit corporis veritatis corrupti facilis hic
+              
+            hr
+
+            .row.align-items-center
+
+              .col-lg-6.col-12.b-tab-block
+
+                .b-tab.tab-2( style="background-image: url( /template/images/tab.svg );")
+
+                .b-float-label
+
+                  input#SERVICE3.input--num( type="text" name="SERVICE3" value="" autocomplete="off" )
+                  label( for="SERVICE3" ) Инициативный аудит
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small.b-tab-block
+                .b-tab.tab-2.d-block.d-lg-none
+                span.text-semimuted Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ratione, dolorum sed suscipit et sequi, aspernatur alias quo voluptas mollitia rerum excepturi obcaecati reprehenderit corporis veritatis corrupti facilis hic
+              
+            hr
+
+            .row.align-items-center
+
+              .col-lg-6.col-12.b-tab-block
+
+                .b-tab.tab-3( style="background-image: url( /template/images/tab.svg );")
+
+                .b-float-label
+
+                  input#SERVICE3.input--num( type="text" name="SERVICE6" value="" autocomplete="off" )
+                  label( for="SERVICE6" ) Инициативный аудит
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small.b-tab-block
+                .b-tab.tab-3.d-block.d-lg-none
+                span.text-semimuted Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ratione, dolorum sed suscipit et sequi, aspernatur alias quo voluptas mollitia rerum excepturi obcaecati reprehenderit corporis veritatis corrupti facilis hic
+              
+            hr
+
+            .row.align-items-center
+
+              .col-lg-6.col-12.b-tab-block
+
+                .b-tab.tab-2( style="background-image: url( /template/images/tab.svg );")
+
+                .b-float-label
+
+                  input#SERVICE4.input--num( type="text" name="SERVICE4" value="" autocomplete="off" )
+                  label( for="SERVICE4" ) Прочие связанные с аудиторской деятельностью услуги
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small.b-tab-block
+                .b-tab.tab-2.d-block.d-lg-none
+                span.text-semimuted Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ratione, dolorum sed suscipit et sequi, aspernatur alias quo voluptas mollitia rerum excepturi obcaecati reprehenderit corporis veritatis corrupti facilis hic
+              
+            hr
+
+            .row.align-items-center
+
+              .col-lg-6.col-12.b-tab-block
+
+                .b-tab( style="background-image: url( /template/images/tab.svg );")
+
+                .b-float-label
+
+                  input#SERVICE5.input--num( type="text" name="SERVICE5" value="" autocomplete="off" )
+                  label( for="SERVICE5" ) Объем услуг по аудиту отчетности общественно-значимых организаций
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small.b-tab-block
+                .b-tab.d-block.d-lg-none
+                span.text-semimuted Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ratione, dolorum sed suscipit et sequi, aspernatur alias quo voluptas mollitia rerum excepturi obcaecati reprehenderit corporis veritatis corrupti facilis hic
+              
+            hr
+
+            h4 Прошедший год
+
+            hr
+
+            .row.align-items-center
+
+              .col-lg-6.col-12
+
+                .b-float-label
+
+                  input#SERVICE1.input--num( type="text" name="SERVICE1" value="" autocomplete="off" )
+                  label( for="SERVICE1" ) Объем услуг за отчетный период
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small
+                span.text-semimuted Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ratione, dolorum sed suscipit et sequi, aspernatur alias quo voluptas mollitia rerum excepturi obcaecati reprehenderit corporis veritatis corrupti facilis hic
+              
+            hr
+
+            .row.align-items-center
+
+              .col-lg-6.col-12.b-tab-block
+
+                .b-tab( style="background-image: url( /template/images/tab.svg );")
+
+                .b-float-label
+
+                  input#SERVICE2.input--num( type="text" name="SERVICE2" value="" autocomplete="off" )
+                  label( for="SERVICE2" ) В том числе: обязательный аудит
+
+              hr.hr--xs.d-block.d-lg-none.w-100
+
+              .col-lg-6.col-12.small.b-tab-block
+                .b-tab.d-block.d-lg-none
+                span.text-semimuted Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ratione, dolorum sed suscipit et sequi, aspernatur alias quo voluptas mollitia rerum excepturi obcaecati reprehenderit corporis veritatis corrupti facilis hic
+
+
+        .b-collapse-block.open.slide
+          .b-collapse-block__head
+            a( href="" )
+              i Участие в международных сетях
+              i.text-danger Не заполнены обязательные поля
+            span
+          .b-collapse-block__body
+            .row
+              .col-lg-6.col-12
+                
+                .b-add-input-block
+                  .b-float-label
+                    input#PROPERTY_176_0( type="text" name="PROPERTY[176][0]" value="FCGA" autocomplete="off" )
+                    label.active( for="PROPERTY_176_0" ) Номер организации
+                
+                  hr
+
+                  .b-add-input-block__item.show.visible
+
+                    .b-float-label
+                      input#PROPERTY_176_1(type="text" name="PROPERTY[176][1]" value="OIT" autocomplete="off")
+                      label.active(for="PROPERTY_176_1") Название организации
+                      a.btn-delete(href="")
+
+                    hr
+
+                  button.btn.btn-success.btn-md Добавить
+              
+            hr
+
+        .b-collapse-block
+          .b-collapse-block__head
+            a( href="" )
+              i Места работы
+              i.text-danger Не заполнены обязательные поля
+            span
+          .b-collapse-block__body
+
+            .b-add-fieldset-block( data-url="/components/report-form/get-fieldset-item.json" data-method="GET")
+
+              .b-add-fieldset-block__item.show.visible
+
+                h4 Места работы 1
+
+                hr
+
+                .b-add-fieldset-block__wrapper( data-hl="17")
+
+                  .row.b-ornz-autocomplete( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+                    .col-xl-6.col-12
+                      .b-float-label
+                        input#PROPERTY_177_0( type="text" name="PROPERTY[177][0]" value="" autocomplete="off" data-ornzautocomplete="companyname" required )
+                        label( for="PROPERTY_177_0" ) Название организации *
+                        .b-input-hint
+
+                    hr.d-block.d-xl-none.w-100
+
+                    .col-xl-3.col-12
+                      .b-float-label
+                        input#PROPERTY_178_0( type="text" name="PROPERTY[178][0]" value="" autocomplete="off" data-ornzautocomplete="ornz" )
+                        label( for="PROPERTY_178_0" ) ОРНЗ
+                        .b-input-hint
+
+                  hr
+
+                  .row
+                    .col-xl-6.col-12
+                      .b-float-label
+                        input#PROPERTY_179_0( type="text" name="PROPERTY[179][0]" value="" autocomplete="off" required )
+                        label( for="PROPERTY_179_0" ) Должность *
+
+                    hr.d-block.d-xl-none.w-100
+
+                    .col-xl-3.col-12
+                      .b-float-label( data-src="/template/images/calendar.svg" )
+                        input#PROPERTY_181_0( type="text" name="PROPERTY[181][0]" value="" autocomplete="off" required )
+                        img.calendar-icon( src="" alt="Выбрать дату в календаре" onclick="" border="0" autocomplete="off" )
+                        label( for="PROPERTY_181_0" ) Дата увольнения *
+
+                  hr
+
+                  .row
+                    .col-xl-6.col-12
+                      .b-float-label
+                        label.active Характер труд.догвора *
+                        select( name="PROPERTY[180][0]" required )
+                          option( value="0" ) Основной
+                          option( value="1" ) По совместительству
+
+                  hr
+
+                  .row
+                    .col-xl-6.col-12
+                      .b-float-label
+                        input#PROPERTY_182_0( type="text" name="PROPERTY[182][0]" value="" autocomplete="off" required )
+                        label( for="PROPERTY_182_0" ) Участие в аудиторских проверках (количество) *
+                    hr.hr--xs.d-block.d-xl-none.w-100
+                    .col-xl-6.col-12.text-semimuted.small Укажите количество завершенных проверок (проверок, по которым выдано аудиторское заключение), в которых вы участвовали в течение отчетного года (целое число).<br>Если Вы не участвовали в аудиторских проверках – укажите 0.
+
+                  hr
+
+                  .row
+                    .col-xl-6.col-12
+                      .b-float-label
+                        input#PROPERTY_184_0( type="text" name="PROPERTY[184][0]" value="" autocomplete="off" required )
+                        label( for="PROPERTY_184_0" ) Оказание прочих аудиторских услуг (указать виды услуг) *
+                    hr.hr--xs.d-block.d-xl-none.w-100
+                    .col-xl-6.col-12.text-semimuted.small Укажите название прочих услуг, например: постановка бух.учета, налоговое консультирование.
+
+                  hr.hr--xl.hr--line
+
+                  a.btn-delete(href="")
+                  
+                  hr.d-block.d-xl-none
+
+              button.btn.btn-success.btn-md Добавить
+
+        hr.hr--lg
+
+        include ../../modules/checkbox/include
+
+        hr.hr--lg
+
+        .b-report-form__submit
+          button.btn.btn-secondary.btn-lg( type="submit" disabled ) Сдать отчет
+          small.text-muted Вы не закончили заполнение обязательных полей.
+            | 
+            a( href="#" ) Продолжить
+
+// end /components/report-form/

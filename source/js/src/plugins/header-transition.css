@@ -1,0 +1,4 @@
+.b-header__menu {
+  transition: opacity .5s ease, margin-left .5s ease;
+  -webkit-transition: opacity .5s ease, margin-left .5s ease;
+}
