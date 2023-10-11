@@ -39,7 +39,7 @@ window.studyCourseCreateStore = {
           invalid: false,
         },
         {
-          name: 'COURSE_TYPE',
+          name: 'UMC_TYPE',
           label: 'Форма проведения',
           value: [
             {
@@ -167,7 +167,7 @@ window.studyCourseCreateStore = {
                   invalid: false,
                 },
                 {
-                  name: 'LESSON_TYPE',
+                  name: 'TASK_TYPE',
                   label: 'Тип занятия',
                   value: [
                     {
@@ -283,7 +283,7 @@ window.studyCourseCreateStore = {
                   invalid: false,
                 },
                 {
-                  name: 'LESSON_TYPE',
+                  name: 'TASK_TYPE',
                   label: 'Тип занятия',
                   value: [
                     {

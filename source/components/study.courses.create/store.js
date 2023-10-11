@@ -38,7 +38,7 @@ window.studyCourseCreateStore = {
           invalid: false,
         },
         {
-          name: 'COURSE_TYPE',
+          name: 'UMC_TYPE',
           label: 'Форма проведения',
           value: [
             {
