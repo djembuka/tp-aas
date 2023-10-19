@@ -12,7 +12,7 @@ function isYabrowserLT18() {
 }
 
 //h1
-var elem = document.querySelector('h1');
+/*var elem = document.querySelector('h1');
 if (elem) {
   elem.classList.add('no-transition');
   var fontSize = parseInt(window.getComputedStyle(elem)['font-size']);
@@ -24,7 +24,7 @@ if (elem) {
     elem.clientHeight >
     Math.floor(parseInt(window.getComputedStyle(elem)['line-height'])) * 4
   );
-}
+}*/
 
 //change&edit info
 (function () {
