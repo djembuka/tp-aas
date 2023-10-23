@@ -315,7 +315,10 @@ window.onload = function () {
         </div>
         <hr class="d-block d-sm-none">
         <div class="b-poll-result__answers">
-          <poll-answer v-for="(answer, index) in question.answers" :index="index" :answer="answer"></poll-answer>
+          <div v-for="(answer, index) in question.answers">
+            <poll-answer-two-counts v-if="typeof answer.votes === 'object'" :index="index" :answer="answer"></poll-answer-two-counts>
+            <poll-answer v-else :index="index" :answer="answer"></poll-answer>
+          </div>
         </div>
       </div>
     `,
@@ -333,7 +336,44 @@ window.onload = function () {
         <div class="b-poll-result__answer-graph b-graph">
           <div class="b-graph__wrapper">
             <div class="b-graph__img"></div>
-            <div class="b-graph__num">{{answer.votes}}</div>
+            <div class="b-graph__num">{{Number(answer.votes).toLocaleString()}}</div>
+          </div>
+        </div>
+      </div>
+    `,
+    methods: {
+      showEffect() {
+        const wrapper = this.$el.querySelector('.b-graph__wrapper');
+        wrapper.style.width = 0;
+        setTimeout(() => {
+          wrapper.style.width = this.$el.getAttribute('data-percentage');
+        }, 0);
+      },
+    },
+  });
+
+  Vue.component('pollAnswerTwoCounts', {
+    data() {
+      return {
+        width1:
+          (100 * this.answer.votes[0]) /
+          (this.answer.votes[0] + this.answer.votes[1]),
+        width2:
+          (100 * this.answer.votes[1]) /
+          (this.answer.votes[0] + this.answer.votes[1]),
+      };
+    },
+    props: ['answer', 'index'],
+    template: `
+      <div class="b-poll-result__answers__item" :data-percentage="answer.percentage" @showeffect="showEffect()">
+        <div class="b-poll-result__answer-title" v-html="'<span>'+(index+1)+'. </span>'+answer.title"></div>
+        <div class="b-poll-result__answer-graph b-graph">
+          <div class="b-graph__wrapper">
+            <div class="b-graph__counts">
+              <span :style="'width: ' + width1 + '%;'">{{answer.votes[0]}}</span>
+              <span :style="'width: ' + width2 + '%;'">{{answer.votes[1]}}</span>
+            </div>
+            <div class="b-graph__num">{{Number(answer.votes[0] + answer.votes[1]).toLocaleString()}}</div>
           </div>
         </div>
       </div>

@@ -215,6 +215,30 @@
     background transparent linear-gradient(270deg, #F2762E 0%, #F1944B 100%) 0% 0% no-repeat padding-box
     border-radius 12px
 
+  &__counts
+    width 100%
+    min-width 5px
+    height 24px
+
+    span
+      color #fff
+      font-size 12px
+      display inline-flex
+      align-items center
+      justify-content center
+      border-radius 12px
+      position relative
+      height 24px
+
+      &:first-child
+        background transparent linear-gradient(270deg, #0038B5 0%, #006CFF 100%) 0% 0% no-repeat padding-box
+        z-index 2
+
+      &:last-child
+        background transparent linear-gradient(270deg, #F2762E 0%, #F1944B 100%) 0% 0% no-repeat padding-box
+        margin-left -22px
+        z-index 1
+
   &__num
     font-size $24px
     font-weight bold
@@ -222,6 +246,7 @@
     white-space nowrap
     margin-left 8px
     line-height normal
+    width 5px
 
 .b-poll-result-screen
 
