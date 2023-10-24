@@ -9,11 +9,19 @@ window.onload = function () {
     );
     window.pollStore.groups.forEach(function (group) {
       group.questions.forEach(function (question) {
-        question.answers.forEach(function (answer) {
-          if (storageObj[answer.value] !== undefined) {
-            answer.checked = storageObj[answer.value];
-          }
-        });
+        if (question.type === 'number') {
+            question.answers.forEach(function (answer) {
+                if (storageObj[answer.name] !== undefined) {
+                    answer.value = storageObj[answer.name];
+                }
+            });
+        } else {
+            question.answers.forEach(function (answer) {
+                if (storageObj[answer.value] !== undefined) {
+                    answer.checked = storageObj[answer.value];
+                }
+            });
+        }
       });
     });
   }
@@ -190,6 +198,51 @@ window.onload = function () {
     },
   });
 
+  Vue.component('formControlNumber', {
+    data() {
+      return {};
+    },
+    props: ['answerIndex', 'answer'],
+    template: `<div class="b-poll__form-control">
+      <div class="b-poll__form-control__content">
+        <div class="b-poll__form-control__img" :style="getStyle()" v-if="answer.img"></div>
+        <div class="b-poll__form-control__text"><b v-html="answer.title"></b><span v-html="answer.note"></span></div>
+      </div>
+      <div class="b-poll__input b-float-label">
+        <label class="b-poll__input-label active">{{answer.label}}</label>
+        <input type="number" :name="answer.name" v-model="answer.value" @change="change">
+      </div>
+    </div>
+    `,
+    methods: {
+      change(e) {
+        e.target.parentNode.classList.add('i-active');
+
+        //set question as active
+        store.commit('removeActiveQuestion');
+
+        //change local storage
+        let storageObj = {};
+        if (window.localStorage.getItem(store.state.pollId)) {
+          storageObj = JSON.parse(
+            window.localStorage.getItem(store.state.pollId)
+          );
+        }
+
+        storageObj[this.answer.name] = this.answer.value;
+
+        window.localStorage.removeItem(store.state.pollId);
+        window.localStorage.setItem(
+          store.state.pollId,
+          JSON.stringify(storageObj)
+        );
+      },
+      getStyle() {
+        return "background-image: url('" + this.answer.img + "')";
+      },
+    },
+  });
+
   Vue.component('question', {
     data() {
       return {
@@ -209,7 +262,8 @@ window.onload = function () {
       <div class="b-poll__questions__set">
         <div v-for="(answer, answerIndex) in question.answers">
           <form-control-checkbox v-if="question.type === 'checkbox'" :answer="answer" :groupIndex="groupIndex" :questionIndex="questionIndex" :answerIndex="answerIndex" @form-control-change="formControlChange"></form-control-checkbox>
-          <form-control-radio v-else :answer="answer" :answerIndex="answerIndex"></form-control-radio>
+          <form-control-radio v-else-if="question.type === 'radio'" :answer="answer" :answerIndex="answerIndex"></form-control-radio>
+          <form-control-number v-else-if="question.type === 'number'" :answer="answer" :answerIndex="answerIndex"></form-control-number>
         </div>
       </div>
 
