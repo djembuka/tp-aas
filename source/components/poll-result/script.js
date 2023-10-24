@@ -215,7 +215,7 @@ window.onload = function () {
     group.questions.forEach((question) => {
       let numArray = [];
       question.answers.forEach(function (answer) {
-        numArray.push(String(answer.votes).deformat());
+        numArray.push(typeof answer.votes === 'object' ? answer.votes[0] + answer.votes[1] : answer.votes);
       });
 
       //get maximum
@@ -224,7 +224,7 @@ window.onload = function () {
       question.answers.forEach(function (answer, index) {
         answer.ordernum = index;
         answer.percentage =
-          Math.round((String(answer.votes).deformat() * 100) / maxNum) + '%';
+              Math.round((typeof answer.votes === 'object' ? answer.votes[0] + answer.votes[1] : answer.votes) * 100 / maxNum) + '%';
       });
     });
   });

@@ -8,7 +8,7 @@ window.pollResultStore = {
           answers: [
             {
               title: 'За',
-              votes: 23 + 4,
+              votes: [23 + 4, 10],
             },
             {
               title: 'Против',

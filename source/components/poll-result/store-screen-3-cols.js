@@ -9,7 +9,7 @@ window.pollResultStore = {
           answers: [
             {
               title: 'Абабкова Светлана Сергеевна',
-              votes: 23 + 4,
+              votes: [23 + 4, 50],
             },
             {
               title: 'Абакумова Светлана Владимировна',
