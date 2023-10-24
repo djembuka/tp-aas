@@ -152,19 +152,10 @@ window.onload = function () {
         const typeControl = state.steps[0].controls.find(
           (c) => c.name === 'UMC_TYPE'
         );
-        let typeControlValue;
 
         if (typeControl) {
-          if (typeControl.selected.code.search('_') === -1) {
-            typeControlValue = [typeControl.selected];
-          } else {
-            const arr = typeControl.selected.code.split('_');
-            const value = [];
-            arr.forEach((code) => {
-              value.push(typeControl.value.find((v) => v.code === code));
-            });
-            typeControlValue = value;
-          }
+          let typeControlValue = state.TYPE_COMPARE[String(typeControl.selected.code)]
+          
           state.steps[2].blocks.forEach((block) => {
             block.lessons.forEach((lesson) => {
               const lessonTypeControl = lesson.controls.find(

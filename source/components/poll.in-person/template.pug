@@ -1,0 +1,73 @@
+// start /components/poll-in-person/
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="/components/poll/store.js" )
+link( rel="stylesheet" href="/template/css/animate.min.css")
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'poll'
+else
+  - var componentsArray = [ 'poll' ]
+  
+.b-poll.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-poll-ill( style="background-image: url('/upload/events/2.jpeg');")
+
+    hr
+
+    h3 Текст подробного описания
+
+    p Ольга Александровна представила презентацию и доложила об основных результатах работы Дирекции СРО ААС за отчетный период: о деятельности по организации и обеспечению исполнения СРО ААС функций саморегулируемой организации аудиторов, в том числе о ведении реестра аудиторов и аудиторских организаций и вопросах членства в СРО ААС, об организации внешнего контроля качества и обучения по программам повышения квалификации аудиторов; об информационной деятельности СРО ААС и раскрытии информации, о работе официального Интернет-сайта СРО ААС; о работе подразделений внутреннего контроля; об организации работы с обращениями, запросами членов СРО ААС и заинтересованных лиц, с жалобами на членов СРО ААС; о взаимодействии с государственными органами и участии в нормотворческой деятельности; об обеспечении работы Территориальных отделений СРО ААС. В докладе Генеральный директор представила информацию о проделанной в отчётном периоде работе, связанной с обеспечением необходимых мер по созданию единой саморегулируемой организации аудиторов.
+
+    hr
+
+    form( action="" method="" )
+
+      #pollQuestions
+
+      hr.hr--lg
+
+      include ../../modules/checkbox/include
+
+      hr.hr--lg
+
+      .b-poll__submit
+        a.btn.btn-secondary.btn-lg( disabled data-toggle="modal" data-target="#voteConfirmModal" href="#" ) Проголосовать
+        small.text-muted Вы сможете изменить свой выбор до даты окончания голосования — 13 марта 2021 23:30.
+
+        #voteConfirmModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="voteConfirmModalLabel" aria-hidden="true")
+          .modal-dialog
+            .modal-content
+              button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+              .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+                h3.text-center Вы хотите отправить свой голос
+
+                hr
+
+                p.text-center Завершив голосование вы не сможете изменить свой выбор. Участие в данном голосование возможно 1 раз.
+
+                hr
+
+                .text-center.modal-buttons
+                  button.btn.btn-lg.btn-secondary( type="submit" ) Завершить голосование
+                  button.btn.btn-lg.btn-light( data-dismiss="modal" ) Вернуться к глосованию
+
+
+
+
+// end /components/poll/

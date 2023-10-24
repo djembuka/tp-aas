@@ -226,6 +226,11 @@ window.onload = function () {
         answer.percentage =
               Math.round((typeof answer.votes === 'object' ? answer.votes[0] + answer.votes[1] : answer.votes) * 100 / maxNum) + '%';
       });
+      
+      //sort by default
+      question.answers.sort((a, b) => {
+          return (typeof b.votes === 'object' ? b.votes[0] + b.votes[1] : b.votes) - (typeof a.votes === 'object' ? a.votes[0] + a.votes[1] : a.votes);
+      });
     });
   });
 

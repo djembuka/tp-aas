@@ -5,6 +5,36 @@ window.studyCourseCreateStore = {
   addLessonURL: '/components/study.courses.create/urls/add-lesson.json',
   deleteLessonURL: '/components/study.courses.create/urls/delete-block.json',
   ornzControlURL: '/components/study.courses.create/urls/ornz-control.json',
+  TYPE_COMPARE: {
+    '91': [
+        {
+            label: 'Очная аудиторная',
+            code: '93',
+        },
+    ],
+    '92': [
+        {
+            label: 'Заочная дистанционная',
+            code: '114',
+        },
+    ], 
+    '97': [
+        {
+            label: 'Очная дистанционная',
+            code: '94',
+        }
+    ],
+    '98': [
+        {
+            label: 'Очная аудиторная',
+            code: '93',
+        },
+        {
+            label: 'Очная дистанционная',
+            code: '94',
+        }
+    ],
+  },
   steps: [
     {
       id: '123qwe',
@@ -47,22 +77,22 @@ window.studyCourseCreateStore = {
             },
             {
               label: 'Заочная дистанционная',
-              code: 'zaochno-dist',
+              code: '91',
             },
             {
               label: 'Очная аудиторная',
-              code: 'ochno',
+              code: '92',
             },
             {
               label: 'Очная дистанционная',
-              code: 'ochno-dist',
+              code: '97',
             },
             {
               label: 'Очная аудиторная/Очная дистанционная',
-              code: 'ochno_ochno-dist',
+              code: '98',
             },
           ],
-          selected: { label: 'Очная аудиторная', code: 'ochno' },
+          selected: { label: 'Очная аудиторная', code: '92' },
           type: 'select',
           required: true,
           invalid: false,

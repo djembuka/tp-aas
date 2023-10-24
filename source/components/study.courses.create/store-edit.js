@@ -44,18 +44,18 @@ window.studyCourseCreateStore = {
           value: [
             {
               label: 'Очная аудиторная',
-              code: 'ochno',
+              code: '92',
             },
             {
               label: 'Заочная',
-              code: 'zaochno',
+              code: '93',
             },
             {
               label: 'Дистанционная',
-              code: 'distant',
+              code: '94',
             },
           ],
-          selected: { label: 'Очная аудиторная', code: 'ochno' },
+          selected: { label: 'Очная аудиторная', code: '92' },
           type: 'select',
           required: true,
           invalid: false,
