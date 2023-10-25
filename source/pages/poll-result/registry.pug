@@ -1,11 +1,11 @@
 extends ../../layouts/main
 
 block vars
-  - var page = 'pages-poll-in-person'
+  - var page = 'pages-poll-result'
   - var authorized = 'true'
 
 block title
-  title Голосование очное | Pages | AAS
+  title Результаты голосования | Pages | AAS
 
 block content
 
@@ -27,6 +27,8 @@ block content
         
         include ../../components/left-menu/profile
           
-      article.col-12.col-md-8
+      article.col-12.col-md-9
+
+        - var tab = 'registry'
         
-        include ../../components/poll/template-in-person
+        include ../../components/poll-result/template

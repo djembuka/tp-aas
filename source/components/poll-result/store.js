@@ -14,7 +14,7 @@ window.pollResultStore = {
           answers: [
             {
               title: 'Вариант ответ номер один с пояснением.',
-              votes: [23, 100],
+              votes: [1, 100],
             },
             {
               title:
@@ -23,7 +23,7 @@ window.pollResultStore = {
             },
             {
               title: 'Вариант ответ номер три с пояснением.',
-              votes: [46, 150],
+              votes: [150, 0],
             },
           ],
         },

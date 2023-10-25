@@ -7,9 +7,6 @@ if componentsArray
   - componentsArray[ componentsArray.length ] = 'poll-result'
 else
   - var componentsArray = [ 'poll-result' ]
-
-link( rel="stylesheet", href="/template/css/swiper.min.css" )
-script( src="/template/js/swiper.min.js" )
   
 .b-poll-result.ph-block
 
@@ -31,21 +28,22 @@ script( src="/template/js/swiper.min.js" )
 
     .b-poll-result__tabs
 
-      .swiper-container
-        .swiper-wrapper
-          a.swiper-slide.active( href="" data-tab="result" ) Все
-          a.swiper-slide( href="" data-tab="registry" ) Активные
-      .b-poll-result__decor
+      .b-tab-links
+        a( class=tab === 'result' ? 'active' : '' href="/pages/poll-result/" ) Результаты голосования
+        a( class=tab === 'registry' ? 'active' : '' href="/pages/poll-result/registry.html" ) Журнал голосования
+        a( class=tab === 'in-person' ? 'active' : '' href="/pages/poll-result/in-person.html" ) Результаты очного голосвания
+
+        .b-tab-links__decor
 
     hr
     
-    .b-poll-result__block
-      .b-poll-result__item.active(data-tab="result")
-        hr
-        include ./result
+    .b-check-detail__block
+      hr
+      if tab === 'result'
+        include result
+      else if tab === 'registry'
+        include registry
+      else if tab === 'in-person'
+        include in-person
 
-      .b-poll-result__item(data-tab="registry")
-        hr
-        include ./registry
-
-// end /components/poll/
+// end /components/poll-result/

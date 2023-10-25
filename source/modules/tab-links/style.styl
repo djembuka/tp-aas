@@ -1,0 +1,32 @@
+@import '../../styl/component-include.styl'
+
+.b-tab-links
+  position relative
+  border-bottom 1px solid $line-color
+  padding-bottom 14px
+  font-size $14px
+  font-family $roboto
+  
+  a
+    display inline-block
+    margin-right 30px
+    white-space nowrap
+    width auto !important
+
+    &,
+    &:hover,
+    &:focus,
+    &:active
+      color #074C86
+
+    &.active
+      color #3b3b3b
+      pointer-events none
+      cursor default
+
+  &__decor
+    position absolute
+    bottom -1px
+    left 0
+    border-top 1px solid #999
+    transition( all .5s ease )

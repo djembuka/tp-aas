@@ -2,116 +2,8 @@ String.prototype.deformat = function () {
   return Number(this.toString().replace(/\D/g, '').split(' ').join(''));
 };
 
-window.onload = function () {
-  if (
-    window.jQuery &&
-    document.querySelectorAll('.b-poll-result .b-poll-result__tabs').length
-  ) {
-    //tabs
-    document.querySelectorAll('.b-poll-result').forEach(function (elem) {
-      var nav = elem.querySelector('.b-poll-result__tabs');
-      var menuLinks = nav.querySelectorAll('a');
-      var tabsItems = elem.querySelectorAll('.b-poll-result__item');
-
-      //swiper menu
-      if (window.matchMedia('(max-width: 600px)').matches) {
-        var slidesPerView = 2.5;
-
-        if (window.matchMedia('(min-width: 500px)').matches) {
-          slidesPerView = 3;
-        }
-
-        //init swiper
-        new Swiper(
-          elem.querySelector('.b-poll-result__tabs .swiper-container'),
-          {
-            slidesPerView: slidesPerView,
-            spaceBetween: 30,
-            freeMode: true,
-          }
-        );
-
-        //scroll
-        window.addEventListener('scroll', function () {
-          if (
-            elem
-              .querySelector('.b-poll-result__tabs')
-              .className.search('animate') !== -1
-          ) {
-            return;
-          }
-
-          if (
-            $(elem).offset().top <=
-            window.scrollY + window.outerHeight - 250
-          ) {
-            elem.querySelector('.b-poll-result__tabs').classList.add('animate');
-          }
-        });
-
-        setTimeout(function () {
-          window.dispatchEvent(new Event('scroll'));
-        }, 500);
-      }
-
-      //decor line
-      var decorLine = elem.querySelector('.b-poll-result__decor');
-      var swiperWrapper = elem.querySelector(
-        '.b-poll-result__tabs .swiper-wrapper'
-      );
-      var trans = swiperWrapper.style.transform;
-      var pos = trans.indexOf('(');
-      setTimeout(function () {
-        decorLine.style.left =
-          menuLinks[0].offsetLeft +
-          parseInt(trans.substr(pos + 1) || 0, 10) +
-          'px';
-        decorLine.style.width = menuLinks[0].offsetWidth + 'px';
-      }, 500);
-
-      menuLinks.forEach(function (menuLink) {
-        menuLink.addEventListener('click', function (e) {
-          e.preventDefault();
-
-          let tab = menuLink.getAttribute('data-tab');
-
-          //highlight nav
-          menuLinks.forEach(function (m) {
-            m.classList.remove('active');
-          });
-          menuLink.classList.add('active');
-
-          //highlight tabs
-          tabsItems.forEach(function (t) {
-            t.classList.remove('active');
-          });
-          elem
-            .querySelector(`.b-poll-result__item[data-tab=${tab}]`)
-            .classList.add('active');
-
-          //underline
-          decorLine.style.width = `${menuLink.clientWidth}px`;
-          decorLine.style.left = `${
-            menuLink.getBoundingClientRect().left -
-            nav.getBoundingClientRect().left
-          }px`;
-
-          //url
-          let query = parseQuery(window.location.search);
-          query.tab = tab;
-          history.replaceState({}, '', getQuery(query));
-        });
-      });
-
-      //on load
-      let tab = parseQuery(window.location.search).tab;
-      if (tab) {
-        setTimeout(function () {
-          nav.querySelector(`[data-tab=${tab}]`).click();
-        }, 500);
-      }
-    });
-
+window.addEventListener('load', () => {
+  if (window.jQuery) {
     //th click, sorting
     $('.b-poll-result th').click(function () {
       var $th = $(this);
@@ -215,7 +107,11 @@ window.onload = function () {
     group.questions.forEach((question) => {
       let numArray = [];
       question.answers.forEach(function (answer) {
-        numArray.push(typeof answer.votes === 'object' ? answer.votes[0] + answer.votes[1] : answer.votes);
+        numArray.push(
+          typeof answer.votes === 'object'
+            ? answer.votes[0] + answer.votes[1]
+            : answer.votes
+        );
       });
 
       //get maximum
@@ -224,12 +120,21 @@ window.onload = function () {
       question.answers.forEach(function (answer, index) {
         answer.ordernum = index;
         answer.percentage =
-              Math.round((typeof answer.votes === 'object' ? answer.votes[0] + answer.votes[1] : answer.votes) * 100 / maxNum) + '%';
+          Math.round(
+            ((typeof answer.votes === 'object'
+              ? answer.votes[0] + answer.votes[1]
+              : answer.votes) *
+              100) /
+              maxNum
+          ) + '%';
       });
-      
+
       //sort by default
       question.answers.sort((a, b) => {
-          return (typeof b.votes === 'object' ? b.votes[0] + b.votes[1] : b.votes) - (typeof a.votes === 'object' ? a.votes[0] + a.votes[1] : a.votes);
+        return (
+          (typeof b.votes === 'object' ? b.votes[0] + b.votes[1] : b.votes) -
+          (typeof a.votes === 'object' ? a.votes[0] + a.votes[1] : a.votes)
+        );
       });
     });
   });
@@ -268,7 +173,7 @@ window.onload = function () {
     },
     props: ['answers'],
     template: `
-      <div class="b-switch-button inverse"><span @click="clickLeft()">По рейтингу</span><span @click="clickRight()">По порядку</span></div>
+      <div class="b-switch-button"><span @click="clickLeft()">По рейтингу</span><span @click="clickRight()">По порядку</span></div>
     `,
     methods: {
       clickLeft() {
@@ -420,4 +325,4 @@ window.onload = function () {
         });
     },
   });
-};
+});
