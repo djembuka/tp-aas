@@ -181,7 +181,10 @@ window.addEventListener('load', () => {
         this.$el.classList.remove('inverse');
         //sort the answers by votes
         this.answers.sort((a, b) => {
-          return String(b.votes).deformat() - String(a.votes).deformat();
+          return (
+            (typeof b.votes === 'object' ? b.votes[0] + b.votes[1] : b.votes) -
+            (typeof a.votes === 'object' ? a.votes[0] + a.votes[1] : a.votes)
+          );
         });
         //show effect
         this.showAnswersEffect();
@@ -241,7 +244,7 @@ window.addEventListener('load', () => {
     },
     props: ['answer', 'index'],
     template: `
-      <div class="b-poll-result__answers__item" :data-percentage="answer.percentage" @showeffect="showEffect()">
+      <div class="b-poll-result__answers__item" @showeffect="showEffect()">
         <div class="b-poll-result__answer-title" v-html="'<span>'+(index+1)+'. </span>'+answer.title"></div>
         <div class="b-poll-result__answer-graph b-graph">
           <div class="b-graph__wrapper">
@@ -255,8 +258,9 @@ window.addEventListener('load', () => {
       showEffect() {
         const wrapper = this.$el.querySelector('.b-graph__wrapper');
         wrapper.style.width = 0;
+        console.log(wrapper);
         setTimeout(() => {
-          wrapper.style.width = this.$el.getAttribute('data-percentage');
+          wrapper.style.width = this.answer.percentage;
         }, 0);
       },
     },
@@ -264,36 +268,42 @@ window.addEventListener('load', () => {
 
   Vue.component('pollAnswerTwoCounts', {
     data() {
-      return {
-        width1:
-          (100 * this.answer.votes[0]) /
-          (this.answer.votes[0] + this.answer.votes[1]),
-        width2:
-          (100 * this.answer.votes[1]) /
-          (this.answer.votes[0] + this.answer.votes[1]),
-      };
+      return {};
     },
     props: ['answer', 'index'],
     template: `
-      <div class="b-poll-result__answers__item" :data-percentage="answer.percentage" @showeffect="showEffect()">
+      <div class="b-poll-result__answers__item" @showeffect="showEffect()">
         <div class="b-poll-result__answer-title" v-html="'<span>'+(index+1)+'. </span>'+answer.title"></div>
         <div class="b-poll-result__answer-graph b-graph">
           <div class="b-graph__wrapper">
             <div class="b-graph__counts">
-              <span :style="'width: ' + width1 + '%;'">{{answer.votes[0]}}</span>
-              <span :style="'width: ' + width2 + '%;'">{{answer.votes[1]}}</span>
+              <span :style="width1 + (answer.votes[0] ? '' : 'visibility: hidden;')">{{answer.votes[1] ? answer.votes[0] : ''}}</span>
+              <span :style="width2 + (answer.votes[1] ? '' : 'display: none;')">{{answer.votes[0] ? answer.votes[1] : ''}}</span>
             </div>
             <div class="b-graph__num">{{Number(answer.votes[0] + answer.votes[1]).toLocaleString()}}</div>
           </div>
         </div>
       </div>
     `,
+    computed: {
+      width1() {
+        const x = this.answer.votes[0];
+        const y = this.answer.votes[1];
+        return `width:calc(${(100 * x) / (x + y)}% ${y ? '- 18px' : ''});`;
+      },
+      width2() {
+        const x = this.answer.votes[0];
+        const y = this.answer.votes[1];
+        return `width:calc(${(100 * y) / (x + y)}% ${x ? '+ 18px' : ''});`;
+      },
+    },
     methods: {
       showEffect() {
         const wrapper = this.$el.querySelector('.b-graph__wrapper');
         wrapper.style.width = 0;
+        console.log(wrapper);
         setTimeout(() => {
-          wrapper.style.width = this.$el.getAttribute('data-percentage');
+          wrapper.style.width = this.answer.percentage;
         }, 0);
       },
     },
