@@ -1,23 +1,16 @@
 // start /components/poll-result/
 
-//- style 
-  | .container-fluid {padding-top: 25px !important;}
-  | .b-poll-result__questions {display: grid !important; grid-template-columns: 1fr 1fr 1fr; column-gap: 32px;}
+style 
+  | .container-fluid {padding-top:85px; padding-bottom: 80px; border-radius: 20px; padding-right: 140px !important; padding-left: 140px !important}
   | .b-poll-result__questions__header {margin-bottom: 0 !important;}
   | .b-poll-result__questions__header h3 {font-size: 1.1rem !important;}
   | .b-screen-logo {margin-bottom: 40px !important;}
-  | .b-poll-result-screen .b-poll-result__answer-title {overflow: initial !important; text-overflow: initial !important; white-space: normal !important; font-size: .8rem !important; font-weight: 400 !important; width: 50% !important; line-height: .8 !important;}
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(1) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(2) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(3) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(4) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(5) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(6) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(7) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(8) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(9) .b-poll-result__answer-title,
-  | .b-poll-result-screen .b-poll-result__answers__item:nth-child(10) .b-poll-result__answer-title {font-weight: bold !important;}
-  | .b-poll-result-screen .b-poll-result__answers__item {margin-bottom: 0 !important;}
+  | .b-poll-result-screen .b-switch-button {display: none}
+  | .b-poll-result-screen .b-poll-result__answers__item {justify-content: flex-start;margin-bottom: 25px}
+  | .b-poll-result-screen .b-poll-result__questions__header {width: 100%;margin-bottom: 60px}
+  | .b-poll-result-screen .b-poll-result__answer-title {width: calc((100% - 30px) / 12 * 3);font-size: 1.5rem;font-weight: 700;font-family: Roboto,sans-serif;margin-right: 10px;height: auto;line-height: normal}
+  | .b-poll-result-screen .b-poll-result__answer-title span,.b-poll-result-screen .b-num-blocks,.b-poll-result-screen .b-poll-result-ill {display: none}
+  | .b-poll-result-screen .b-poll-result__answer-graph { width: 100% }
 
 script( src="/components/poll-result/store-screen.js" )
 
@@ -27,7 +20,7 @@ if componentsArray
 else
   - var componentsArray = [ 'poll-result' ]
   
-.b-poll-result.ph-block
+.b-poll-result.b-poll-result-screen.ph-block
 
   .ph
 

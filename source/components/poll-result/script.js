@@ -258,7 +258,6 @@ window.addEventListener('load', () => {
       showEffect() {
         const wrapper = this.$el.querySelector('.b-graph__wrapper');
         wrapper.style.width = 0;
-        console.log(wrapper);
         setTimeout(() => {
           wrapper.style.width = this.answer.percentage;
         }, 0);
@@ -277,7 +276,7 @@ window.addEventListener('load', () => {
         <div class="b-poll-result__answer-graph b-graph">
           <div class="b-graph__wrapper">
             <div class="b-graph__counts">
-              <span :style="width1 + (answer.votes[0] ? '' : 'visibility: hidden;')">{{answer.votes[1] ? answer.votes[0] : ''}}</span>
+              <span :style="width1 + (answer.votes[0] || (!answer.votes[0] && !answer.votes[1]) ? '' : 'visibility: hidden;')">{{answer.votes[1] ? answer.votes[0] : ''}}</span>
               <span :style="width2 + (answer.votes[1] ? '' : 'display: none;')">{{answer.votes[0] ? answer.votes[1] : ''}}</span>
             </div>
             <div class="b-graph__num">{{Number(answer.votes[0] + answer.votes[1]).toLocaleString()}}</div>
@@ -301,7 +300,6 @@ window.addEventListener('load', () => {
       showEffect() {
         const wrapper = this.$el.querySelector('.b-graph__wrapper');
         wrapper.style.width = 0;
-        console.log(wrapper);
         setTimeout(() => {
           wrapper.style.width = this.answer.percentage;
         }, 0);
