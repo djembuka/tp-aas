@@ -29,3 +29,23 @@ block content
             .text-center.modal-buttons
               a.btn.btn-lg.btn-secondary( href="/pages/report-form/" ) Отредактировать
               button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
+
+    a.btn.btn-secondary.btn-md( data-toggle="modal" data-target="#oneButtonModal" ) С одной кнопкой
+
+    #oneButtonModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="editConfirmModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+          .modal-body( data-hint-url="/components/report-form/hint-response.json" data-info-url="/components/report-form/info-response.json" data-method="GET" )
+            h3.text-center Вы хотите отредактировать отчет?
+
+            hr
+
+            p Вы переходите в режим редактирования отчета. После внесения изменений в отчет вам необходимо сдать его, нажав на кнопку «Сдать отчет».
+            
+            p До тех пор, пока вы повторно не отправите отчет, он будет находиться в статусе «Необходимо сдать».
+
+            hr
+
+            .text-center.modal-buttons
+              button.btn.btn-lg.btn-light( data-dismiss="modal" ) Отменить
