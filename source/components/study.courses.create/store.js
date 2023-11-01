@@ -6,33 +6,33 @@ window.studyCourseCreateStore = {
   deleteLessonURL: '/components/study.courses.create/urls/delete-block.json',
   ornzControlURL: '/components/study.courses.create/urls/ornz-control.json',
   TYPE_COMPARE: {
-    '91': [
-        {
-            label: 'Очная аудиторная',
-            code: '93',
-        },
+    91: [
+      {
+        label: 'Очная аудиторная',
+        code: '93',
+      },
     ],
-    '92': [
-        {
-            label: 'Заочная дистанционная',
-            code: '114',
-        },
-    ], 
-    '97': [
-        {
-            label: 'Очная дистанционная',
-            code: '94',
-        }
+    92: [
+      {
+        label: 'Заочная дистанционная',
+        code: '114',
+      },
     ],
-    '98': [
-        {
-            label: 'Очная аудиторная',
-            code: '93',
-        },
-        {
-            label: 'Очная дистанционная',
-            code: '94',
-        }
+    97: [
+      {
+        label: 'Очная дистанционная',
+        code: '94',
+      },
+    ],
+    98: [
+      {
+        label: 'Очная аудиторная',
+        code: '93',
+      },
+      {
+        label: 'Очная дистанционная',
+        code: '94',
+      },
     ],
   },
   steps: [

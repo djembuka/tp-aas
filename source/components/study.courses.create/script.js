@@ -154,8 +154,9 @@ window.onload = function () {
         );
 
         if (typeControl) {
-          let typeControlValue = state.TYPE_COMPARE[String(typeControl.selected.code)]
-          
+          let typeControlValue =
+            state.TYPE_COMPARE[String(typeControl.selected.code)];
+
           state.steps[2].blocks.forEach((block) => {
             block.lessons.forEach((lesson) => {
               const lessonTypeControl = lesson.controls.find(
@@ -314,11 +315,13 @@ window.onload = function () {
         }, 20000);
 
         try {
-          response = await fetch(url, {
+          response = await fetch(
+            url /*, {
             method: 'POST',
             body: formData,
             signal: controller.signal,
-          });
+          }*/
+          );
           result = await response.json();
           if (result.status === 'success') {
             success(result);
@@ -1406,11 +1409,13 @@ window.onload = function () {
         }, 20000);
 
         try {
-          response = await fetch(this.$store.state.editURL, {
+          response = await fetch(
+            this.$store.state.editURL /*, {
             method: 'POST',
             body: formData,
             signal: controller.signal,
-          });
+          }*/
+          );
 
           result = await response.json();
 
