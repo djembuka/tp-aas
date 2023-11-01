@@ -26,7 +26,7 @@ window.appealNewChangeFormStore = {
     title: 'Данные для изменения',
     text: '',
     controls: [
-      {
+      /*{
         multy: true,
         value: [''],
         property: '85',
@@ -134,7 +134,7 @@ window.appealNewChangeFormStore = {
           value: '',
           comment: 'Comment',
         },
-      },
+      },*/
       {
         property: 42,
         word: 'PROPERTY',
@@ -152,6 +152,24 @@ window.appealNewChangeFormStore = {
         },
       },
       {
+        property: 142,
+        word: 'PROPERTY',
+        sort: 0,
+        label: 'Поиск по url *',
+        type: 'search',
+        required: true,
+        value: '22006129',
+        multy: false,
+        //pattern: '^\\d{11}$',
+        url: '/components/appeal.new.change-form/get-search.json',
+        count: 3,
+        completeBlock: {
+          title: '',
+          value: '',
+          comment: '',
+        },
+      },
+      /*{
         property: 43,
         word: 'PROPERTY',
         sort: 0,
@@ -166,14 +184,14 @@ window.appealNewChangeFormStore = {
           value: '4564546654',
           comment: 'Comment',
         },
-      },
+      },*/
     ],
   },
   confirmDocsBlock: {
     title: 'Документы',
     text: '',
     items: [
-      {
+      /*{
         id: 0,
         checked: true,
         title: 'Пакет документов 1',
@@ -243,7 +261,7 @@ window.appealNewChangeFormStore = {
             },
           },
         ],
-      },
+      },*/
     ],
   },
   autosaveTimeoutId: 58,

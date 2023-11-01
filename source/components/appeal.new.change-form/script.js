@@ -264,6 +264,7 @@ window.onload = function () {
         <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
         <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
         <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
+        <form-control-search v-else-if="formControl.type==='search'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-search>
         <form-control v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
       </div>
     </div>
@@ -661,6 +662,252 @@ window.onload = function () {
                 if (typeof result === 'object' && result[0]) {
                   this.isInvalid = false;
                   this.activeUser = result[0];
+                } else {
+                  this.isInvalid = true;
+                }
+              } catch (err) {
+                throw err;
+              }
+            })();
+          } else {
+            this.isInvalid = false;
+          }
+        }
+      },
+    },
+  });
+
+  //form control ornz
+  Vue.component('formControlSearch', {
+    data() {
+      return {
+        controlValue: this.formControl.multy
+          ? this.formControl.value[this.controlIndex].val
+          : this.formControl.value,
+        isActive: this.formControl.multy
+          ? this.formControl.value[this.controlIndex].val === ''
+            ? false
+            : true
+          : this.formControl.value === ''
+          ? false
+          : true,
+        isInvalid: false,
+        //hints
+        users: [],
+        activeUser: '',
+        activeHint: [],
+        hover: false,
+        compare: this.controlValue,
+      };
+    },
+
+    props: ['formControl', 'fieldsetBlockIndex', 'controlIndex'],
+
+    computed: {
+      id() {
+        return `${this.formControl.word}_${this.formControl.property}_${this.fieldsetBlockIndex}`;
+      },
+      name() {
+        return `${this.formControl.word}[${this.formControl.property}][${this.fieldsetBlockIndex}]`;
+      },
+      isClearable() {
+        return this.controlValue !== '' && this.hover ? true : false;
+      },
+    },
+
+    template: `
+    <div>
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-12">
+          <div class="b-float-label" :class="{invalid: isInvalid}" @mouseover="hover=true;" @mouseout="hover=false;">
+            <input :data-pattern="formControl.pattern" :data-required="formControl.required" ref="input" :id="id" type="text" :name="name" autocomplete="off" v-model="controlValue" @input="changeInput" @focus="focusInput" @blur="blurInput($event)" @keydown.enter.prevent="enterInput" @keydown.up.prevent="upArrow()" @keydown.down.prevent="downArrow()">
+            <label ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
+
+            <div class="b-input-clear" @click.prevent="clearInput()" v-show="isClearable"></div>
+            <div class="b-input-hint">
+              <div v-for="(user, index) in users" :class="{active: activeHint[index]}" class="b-input-hint__item" @click.prevent="clickHint($event)"><a href="" class="b-input-hint__text">{{user}}</a></div>
+            </div>
+          </div></div>
+          <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
+          <div class="col-lg-6 col-12 small" v-if="!formControl.multy || !controlIndex">
+            <span class="text-muted" v-if="this.formControl.completeBlock && this.formControl.completeBlock.title">{{ this.formControl.completeBlock.title }}</span>
+            <span v-if="this.formControl.completeBlock && this.formControl.completeBlock.title">
+              <a v-if="this.formControl.completeBlock.value" class="b-complete-link" ref="link" href="" @click.prevent="clickLink">
+                {{ this.formControl.completeBlock.value }}
+                <span class="icon" style="background-image: url( '/template/images/copy.svg' );"></span>
+              </a>
+              <span v-else class="text-muted">Пусто.</span>
+            </span>
+            <div v-if="this.formControl.completeBlock && this.formControl.completeBlock.comment" class="text-muted b-complete-comment">{{ this.formControl.completeBlock.comment }}</div>
+          </div>
+        </div>
+        <hr class="hr--sl">
+      </div>`,
+
+    watch: {
+      controlValue(val) {
+        let payload = {
+          property: this.formControl.property,
+          value: val,
+        };
+        if (this.formControl.multy) {
+          payload.index = this.controlIndex;
+        }
+        store.commit('changeControl', payload);
+      },
+    },
+
+    methods: {
+      clickLink() {
+        this.controlValue = this.formControl.completeBlock.value;
+        this.isActive = true;
+        this.validate();
+        //if tel
+        //autosave
+        this.$emit('autosave');
+
+        bitrixLogs(6, `${this.formControl.label}: ${this.controlValue}`);
+      },
+      changeInput() {
+        this.activeHint = [];
+        this.activeUser = '';
+
+        if (this.controlValue.length >= this.formControl.count || 5) {
+          (async () => {
+            try {
+              let response = await fetch(
+                `${this.formControl.url}?s=${this.controlValue}`,
+                {
+                  headers: {
+                    Authentication: 'secret',
+                  },
+                }
+              );
+              let result = await response.json();
+
+              //change active hint array
+              this.activeHint = result.data.map((elem) => null);
+
+              //store.commit( 'changeUsers', result );
+              this.users = result.data;
+            } catch (err) {
+              throw err;
+            }
+          })();
+        } else {
+          this.users = [];
+        }
+      },
+      upArrow() {
+        let activeIndex = this.activeHint.indexOf(true);
+        let arr = this.activeHint.map((elem) => null);
+        if (activeIndex >= 0) {
+          this.activeHint[activeIndex] = null;
+        }
+        if (--activeIndex < 0) {
+          activeIndex = this.activeHint.length - 1;
+        }
+        arr[activeIndex] = true;
+        //lightlight hint
+        this.activeHint = arr;
+        //set active user
+        this.activeUser =
+          this.users.find((user) => user === this.controlValue) || '';
+      },
+      downArrow() {
+        let activeIndex = this.activeHint.indexOf(true);
+        let arr = this.activeHint.map((elem) => null);
+        if (activeIndex >= 0) {
+          this.activeHint[activeIndex] = null;
+        }
+        if (++activeIndex > this.activeHint.length - 1) {
+          activeIndex = 0;
+        }
+        arr[activeIndex] = true;
+        //lightlight hint
+        this.activeHint = arr;
+        //set active user
+        this.activeUser =
+          this.users.find((user) => user === this.controlValue) || '';
+      },
+      focusInput() {
+        this.compare = this.controlValue;
+      },
+      blurInput(e) {
+        if (e.target.value !== '') {
+          this.isActive = true;
+        } else {
+          this.isActive = false;
+        }
+        setTimeout(() => {
+          this.users = [];
+        }, 200);
+
+        setTimeout(() => {
+          this.validate();
+        }, 100);
+
+        if (this.controlValue !== this.compare) {
+          this.$emit('autosave');
+          bitrixLogs(6, `${this.formControl.label}: ${this.controlValue}`);
+        }
+      },
+      clickHint(e) {
+        this.activeUser = e.target.textContent || '';
+        this.controlValue = this.activeUser || '';
+        this.users = [];
+
+        this.validate();
+      },
+      enterInput() {
+        //check if there is an active hint
+        let activeIndex = this.activeHint.indexOf(true);
+        if (activeIndex >= 0) {
+          this.activeUser = this.users[activeIndex] || '';
+        } else {
+          //if not
+          this.activeUser =
+            this.users.find((user) => user.search(this.controlValue) >= 0) ||
+            '';
+        }
+        this.controlValue = this.activeUser || '';
+        this.users = [];
+      },
+      clearInput() {
+        this.controlValue = '';
+        this.activeHint = [];
+        this.activeUser = '';
+        this.isActive = false;
+      },
+      validate() {
+        if (
+          this.formControl.pattern &&
+          this.controlValue !== '' &&
+          !new RegExp(this.formControl.pattern, 'ig').test(this.controlValue)
+        ) {
+          this.isInvalid = true;
+        } else {
+          if (this.formControl.required && !this.activeUser) {
+            //else if there is no id, then send request
+            (async () => {
+              try {
+                let response = await fetch(
+                  `${this.formControl.url}?s=${this.controlValue}`,
+                  {
+                    headers: {
+                      Authentication: 'secret',
+                    },
+                  }
+                );
+                let result = await response.json();
+
+                if (
+                  typeof result === 'object' &&
+                  result.status === 'success' &&
+                  result.data.length
+                ) {
+                  this.isInvalid = false;
+                  this.activeUser = result.data[0];
                 } else {
                   this.isInvalid = true;
                 }
