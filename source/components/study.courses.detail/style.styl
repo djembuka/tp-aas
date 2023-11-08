@@ -267,3 +267,61 @@
           width auto
           margin-bottom 5px
 
+.b-appeal-detail
+
+  &__data
+    background-color $light-gray
+    border-radius 10px
+    padding 30px
+
+    h3:first-of-type
+      margin-top 0
+      margin-bottom 1.25rem
+
+      b
+        margin-right 1rem
+
+      span
+        font-size $16px
+        font-weight $normal
+
+    &-item
+      margin-bottom 10px
+      display flex
+      align-items center
+      flex-wrap wrap
+
+      strong,
+      h4
+        display block
+        width 100%
+
+      span:first-of-type
+        max-width calc( 100% - 16px - 16px )
+
+      .b-copy-icon
+        margin-top 2px
+
+      &:hover
+
+        .b-copy-icon
+          opacity 1
+
+  &__file-card
+    background-color #fff
+    padding 0 30px 10px
+    border-radius 10px
+    height 100
+
+    &__title
+      min-height 80px
+      line-height 1.2
+      display flex
+      align-items center
+      font-family $roboto
+      font-weight $bold
+      border-bottom 1px solid $line-color
+      padding 5px 0
+      margin-bottom 10px
+
+
