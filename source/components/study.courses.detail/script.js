@@ -4,46 +4,51 @@
   $(function () {
     //check button
     document
-      .querySelector('#scdCheckButton')
-      .addEventListener('click', async (e) => {
-        e.preventDefault();
+      .querySelectorAll('#scdCheckButton, #scdCheckButton2')
+      .forEach((button) => {
+        button.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const b = e.target.getAttribute('data-id')
+            ? e.target
+            : e.target.parentNode;
 
-        let formData = new FormData(),
-          controller = new AbortController(),
-          response,
-          result;
+          let formData = new FormData(),
+            controller = new AbortController(),
+            response,
+            result;
 
-        formData.set('id', e.target.getAttribute('data-id'));
+          formData.set('id', b.getAttribute('data-id'));
 
-        setTimeout(() => {
-          if (!response) {
-            controller.abort();
-          }
-        }, 20000);
-
-        try {
-          response = await fetch(e.target.getAttribute('data-url'), {
-            method: 'POST',
-            body: formData,
-            signal: controller.signal,
-          });
-
-          result = await response.json();
-
-          if (result && typeof result === 'object') {
-            if (result.status === 'success') {
-              if (result.data.check === true) {
-                $('#checkConfirmModal').modal('show');
-              } else {
-                $('#hoursConfirmModal').modal('show');
-              }
-            } else if (result.errors) {
-              console.log(result.errors[0].message);
+          setTimeout(() => {
+            if (!response) {
+              controller.abort();
             }
+          }, 20000);
+
+          try {
+            response = await fetch(b.getAttribute('data-url'), {
+              method: 'POST',
+              body: formData,
+              signal: controller.signal,
+            });
+
+            result = await response.json();
+
+            if (result && typeof result === 'object') {
+              if (result.status === 'success') {
+                if (result.data.check === true) {
+                  $('#checkConfirmModal').modal('show');
+                } else {
+                  $('#hoursConfirmModal').modal('show');
+                }
+              } else if (result.errors) {
+                console.log(result.errors[0].message);
+              }
+            }
+          } catch (err) {
+            throw err;
           }
-        } catch (err) {
-          throw err;
-        }
+        });
       });
 
     //icon copy
