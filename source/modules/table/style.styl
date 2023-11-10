@@ -121,24 +121,63 @@
         padding-left 1.5rem
 
 .table-responsive
-  display: table;
+  display table
+  position relative
 
   @media(max-width 1199px)
-    scrollbar-color: #ccc #fff;
-    scrollbar-width: thin;
+    scrollbar-color: #EA5E21 #F2F2F2;
+    scrollbar-width: thick;
     display: block;
     width: 100%;
     overflow-x: auto; 
     -webkit-overflow-scrolling: touch;
 
     &::-webkit-scrollbar
-      width 4px /* ширина для вертикального скролла */
-      height 4px /* высота для горизонтального скролла */
-      background-color #fff
+      width 16px /* ширина для вертикального скролла */
+      height 16px /* высота для горизонтального скролла */
+      background-color #F2F2F2
 
     &::-webkit-scrollbar-thumb
-      background-color #ccc
-      border-radius 2px
+      background-color #EA5E21
+      border-radius 8px
 
     &::-webkit-scrollbar-thumb:hover
-      background-color #c0c0c0
+      background-color #EA5E21
+
+  &-arrow-left,
+  &-arrow-right
+    position absolute
+    top 50%
+    left -32px
+    width 64px
+    height 64px
+    border-radius 50%
+    background-color #fff
+    box-shadow 0px 3px 6px #00000029
+    margin-top -32px
+    cursor pointer
+    z-index 10
+
+    &:after
+        content ''
+        display block
+        border-right 2px solid #074B84
+        border-top 2px solid #074B84
+        -webkit-transform rotate(-135deg)
+        transform rotate(-135deg)
+        position absolute
+        top 50%
+        left 50%
+        width 12px
+        height 12px
+        margin -6px 0 0 -4px
+        z-index 10
+
+  &-arrow-right
+    left auto
+    right -32px
+    
+    &:after
+        -webkit-transform rotate(45deg)
+        transform rotate(45deg)
+        margin -6px 0 0 -8px
