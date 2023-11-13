@@ -1,11 +1,73 @@
 {
   "status": "success",
   "data": [
-    "51050ЛК310523",
-    "1050ТП020523",
-    "1050/180122",
-    "41050ЛК230123",
-    "31050ЛК140922"
+    {
+      "id": "32210",
+      "value": "21006004116",
+      "title": "\u0421\u0430\u0432\u0435\u043b\u044c\u0435\u0432\u0430 \u0412\u0430\u043b\u0435\u043d\u0442\u0438\u043d\u0430 \u0410\u043d\u0434\u0440\u0435\u0435\u0432\u043d\u0430",
+      "text": "21006004116",
+      "img": "background-image: url(/template/images/nopic.svg);",
+      "type": "auditor"
+    },
+    {
+      "id": "710",
+      "value": "Простая строка",
+      "title": "Простая строка",
+      "some-prop": "any",
+      "autocomplete": [
+        {
+          "property": 1030,
+          "value": "Textarea value"
+        },
+        {
+          "property": 1330,
+          "value": "Text value"
+        },
+        {
+          "property": 103,
+          "value": "Textarea value"
+        },
+        {
+          "property": 133,
+          "value": "Text value"
+        },
+        {
+          "property": 134,
+          "value": "Text value"
+        },
+        {
+          "property": 1350,
+          "value": {
+            "label": "Основное",
+            "code": "Основное"
+          }
+        },
+        {
+          "property": 1111,
+          "checked": false
+        },
+        {
+          "property": 1132,
+          "value": "12345645644"
+        },
+        {
+          "property": 1131,
+          "value": {
+            "ID": "10945",
+            "FIO": "\u0421\u0430\u0432\u0435\u043b\u044c\u0435\u0432\u0430 \u0418\u0440\u0438\u043d\u0430 \u0412\u0430\u043b\u0435\u043d\u0442\u0438\u043d\u043e\u0432\u043d\u0430",
+            "ORNZ": "22006014748",
+            "PHOTO": "background-image: url(/template/images/nopic.svg);",
+            "TYPE": "auditor"
+          }
+        }
+      ]
+    },
+    {
+      "id": "810",
+      "value": "Название в несколько слов, оно может быть очень длинны и занимать более одной строки (межстрочный интервал 1.2)",
+      "title": "<b>Название в несколь</b>ко слов, оно может быть очень длинны и занимать более одной строки (межстрочный интервал 1.2)",
+      "some-other-prop": "any"
+    }
   ],
   "errors": {}
 }
