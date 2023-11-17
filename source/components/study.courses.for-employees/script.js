@@ -556,7 +556,7 @@ window.addEventListener('load', () => {
     },
     template: `<div id="inbox-table" class="b-registry-report">
       <div v-if="$store.state.table.html.rows">
-        <table class="table table-responsive">
+        <table class="table">
           <thead>
             <tr>
               <th v-for="col in tableHtml.cols" :class="col.sortType" @click="clickTh(col)">{{col.title}}</th>
@@ -649,15 +649,15 @@ window.addEventListener('load', () => {
         hoverSpaceIntervalId: undefined,
         thumbClickedFlag: false,
         thumbClickedCoords: 0,
-        resizeIntervalId: undefined,
+        resizeTimeoutId: undefined,
       };
     },
     template: `
       <div class="twpx-sticky-scroll">
-        <div class="twpx-sticky-scroll-space-right" ref="spaceRight" @mouseover="spaceAndArrowMouseover('right')" @mouseout="spaceAndArrowMouseout" v-if="visible"></div>
-        <div class="twpx-sticky-scroll-space-left" ref="spaceLeft" @mouseover="spaceAndArrowMouseover('left')" @mouseout="spaceAndArrowMouseout" v-if="visible"></div>
+        <div class="twpx-sticky-scroll-space-right" ref="spaceRight" @mouseover="spaceAndArrowMouseover('right')" @mouseout="spaceAndArrowMouseout" v-show="visible"></div>
+        <div class="twpx-sticky-scroll-space-left" ref="spaceLeft" @mouseover="spaceAndArrowMouseover('left')" @mouseout="spaceAndArrowMouseout" v-show="visible"></div>
 
-        <div class="twpx-sticky-scroll-arrows" v-if="visible">
+        <div class="twpx-sticky-scroll-arrows" v-show="visible">
           <div class="twpx-sticky-scroll-arrow-right" ref="arrowRight" @mouseover="spaceAndArrowMouseover('right')" @mouseout="spaceAndArrowMouseout"></div>
           <div class="twpx-sticky-scroll-arrow-left" ref="arrowLeft" @mouseover="spaceAndArrowMouseover('left')" @mouseout="spaceAndArrowMouseout"></div>
         </div>
@@ -668,7 +668,7 @@ window.addEventListener('load', () => {
           </div>
         </div>
 
-        <div class="twpx-sticky-scroll-scrollbar" ref="scrollbar" @click="scrollbarClick($event)" v-if="visible">
+        <div class="twpx-sticky-scroll-scrollbar" ref="scrollbar" @click="scrollbarClick($event)" v-show="visible">
           <div class="twpx-sticky-scroll-scrollbar-thumb" ref="thumb" @mousedown="thumbMousedown($event)" @click="thumbClick($event)"></div>
         </div>
       </div>
@@ -789,10 +789,10 @@ window.addEventListener('load', () => {
       setContentWidth() {
         this.$refs.content.style.width = 'auto';
 
-        if (this.resizeIntervalId) {
-          clearInterval(this.resizeIntervalId);
+        if (this.resizeTimeoutId) {
+          clearInterval(this.resizeTimeoutId);
         }
-        this.resizeIntervalId = setTimeout(() => {
+        this.resizeTimeoutId = setTimeout(() => {
           this.$refs.content.style.width = `${
             this.$refs.content.querySelector('table.table').clientWidth
           }px`;
