@@ -142,11 +142,17 @@ window.addEventListener('load', () => {
 
   const store = new Vuex.Store({
     state() {
-      return window.checkDetailChangeStore;
+      return {
+        ...window.checkDetailChangeStore,
+        renderingTable: null,
+      };
     },
     mutations: {
       changeTableHtml(state, payload) {
         Vue.set(state.table, 'html', payload);
+      },
+      changeRenderingTable(state, payload) {
+        state.renderingTable = payload;
       },
       changeControlValue(state, payload) {
         //payload = {controlCode, controlValue}
@@ -227,6 +233,7 @@ window.addEventListener('load', () => {
     actions: {
       renderTable({ state, commit, getters }, href) {
         (async () => {
+          commit('changeRenderingTable', true);
           const response = await fetch(
             href
               ? `${state.paths.getTable}?${href.split('?')[1]}`
@@ -244,6 +251,7 @@ window.addEventListener('load', () => {
             let result = await response.json();
             //table data
             commit('changeTableHtml', result);
+            commit('changeRenderingTable', false);
             //scroll
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }
@@ -520,6 +528,7 @@ window.addEventListener('load', () => {
         <hr>
         <div v-html="tableHtml.pagination" @click="clickPagination($event)"></div>
       </div>
+      <div v-else-if="$store.state.renderingTable">Загрузка данных.</div>
       <div v-else>Нет данных.</div>
     </div>`,
     computed: {

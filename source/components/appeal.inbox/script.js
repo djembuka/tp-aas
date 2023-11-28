@@ -5,7 +5,10 @@ window.addEventListener('load', () => {
 
   const store = new Vuex.Store({
     state() {
-      return window.appealIndexStore;
+      return {
+        ...window.appealIndexStore,
+        renderingTable: null,
+      };
     },
     mutations: {
       setNew(state, payload) {
@@ -13,6 +16,9 @@ window.addEventListener('load', () => {
       },
       changeTableHtml(state, payload) {
         Vue.set(state.table, 'html', payload);
+      },
+      changeRenderingTable(state, payload) {
+        state.renderingTable = payload;
       },
       changeControlValue(state, payload) {
         //payload = {controlCode, controlValue}
@@ -90,6 +96,7 @@ window.addEventListener('load', () => {
     },
     actions: {
       renderTable({ state, commit, getters }) {
+        commit('changeRenderingTable', true);
         (async () => {
           const response = await fetch(
             `${state.paths.getTable}${getQuery(getters.requestObj)}`,
@@ -106,6 +113,8 @@ window.addEventListener('load', () => {
             let result = await response.json();
             //table data
             commit('changeTableHtml', result);
+
+            commit('changeRenderingTable', false);
             //scroll
             $.scrollTo(
               document
@@ -500,6 +509,7 @@ window.addEventListener('load', () => {
         <hr>
         <div v-html="tableHtml.pagination" @click="clickPagination($event)"></div>
       </div>
+      <div v-else-if="$store.state.renderingTable">Загрузка данных.</div>
       <div v-else>Нет данных.</div>
     </div>`,
     computed: {

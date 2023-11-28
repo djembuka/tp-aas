@@ -6,6 +6,7 @@ window.addEventListener('load', () => {
   const store = new Vuex.Store({
     state: {
       tableHtml: '',
+      renderingTable: null,
       id: undefined,
       type: '',
       status: '',
@@ -25,6 +26,9 @@ window.addEventListener('load', () => {
       },
       changeSelectedOption(state, payload) {
         state[`selectedOption${payload.type}`] = { label: payload.label };
+      },
+      changeRenderingTable(state, payload) {
+        state.renderingTable = payload;
       },
     },
   });
@@ -361,6 +365,7 @@ window.addEventListener('load', () => {
         <hr>
         <div v-html="tableHtml.pagination" @click="clickPagination($event)"></div>
       </div>
+      <div v-else-if="$store.state.renderingTable">Загрузка данных.</div>
       <div v-else>Нет данных.</div>
     </div>`,
     computed: {
@@ -455,6 +460,7 @@ window.addEventListener('load', () => {
             requestObj.PAGEN_1 = this.$store.state.page;
           }
 
+          this.$store.commit('changeRenderingTable', true);
           const response = await fetch(
             `${window.myScriptURL.getTable.split('?')[0]}${getQuery(
               requestObj,
@@ -476,6 +482,8 @@ window.addEventListener('load', () => {
               prop: 'tableHtml',
               value: result,
             });
+
+            this.$store.commit('changeRenderingTable', false);
             //scroll
             window.scrollTo({
               top:
