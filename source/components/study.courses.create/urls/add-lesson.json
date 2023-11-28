@@ -38,7 +38,7 @@
           "invalid": false
         },
         {
-          "name": "LESSON_TYPE",
+          "name": "TASK_TYPE",
           "label": "Тип занятия",
           "value": [
             {
