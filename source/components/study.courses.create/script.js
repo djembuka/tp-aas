@@ -133,7 +133,6 @@ window.onload = function () {
         b3.splice(i3, 1);
       },
       addLesson(state, { stepIndex, blockIndex, lesson }) {
-        console.log(lesson);
         let l = state.steps[stepIndex].blocks[blockIndex].lessons;
         Vue.set(l, l.length, lesson);
       },
