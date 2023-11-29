@@ -315,13 +315,11 @@ window.onload = function () {
         }, 20000);
 
         try {
-          response = await fetch(
-            url /*, {
+          response = await fetch(url, {
             method: 'POST',
             body: formData,
             signal: controller.signal,
-          }*/
-          );
+          });
           result = await response.json();
           if (result.status === 'success') {
             success(result);
@@ -340,6 +338,7 @@ window.onload = function () {
       submitStep({ dispatch, commit, getters, state }, { button, stepIndex }) {
         let step = state.steps[getters.activeStepIndex];
 
+        //validate
         if (step.blocks) {
           step.blocks.forEach((block, blockIndex) => {
             if (block.lessons) {
@@ -386,6 +385,7 @@ window.onload = function () {
           return;
         }
 
+        //load
         commit('changeProp', { prop: 'loading', value: true });
 
         dispatch('fetchAction', {
@@ -438,6 +438,26 @@ window.onload = function () {
                   break;
               }
             } else if (stepIndex !== undefined) {
+              if (stepIndex === 1) {
+                if (result.data.courseId) {
+                  dispatch('createCourse', {
+                    data: result.data,
+                  });
+                }
+
+                //set URL
+                if (result.data.courseId) {
+                  let queryObject = parseQuery(window.location.search);
+                  queryObject.courseId = result.data.courseId;
+                  history.replaceState({}, '', getQuery(queryObject));
+                }
+              } else if (stepIndex === 2) {
+                if (result.data.discipline) {
+                  commit('updateLessonSubject', {
+                    data: result.data,
+                  });
+                }
+              }
               commit('setStepActive', stepIndex);
               commit('setStepVisited', stepIndex);
             }
@@ -1409,13 +1429,11 @@ window.onload = function () {
         }, 20000);
 
         try {
-          response = await fetch(
-            this.$store.state.editURL /*, {
+          response = await fetch(this.$store.state.editURL, {
             method: 'POST',
             body: formData,
             signal: controller.signal,
-          }*/
-          );
+          });
 
           result = await response.json();
 
