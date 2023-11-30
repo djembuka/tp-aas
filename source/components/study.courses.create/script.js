@@ -315,11 +315,13 @@ window.onload = function () {
         }, 20000);
 
         try {
-          response = await fetch(url, {
+          response = await fetch(
+            url /*, {
             method: 'POST',
             body: formData,
             signal: controller.signal,
-          });
+          }*/
+          );
           result = await response.json();
           if (result.status === 'success') {
             success(result);
@@ -393,7 +395,10 @@ window.onload = function () {
           data: [
             {
               name: 'stepId',
-              value: step.id,
+              value:
+                stepIndex !== undefined
+                  ? state.steps[stepIndex].id
+                  : state.steps[getters.activeStepIndex + 1].id,
             },
             {
               name: 'fields',
@@ -1429,11 +1434,13 @@ window.onload = function () {
         }, 20000);
 
         try {
-          response = await fetch(this.$store.state.editURL, {
+          response = await fetch(
+            this.$store.state.editURL /*, {
             method: 'POST',
             body: formData,
             signal: controller.signal,
-          });
+          }*/
+          );
 
           result = await response.json();
 
