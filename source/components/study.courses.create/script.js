@@ -402,6 +402,8 @@ window.onload = function () {
               value:
                 stepIndex !== undefined
                   ? state.steps[stepIndex].id
+                  : button && button.type === 'save'
+                  ? null
                   : state.steps[getters.activeStepIndex + 1].id,
             },
             {
