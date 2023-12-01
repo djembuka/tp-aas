@@ -394,7 +394,7 @@ window.onload = function () {
           url: state.submitStepURL,
           data: [
             {
-              name: 'stepFrom',
+              name: 'stepId',
               value: step.id,
             },
             {
