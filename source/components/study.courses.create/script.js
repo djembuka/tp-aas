@@ -315,13 +315,11 @@ window.onload = function () {
         }, 20000);
 
         try {
-          response = await fetch(
-            url /*, {
+          response = await fetch(url, {
             method: 'POST',
             body: formData,
             signal: controller.signal,
-          }*/
-          );
+          });
           result = await response.json();
           if (result.status === 'success') {
             success(result);
@@ -659,7 +657,7 @@ window.onload = function () {
     },
     template: `
       <div class="b-float-label" :class="{invalid: formControl.invalid}">
-        <input :id="id" type="text" :name="name" autocomplete="off" required="required" @blur="blurControl()" @keyup="inputControl()" v-model="controlValue" ref="input">
+        <input :id="id" type="text" :name="name" autocomplete="off" required="required" @blur="blurControl()" @keyup="inputControl($event)" v-model="controlValue" ref="input">
         <label :for="id" :class="{active: isActive}">{{formControl.label}}{{ formControl.required ? ' *' : ''}}</label>
       </div>
     `,
@@ -686,9 +684,12 @@ window.onload = function () {
           value: val,
         });
       },
-      inputControl() {
+      inputControl(event) {
         if (!!this.controlValue) {
           this.setInvalid(false);
+        }
+        if (this.time) {
+          this.onTimeInputChange(event);
         }
         this.setValue();
       },
@@ -707,13 +708,51 @@ window.onload = function () {
           time: this.time,
         });
       },
-    },
-    mounted() {
-      if (this.time) {
-        IMask(this.$refs.input, {
-          mask: '00:00',
-        });
-      }
+      isTimeValid(input) {
+        let timePattern = /\d/;
+
+        switch (input.length) {
+          case 1:
+            timePattern = /^(0|1|2)$/;
+            break;
+          case 2:
+            timePattern = /^([0-1]?[0-9]|2[0-3])$/;
+            break;
+          case 3:
+            timePattern = /^([0-1]?[0-9]|2[0-3]):$/;
+            break;
+          case 4:
+            timePattern = /^([0-1]?[0-9]|2[0-3]):([0-5])$/;
+            break;
+          default:
+            timePattern = /^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/;
+            break;
+        }
+        return timePattern.test(input);
+      },
+      applyMask(input) {
+        var out = input.replace(/\D/g, '');
+        if (out.length >= 2) {
+          out = out.substring(0, 2) + ':' + out.substring(2, 4);
+        }
+        return out;
+      },
+      onTimeInputChange(event) {
+        const control = event.target;
+        let input = control.value;
+        if (event.which !== 8) {
+          input = this.applyMask(input);
+        }
+
+        if (!this.isTimeValid(input)) {
+          control.value = input.substring(
+            0,
+            input.length - (input.length === 3 ? 2 : 1)
+          );
+        } else {
+          control.value = input;
+        }
+      },
     },
   });
 
@@ -1440,13 +1479,11 @@ window.onload = function () {
         }, 20000);
 
         try {
-          response = await fetch(
-            this.$store.state.editURL /*, {
+          response = await fetch(this.$store.state.editURL, {
             method: 'POST',
             body: formData,
             signal: controller.signal,
-          }*/
-          );
+          });
 
           result = await response.json();
 
