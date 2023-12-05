@@ -732,6 +732,9 @@ window.onload = function () {
       },
       applyMask(input) {
         var out = input.replace(/\D/g, '');
+        if (out.length === 1 && out.match(/^[3-9]$/)) {
+          out = `0${out}`;
+        }
         if (out.length >= 2) {
           out = out.substring(0, 2) + ':' + out.substring(2, 4);
         }
