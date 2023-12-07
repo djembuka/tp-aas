@@ -30,6 +30,7 @@ script( src="/template/js/swiper.min.js" )
           a.swiper-slide( class=tab === 'employees' ? 'active' : tab === 'employee' ? 'active in' : '' href="/pages/check-detail/employees.html" data-tab="tab6" ) Сотрудники
           a.swiper-slide( class=tab === 'changes' ? 'active' : '' href="/pages/check-detail/changes.html" data-tab="tab4" ) Изменения в реестре
           a.swiper-slide( class=tab === 'appeals' ? 'active' : '' href="/pages/check-detail/appeals.html" data-tab="tab5" ) Жалобы
+          a.swiper-slide( class=tab === 'fileload' ? 'active' : '' href="/pages/check-detail/fileload.html" data-tab="tab5" ) Загрузка документов
 
       .b-check-detail__decor
 
@@ -51,5 +52,7 @@ script( src="/template/js/swiper.min.js" )
         include changes
       else if tab === 'appeals'
         include appeals
+      else if tab === 'fileload'
+        include fileload
 
 // end /components/check.detail/

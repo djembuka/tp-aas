@@ -1,0 +1,28 @@
+// start /components/check.detail.fileload/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'check.detail.fileload'
+else
+  - var componentsArray = [ 'check.detail.fileload' ]
+
+script( src="/components/check.detail.fileload/bx.ajax.runAction.js" )
+script( src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+  
+.b-check-detail-fileload.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    #checkDetailFileload
+  
+// end /components/check.detail.fileload/

@@ -1,0 +1,221 @@
+/*File control*/
+.b-float-label--file label span {
+  color: #ea4420;
+}
+
+/*File*/
+.b-float-label--file {
+  position: relative;
+  margin-bottom: 0;
+}
+.b-float-label--file.progressing,
+.b-float-label--file.deleting {
+  pointer-events: none;
+}
+.b-float-label--file svg {
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  z-index: 10;
+}
+.b-float-label--file.progressing svg,
+.b-float-label--file.deleting svg {
+  display: none;
+}
+.b-float-label--file.deleting .b-float-label__progressbar {
+  width: 100% !important;
+}
+.b-float-label--file.deleting .b-float-label__progressbar span {
+  display: none;
+}
+.b-float-label--file input {
+  position absolute
+  top 0
+  left 0
+  opacity 0
+  width 1px
+  height 1px
+  overflow hidden
+  z-index -1
+}
+.b-float-label--file label {
+  display: block;
+  background-color: #f0f5fc;
+  background-size: 12px;
+  font-size: 14px;
+  height: 47px;
+  line-height: 47px;
+  padding: 0 20px 0 50px;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  margin-bottom: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-transition: background-color .3s ease, color .3s ease;
+  transition: background-color .3s ease, color .3s ease;
+}
+.b-float-label--file.clearable label {
+  padding-right: 40px;
+}
+.b-float-label--file label a {
+  pointer-events: none;
+  -webkit-transition: none;
+  transition: none;
+}
+.b-float-label--file .a,
+.b-float-label--file .b,
+.b-float-label--file .c,
+.b-float-label--file .d {
+  -webkit-transition: fill .3s ease;
+  transition: fill .3s ease;
+}
+.b-float-label--file .a {
+  fill: #c3cfdd;
+}
+.b-float-label--file .b {
+  fill: #a3b2c1;
+}
+.b-float-label--file .c {
+  fill: #d3e0ea;
+}
+.b-float-label--file .d {
+  fill: #fff;
+}
+.b-float-label--file:hover .a {
+  fill: #4375d8;
+}
+.b-float-label--file:hover .b {
+  fill: #1c56c7;
+}
+.b-float-label--file:hover .c {
+  fill: #74a2ff;
+}
+.b-float-label--file:hover .d {
+  fill: #fff;
+}
+.b-float-label--file:active .a,
+.b-float-label--file.dragover .a,
+.b-float-label--file.filled .a {
+  fill: #fff;
+}
+.b-float-label--file:active .b,
+.b-float-label--file.dragover .b,
+.b-float-label--file.filled .b {
+  fill: #a7bde8;
+}
+.b-float-label--file:active .c,
+.b-float-label--file.dragover .c,
+.b-float-label--file.filled .c {
+  fill: #d0e0ff;
+}
+.b-float-label--file:active .d,
+.b-float-label--file.dragover .d,
+.b-float-label--file.filled .d {
+  fill: #4375d8;
+}
+.b-float-label--file:active label,
+.b-float-label--file.dragover label,
+.b-float-label--file.filled label {
+  background-color: #4375D8;
+  color: #fff;
+}
+.b-float-label--file:active label a,
+.b-float-label--file.dragover label a,
+.b-float-label--file.filled label a {
+  color: #fff;
+}
+/*invalid*/
+.b-float-label--file.invalid .a,
+.b-float-label--file:active.invalid .a {
+  fill: #ff8080;
+}
+.b-float-label--file.invalid .b,
+.b-float-label--file:active.invalid .b {
+  fill: #db6a6a;
+}
+.b-float-label--file.invalid .c,
+.b-float-label--file:active.invalid .c {
+  fill: #f9bbbb;
+}
+.b-float-label--file.invalid .d,
+.b-float-label--file:active.invalid .d {
+  fill: #fff;
+}
+/*.b-float-label--file.invalid .a,
+.b-float-label--file.invalid .b,
+.b-float-label--file:active.invalid .a,
+.b-float-label--file:active.invalid .b {
+  stroke: #ff0000;
+}*/
+.b-float-label--file.invalid label,
+.b-float-label--file:active.invalid label {
+  background-color: #ffeaea;
+  color: #ff0000;
+}
+.b-float-label--file.invalid label a,
+.b-float-label--file:active.invalid label a {
+  color: #ff0000;
+}
+
+.b-float-label-file__label {
+  position absolute
+  top -23px
+  left 15px
+  font-size 0.69rem
+  color #2b2b2b
+  z-index 10
+}
+.b-float-label-file__clear
+  position absolute
+  top calc(50% - 8px)
+  right 30px
+  width 16px
+  height 16px
+  cursor pointer
+  transition( opacity .5s ease )
+  z-index 10
+
+  &:hover
+    opacity .7
+    
+.b-float-label-file__clear:before {
+  content: '';
+  display: block;
+  height 20px
+  border-left 2px solid #fff
+  transform( rotate(45deg))
+  position absolute
+  top -2px
+  left 7px
+  z-index 10
+}
+.b-float-label-file__clear:after {
+  content: '';
+  display: block;
+  height 20px
+  border-left 2px solid #fff
+  transform( rotate(135deg))
+  position absolute
+  top -2px
+  left 7px
+  z-index 10
+}
+
+.b-float-label-file__clear.btn--load-circle {
+  position: absolute;
+}
+.b-float-label-file__clear.btn--load-circle:after {
+  width: 20px;
+  height: 20px;
+  top: calc(50% - 10px);
+  right: calc(50% - 10px);
+  left: auto;
+}
+.b-float-label-file__clear.btn--load-circle:before {
+  display: none;
+}
+
+.btn--load-circle label,
+.btn--load-circle label a
+	color transparent !important

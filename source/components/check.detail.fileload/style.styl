@@ -1,0 +1,51 @@
+@import '../../styl/component-include.styl'
+
+.b-check-detail-fileload
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-check-detail-fileload
+
+    &__block
+        background-color #FAFBFC
+        border-radius 10px
+        padding 32px
+        position relative
+
+    &__heading
+        font-family $roboto
+        font-weight $bold
+        font-size $18px
+        margin 0 40px 10px 0
+
+    &__text
+        font-size $14px
+        max-width 700px
+
+    &__history-icon
+        position absolute
+        top 32px
+        right 32px
+        width 24px
+        height 24px
+        cursor pointer
+        z-index 10
+
+@import './style/collapse-vue-component.styl'
+@import './style/file-vue-component.styl'
+@import './style/transition.styl'
