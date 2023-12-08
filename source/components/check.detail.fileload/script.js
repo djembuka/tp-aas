@@ -97,23 +97,6 @@ window.addEventListener('load', () => {
             );
         }
       },
-      async getHistory({ commit }, { blockId }) {
-        if (window.BX) {
-          return window.BX.ajax
-            .runAction(`twinpx:aas.api.methods.saveBlock`, 'formData')
-            .then(
-              (r) => {
-                if (r.status === 'success' && r.data) {
-                  commit('setBlockStatus', { blockId, status: r.data.status });
-                }
-                return { status: r.status };
-              },
-              (error) => {
-                return { error };
-              }
-            );
-        }
-      },
     },
   });
 

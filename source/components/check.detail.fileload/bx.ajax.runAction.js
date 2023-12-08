@@ -103,6 +103,19 @@ window.BX = {
               status: 'success',
               data: {
                 status: 'moderating',
+                vkkrId: 'id12',
+                blockId: 'id123',
+                history: [
+                  {
+                    id: 'is12312',
+                    date: '15 января 2020',
+                    author_id: 'id1233',
+                    author_name: 'Азарянц Ашот Александрович',
+                    type: 'uploaded_files',
+                    items: [],
+                    status,
+                  },
+                ],
               },
               errors: [],
             });
