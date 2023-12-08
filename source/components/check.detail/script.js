@@ -136,7 +136,14 @@ window.addEventListener('load', () => {
   });
 
   //changes
-  if (!window.Vue || !window.Vuex) return;
+  if (
+    !window.Vue ||
+    !window.Vuex ||
+    !window.VueSelect ||
+    !window.DatePicker ||
+    !window.checkDetailChangeStore
+  )
+    return;
 
   Vue.use(Vuex);
 

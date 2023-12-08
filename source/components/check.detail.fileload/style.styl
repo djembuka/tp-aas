@@ -46,6 +46,18 @@
         cursor pointer
         z-index 10
 
+.b-form-control-cols
+    display grid
+    grid-template-columns calc(50% - 15px) calc(50% - 15px)
+    gap 30px
+
+    &__desc
+        font-size $12px
+        color #9B9B9B
+        display flex
+        align-items center
+
 @import './style/collapse-vue-component.styl'
 @import './style/file-vue-component.styl'
+@import './style/multy-control-wrapper.styl'
 @import './style/transition.styl'
