@@ -15,6 +15,9 @@ window.addEventListener('load', () => {
     }
   }
 
+  const vkkrId = 5556;
+
+  if (!vkkrId) return;
   if (!window.Vue && !window.Vuex) return;
 
   let velocity = window.Velocity || jQuery.Velocity;
@@ -57,20 +60,62 @@ window.addEventListener('load', () => {
         const block = state.data.blocks.find((b) => b.id === blockId);
         block.status = status;
       },
+      //collections
+      addToMultipleCollection(_, { collection, collectIndex }) {
+        if (!collection || !collection.multiple) return;
+
+        if (!collection.value) {
+          collection.value = [];
+          collectIndex = 0;
+        }
+
+        const filenamesArray = collection.files.map((f) => {
+          return { filename: f.filename };
+        });
+
+        Vue.set(collection.value, collectIndex, {
+          id: parseInt(Math.random() * 100000, 10),
+          files: filenamesArray,
+        });
+      },
+      changeControld(_, { collection, collectIndex }) {
+        if (collection.multiple && collectIndex !== undefined) {
+          if (!collection.value) {
+            collection.value = [];
+            collectIndex = 0;
+          }
+          if (!collection.value[controlIndex]) {
+            collection.value.push({
+              id: parseInt(Math.random() * 100000, 10),
+            });
+          }
+          Vue.set(control.value[controlIndex], 'val', value);
+          Vue.set(control.filename, controlIndex, value);
+        }
+      },
     },
     actions: {
       async loadState({ commit }) {
         if (window.BX) {
-          window.BX.ajax.runAction(`twinpx:aas.api.methods.blocks`).then(
-            (r) => {
-              if (r.status === 'success' && r.data) {
-                commit('setState', r.data);
+          window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'blocks', {
+              mode: 'class',
+              data: {
+                vkkr_id: vkkrId,
+                sessid: BX.bitrix_sessid(),
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                if (r.status === 'success' && r.data) {
+                  commit('setState', r.data);
+                }
+              },
+              (error) => {
+                rej(error);
               }
-            },
-            (error) => {
-              rej(error);
-            }
-          );
+            );
         }
       },
       setControlValue({ commit }, { control, controlIndex, value }) {
@@ -80,10 +125,16 @@ window.addEventListener('load', () => {
           value,
         });
       },
+      setCollectionValue({ commit }, { collection, collectIndex }) {
+        commit('addToMultipleCollection', {
+          collection,
+          collectIndex,
+        });
+      },
       async saveBlock({ commit }, { blockId }) {
         if (window.BX) {
           return window.BX.ajax
-            .runAction(`twinpx:aas.api.methods.saveBlock`, 'formData')
+            .runComponentAction(`twinpx:aas.api.methods.saveBlock`, 'formData')
             .then(
               (r) => {
                 if (r.status === 'success' && r.data) {
@@ -130,9 +181,13 @@ window.addEventListener('load', () => {
                     </g>
                 </svg>
               </div>
-              <div class="b-check-detail-fileload__heading" v-if="block.heading" v-html="block.heading"></div>
-              <div class="b-check-detail-fileload__text" v-if="block.text" v-html="block.text"></div>
-              <fileload-form :controls="block.items" :blockId="block.id"></fileload-form>
+
+              <div v-if="block.permissions.write">
+                <fileload-form :collections="block.items" :block="block"></fileload-form>
+              </div>
+              <div v-else-if="block.permissions.moderation">
+                <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+              </div>
             </div>
           </div>
         </transition>
@@ -140,19 +195,12 @@ window.addEventListener('load', () => {
     `,
     computed: {
       status() {
-        let result = '';
-        switch (this.block.status) {
-          case 'empty':
-            result = `<div class='label-red'><span>Не принят</span></div>`;
-            break;
-          case 'filled':
-            result = `<div class='label-green'><span>Принят</span></div>`;
-            break;
-          case 'moderating':
-            result = `<div class='label-blue'><span>На проверке</span></div>`;
-            break;
-        }
-        return result;
+        if (!this.block.status) return;
+
+        const status = this.$store.state.data.statuses.find(
+          (s) => s.id === this.block.status
+        );
+        return `<div class="label-default"><span style="color:${status['text-color']}; background-color:${status['bg-color']}">${status.name}</span></div>`;
       },
     },
     methods: {
@@ -178,6 +226,182 @@ window.addEventListener('load', () => {
         //slide body
         this.open = !this.open;
       },
+    },
+  });
+
+  Vue.component('filesCollection', {
+    data() {
+      return {};
+    },
+    props: ['block', 'collection', 'collectIndex'],
+    template: `
+      <div class="b-files-collection">
+        <div class="b-files-collection__name">{{ collection.name }}</div>
+        <div class="b-files-collection__description" v-html="collection.description"></div>
+        <div class="b-files-collection__hint" v-html="collection.hint"></div>
+        
+        <hr>
+
+        <div v-for="formControl in collection.files" :key="formControl.id">
+            <hr>
+
+            <form-control-multy v-if="formControl.multiple" :formControl="formControl"></form-control-multy>
+
+            <form-control-cols v-else :formControl="formControl"></form-control-cols>
+        </div>
+      </div>
+    `,
+  });
+
+  Vue.component('filesCollectionInfo', {
+    data() {
+      return {};
+    },
+    props: ['block', 'collection', 'last'],
+    template: `
+      <div class="b-files-collection-info">
+        <div class="b-files-collection__name">{{ collection.name }}</div>
+        <div class="b-files-collection__description" v-html="collection.description"></div>
+        <div class="b-files-collection__hint" v-html="collection.hint"></div>
+
+        <hr>
+
+        <div v-if="block.state==='moderating'">
+
+          <file-info v-for="file in collection.files" :key="file.id" :block="block" :file="file"></file-info>
+
+          <hr v-if="!last">
+
+        </div>
+        <div v-else-if="block.state==='empty'">
+
+          <file-info-empty></file-info-empty>
+
+        </div>
+      </div>
+    `,
+  });
+
+  Vue.component('fileInfo', {
+    data() {
+      return {
+        ext: this.file.filename.split('.').reverse()[0],
+      };
+    },
+    props: ['block', 'file'],
+    template: `
+      <div class="b-docs-block__item" :href="file.filelink">
+        <div class="b-docs-block__body">
+          <a class="b-docs-block__icon" :href="file.filelink" :style="icon"></a>
+          <span class="b-docs-block__text">
+            <a :href="file.filelink">{{ name }}</a>
+            <span class="b-docs-block__data">
+              <span class="text-muted">{{ file.filesize }} .{{ ext }}</span>
+              <span class="text-muted">Дата публикации: {{ block.date_added }}</span>
+              <span class="text-muted">Автор: <a :href="block.author_id">{{ block.author_name }}</a></span>
+            </span>
+          </span>
+        </div>
+        <div v-if="block.status" v-html="status"></div>
+      </div>
+    `,
+    computed: {
+      name() {
+        const index = this.file.filename.lastIndexOf('.');
+        return this.file.filename.substring(0, index);
+      },
+      icon() {
+        return `background-image: url( '/template/images/${this.ext}.svg' );`;
+      },
+      status() {
+        if (!this.block.status) return;
+
+        const status = this.$store.state.data.statuses.find(
+          (s) => s.id === this.block.status
+        );
+        return `<div class="label-default"><span style="color:${status['text-color']}; background-color:${status['bg-color']}">${status.name}</span></div>`;
+      },
+    },
+    methods: {},
+  });
+
+  Vue.component('fileInfoEmpty', {
+    template: `
+      <div class="b-docs-block__item b-docs-block__item--empty">
+        <div class="b-docs-block__body">
+          <span class="b-docs-block__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
+              <g transform="translate(-364.5 -186.5)">
+                <path d="M11.2,32h9.6c8,0,11.2-3.2,11.2-11.2V11.2C32,3.2,28.8,0,20.8,0H11.2C3.2,0,0,3.2,0,11.2v9.6C0,28.8,3.2,32,11.2,32Z" transform="translate(366 188)" fill="none" stroke="#c6c6c6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+                <path d="M0,.01H6.018A3.725,3.725,0,0,1,8.883,1.12l1.425,1.79a3.756,3.756,0,0,0,2.881,1.1h5.65A3.725,3.725,0,0,0,21.7,2.9l1.425-1.79A3.725,3.725,0,0,1,25.994,0H31.98" transform="translate(366 207.238)" fill="none" stroke="#c6c6c6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+              </g>
+            </svg>
+          </span>
+          <span class="b-docs-block__text">
+            <span class="b-docs-block__data">
+              <span>Ничего не добавлено</span>
+            </span>
+          </span>
+        </div>
+      </div>
+    `,
+  });
+
+  Vue.component('filesCollectionMulty', {
+    data() {
+      return {
+        val: 'value',
+      };
+    },
+    props: ['block', 'collection'],
+    template: `
+      <div>
+      {{ val }}
+        <hr class="hr--md" style="margin-top: 0;">
+        <transition-group name="list" tag="div" >
+          <div v-for="(valueObject, idx) in collection.value" :key="valueObject.id" class="multy-collection-wrapper">
+          
+            <div v-if="collection.value.length > 1" @click="remove(idx)" class="multy-collection-wrapper__remove btn-delete"></div>
+
+            <files-collection v-for="(collect, idx) in collection.value" :key="collect.id" :collection="collection" :collectIndex="idx" :block="block"></files-collection>
+          </div>
+        </transition-group>
+        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
+        <hr class="hr--sl">
+      </div>
+    `,
+    computed: {
+      isBtnDisabled() {
+        if (
+          this.collection.maxcollections &&
+          typeof this.collection.maxcollections === 'number'
+        ) {
+          return this.collection.value.length >= this.collection.maxcollections;
+        } else {
+          return false;
+        }
+      },
+    },
+    methods: {
+      add() {
+        this.val = this.val + 'new value';
+        this.$store.dispatch('setCollectionValue', {
+          collection: this.collection,
+          collectIndex: this.collection.value.length,
+        });
+      },
+      remove(idx) {
+        this.$store.commit('removeControl', {
+          control: this.formControl,
+          controlIndex: idx,
+        });
+      },
+    },
+    beforeMount() {
+      this.$store.dispatch('setCollectionValue', {
+        collection: this.collection,
+        collectIndex: null,
+      });
     },
   });
 
@@ -494,16 +718,19 @@ window.addEventListener('load', () => {
   });
 
   Vue.component('FileloadForm', {
-    template: `<div>
-        <div v-for="formControl in controls" :key="formControl.id">
-            <hr>
-            <form-control-multy v-if="formControl.multiple" :formControl="formControl"></form-control-multy>
-            <form-control-cols v-else-if="formControl.type==='file'" :formControl="formControl"></form-control-cols>
+    template: `
+      <div>
+        <div v-for="collection in collections" :key="collection.id">
+          <files-collection-multy v-if="collection.multiple" :collection="collection" :block="block"></files-collection-multy>
+
+          <files-collection v-else :collection="collection" :block="block"></files-collection>
         </div>
+
         <hr>
+
         <div class="btn btn-secondary btn-lg" href="" @click="submit">Отправить</div>
-    </div>`,
-    props: ['controls', 'blockId'],
+      </div>`,
+    props: ['collections', 'block'],
     methods: {
       submit() {
         //loading
