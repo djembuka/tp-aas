@@ -15,10 +15,7 @@ window.addEventListener('load', () => {
     }
   }
 
-  const vkkrId = 5556;
-
-  if (!vkkrId) return;
-  if (!window.Vue && !window.Vuex) return;
+  if (!window.Vue || !window.Vuex || !window.VueSelect) return;
 
   let velocity = window.Velocity || jQuery.Velocity;
 
@@ -29,8 +26,28 @@ window.addEventListener('load', () => {
       data: undefined,
     },
     mutations: {
-      setState(state, payload) {
-        state.data = payload;
+      setVkkrId(state, { vkkrId }) {
+        Vue.set(state, 'vkkrId', vkkrId);
+      },
+      setState(state, { data }) {
+        Vue.set(state, 'data', data);
+      },
+      setStatuses(state, { statuses }) {
+        Vue.set(state, 'statuses', statuses);
+      },
+      createControlMultyProps(_, { control }) {
+        //make filename an array
+        const filename = [control.filename];
+        Vue.set(control, 'filename', filename);
+
+        //create value array
+        const value = filename.map((val) => {
+          return {
+            id: parseInt(Math.random() * 100000, 10),
+            val,
+          };
+        });
+        Vue.set(control, 'value', value);
       },
       changeControl(_, { control, controlIndex, value }) {
         //multy
@@ -95,13 +112,13 @@ window.addEventListener('load', () => {
       },
     },
     actions: {
-      async loadState({ commit }) {
+      async loadState({ state, commit }) {
         if (window.BX) {
           window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'blocks', {
               mode: 'class',
               data: {
-                vkkr_id: vkkrId,
+                vkkr_id: state.vkkrId,
                 sessid: BX.bitrix_sessid(),
               },
               dataType: 'json',
@@ -109,11 +126,72 @@ window.addEventListener('load', () => {
             .then(
               (r) => {
                 if (r.status === 'success' && r.data) {
-                  commit('setState', r.data);
+                  commit('setState', { data: r.data });
+                }
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+        }
+      },
+      async loadStatuses({ commit }) {
+        if (window.BX) {
+          window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'statuses', {
+              mode: 'class',
+              data: {
+                sessid: BX.bitrix_sessid(),
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                if (r.status === 'success' && r.data) {
+                  commit('setStatuses', { statuses: r.data });
                 }
               },
               (error) => {
                 rej(error);
+              }
+            );
+        }
+      },
+      async setBlockStatusBX({ state }, { blockId, statusId, statusComment }) {
+        if (window.BX) {
+          window.BX.ajax
+            .runComponentAction('twinpx:vkkr.api', 'setBlockStatus', {
+              mode: 'class',
+              data: {
+                vkkr_id: state.vkkrId,
+                block_id: blockId,
+                status: {
+                  status_id: statusId,
+                  status_comment: statusComment,
+                },
+                sessid: BX.bitrix_sessid(),
+              },
+              dataType: 'json',
+            })
+            .then((r) => {
+              console.log(r.status);
+            });
+        }
+      },
+      async saveBlockBX(_, { formData }) {
+        if (window.BX) {
+          window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'saveBlock', {
+              mode: 'class',
+              data: formData,
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                console.log(r);
+              },
+              (error) => {
+                console.log(error);
               }
             );
         }
@@ -151,11 +229,19 @@ window.addEventListener('load', () => {
     },
   });
 
+  Vue.component('v-select', VueSelect.VueSelect);
+
   Vue.component('collapseBlock', {
     data() {
       return {
         slide: false,
         open: false,
+        historyIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <g transform="translate(-108 -188)">
+            <path d="M9.749,0H3.269c-3.76,0-4.05,3.38-2.02,5.22l10.52,9.56C13.8,16.62,13.509,20,9.749,20H3.269c-3.76,0-4.05-3.38-2.02-5.22l10.52-9.56C13.8,3.38,13.509,0,9.749,0Z" transform="translate(113.491 190)" fill="none" stroke="#9b9b9b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+            <path d="M0,0H24V24H0Z" transform="translate(108 188)" fill="none" opacity="0"/>
+          </g>
+        </svg>`,
       };
     },
     props: ['block'],
@@ -173,19 +259,21 @@ window.addEventListener('load', () => {
         <transition @enter="enter" @leave="leave" :css="false">
           <div class="b-collapse-vc__body" v-if="slide">
             <div class="b-check-detail-fileload__block">
-              <div class="b-check-detail-fileload__history-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <g transform="translate(-108 -188)">
-                        <path d="M9.749,0H3.269c-3.76,0-4.05,3.38-2.02,5.22l10.52,9.56C13.8,16.62,13.509,20,9.749,20H3.269c-3.76,0-4.05-3.38-2.02-5.22l10.52-9.56C13.8,3.38,13.509,0,9.749,0Z" transform="translate(113.491 190)" fill="none" stroke="#9b9b9b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-                        <path d="M0,0H24V24H0Z" transform="translate(108 188)" fill="none" opacity="0"/>
-                    </g>
-                </svg>
-              </div>
+              <div class="b-check-detail-fileload__history-icon" v-html="historyIcon" v-if="status"></div>
 
-              <div v-if="block.permissions.write">
-                <fileload-form :collections="block.items" :block="block"></fileload-form>
+              <div v-if="block.permissions.moderation">
+                <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+
+                <moderation-form :blockId="block.id" v-if="block.state==='moderating'"></moderation-form>
               </div>
-              <div v-else-if="block.permissions.moderation">
+              <div v-else-if="block.permissions.write">
+                <fileload-form v-if="block.state==='empty'" :collections="block.items" :block="block"></fileload-form>
+
+                <div v-else-if="block.state==='moderating' || block.state==='filled'">
+                  <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+                </div>
+              </div>
+              <div v-else-if="block.permissions.read">
                 <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
               </div>
             </div>
@@ -195,10 +283,10 @@ window.addEventListener('load', () => {
     `,
     computed: {
       status() {
-        if (!this.block.status) return;
+        if (!this.block.status || this.block.status === '0') return;
 
-        const status = this.$store.state.data.statuses.find(
-          (s) => s.id === this.block.status
+        const status = this.$store.state.statuses.find(
+          (s) => String(s.id) === String(this.block.status)
         );
         return `<div class="label-default"><span style="color:${status['text-color']}; background-color:${status['bg-color']}">${status.name}</span></div>`;
       },
@@ -245,9 +333,9 @@ window.addEventListener('load', () => {
         <div v-for="formControl in collection.files" :key="formControl.id">
             <hr>
 
-            <form-control-multy v-if="formControl.multiple" :formControl="formControl"></form-control-multy>
+            <form-control-multy v-if="formControl.multiple" :formControl="formControl" :collectionId="collection.id"></form-control-multy>
 
-            <form-control-cols v-else :formControl="formControl"></form-control-cols>
+            <form-control-cols v-else :formControl="formControl" :collectionId="collection.id"></form-control-cols>
         </div>
       </div>
     `,
@@ -266,7 +354,7 @@ window.addEventListener('load', () => {
 
         <hr>
 
-        <div v-if="block.state==='moderating'">
+        <div v-if="block.state==='moderating' || block.state==='filled'">
 
           <file-info v-for="file in collection.files" :key="file.id" :block="block" :file="file"></file-info>
 
@@ -276,6 +364,8 @@ window.addEventListener('load', () => {
         <div v-else-if="block.state==='empty'">
 
           <file-info-empty></file-info-empty>
+
+          <hr v-if="!last">
 
         </div>
       </div>
@@ -316,7 +406,7 @@ window.addEventListener('load', () => {
       status() {
         if (!this.block.status) return;
 
-        const status = this.$store.state.data.statuses.find(
+        const status = this.$store.state.statuses.find(
           (s) => s.id === this.block.status
         );
         return `<div class="label-default"><span style="color:${status['text-color']}; background-color:${status['bg-color']}">${status.name}</span></div>`;
@@ -409,7 +499,7 @@ window.addEventListener('load', () => {
     data() {
       return {};
     },
-    props: ['formControl'],
+    props: ['formControl', 'collectionId'],
     template: `
       <div>
         <hr class="hr--md" style="margin-top: 0;">
@@ -417,7 +507,7 @@ window.addEventListener('load', () => {
           <transition-group name="list" tag="div" >
             <div v-for="(valueObject, idx) in formControl.value" :key="valueObject.id" class="multy-control-wrapper">
               <div v-if="formControl.value.length > 1" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
-              <form-control-cols :formControl="formControl" :controlIndex="idx"></form-control-cols>
+              <form-control-cols :formControl="formControl" :collectionId="collectionId" :controlIndex="idx"></form-control-cols>
               <hr class="hr--sl">
             </div>
           </transition-group>
@@ -440,7 +530,7 @@ window.addEventListener('load', () => {
     },
     methods: {
       validate() {
-        if (this.formControl.required && !this.controlValue) {
+        if (this.required && !this.controlValue) {
           this.isInvalid = true;
         } else {
           this.isInvalid = false;
@@ -461,13 +551,9 @@ window.addEventListener('load', () => {
       },
     },
     beforeMount() {
-      const newValue = this.formControl.value.map((val) => {
-        return {
-          id: parseInt(Math.random() * 100000, 10),
-          val,
-        };
+      this.$store.commit('createControlMultyProps', {
+        control: this.formControl,
       });
-      this.formControl.value = newValue;
     },
   });
 
@@ -475,12 +561,12 @@ window.addEventListener('load', () => {
     template: `
         <div class="b-form-control-cols">
             <div class="b-form-control-cols__control">
-                <form-control-file :formControl="formControl" :controlIndex="controlIndex"></form-control-file>
+                <form-control-file :formControl="formControl" :controlIndex="controlIndex" :collectionId="collectionId"></form-control-file>
             </div>
             <div class="b-form-control-cols__desc" v-if="formControl.description" v-html="formControl.description"></div>
         </div>
     `,
-    props: ['formControl', 'controlIndex'],
+    props: ['formControl', 'controlIndex', 'collectionId'],
   });
 
   Vue.component('formControlFile', {
@@ -500,56 +586,57 @@ window.addEventListener('load', () => {
             </g>
             <path d="M18.117,19.012l-2.85-2.85a.555.555,0,0,0-.785,0l-2.85,2.85a.555.555,0,0,0,.785.784l1.9-1.9v5.024a.555.555,0,1,0,1.109,0V17.894l1.9,1.9a.555.555,0,0,0,.785-.784Z" transform="translate(-1.741 -3.974)" class="d"/>
           </g>`,
+        default: '<a href>Выберите файл</a> или перетащите в поле',
+        labelName: this.formControl.label || '',
+        required: this.formControl.required || true,
       };
     },
     template: `<div
-            class="b-float-label--file"
-            :class="{
-            'invalid': invalid,
-            'slr2-page-settings__control--disabled': disabled,
-            }"
+        class="b-float-label--file"
+        :class="{
+        'invalid': invalid,
+        'slr2-page-settings__control--disabled': disabled,
+        }"
+      >
+        <span
+          class="b-float-label-file__clear"
+          @click.prevent="clearInputFile"
+          v-if="isClearable"
+          >
+        </span>
+        <div
+          class="b-float-label--file"
+          :class="{
+            filled: isFilled,
+            clearable: isClearable,
+          }"
+          ref="controlFile"
         >
-            <span
-                class="b-float-label-file__clear"
-                @click.prevent="clearInputFile"
-                v-if="isClearable"
-                >
-            </span>
-            <div
-                class="b-float-label--file"
-                :class="{
-                    filled: isFilled,
-                    clearable: isClearable,
-                }"
-                ref="controlFile"
-            >
-                <span class="b-float-label-file__label">{{
-                    formControl.label
-                }}</span>
+          <span class="b-float-label-file__label">{{labelName}}</span>
 
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="17.383"
-                    height="24"
-                    viewBox="0 0 17.383 24"
-                    v-html="icon"
-                ></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="17.383"
+            height="24"
+            viewBox="0 0 17.383 24"
+            v-html="icon"
+          ></svg>
 
-                <input
-                    type="file"
-                    :name="name"
-                    :id="id"
-                    @change="uploadFile($refs.inputFile.files)"
-                    ref="inputFile"
-                />
-                <label
-                    :for="id"
-                    class="active"
-                    v-html="label"
-                    ref="dropzone"
-                ></label>
-            </div>
-        </div>`,
+          <input
+            type="file"
+            :name="name"
+            :id="id"
+            @change="uploadFile($refs.inputFile.files)"
+            ref="inputFile"
+          />
+          <label
+            :for="id"
+            class="active"
+            v-html="label"
+            ref="dropzone"
+          ></label>
+        </div>
+      </div>`,
     props: {
       formControl: Object,
       controlIndex: {
@@ -559,6 +646,7 @@ window.addEventListener('load', () => {
           return 0;
         },
       },
+      collectionId: String,
     },
     computed: {
       id() {
@@ -570,9 +658,9 @@ window.addEventListener('load', () => {
       },
       name() {
         if (this.formControl.multiple && this.controlIndex !== undefined) {
-          return `${this.formControl.name}[${this.controlIndex}]`;
+          return `${this.collectionId}||${this.formControl.id}|${this.controlIndex}`;
         } else if (!this.formControl.multiple) {
-          return this.formControl.name;
+          return `${this.collectionId}||${this.formControl.id}|`;
         }
       },
       invalid() {
@@ -624,7 +712,7 @@ window.addEventListener('load', () => {
         } else if (!this.formControl.multiple && this.formControl.filename) {
           return this.formControl.filename;
         }
-        return this.formControl.default;
+        return this.default;
       },
       filename() {
         return this.formControl.multiple
@@ -720,37 +808,134 @@ window.addEventListener('load', () => {
   Vue.component('FileloadForm', {
     template: `
       <div>
-        <div v-for="collection in collections" :key="collection.id">
-          <files-collection-multy v-if="collection.multiple" :collection="collection" :block="block"></files-collection-multy>
+        <form ref="fileload-form" action="" method="" enctype= multipart/form-data>
+          <div v-for="collection in collections" :key="collection.id">
+            <files-collection-multy v-if="collection.multiple" :collection="collection" :block="block"></files-collection-multy>
 
-          <files-collection v-else :collection="collection" :block="block"></files-collection>
-        </div>
+            <files-collection v-else :collection="collection" :block="block"></files-collection>
+          </div>
+        </form>
 
         <hr>
 
-        <div class="btn btn-secondary btn-lg" href="" @click="submit">Отправить</div>
+        <div class="btn btn-secondary btn-lg" href="" @click="submit" :disabled="isBtnDisabled">Отправить</div>
       </div>`,
     props: ['collections', 'block'],
+    computed: {
+      isBtnDisabled() {
+        const result = this.collections.every((c) => {
+          return c.files.every((f) => f.filename);
+        });
+        return !result;
+      },
+    },
     methods: {
       submit() {
-        //loading
-        const promise = this.$store.dispatch('saveBlock', {
-          blockId: this.blockId,
-        });
-        promise
-          .then((res) => {
-            if (res.error) {
-              //show error
-            } else if (res.status && res.status === 'success') {
-              return this.$store.dispatch('getHistory', {
-                blockId: this.blockId,
-              });
-            }
-          })
-          .then((res) => {
-            //remove loading
-          });
+        const formData = new FormData(this.$refs['fileload-form']);
+        formData.append('vkkr_id', this.$store.state.vkkrId);
+        formData.append('block_id', this.block.id);
+        formData.append('sessid', window.BX.bitrix_sessid());
+
+        this.$store.dispatch('saveBlockBX', { formData });
       },
+    },
+  });
+
+  Vue.component('ModerationForm', {
+    data() {
+      return {
+        heading: 'Изменение статуса документа',
+        required: true,
+        isLoading: false,
+        select: {
+          label: 'Статус документа',
+          name: 'MODERATION_STATUS',
+        },
+        selectedOption: { label: '', code: '' },
+        textarea: {
+          label: 'Комментарий для сотрудников СРО ААС',
+          name: 'MODERATION_COMMENT',
+        },
+        textareaValue: '',
+        button: {
+          text: 'Сохранить',
+          message: 'Для отправки необходимо заполнить все поля.',
+        },
+      };
+    },
+    template: `
+    <div>
+      <h3>{{ heading }}</h3>
+      <hr>
+      <form enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-sm-6">
+
+            <div class="form-control-wrapper">
+
+              <v-select :searchable="false" :options="options" class="form-control-select"  @input="onSelect" v-model="selectedOption"></v-select>
+
+              <label>{{select.label}}</label>
+
+              <input type="hidden" :name="select.name" v-model="selectedOption.code">
+            </div>
+
+            <hr>
+
+            <div>
+              <div class="b-float-label" :class="{invalid: textarea.invalid}">
+                <textarea :name="textarea.name" autocomplete="off" required="required" v-model="textareaValue" :class="{active: textareaActive}"></textarea>
+                <label>{{textarea.label}}</label>
+              </div>
+              <hr>
+            </div>
+
+            <div class="b-moderation-form__button">
+              <a href="" class="btn btn-secondary btn-lg" :class="{'btn--load-circle': isLoading}" :disabled="!textareaValue" @click.prevent="changeStatus">{{button.text}}</a>
+
+              <div class="text-muted">{{button.message}}</div>
+            </div>
+
+          </div>
+          <div class="col-sm-6 b-moderation-form__text">
+            <p>Перед вами последняя версия документа. Пожалуйста, тщательно оцените, соответствует ли она критериям для дальнейшей работы. Если документ не подходит, укажите причины отклонения как можно более подробно. Это поможет автору исправить ошибки и предоставить обновленную версию, соответствующую всем требованиям.</p>
+            <p>Обратите внимание: после установки статуса документа изменить его будет невозможно. Убедитесь в обоснованности вашего решения перед его принятием.</p>
+          </div>
+        </div>
+        
+      </form>
+    </div>`,
+    props: ['blockId'],
+    computed: {
+      textareaActive() {
+        return !!this.textareaValue;
+      },
+      options() {
+        const statuses = this.$store.state.statuses;
+        if (!statuses) return;
+
+        return statuses.map((s) => {
+          return {
+            label: s.name,
+            code: s.id,
+          };
+        });
+      },
+    },
+    methods: {
+      onSelect(selected) {
+        this.select.selectedOption = selected;
+      },
+      changeStatus() {
+        this.$store.dispatch('setBlockStatusBX', {
+          blockId: this.blockId,
+          statusId: this.selectedOption.code,
+          statusComment: this.textareaValue,
+        });
+      },
+    },
+    beforeMount() {
+      this.selectedOption = this.options[0];
     },
   });
 
@@ -758,12 +943,12 @@ window.addEventListener('load', () => {
     el: '#checkDetailFileload',
     store,
     template: `
-        <div v-f="loaded">
-            <collapse-block v-for="block in blocks" :block="block" :key="block.id"></collapse-block>
-        </div>`,
+      <div v-if="loaded">
+        <collapse-block v-for="block in blocks" :block="block" :key="block.id"></collapse-block>
+      </div>`,
     computed: {
       loaded() {
-        return !!this.$store.state.data;
+        return !!this.$store.state.data && !!this.$store.state.statuses;
       },
       blocks() {
         if (this.loaded) return this.$store.state.data.blocks;
@@ -771,6 +956,11 @@ window.addEventListener('load', () => {
     },
     methods: {},
     beforeMount() {
+      const vkkrId = this.$el.getAttribute('data-vkkrid');
+      if (!vkkrId) return;
+
+      this.$store.commit('setVkkrId', { vkkrId });
+      this.$store.dispatch('loadStatuses');
       this.$store.dispatch('loadState');
     },
     mounted() {},

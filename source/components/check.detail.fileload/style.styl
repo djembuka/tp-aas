@@ -57,6 +57,33 @@
         display flex
         align-items center
 
+.b-moderation-form
+
+  &__button
+    display flex
+    justify-content space-between
+    align-items center
+
+    a
+      margin-right 30px
+
+    div
+      width 100%
+      font-size $11px
+      line-height 1.2
+
+    @media(max-width 1200px)
+      display block
+
+      a
+        margin-bottom 15px
+
+      div
+        margin-bottom 30px
+
+  &__text
+    font-size $14px
+
 @import './style/collapse-vue-component.styl'
 @import './style/files-collection.styl'
 @import './style/file-vue-component.styl'
