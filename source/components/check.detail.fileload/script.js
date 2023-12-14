@@ -73,6 +73,11 @@ window.addEventListener('load', () => {
         }
         control.value.splice(controlIndex, 1);
       },
+      //blocks
+      setNewBlock(state, { blockId, newBlock }) {
+        const index = state.data.blocks.findIndex((b) => b.id === blockId);
+        Vue.set(state.data.blocks, index, newBlock);
+      },
       setBlockStatus(state, { blockId, status }) {
         const block = state.data.blocks.find((b) => b.id === blockId);
         block.status = status;
@@ -82,7 +87,7 @@ window.addEventListener('load', () => {
         if (!collection || !collection.multiple) return;
 
         if (!collection.value) {
-          collection.value = [];
+          Vue.set(collection, 'value', []);
           collectIndex = 0;
         }
 
@@ -94,6 +99,13 @@ window.addEventListener('load', () => {
           id: parseInt(Math.random() * 100000, 10),
           files: filenamesArray,
         });
+      },
+      removeFromMultipleCollection(_, { collection, collectIndex }) {
+        if (!collection || !collection.multiple || !collection.value) return;
+
+        const value = collection.value.slice(0);
+        value.splice(collectIndex, 1);
+        Vue.set(collection, 'value', value);
       },
       changeControld(_, { collection, collectIndex }) {
         if (collection.multiple && collectIndex !== undefined) {
@@ -137,7 +149,7 @@ window.addEventListener('load', () => {
       },
       async loadStatuses({ commit }) {
         if (window.BX) {
-          window.BX.ajax
+          return window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'statuses', {
               mode: 'class',
               data: {
@@ -159,8 +171,10 @@ window.addEventListener('load', () => {
       },
       async setBlockStatusBX({ state }, { blockId, statusId, statusComment }) {
         if (window.BX) {
-          window.BX.ajax
-            .runComponentAction('twinpx:vkkr.api', 'setBlockStatus', {
+          return window.BX.ajax.runComponentAction(
+            'twinpx:vkkr.api',
+            'setBlockStatus',
+            {
               mode: 'class',
               data: {
                 vkkr_id: state.vkkrId,
@@ -172,28 +186,60 @@ window.addEventListener('load', () => {
                 sessid: BX.bitrix_sessid(),
               },
               dataType: 'json',
-            })
-            .then((r) => {
-              console.log(r.status);
-            });
+            }
+          );
         }
       },
       async saveBlockBX(_, { formData }) {
         if (window.BX) {
-          window.BX.ajax
-            .runComponentAction(`twinpx:vkkr.api`, 'saveBlock', {
+          return window.BX.ajax.runComponentAction(
+            `twinpx:vkkr.api`,
+            'saveBlock',
+            {
               mode: 'class',
               data: formData,
+              dataType: 'json',
+            }
+          );
+        }
+      },
+      async blockBX({ state, commit }, { blockId }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'block', {
+              mode: 'class',
+              data: {
+                vkkr_id: state.vkkrId,
+                block_id: blockId,
+              },
               dataType: 'json',
             })
             .then(
               (r) => {
-                console.log(r);
+                if (r.status === 'success') {
+                  commit('setNewBlock', { blockId, newBlock: r.data });
+                }
               },
               (error) => {
                 console.log(error);
               }
             );
+        }
+      },
+      async historyBX({ state }, { blockId }) {
+        if (window.BX) {
+          return window.BX.ajax.runComponentAction(
+            `twinpx:vkkr.api`,
+            'history',
+            {
+              mode: 'class',
+              data: {
+                vkkr_id: state.vkkrId,
+                block_id: blockId,
+              },
+              dataType: 'json',
+            }
+          );
         }
       },
       setControlValue({ commit }, { control, controlIndex, value }) {
@@ -205,6 +251,12 @@ window.addEventListener('load', () => {
       },
       setCollectionValue({ commit }, { collection, collectIndex }) {
         commit('addToMultipleCollection', {
+          collection,
+          collectIndex,
+        });
+      },
+      removeCollectionValue({ commit }, { collection, collectIndex }) {
+        commit('removeFromMultipleCollection', {
           collection,
           collectIndex,
         });
@@ -236,6 +288,8 @@ window.addEventListener('load', () => {
       return {
         slide: false,
         open: false,
+        state: 'content', //'history', 'loader'
+        history: [],
         historyIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <g transform="translate(-108 -188)">
             <path d="M9.749,0H3.269c-3.76,0-4.05,3.38-2.02,5.22l10.52,9.56C13.8,16.62,13.509,20,9.749,20H3.269c-3.76,0-4.05-3.38-2.02-5.22l10.52-9.56C13.8,3.38,13.509,0,9.749,0Z" transform="translate(113.491 190)" fill="none" stroke="#9b9b9b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
@@ -258,8 +312,8 @@ window.addEventListener('load', () => {
         </div>
         <transition @enter="enter" @leave="leave" :css="false">
           <div class="b-collapse-vc__body" v-if="slide">
-            <div class="b-check-detail-fileload__block">
-              <div class="b-check-detail-fileload__history-icon" v-html="historyIcon" v-if="status"></div>
+            <div class="b-check-detail-fileload__block" v-if="state==='content'">
+              <div class="b-check-detail-fileload__history-icon" v-html="historyIcon" v-if="status" @click.prevent="showHistory"></div>
 
               <div v-if="block.permissions.moderation">
                 <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
@@ -276,6 +330,10 @@ window.addEventListener('load', () => {
               <div v-else-if="block.permissions.read">
                 <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
               </div>
+            </div>
+
+            <div v-else-if="state==='history'">
+              <history-attempt v-for="(attempt, index) in history" :attempt="attempt" :attemptIndex="history.length - index" @toContent="toContent"></history-attempt>
             </div>
           </div>
         </transition>
@@ -307,12 +365,44 @@ window.addEventListener('load', () => {
           duration: 500,
         });
       },
-
       toggleBody() {
         //set slide class for the main div
         this.slide = !this.slide;
         //slide body
         this.open = !this.open;
+      },
+      showHistory() {
+        this.state = 'loader';
+
+        //get history
+        const pr = this.$store.dispatch('historyBX', {
+          blockId: this.block.id,
+        });
+
+        pr.then(
+          (r) => {
+            this.state = 'history';
+            this.history = this.splitToAttempts(r.data).reverse();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      },
+      splitToAttempts(historyArray) {
+        const result = [];
+        historyArray.forEach((item) => {
+          if (item.type === 'uploaded_files') {
+            result.push([item]);
+          } else if (item.type === 'changed_status') {
+            result[result.length - 1].push(item);
+          }
+        });
+
+        return result;
+      },
+      toContent() {
+        this.state = 'content';
       },
     },
   });
@@ -333,9 +423,9 @@ window.addEventListener('load', () => {
         <div v-for="formControl in collection.files" :key="formControl.id">
             <hr>
 
-            <form-control-multy v-if="formControl.multiple" :formControl="formControl" :collectionId="collection.id"></form-control-multy>
+            <form-control-multy v-if="formControl.multiple" :formControl="formControl" :collectionId="collection.id" :collectIndex="collectIndex"></form-control-multy>
 
-            <form-control-cols v-else :formControl="formControl" :collectionId="collection.id"></form-control-cols>
+            <form-control-cols v-else :formControl="formControl" :collectionId="collection.id" :collectIndex="collectIndex"></form-control-cols>
         </div>
       </div>
     `,
@@ -354,7 +444,7 @@ window.addEventListener('load', () => {
 
         <hr>
 
-        <div v-if="block.state==='moderating' || block.state==='filled'">
+        <div v-if="block.state==='moderating' || block.state==='filled' || block.type==='uploaded_files'">
 
           <file-info v-for="file in collection.files" :key="file.id" :block="block" :file="file"></file-info>
 
@@ -388,7 +478,7 @@ window.addEventListener('load', () => {
             <span class="b-docs-block__data">
               <span class="text-muted">{{ file.filesize }} .{{ ext }}</span>
               <span class="text-muted">Дата публикации: {{ block.date_added }}</span>
-              <span class="text-muted">Автор: <a :href="block.author_id">{{ block.author_name }}</a></span>
+              <span class="text-muted">Автор: <a :href="'/person/'+block.author_id+'/'">{{ block.author_name }}</a></span>
             </span>
           </span>
         </div>
@@ -439,21 +529,20 @@ window.addEventListener('load', () => {
 
   Vue.component('filesCollectionMulty', {
     data() {
-      return {
-        val: 'value',
-      };
+      return {};
     },
     props: ['block', 'collection'],
     template: `
       <div>
-      {{ val }}
         <hr class="hr--md" style="margin-top: 0;">
         <transition-group name="list" tag="div" >
           <div v-for="(valueObject, idx) in collection.value" :key="valueObject.id" class="multy-collection-wrapper">
           
             <div v-if="collection.value.length > 1" @click="remove(idx)" class="multy-collection-wrapper__remove btn-delete"></div>
 
-            <files-collection v-for="(collect, idx) in collection.value" :key="collect.id" :collection="collection" :collectIndex="idx" :block="block"></files-collection>
+            <files-collection :collection="collection" :collectIndex="idx" :block="block"></files-collection>
+
+            <hr>
           </div>
         </transition-group>
         <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
@@ -474,16 +563,15 @@ window.addEventListener('load', () => {
     },
     methods: {
       add() {
-        this.val = this.val + 'new value';
         this.$store.dispatch('setCollectionValue', {
           collection: this.collection,
           collectIndex: this.collection.value.length,
         });
       },
       remove(idx) {
-        this.$store.commit('removeControl', {
-          control: this.formControl,
-          controlIndex: idx,
+        this.$store.dispatch('removeCollectionValue', {
+          collection: this.collection,
+          collectIndex: idx,
         });
       },
     },
@@ -499,15 +587,18 @@ window.addEventListener('load', () => {
     data() {
       return {};
     },
-    props: ['formControl', 'collectionId'],
+    props: ['formControl', 'collectionId', 'collectIndex'],
     template: `
       <div>
         <hr class="hr--md" style="margin-top: 0;">
         <div v-if="formControl.type==='file'">
           <transition-group name="list" tag="div" >
             <div v-for="(valueObject, idx) in formControl.value" :key="valueObject.id" class="multy-control-wrapper">
+
               <div v-if="formControl.value.length > 1" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
-              <form-control-cols :formControl="formControl" :collectionId="collectionId" :controlIndex="idx"></form-control-cols>
+
+              <form-control-cols :formControl="formControl" :controlIndex="idx" :collectionId="collectionId" :collectIndex="collectIndex"></form-control-cols>
+
               <hr class="hr--sl">
             </div>
           </transition-group>
@@ -561,12 +652,12 @@ window.addEventListener('load', () => {
     template: `
         <div class="b-form-control-cols">
             <div class="b-form-control-cols__control">
-                <form-control-file :formControl="formControl" :controlIndex="controlIndex" :collectionId="collectionId"></form-control-file>
+                <form-control-file :formControl="formControl" :controlIndex="controlIndex" :collectionId="collectionId"  :collectIndex="collectIndex"></form-control-file>
             </div>
             <div class="b-form-control-cols__desc" v-if="formControl.description" v-html="formControl.description"></div>
         </div>
     `,
-    props: ['formControl', 'controlIndex', 'collectionId'],
+    props: ['formControl', 'controlIndex', 'collectionId', 'collectIndex'],
   });
 
   Vue.component('formControlFile', {
@@ -646,28 +737,37 @@ window.addEventListener('load', () => {
           return 0;
         },
       },
-      collectionId: String,
+      collectionId: [Number, String],
+      collectIndex: {
+        type: [Number, String],
+        required: true,
+        default() {
+          return 0;
+        },
+      },
     },
     computed: {
       id() {
-        if (this.formControl.multiple && this.formControl.value.length) {
-          return `id${this.formControl.value[this.controlIndex].id}`;
-        } else if (!this.formControl.multiple) {
-          return `id${this.formControl.id}`;
-        }
+        const cId = this.collectionId,
+          cIndex = this.collectIndex !== undefined ? this.collectIndex : '',
+          fId = this.formControl.id,
+          fIndex = this.controlIndex !== undefined ? this.controlIndex : '';
+
+        return `id_${cId}_${cIndex}_${fId}_${fIndex}`;
       },
       name() {
-        if (this.formControl.multiple && this.controlIndex !== undefined) {
-          return `${this.collectionId}||${this.formControl.id}|${this.controlIndex}`;
-        } else if (!this.formControl.multiple) {
-          return `${this.collectionId}||${this.formControl.id}|`;
-        }
+        const cId = this.collectionId,
+          cIndex = this.collectIndex !== undefined ? this.collectIndex : '',
+          fId = this.formControl.id,
+          fIndex = this.controlIndex !== undefined ? this.controlIndex : '';
+
+        return `${cId}|${cIndex}|${fId}|${fIndex}`;
       },
       invalid() {
         return !!this.invalidString;
       },
       isClearable() {
-        return !!this.filename;
+        return !!this.filename || this.invalid;
       },
       isFilled() {
         return !!this.filename;
@@ -722,13 +822,15 @@ window.addEventListener('load', () => {
     },
     methods: {
       uploadFile(files) {
-        this.$store.dispatch('setControlValue', {
-          control: this.formControl,
-          controlIndex: this.controlIndex,
-          value: files[0].name,
-        });
-
         this.files = files;
+
+        if (!this.invalid) {
+          this.$store.dispatch('setControlValue', {
+            control: this.formControl,
+            controlIndex: this.controlIndex,
+            value: files[0].name,
+          });
+        }
       },
       clearInputFile() {
         this.files = [];
@@ -824,7 +926,19 @@ window.addEventListener('load', () => {
     computed: {
       isBtnDisabled() {
         const result = this.collections.every((c) => {
-          return c.files.every((f) => f.filename);
+          return c.files.every((f) => {
+            if (
+              f.multiple &&
+              typeof f.filename === 'object' &&
+              f.filename.every((n) => n)
+            ) {
+              return true;
+            } else if (!f.multiple && f.filename) {
+              return true;
+            } else {
+              return false;
+            }
+          });
         });
         return !result;
       },
@@ -836,7 +950,19 @@ window.addEventListener('load', () => {
         formData.append('block_id', this.block.id);
         formData.append('sessid', window.BX.bitrix_sessid());
 
-        this.$store.dispatch('saveBlockBX', { formData });
+        const pr = this.$store.dispatch('saveBlockBX', { formData });
+        pr.then(
+          (r) => {
+            if (r.status === 'success') {
+              return this.$store.dispatch('blockBX', {
+                blockId: this.block.id,
+              });
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       },
     },
   });
@@ -860,6 +986,7 @@ window.addEventListener('load', () => {
         button: {
           text: 'Сохранить',
           message: 'Для отправки необходимо заполнить все поля.',
+          disabled: false, //this.!textareaValue
         },
       };
     },
@@ -891,7 +1018,7 @@ window.addEventListener('load', () => {
             </div>
 
             <div class="b-moderation-form__button">
-              <a href="" class="btn btn-secondary btn-lg" :class="{'btn--load-circle': isLoading}" :disabled="!textareaValue" @click.prevent="changeStatus">{{button.text}}</a>
+              <a href="" class="btn btn-secondary btn-lg" :class="{'btn--load-circle': isLoading}" :disabled="button.disabled" @click.prevent="changeStatus">{{button.text}}</a>
 
               <div class="text-muted">{{button.message}}</div>
             </div>
@@ -927,11 +1054,24 @@ window.addEventListener('load', () => {
         this.select.selectedOption = selected;
       },
       changeStatus() {
-        this.$store.dispatch('setBlockStatusBX', {
+        const pr = this.$store.dispatch('setBlockStatusBX', {
           blockId: this.blockId,
           statusId: this.selectedOption.code,
           statusComment: this.textareaValue,
         });
+
+        pr.then(
+          (r) => {
+            if (r.status === 'success') {
+              return this.$store.dispatch('blockBX', {
+                blockId: this.blockId,
+              });
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       },
     },
     beforeMount() {
@@ -939,12 +1079,81 @@ window.addEventListener('load', () => {
     },
   });
 
+  Vue.component('HistoryAttempt', {
+    data() {
+      return {
+        backIcon: `
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g transform="translate(-108 -316)">
+              <path d="M3,10h8A5,5,0,0,0,11,0H0" transform="translate(112.13 324.31)" fill="none" stroke="#9b9b9b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path d="M2.56,5.12,0,2.56,2.56,0" transform="translate(111.87 321.69)" fill="none" stroke="#9b9b9b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path d="M0,0H24V24H0Z" transform="translate(132 340) rotate(180)" fill="none" opacity="0"/>
+            </g>
+        </svg>`,
+      };
+    },
+    template: `
+      <div class="b-check-detail-fileload__history">
+        <div class="b-check-detail-fileload__back-icon" v-html="backIcon" @click.prevent="$emit('toContent')"></div>
+
+        <div class="b-check-detail-fileload__history-heading">Попытка {{ attemptIndex }}</div>
+
+        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :last="index === attempt[0].items.length-1"></files-collection-info>
+
+        <hr>
+
+        <div class="b-check-detail-fileload__history-comment">
+          <div class="b-check-detail-fileload__history-comment-heading">История</div>
+          <div class="b-check-detail-fileload__history-comment-grid">
+            <span v-for="text in comment" v-html="text"></span>
+          </div>
+        </div>
+      </div>
+    `,
+    props: ['attempt', 'attemptIndex'],
+    emits: ['toContent'],
+    computed: {
+      comment() {
+        const result = [];
+        this.attempt.forEach((item) => {
+          if (item.type === 'uploaded_files') {
+            result.push(item.date);
+            result.push(item.author_name);
+            result.push('Добавлены файлы.');
+          } else if (item.type === 'changed_status') {
+            const statusObject = this.$store.state.statuses.find(
+              (s) => s.id === item.status
+            );
+
+            result.push(item.date);
+            result.push(item.author_name);
+            result.push(
+              `${
+                statusObject
+                  ? 'Статус изменён на &laquo;' +
+                    statusObject.name +
+                    '&raquo;<br>'
+                  : ''
+              }${item.status_comment}`
+            );
+          }
+        });
+
+        return result;
+      },
+    },
+    methods: {},
+  });
+
   const App = {
     el: '#checkDetailFileload',
     store,
     template: `
       <div v-if="loaded">
-        <collapse-block v-for="block in blocks" :block="block" :key="block.id"></collapse-block>
+        <div v-for="block in blocks">
+          <collapse-block v-if="!block.permissions.read || block.state==='filled'" :block="block" :key="block.id"></collapse-block>
+        </div>
+        
       </div>`,
     computed: {
       loaded() {
