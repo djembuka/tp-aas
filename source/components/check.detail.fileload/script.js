@@ -49,22 +49,51 @@ window.addEventListener('load', () => {
         });
         Vue.set(control, 'value', value);
       },
-      changeControl(_, { control, controlIndex, value }) {
-        //multy
-        if (control.multiple && controlIndex !== undefined) {
-          if (!control.value) {
-            control.value = [];
+      changeControl(
+        _,
+        { control, controlIndex, collection, collectIndex, value }
+      ) {
+        //multiple collection
+        if (collection.multiple && collectIndex !== undefined) {
+          if (!collection.value || !collection.value[collectIndex]) return;
+
+          if (control.multiple && controlIndex !== undefined) {
+            if (!collection.value[collectIndex].files[`id${control.id}`]) {
+              Vue.set(
+                collection.value[collectIndex].files,
+                `id${control.id}`,
+                []
+              );
+            }
+            Vue.set(
+              collection.value[collectIndex].files[`id${control.id}`],
+              controlIndex,
+              value
+            );
+          } else {
+            Vue.set(
+              collection.value[collectIndex].files,
+              `id${control.id}`,
+              value
+            );
           }
-          if (!control.value[controlIndex]) {
-            control.value.push({
-              id: parseInt(Math.random() * 100000, 10),
-            });
-          }
-          Vue.set(control.value[controlIndex], 'val', value);
-          Vue.set(control.filename, controlIndex, value);
         } else {
-          Vue.set(control, 'value', value);
-          Vue.set(control, 'filename', value);
+          //multy
+          if (control.multiple && controlIndex !== undefined) {
+            if (!control.value) {
+              Vue.set(control, 'value', []);
+            }
+            if (!control.value[controlIndex]) {
+              control.value.push({
+                id: parseInt(Math.random() * 100000, 10),
+              });
+            }
+            Vue.set(control.value[controlIndex], 'val', value);
+            Vue.set(control.filename, controlIndex, value);
+          } else {
+            Vue.set(control, 'value', value);
+            Vue.set(control, 'filename', value);
+          }
         }
       },
       removeControl(_, { control, controlIndex }) {
@@ -91,13 +120,18 @@ window.addEventListener('load', () => {
           collectIndex = 0;
         }
 
-        const filenamesArray = collection.files.map((f) => {
-          return { filename: f.filename };
-        });
-
         Vue.set(collection.value, collectIndex, {
           id: parseInt(Math.random() * 100000, 10),
-          files: filenamesArray,
+        });
+
+        Vue.set(collection.value[collectIndex], 'files', {});
+
+        collection.files.forEach((f) => {
+          if (f.multiple) {
+            Vue.set(collection.value[collectIndex].files, `id${f.id}`, ['']);
+          } else {
+            Vue.set(collection.value[collectIndex].files, `id${f.id}`, '');
+          }
         });
       },
       removeFromMultipleCollection(_, { collection, collectIndex }) {
@@ -242,10 +276,15 @@ window.addEventListener('load', () => {
           );
         }
       },
-      setControlValue({ commit }, { control, controlIndex, value }) {
+      setControlValue(
+        { commit },
+        { control, controlIndex, collection, collectIndex, value }
+      ) {
         commit('changeControl', {
           control,
           controlIndex,
+          collection,
+          collectIndex,
           value,
         });
       },
@@ -407,6 +446,62 @@ window.addEventListener('load', () => {
     },
   });
 
+  Vue.component('filesCollectionMulty', {
+    data() {
+      return {};
+    },
+    props: ['block', 'collection'],
+    template: `
+      <div>
+        <hr class="hr--md" style="margin-top: 0;">
+        <transition-group name="list" tag="div" >
+          <div v-for="(valueObject, idx) in collection.value" :key="valueObject.id" class="multy-collection-wrapper">
+          
+            <div v-if="collection.value.length > 1" @click="remove(idx)" class="multy-collection-wrapper__remove btn-delete"></div>
+
+            <files-collection :collection="collection" :collectIndex="idx" :block="block"></files-collection>
+
+            <hr>
+          </div>
+        </transition-group>
+        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
+        <hr class="hr--sl">
+      </div>
+    `,
+    computed: {
+      isBtnDisabled() {
+        if (
+          this.collection.maxcollections &&
+          typeof this.collection.maxcollections === 'number'
+        ) {
+          return this.collection.value.length >= this.collection.maxcollections;
+        } else {
+          return false;
+        }
+      },
+    },
+    methods: {
+      add() {
+        this.$store.dispatch('setCollectionValue', {
+          collection: this.collection,
+          collectIndex: this.collection.value.length,
+        });
+      },
+      remove(idx) {
+        this.$store.dispatch('removeCollectionValue', {
+          collection: this.collection,
+          collectIndex: idx,
+        });
+      },
+    },
+    beforeMount() {
+      this.$store.dispatch('setCollectionValue', {
+        collection: this.collection,
+        collectIndex: null,
+      });
+    },
+  });
+
   Vue.component('filesCollection', {
     data() {
       return {};
@@ -417,15 +512,15 @@ window.addEventListener('load', () => {
         <div class="b-files-collection__name">{{ collection.name }}</div>
         <div class="b-files-collection__description" v-html="collection.description"></div>
         <div class="b-files-collection__hint" v-html="collection.hint"></div>
-        
+         {{ collection.value }}
         <hr>
 
         <div v-for="formControl in collection.files" :key="formControl.id">
             <hr>
 
-            <form-control-multy v-if="formControl.multiple" :formControl="formControl" :collectionId="collection.id" :collectIndex="collectIndex"></form-control-multy>
+            <form-control-multy v-if="formControl.multiple" :formControl="formControl" :collection="collection" :collectIndex="collectIndex"></form-control-multy>
 
-            <form-control-cols v-else :formControl="formControl" :collectionId="collection.id" :collectIndex="collectIndex"></form-control-cols>
+            <form-control-cols v-else :formControl="formControl" :collection="collection" :collectIndex="collectIndex"></form-control-cols>
         </div>
       </div>
     `,
@@ -527,67 +622,11 @@ window.addEventListener('load', () => {
     `,
   });
 
-  Vue.component('filesCollectionMulty', {
-    data() {
-      return {};
-    },
-    props: ['block', 'collection'],
-    template: `
-      <div>
-        <hr class="hr--md" style="margin-top: 0;">
-        <transition-group name="list" tag="div" >
-          <div v-for="(valueObject, idx) in collection.value" :key="valueObject.id" class="multy-collection-wrapper">
-          
-            <div v-if="collection.value.length > 1" @click="remove(idx)" class="multy-collection-wrapper__remove btn-delete"></div>
-
-            <files-collection :collection="collection" :collectIndex="idx" :block="block"></files-collection>
-
-            <hr>
-          </div>
-        </transition-group>
-        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
-        <hr class="hr--sl">
-      </div>
-    `,
-    computed: {
-      isBtnDisabled() {
-        if (
-          this.collection.maxcollections &&
-          typeof this.collection.maxcollections === 'number'
-        ) {
-          return this.collection.value.length >= this.collection.maxcollections;
-        } else {
-          return false;
-        }
-      },
-    },
-    methods: {
-      add() {
-        this.$store.dispatch('setCollectionValue', {
-          collection: this.collection,
-          collectIndex: this.collection.value.length,
-        });
-      },
-      remove(idx) {
-        this.$store.dispatch('removeCollectionValue', {
-          collection: this.collection,
-          collectIndex: idx,
-        });
-      },
-    },
-    beforeMount() {
-      this.$store.dispatch('setCollectionValue', {
-        collection: this.collection,
-        collectIndex: null,
-      });
-    },
-  });
-
   Vue.component('formControlMulty', {
     data() {
       return {};
     },
-    props: ['formControl', 'collectionId', 'collectIndex'],
+    props: ['formControl', 'collection', 'collectIndex'],
     template: `
       <div>
         <hr class="hr--md" style="margin-top: 0;">
@@ -597,7 +636,7 @@ window.addEventListener('load', () => {
 
               <div v-if="formControl.value.length > 1" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
 
-              <form-control-cols :formControl="formControl" :controlIndex="idx" :collectionId="collectionId" :collectIndex="collectIndex"></form-control-cols>
+              <form-control-cols :formControl="formControl" :controlIndex="idx" :collection="collection" :collectIndex="collectIndex"></form-control-cols>
 
               <hr class="hr--sl">
             </div>
@@ -628,9 +667,20 @@ window.addEventListener('load', () => {
         }
       },
       add() {
+        let controlIndex = this.formControl.value.length;
+
+        if (this.collection && this.collection.multiple) {
+          controlIndex =
+            this.collection.value[this.collectIndex].files[
+              `id${this.formControl.id}`
+            ].length;
+        }
+
         this.$store.dispatch('setControlValue', {
           control: this.formControl,
-          controlIndex: this.formControl.value.length,
+          controlIndex,
+          collection: this.collection,
+          collectIndex: this.collectIndex,
           value: '',
         });
       },
@@ -638,6 +688,8 @@ window.addEventListener('load', () => {
         this.$store.commit('removeControl', {
           control: this.formControl,
           controlIndex: idx,
+          collection: this.collection,
+          collectIndex: this.collectIndex,
         });
       },
     },
@@ -652,12 +704,12 @@ window.addEventListener('load', () => {
     template: `
         <div class="b-form-control-cols">
             <div class="b-form-control-cols__control">
-                <form-control-file :formControl="formControl" :controlIndex="controlIndex" :collectionId="collectionId"  :collectIndex="collectIndex"></form-control-file>
+                <form-control-file :formControl="formControl" :controlIndex="controlIndex" :collection="collection"  :collectIndex="collectIndex"></form-control-file>
             </div>
             <div class="b-form-control-cols__desc" v-if="formControl.description" v-html="formControl.description"></div>
         </div>
     `,
-    props: ['formControl', 'controlIndex', 'collectionId', 'collectIndex'],
+    props: ['formControl', 'controlIndex', 'collection', 'collectIndex'],
   });
 
   Vue.component('formControlFile', {
@@ -737,7 +789,7 @@ window.addEventListener('load', () => {
           return 0;
         },
       },
-      collectionId: [Number, String],
+      collection: Object,
       collectIndex: {
         type: [Number, String],
         required: true,
@@ -748,7 +800,7 @@ window.addEventListener('load', () => {
     },
     computed: {
       id() {
-        const cId = this.collectionId,
+        const cId = this.collection.id,
           cIndex = this.collectIndex !== undefined ? this.collectIndex : '',
           fId = this.formControl.id,
           fIndex = this.controlIndex !== undefined ? this.controlIndex : '';
@@ -756,7 +808,7 @@ window.addEventListener('load', () => {
         return `id_${cId}_${cIndex}_${fId}_${fIndex}`;
       },
       name() {
-        const cId = this.collectionId,
+        const cId = this.collection.id,
           cIndex = this.collectIndex !== undefined ? this.collectIndex : '',
           fId = this.formControl.id,
           fIndex = this.controlIndex !== undefined ? this.controlIndex : '';
@@ -804,20 +856,44 @@ window.addEventListener('load', () => {
         if (this.files[0] && this.files[0].name) {
           return this.files[0].name;
         }
-        if (
-          this.formControl.multiple &&
-          this.formControl.filename[this.controlIndex]
-        ) {
-          return this.formControl.filename[this.controlIndex];
-        } else if (!this.formControl.multiple && this.formControl.filename) {
-          return this.formControl.filename;
+
+        let result = '';
+        if (this.collection.multiple) {
+          result =
+            this.collection.value[this.collectIndex].files[
+              `id${this.formControl.id}`
+            ];
+          if (this.formControl.multiple) {
+            result = result[this.controlIndex];
+          }
+        } else {
+          result = this.formControl.filename;
+          if (this.formControl.multiple) {
+            result = result[this.controlIndex];
+          }
         }
+        if (result) return result;
+
         return this.default;
       },
       filename() {
-        return this.formControl.multiple
-          ? this.formControl.filename[this.controlIndex]
-          : this.formControl.filename;
+        let result;
+
+        if (this.collection.multiple) {
+          result =
+            this.collection.value[this.collectIndex].files[
+              `id${this.formControl.id}`
+            ];
+          if (this.formControl.multiple) {
+            result = result[this.controlIndex];
+          }
+        } else {
+          result = this.formControl.filename;
+          if (this.formControl.multiple) {
+            result = result[this.controlIndex];
+          }
+        }
+        return result;
       },
     },
     methods: {
@@ -828,6 +904,8 @@ window.addEventListener('load', () => {
           this.$store.dispatch('setControlValue', {
             control: this.formControl,
             controlIndex: this.controlIndex,
+            collection: this.collection,
+            collectIndex: this.collectIndex,
             value: files[0].name,
           });
         }
@@ -839,6 +917,8 @@ window.addEventListener('load', () => {
         this.$store.dispatch('setControlValue', {
           control: this.formControl,
           controlIndex: this.controlIndex,
+          collection: this.collection,
+          collectIndex: this.collectIndex,
           value: '',
         });
       },
