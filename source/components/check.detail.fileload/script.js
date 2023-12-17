@@ -512,7 +512,6 @@ window.addEventListener('load', () => {
         <div class="b-files-collection__name">{{ collection.name }}</div>
         <div class="b-files-collection__description" v-html="collection.description"></div>
         <div class="b-files-collection__hint" v-html="collection.hint"></div>
-         {{ collection.value }}
         <hr>
 
         <div v-for="formControl in collection.files" :key="formControl.id">
@@ -632,7 +631,8 @@ window.addEventListener('load', () => {
         <hr class="hr--md" style="margin-top: 0;">
         <div v-if="formControl.type==='file'">
           <transition-group name="list" tag="div" >
-            <div v-for="(valueObject, idx) in formControl.value" :key="valueObject.id" class="multy-control-wrapper">
+
+            <div v-for="(valueObject, idx) in values" :key="formControl.id+''+idx" class="multy-control-wrapper">
 
               <div v-if="formControl.value.length > 1" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
 
@@ -647,6 +647,15 @@ window.addEventListener('load', () => {
       </div>
     `,
     computed: {
+      values() {
+        if (this.collection.multiple) {
+          return this.collection.value[this.collectIndex].files[
+            `id${this.formControl.id}`
+          ];
+        } else {
+          this.formControl.value;
+        }
+      },
       isBtnDisabled() {
         if (
           this.formControl.maxfiles &&
