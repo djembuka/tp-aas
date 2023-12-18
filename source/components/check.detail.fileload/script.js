@@ -59,17 +59,46 @@ window.addEventListener('load', () => {
 
           if (control.multiple && controlIndex !== undefined) {
             if (!collection.value[collectIndex].files[`id${control.id}`]) {
+              //first init
               Vue.set(
                 collection.value[collectIndex].files,
                 `id${control.id}`,
                 []
               );
+              Vue.set(
+                collection.value[collectIndex].files[`id${control.id}`],
+                controlIndex,
+                {
+                  id: parseInt(Math.random() * 100000, 10),
+                  val: value,
+                }
+              );
+            } else {
+              //existing file input
+              if (
+                collection.value[collectIndex].files[`id${control.id}`][
+                  controlIndex
+                ]
+              ) {
+                Vue.set(
+                  collection.value[collectIndex].files[`id${control.id}`][
+                    controlIndex
+                  ],
+                  'val',
+                  value
+                );
+              } else {
+                //add file input
+                Vue.set(
+                  collection.value[collectIndex].files[`id${control.id}`],
+                  controlIndex,
+                  {
+                    id: parseInt(Math.random() * 100000, 10),
+                    val: value,
+                  }
+                );
+              }
             }
-            Vue.set(
-              collection.value[collectIndex].files[`id${control.id}`],
-              controlIndex,
-              value
-            );
           } else {
             Vue.set(
               collection.value[collectIndex].files,
@@ -96,11 +125,22 @@ window.addEventListener('load', () => {
           }
         }
       },
-      removeControl(_, { control, controlIndex }) {
-        if (control.type === 'file') {
-          control.filename.splice(controlIndex, 1);
+      removeControl(_, { control, controlIndex, collection, collectIndex }) {
+        if (collection.multiple && collectIndex !== undefined) {
+          if (!collection.value || !collection.value[collectIndex]) return;
+
+          if (collection.value[collectIndex].files[`id${control.id}`]) {
+            collection.value[collectIndex].files[`id${control.id}`].splice(
+              controlIndex,
+              1
+            );
+          }
+        } else {
+          if (control.type === 'file') {
+            control.filename.splice(controlIndex, 1);
+          }
+          control.value.splice(controlIndex, 1);
         }
-        control.value.splice(controlIndex, 1);
       },
       //blocks
       setNewBlock(state, { blockId, newBlock }) {
@@ -128,7 +168,12 @@ window.addEventListener('load', () => {
 
         collection.files.forEach((f) => {
           if (f.multiple) {
-            Vue.set(collection.value[collectIndex].files, `id${f.id}`, ['']);
+            Vue.set(collection.value[collectIndex].files, `id${f.id}`, [
+              {
+                id: parseInt(Math.random() * 100000, 10),
+                val: '',
+              },
+            ]);
           } else {
             Vue.set(collection.value[collectIndex].files, `id${f.id}`, '');
           }
@@ -453,6 +498,7 @@ window.addEventListener('load', () => {
     props: ['block', 'collection'],
     template: `
       <div>
+      {{ collection.value }}
         <hr class="hr--md" style="margin-top: 0;">
         <transition-group name="list" tag="div" >
           <div v-for="(valueObject, idx) in collection.value" :key="valueObject.id" class="multy-collection-wrapper">
@@ -632,9 +678,9 @@ window.addEventListener('load', () => {
         <div v-if="formControl.type==='file'">
           <transition-group name="list" tag="div" >
 
-            <div v-for="(valueObject, idx) in values" :key="formControl.id+''+idx" class="multy-control-wrapper">
+            <div v-for="(valueObject, idx) in values" :key="valueObject.id" class="multy-control-wrapper">
 
-              <div v-if="formControl.value.length > 1" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
+              <div v-if="btnDeleteVisible" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
 
               <form-control-cols :formControl="formControl" :controlIndex="idx" :collection="collection" :collectIndex="collectIndex"></form-control-cols>
 
@@ -647,13 +693,24 @@ window.addEventListener('load', () => {
       </div>
     `,
     computed: {
+      btnDeleteVisible() {
+        if (this.collection.multiple) {
+          return (
+            this.collection.value[this.collectIndex].files[
+              `id${this.formControl.id}`
+            ].length > 1
+          );
+        } else {
+          return this.formControl.value.length > 1;
+        }
+      },
       values() {
         if (this.collection.multiple) {
           return this.collection.value[this.collectIndex].files[
             `id${this.formControl.id}`
           ];
         } else {
-          this.formControl.value;
+          return this.formControl.value;
         }
       },
       isBtnDisabled() {
@@ -873,7 +930,7 @@ window.addEventListener('load', () => {
               `id${this.formControl.id}`
             ];
           if (this.formControl.multiple) {
-            result = result[this.controlIndex];
+            result = result[this.controlIndex].val;
           }
         } else {
           result = this.formControl.filename;
@@ -894,7 +951,7 @@ window.addEventListener('load', () => {
               `id${this.formControl.id}`
             ];
           if (this.formControl.multiple) {
-            result = result[this.controlIndex];
+            result = result[this.controlIndex].val;
           }
         } else {
           result = this.formControl.filename;
@@ -1014,21 +1071,31 @@ window.addEventListener('load', () => {
     props: ['collections', 'block'],
     computed: {
       isBtnDisabled() {
-        const result = this.collections.every((c) => {
-          return c.files.every((f) => {
-            if (
-              f.multiple &&
-              typeof f.filename === 'object' &&
-              f.filename.every((n) => n)
-            ) {
-              return true;
-            } else if (!f.multiple && f.filename) {
-              return true;
-            } else {
-              return false;
-            }
-          });
+        let result;
+        result = this.collections.every((c) => {
+          if (c.multiple) {
+            return c.value.every((cObj) => {
+              return typeof cObj.files === 'object'
+                ? Object.values(cObj.files).every((v) => !!v)
+                : cObj.files;
+            });
+          } else {
+            return c.files.every((f) => {
+              if (
+                f.multiple &&
+                typeof f.filename === 'object' &&
+                f.filename.every((n) => n)
+              ) {
+                return true;
+              } else if (!f.multiple && f.filename) {
+                return true;
+              } else {
+                return false;
+              }
+            });
+          }
         });
+
         return !result;
       },
     },
