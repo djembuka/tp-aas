@@ -2,6 +2,15 @@
 
 .b-check-detail-fileload
 
+  &-loader
+    min-height 300px
+    display flex
+    justify-content center
+    align-items center
+
+  .circle-loader
+    justify-content center
+
   &.ph-block
     
     &.ph-block--animated
@@ -27,6 +36,25 @@
         border-radius 10px
         padding 32px
         position relative
+        min-height 200px
+
+        &--load
+          position relative
+          cursor default
+          pointer-events none
+
+          &:after
+            content "";
+            position absolute
+            height 30px
+            width 30px
+            top calc(50% - 15px)
+            right calc(50% - 15px)
+            animation circle 1.3s infinite linear
+            border 2px solid #8393AA
+            border-radius 50%
+            border-right-color transparent
+
 
     &__history
       margin-bottom 30px
@@ -116,6 +144,12 @@
 
   &__text
     font-size $14px
+
+@keyframes circle
+  0%
+    transform( rotate(0))
+  100%
+    transform( rotate(360deg))
 
 @import './style/collapse-vue-component.styl'
 @import './style/files-collection.styl'

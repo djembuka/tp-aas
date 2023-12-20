@@ -26,6 +26,11 @@ window.addEventListener('load', () => {
       data: undefined,
     },
     mutations: {
+      changeBlockLoad(state, { blockId, load }) {
+        const block = state.data.blocks.find((b) => String(b.id) === blockId);
+        Vue.set(block, 'load', load);
+        // block.load = load;
+      },
       setVkkrId(state, { vkkrId }) {
         Vue.set(state, 'vkkrId', vkkrId);
       },
@@ -283,6 +288,7 @@ window.addEventListener('load', () => {
         }
       },
       async blockBX({ state, commit }, { blockId }) {
+        commit('changeBlockLoad', { blockId, load: true });
         if (window.BX) {
           return window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'block', {
@@ -296,6 +302,7 @@ window.addEventListener('load', () => {
             .then(
               (r) => {
                 if (r.status === 'success') {
+                  commit('changeBlockLoad', { blockId, load: false });
                   commit('setNewBlock', { blockId, newBlock: r.data });
                 }
               },
@@ -307,18 +314,21 @@ window.addEventListener('load', () => {
       },
       async historyBX({ state }, { blockId }) {
         if (window.BX) {
-          return window.BX.ajax.runComponentAction(
-            `twinpx:vkkr.api`,
-            'history',
-            {
+          commit('changeBlockLoad', { blockId, load: true });
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'history', {
               mode: 'class',
               data: {
                 vkkr_id: state.vkkrId,
                 block_id: blockId,
               },
               dataType: 'json',
-            }
-          );
+            })
+            .then((r) => {
+              if (r.status === 'success') {
+                commit('changeBlockLoad', { blockId, load: false });
+              }
+            });
         }
       },
       setControlValue(
@@ -344,23 +354,6 @@ window.addEventListener('load', () => {
           collection,
           collectIndex,
         });
-      },
-      async saveBlock({ commit }, { blockId }) {
-        if (window.BX) {
-          return window.BX.ajax
-            .runComponentAction(`twinpx:aas.api.methods.saveBlock`, 'formData')
-            .then(
-              (r) => {
-                if (r.status === 'success' && r.data) {
-                  commit('setBlockStatus', { blockId, status: r.data.status });
-                }
-                return { status: r.status };
-              },
-              (error) => {
-                return { error };
-              }
-            );
-        }
       },
     },
   });
@@ -396,23 +389,29 @@ window.addEventListener('load', () => {
         </div>
         <transition @enter="enter" @leave="leave" :css="false">
           <div class="b-collapse-vc__body" v-if="slide">
-            <div class="b-check-detail-fileload__block" v-if="state==='content'">
-              <div class="b-check-detail-fileload__history-icon" v-html="historyIcon" v-if="status" @click.prevent="showHistory"></div>
 
-              <div v-if="block.permissions.moderation">
-                <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+            <div :class="{'b-check-detail-fileload__block': true, 'b-check-detail-fileload__block--load': block.load}" v-if="state==='content'">
 
-                <moderation-form :blockId="block.id" v-if="block.state==='moderating'"></moderation-form>
-              </div>
-              <div v-else-if="block.permissions.write">
-                <fileload-form v-if="block.state==='empty'" :collections="block.items" :block="block"></fileload-form>
+              <div v-if="!block.load">
 
-                <div v-else-if="block.state==='moderating' || block.state==='filled'">
+                <div class="b-check-detail-fileload__history-icon" v-html="historyIcon" v-if="status" @click.prevent="showHistory"></div>
+
+                <div v-if="block.permissions.moderation">
+                  <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+
+                  <moderation-form :blockId="block.id" v-if="block.state==='moderating'"></moderation-form>
+                </div>
+                <div v-else-if="block.permissions.write">
+                  <fileload-form v-if="block.state==='empty'" :collections="block.items" :block="block"></fileload-form>
+
+                  <div v-else-if="block.state==='moderating' || block.state==='filled'">
+                    <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+                  </div>
+                </div>
+                <div v-else-if="block.permissions.read">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
                 </div>
-              </div>
-              <div v-else-if="block.permissions.read">
-                <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+
               </div>
             </div>
 
@@ -456,8 +455,6 @@ window.addEventListener('load', () => {
         this.open = !this.open;
       },
       showHistory() {
-        this.state = 'loader';
-
         //get history
         const pr = this.$store.dispatch('historyBX', {
           blockId: this.block.id,
@@ -1312,12 +1309,22 @@ window.addEventListener('load', () => {
     el: '#checkDetailFileload',
     store,
     template: `
+    <div :class="{'b-check-detail-fileload-loader': !loaded}">
       <div v-if="loaded">
         <div v-for="block in blocks">
           <collapse-block v-if="!block.permissions.read || block.state==='filled'" :block="block" :key="block.id"></collapse-block>
         </div>
-        
-      </div>`,
+      </div>
+      <div v-else>
+        <div class="circle-loader">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+          <div class="circle circle-3"></div>
+          <div class="circle circle-4"></div>
+          <div class="circle circle-5"></div>
+        </div>
+      </div>
+    </div>`,
     computed: {
       loaded() {
         return !!this.$store.state.data && !!this.$store.state.statuses;
