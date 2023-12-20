@@ -498,7 +498,6 @@ window.addEventListener('load', () => {
     props: ['block', 'collection'],
     template: `
       <div>
-      {{ collection.value }}
         <hr class="hr--md" style="margin-top: 0;">
         <transition-group name="list" tag="div" >
           <div v-for="(valueObject, idx) in collection.value" :key="valueObject.id" class="multy-collection-wrapper">
@@ -510,6 +509,9 @@ window.addEventListener('load', () => {
             <hr>
           </div>
         </transition-group>
+
+        <hr class="hr--xxxl hr--line" style="margin-top: 0;">
+
         <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
         <hr class="hr--sl">
       </div>
@@ -674,7 +676,6 @@ window.addEventListener('load', () => {
     props: ['formControl', 'collection', 'collectIndex'],
     template: `
       <div>
-        <hr class="hr--md" style="margin-top: 0;">
         <div v-if="formControl.type==='file'">
           <transition-group name="list" tag="div" >
 
@@ -684,7 +685,7 @@ window.addEventListener('load', () => {
 
               <form-control-cols :formControl="formControl" :controlIndex="idx" :collection="collection" :collectIndex="collectIndex"></form-control-cols>
 
-              <hr class="hr--sl">
+              <hr >
             </div>
           </transition-group>
         </div>
@@ -966,15 +967,13 @@ window.addEventListener('load', () => {
       uploadFile(files) {
         this.files = files;
 
-        if (!this.invalid) {
-          this.$store.dispatch('setControlValue', {
-            control: this.formControl,
-            controlIndex: this.controlIndex,
-            collection: this.collection,
-            collectIndex: this.collectIndex,
-            value: files[0].name,
-          });
-        }
+        this.$store.dispatch('setControlValue', {
+          control: this.formControl,
+          controlIndex: this.controlIndex,
+          collection: this.collection,
+          collectIndex: this.collectIndex,
+          value: this.invalid ? '' : files[0].name,
+        });
       },
       clearInputFile() {
         this.files = [];
@@ -1074,11 +1073,19 @@ window.addEventListener('load', () => {
         let result;
         result = this.collections.every((c) => {
           if (c.multiple) {
-            return c.value.every((cObj) => {
-              return typeof cObj.files === 'object'
-                ? Object.values(cObj.files).every((v) => !!v)
-                : cObj.files;
-            });
+            if (c.value) {
+              return c.value.every((cObj) => {
+                return Object.values(cObj.files).every((v) => {
+                  if (typeof v === 'object') {
+                    return v.every((obj) => !!obj.val);
+                  } else {
+                    return !!v;
+                  }
+                });
+              });
+            } else {
+              return false;
+            }
           } else {
             return c.files.every((f) => {
               if (
