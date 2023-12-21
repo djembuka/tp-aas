@@ -1034,7 +1034,7 @@ window.BX = {
         case 'history':
           result = new Promise((resolve) => {
             resolve({
-              status: 'success',
+              status: 'error',
               data: [
                 {
                   id: 'historyId1',

@@ -26,6 +26,9 @@ window.addEventListener('load', () => {
       data: undefined,
     },
     mutations: {
+      showError(state, { error }) {
+        state.error = error;
+      },
       changeBlockLoad(state, { blockId, load }) {
         const block = state.data.blocks.find((b) => String(b.id) === blockId);
         Vue.set(block, 'load', load);
@@ -223,10 +226,12 @@ window.addEventListener('load', () => {
               (r) => {
                 if (r.status === 'success' && r.data) {
                   commit('setState', { data: r.data });
+                } else {
+                  this.$store.commit('showError', { error: 'Server error' });
                 }
               },
               (error) => {
-                console.log(error);
+                commit('showError', { error });
               }
             );
         }
@@ -245,20 +250,20 @@ window.addEventListener('load', () => {
               (r) => {
                 if (r.status === 'success' && r.data) {
                   commit('setStatuses', { statuses: r.data });
+                } else {
+                  this.$store.commit('showError', { error: 'Server error' });
                 }
               },
               (error) => {
-                rej(error);
+                commit('showError', { error });
               }
             );
         }
       },
       async setBlockStatusBX({ state }, { blockId, statusId, statusComment }) {
         if (window.BX) {
-          return window.BX.ajax.runComponentAction(
-            'twinpx:vkkr.api',
-            'setBlockStatus',
-            {
+          return window.BX.ajax
+            .runComponentAction('twinpx:vkkr.api', 'setBlockStatus', {
               mode: 'class',
               data: {
                 vkkr_id: state.vkkrId,
@@ -270,21 +275,23 @@ window.addEventListener('load', () => {
                 sessid: BX.bitrix_sessid(),
               },
               dataType: 'json',
-            }
-          );
+            })
+            .then(_, (error) => {
+              commit('showError', { error });
+            });
         }
       },
       async saveBlockBX(_, { formData }) {
         if (window.BX) {
-          return window.BX.ajax.runComponentAction(
-            `twinpx:vkkr.api`,
-            'saveBlock',
-            {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'saveBlock', {
               mode: 'class',
               data: formData,
               dataType: 'json',
-            }
-          );
+            })
+            .then(_, (error) => {
+              commit('showError', { error });
+            });
         }
       },
       async blockBX({ state, commit }, { blockId }) {
@@ -304,15 +311,17 @@ window.addEventListener('load', () => {
                 if (r.status === 'success') {
                   commit('changeBlockLoad', { blockId, load: false });
                   commit('setNewBlock', { blockId, newBlock: r.data });
+                } else {
+                  this.$store.commit('showError', { error: 'Server error' });
                 }
               },
               (error) => {
-                console.log(error);
+                commit('showError', { error });
               }
             );
         }
       },
-      async historyBX({ state }, { blockId }) {
+      async historyBX({ state, commit }, { blockId }) {
         if (window.BX) {
           commit('changeBlockLoad', { blockId, load: true });
           return window.BX.ajax
@@ -324,11 +333,21 @@ window.addEventListener('load', () => {
               },
               dataType: 'json',
             })
-            .then((r) => {
-              if (r.status === 'success') {
-                commit('changeBlockLoad', { blockId, load: false });
+            .then(
+              (r) => {
+                if (r.status === 'success') {
+                  commit('changeBlockLoad', { blockId, load: false });
+                } else {
+                  commit('showError', { error: 'Server error' });
+                }
+                return new Promise((res, rej) => {
+                  res(r);
+                });
+              },
+              (error) => {
+                commit('showError', { error });
               }
-            });
+            );
         }
       },
       setControlValue(
@@ -390,7 +409,7 @@ window.addEventListener('load', () => {
         <transition @enter="enter" @leave="leave" :css="false">
           <div class="b-collapse-vc__body" v-if="slide">
 
-            <div :class="{'b-check-detail-fileload__block': true, 'b-check-detail-fileload__block--load': block.load}" v-if="state==='content'">
+            <div :class="{'b-check-detail-fileload__block': true, 'b-check-detail-fileload__block--load': block.load}" v-if="state==='content' || block.load">
 
               <div v-if="!block.load">
 
@@ -463,7 +482,11 @@ window.addEventListener('load', () => {
         pr.then(
           (r) => {
             this.state = 'history';
-            this.history = this.splitToAttempts(r.data).reverse();
+            if (r && r.status === 'success' && r.data) {
+              this.history = this.splitToAttempts(r.data).reverse();
+            } else {
+              this.$store.commit('showError', { error: 'Server error' });
+            }
           },
           (error) => {
             console.log(error);
@@ -1117,6 +1140,8 @@ window.addEventListener('load', () => {
               return this.$store.dispatch('blockBX', {
                 blockId: this.block.id,
               });
+            } else {
+              this.$store.commit('showError', { error: 'Server error' });
             }
           },
           (error) => {
@@ -1226,6 +1251,8 @@ window.addEventListener('load', () => {
               return this.$store.dispatch('blockBX', {
                 blockId: this.blockId,
               });
+            } else {
+              this.$store.commit('showError', { error: 'Server error' });
             }
           },
           (error) => {
@@ -1310,6 +1337,8 @@ window.addEventListener('load', () => {
     store,
     template: `
     <div :class="{'b-check-detail-fileload-loader': !loaded}">
+      <div v-if="error" class="b-check-detail-fileload-error" @click="clickError">{{ error }}</div>
+
       <div v-if="loaded">
         <div v-for="block in blocks">
           <collapse-block v-if="!block.permissions.read || block.state==='filled'" :block="block" :key="block.id"></collapse-block>
@@ -1329,11 +1358,18 @@ window.addEventListener('load', () => {
       loaded() {
         return !!this.$store.state.data && !!this.$store.state.statuses;
       },
+      error() {
+        return !!this.$store.state.error;
+      },
       blocks() {
         if (this.loaded) return this.$store.state.data.blocks;
       },
     },
-    methods: {},
+    methods: {
+      clickError() {
+        this.$store.commit('showError', { error: false });
+      },
+    },
     beforeMount() {
       const vkkrId = this.$el.getAttribute('data-vkkrid');
       if (!vkkrId) return;
