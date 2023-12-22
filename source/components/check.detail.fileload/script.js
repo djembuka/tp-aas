@@ -30,7 +30,9 @@ window.addEventListener('load', () => {
         state.error = error;
       },
       changeBlockLoad(state, { blockId, load }) {
-        const block = state.data.blocks.find((b) => String(b.id) === blockId);
+        const block = state.data.blocks.find(
+          (b) => String(b.id) === String(blockId)
+        );
         Vue.set(block, 'load', load);
         // block.load = load;
       },
@@ -483,7 +485,7 @@ window.addEventListener('load', () => {
           (r) => {
             this.state = 'history';
             if (r && r.status === 'success' && r.data) {
-              this.history = this.splitToAttempts(r.data).reverse();
+              this.history = this.splitToAttempts(r.data);
             } else {
               this.$store.commit('showError', { error: 'Server error' });
             }
@@ -495,7 +497,7 @@ window.addEventListener('load', () => {
       },
       splitToAttempts(historyArray) {
         const result = [];
-        historyArray.forEach((item) => {
+        historyArray.reverse().forEach((item) => {
           if (item.type === 'uploaded_files') {
             result.push([item]);
           } else if (item.type === 'changed_status') {
@@ -503,7 +505,7 @@ window.addEventListener('load', () => {
           }
         });
 
-        return result;
+        return result.reverse();
       },
       toContent() {
         this.state = 'content';
@@ -638,8 +640,8 @@ window.addEventListener('load', () => {
           <span class="b-docs-block__text">
             <a :href="file.filelink">{{ name }}</a>
             <span class="b-docs-block__data">
-              <span class="text-muted">{{ file.filesize }} .{{ ext }}</span>
-              <span class="text-muted">Дата публикации: {{ block.date_added }}</span>
+              <span class="text-muted">{{ filesize }} .{{ ext }}</span>
+              <span class="text-muted">Дата публикации: {{ block.date }}</span>
               <span class="text-muted">Автор: <a :href="'/person/'+block.author_id+'/'">{{ block.author_name }}</a></span>
             </span>
           </span>
@@ -663,8 +665,21 @@ window.addEventListener('load', () => {
         );
         return `<div class="label-default"><span style="color:${status['text-color']}; background-color:${status['bg-color']}">${status.name}</span></div>`;
       },
+      filesize() {
+        return this.formatSize(this.file.filesize);
+      },
     },
-    methods: {},
+    methods: {
+      formatSize(length) {
+        var i = 0,
+          type = ['б', 'Кб', 'Мб', 'Гб', 'Тб', 'Пб'];
+        while ((length / 1000) | 0 && i < type.length - 1) {
+          length /= 1000;
+          i++;
+        }
+        return parseInt(length) + ' ' + type[i];
+      },
+    },
   });
 
   Vue.component('fileInfoEmpty', {
