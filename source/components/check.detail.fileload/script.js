@@ -1384,7 +1384,7 @@ window.addEventListener('load', () => {
 
       <div v-if="loaded">
         <div v-for="block in blocks">
-          <collapse-block v-if="!block.permissions.read || block.state==='filled'" :block="block" :key="block.id"></collapse-block>
+          <collapse-block v-if="blockVisible(block)" :block="block" :key="block.id"></collapse-block>
         </div>
       </div>
       <div v-else>
@@ -1409,6 +1409,13 @@ window.addEventListener('load', () => {
       },
     },
     methods: {
+      blockVisible(block) {
+        return (
+          block.permissions.moderation ||
+          block.permissions.write ||
+          (block.permissions.read && block.state === 'filled')
+        );
+      },
       clickError() {
         this.$store.commit('showError', { error: false });
       },

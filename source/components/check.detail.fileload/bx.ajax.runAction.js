@@ -126,7 +126,7 @@ window.BX = {
                     permissions: {
                       read: true,
                       write: false,
-                      moderation: false,
+                      moderation: true,
                     },
                     status: 0,
                     items: [
