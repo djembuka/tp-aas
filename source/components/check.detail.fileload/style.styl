@@ -64,6 +64,9 @@
             border-radius 50%
             border-right-color transparent
 
+        @media(max-width 575px)
+            padding 20px
+
 
     &__history
       margin-bottom 30px
@@ -96,6 +99,23 @@
           font-family $roboto
           font-size $12px
 
+        @media(max-width 575px)
+            padding-right 20px
+            padding-left 20px
+
+            &-grid
+                display block
+
+                span
+                    display block
+                    margin-bottom 5px
+
+                    &:nth-child(3n)
+                        margin-bottom 15px
+
+                    &:last-child
+                        margin-bottom 0
+
     &__heading
         font-family $roboto
         font-weight $bold
@@ -126,6 +146,12 @@
         color #9B9B9B
         display flex
         align-items center
+
+    @media(max-width 575px)
+        display block
+
+        &__control
+            margin-bottom 20px
 
 .b-moderation-form
 
