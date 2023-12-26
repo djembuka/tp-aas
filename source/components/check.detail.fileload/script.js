@@ -267,8 +267,10 @@ window.addEventListener('load', () => {
       },
       async setBlockStatusBX({ state }, { blockId, statusId, statusComment }) {
         if (window.BX) {
-          return window.BX.ajax
-            .runComponentAction('twinpx:vkkr.api', 'setBlockStatus', {
+          return window.BX.ajax.runComponentAction(
+            'twinpx:vkkr.api',
+            'setBlockStatus',
+            {
               mode: 'class',
               data: {
                 vkkr_id: state.vkkrId,
@@ -280,13 +282,8 @@ window.addEventListener('load', () => {
                 sessid: BX.bitrix_sessid(),
               },
               dataType: 'json',
-            })
-            .then(
-              () => {},
-              (error) => {
-                commit('showError', { error });
-              }
-            );
+            }
+          );
         }
       },
       async saveBlockBX(_, { formData }) {
@@ -605,18 +602,17 @@ window.addEventListener('load', () => {
     data() {
       return {};
     },
-    props: ['block', 'collection', 'last'],
+    props: ['block', 'collection', 'last', 'status'],
     template: `
       <div class="b-files-collection-info">
         <div class="b-files-collection__name">{{ collection.name }}</div>
         <div class="b-files-collection__description" v-html="collection.description"></div>
-        <div class="b-files-collection__hint" v-html="collection.hint"></div>
 
         <hr>
 
         <div v-if="block.state==='moderating' || block.state==='filled' || block.type==='uploaded_files'">
 
-          <file-info v-for="file in collection.files" :key="file.id" :block="block" :file="file"></file-info>
+          <file-info v-for="file in collection.files" :key="file.id" :block="block" :file="file" :statusCode="status"></file-info>
 
           <hr v-if="!last">
 
@@ -638,7 +634,7 @@ window.addEventListener('load', () => {
         ext: this.file.filename.split('.').reverse()[0],
       };
     },
-    props: ['block', 'file'],
+    props: ['block', 'file', 'statusCode'],
     template: `
       <div class="b-docs-block__item" :href="file.filelink">
         <div class="b-docs-block__body">
@@ -652,7 +648,7 @@ window.addEventListener('load', () => {
             </span>
           </span>
         </div>
-        <div v-if="block.status" v-html="status"></div>
+        <div v-if="status" v-html="status"></div>
       </div>
     `,
     computed: {
@@ -664,11 +660,11 @@ window.addEventListener('load', () => {
         return `background-image: url( '/template/images/${this.ext}.svg' );`;
       },
       status() {
-        if (!this.block.status) return;
-
         const status = this.$store.state.statuses.find(
-          (s) => s.id === this.block.status
+          (s) => s.id === this.statusCode || this.block.status
         );
+        if (!status) return '';
+
         return `<div class="label-default"><span style="color:${status['text-color']}; background-color:${status['bg-color']}">${status.name}</span></div>`;
       },
       filesize() {
@@ -1328,7 +1324,7 @@ window.addEventListener('load', () => {
 
         <div class="b-check-detail-fileload__history-heading">Попытка {{ attemptIndex }}</div>
 
-        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :last="index === attempt[0].items.length-1"></files-collection-info>
+        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :status="status" :last="index === attempt[0].items.length-1"></files-collection-info>
 
         <hr>
 
@@ -1343,6 +1339,12 @@ window.addEventListener('load', () => {
     props: ['attempt', 'attemptIndex'],
     emits: ['toContent'],
     computed: {
+      status() {
+        let statusObject = this.attempt[this.attempt.length - 1];
+        if (statusObject && statusObject.type === 'changed_status') {
+          return statusObject.status;
+        }
+      },
       comment() {
         const result = [];
         this.attempt.forEach((item) => {
