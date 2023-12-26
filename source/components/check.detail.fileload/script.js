@@ -57,7 +57,10 @@ window.addEventListener('load', () => {
             val,
           };
         });
+
+        console.log(control, value);
         Vue.set(control, 'value', value);
+        console.log(control, value);
       },
       changeControl(
         _,
@@ -278,9 +281,12 @@ window.addEventListener('load', () => {
               },
               dataType: 'json',
             })
-            .then(_, (error) => {
-              commit('showError', { error });
-            });
+            .then(
+              () => {},
+              (error) => {
+                commit('showError', { error });
+              }
+            );
         }
       },
       async saveBlockBX(_, { formData }) {
@@ -581,7 +587,7 @@ window.addEventListener('load', () => {
       <div class="b-files-collection">
         <div class="b-files-collection__name">{{ collection.name }}</div>
         <div class="b-files-collection__description" v-html="collection.description"></div>
-        <div class="b-files-collection__hint" v-html="collection.hint"></div>
+        
         <hr>
 
         <div v-for="formControl in collection.files" :key="formControl.id">
@@ -754,7 +760,15 @@ window.addEventListener('load', () => {
           this.formControl.maxfiles &&
           typeof this.formControl.maxfiles === 'number'
         ) {
-          return this.formControl.value.length >= this.formControl.maxfiles;
+          if (this.collection.multiple) {
+            return (
+              this.collection.value[this.collectIndex].files[
+                `id${this.formControl.id}`
+              ].length >= this.formControl.maxfiles
+            );
+          } else {
+            return this.formControl.value.length >= this.formControl.maxfiles;
+          }
         } else {
           return false;
         }
@@ -808,7 +822,7 @@ window.addEventListener('load', () => {
             <div class="b-form-control-cols__control">
                 <form-control-file :formControl="formControl" :controlIndex="controlIndex" :collection="collection"  :collectIndex="collectIndex"></form-control-file>
             </div>
-            <div class="b-form-control-cols__desc" v-if="formControl.description" v-html="formControl.description"></div>
+            <div class="b-form-control-cols__desc" v-if="formControl.hint" v-html="formControl.hint"></div>
         </div>
     `,
     props: ['formControl', 'controlIndex', 'collection', 'collectIndex'],
@@ -831,8 +845,8 @@ window.addEventListener('load', () => {
             </g>
             <path d="M18.117,19.012l-2.85-2.85a.555.555,0,0,0-.785,0l-2.85,2.85a.555.555,0,0,0,.785.784l1.9-1.9v5.024a.555.555,0,1,0,1.109,0V17.894l1.9,1.9a.555.555,0,0,0,.785-.784Z" transform="translate(-1.741 -3.974)" class="d"/>
           </g>`,
-        default: '<a href>Выберите файл</a> или перетащите в поле',
-        labelName: this.formControl.label || '',
+
+        labelName: this.formControl.name || '',
         required: this.formControl.required || true,
       };
     },
@@ -997,6 +1011,17 @@ window.addEventListener('load', () => {
         }
         return result;
       },
+      default() {
+        let result = '';
+        if (this.formControl.accept && this.formControl.maxfilesize) {
+          result = `<a href>Выберите файл</a> (${this.formControl.accept.join(
+            ', '
+          )}, до ${this.formatSize(this.formControl.maxfilesize)})`;
+        } else {
+          result = '<a href>Выберите файл</a> или перетащить в поле';
+        }
+        return result;
+      },
     },
     methods: {
       uploadFile(files) {
@@ -1095,6 +1120,8 @@ window.addEventListener('load', () => {
             <files-collection-multy v-if="collection.multiple" :collection="collection" :block="block"></files-collection-multy>
 
             <files-collection v-else :collection="collection" :block="block"></files-collection>
+
+            <hr>
           </div>
         </form>
 
@@ -1126,6 +1153,7 @@ window.addEventListener('load', () => {
               if (
                 f.multiple &&
                 typeof f.filename === 'object' &&
+                f.filename !== null &&
                 f.filename.every((n) => n)
               ) {
                 return true;
