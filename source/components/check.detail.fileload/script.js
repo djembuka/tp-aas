@@ -265,7 +265,11 @@ window.addEventListener('load', () => {
             );
         }
       },
-      async setBlockStatusBX({ state }, { blockId, statusId, statusComment }) {
+      async setBlockStatusBX(
+        { state, commit },
+        { blockId, statusId, statusComment }
+      ) {
+        commit('changeBlockLoad', { blockId, load: true });
         if (window.BX) {
           return window.BX.ajax.runComponentAction(
             'twinpx:vkkr.api',
@@ -660,9 +664,12 @@ window.addEventListener('load', () => {
         return `background-image: url( '/template/images/${this.ext}.svg' );`;
       },
       status() {
-        const status = this.$store.state.statuses.find(
-          (s) => s.id === this.statusCode || this.block.status
-        );
+        const status = this.$store.state.statuses.find((s) => {
+          return (
+            String(s.id) === String(this.statusCode) ||
+            (!this.statusCode && String(s.id) === String(this.block.status))
+          );
+        });
         if (!status) return '';
 
         return `<div class="label-default"><span style="color:${status['text-color']}; background-color:${status['bg-color']}">${status.name}</span></div>`;
@@ -1286,6 +1293,10 @@ window.addEventListener('load', () => {
 
         pr.then(
           (r) => {
+            this.$store.commit('changeBlockLoad', {
+              blockId: this.blockId,
+              load: false,
+            });
             if (r.status === 'success') {
               return this.$store.dispatch('blockBX', {
                 blockId: this.blockId,
@@ -1295,6 +1306,10 @@ window.addEventListener('load', () => {
             }
           },
           (error) => {
+            this.$store.commit('changeBlockLoad', {
+              blockId: this.blockId,
+              load: false,
+            });
             console.log(error);
           }
         );

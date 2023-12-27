@@ -15,6 +15,101 @@ window.BX = {
                 blocks: [
                   {
                     id: 1225,
+                    author_id: '19891',
+                    author_name: 'Виктор (Программист)',
+                    date_added: '25 декабря 2023',
+                    name: 'Письмо-согласование сроков проведения проверки от эксперта',
+                    description: '',
+                    hint: null,
+                    name_w: 'Название для объекта:',
+                    description_w: 'Название для объекта:',
+                    hint_w: 'Название для объекта:',
+                    name_m: 'Название для модераторов:',
+                    description_m: 'Описание для модератора:',
+                    hint_m: 'Описание для модератора:',
+                    archived: false,
+                    needModerate: true,
+                    permissions: {
+                      read: false,
+                      write: true,
+                      moderation: true,
+                    },
+                    state: 'filled',
+                    status: 3,
+                    items: [
+                      {
+                        id: 9,
+                        name: 'Письмо-согласование сроков проведения проверки с уполномоченным экспертом',
+                        type: 'collection',
+                        description: 'Это описание для коллекции',
+                        hint: 'Подсказка коллекции',
+                        name_w: 'Название для объекта',
+                        description_w: 'Название для объекта',
+                        hint_w: 'Название для объекта',
+                        name_m: 'Название для объекта',
+                        description_m: 'Название для объекта',
+                        hint_m: 'Название для объекта',
+                        multiple: false,
+                        maxcollections: null,
+                        files: [
+                          {
+                            id: 10,
+                            name: 'Письмо-согласование',
+                            type: 'file',
+                            description: '',
+                            hint: 'Приложите файл',
+                            name_w: '',
+                            description_w: '',
+                            hint_w: '',
+                            name_m: '',
+                            description_m: '',
+                            hint_m: '',
+                            multiple: true,
+                            maxfiles: 3,
+                            maxfilesize: 10485760,
+                            accept: ['docx'],
+                            filename: 'file_64ad7b9eb7980(1).docx',
+                            filelink:
+                              '/upload/uf/ee5/kbe1r85h8v7errw1jtfonk4ekcsnjqo3/file_64ad7b9eb7980_114.docx',
+                            filesize: 52980,
+                          },
+                          {
+                            id: 8,
+                            name: 'Анкета уполномоченного эксперта',
+                            type: 'file',
+                            description: 'Это описание для файла',
+                            hint: 'Это подсказка для файла',
+                            name_w: '',
+                            description_w: '',
+                            hint_w: '',
+                            name_m: '',
+                            description_m: '',
+                            hint_m: '',
+                            multiple: false,
+                            maxfiles: null,
+                            maxfilesize: 10485760,
+                            accept: [
+                              'pdf',
+                              'jpg',
+                              'jpeg',
+                              'png',
+                              'webp',
+                              'doc',
+                              'docx',
+                              'xls',
+                              'xlsx',
+                            ],
+                            filename: 'Справка-122647-СФС1_23(1).pdf',
+                            filelink:
+                              '/upload/uf/2a9/sl2ajq8lmwxgtki6h1blrajb6qm0a1ws/spravka_122647_sfs1_23_159.pdf',
+                            filesize: 260993,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    id: 1225,
                     author_id: null,
                     author_name: null,
                     date_added: null,
@@ -563,7 +658,7 @@ window.BX = {
                       write: true,
                       moderation: false,
                     },
-                    status: 'statusBlue',
+                    status: 3,
                     items: [
                       {
                         id: 'collectionId10',
@@ -657,7 +752,7 @@ window.BX = {
                       write: false,
                       moderation: true,
                     },
-                    status: 'statusGreen',
+                    status: 1,
                     items: [
                       {
                         id: 'collectionId11',
@@ -828,7 +923,7 @@ window.BX = {
                       write: false,
                       moderation: true,
                     },
-                    status: 'statusBlue',
+                    status: 3,
                     items: [
                       {
                         id: 'collectionId6',
@@ -923,7 +1018,7 @@ window.BX = {
                       write: false,
                       moderation: true,
                     },
-                    status: 'statusGreen',
+                    status: 1,
                     items: [
                       {
                         id: 'collectionId9',
@@ -1017,7 +1112,7 @@ window.BX = {
                       write: false,
                       moderation: false,
                     },
-                    status: 'statusGreen',
+                    status: 1,
                     items: [
                       {
                         id: 'collectionId12',
@@ -1107,21 +1202,21 @@ window.BX = {
               status: 'success',
               data: [
                 {
-                  id: 'statusGreen',
+                  id: 1,
                   name: 'Принят',
                   active: true,
                   'text-color': '#74C37A',
                   'bg-color': '#EFFFF0',
                 },
                 {
-                  id: 'statusRed',
+                  id: 2,
                   name: 'Отклонён',
                   active: true,
                   'text-color': '#FF0000',
                   'bg-color': '#FFF4F4',
                 },
                 {
-                  id: 'statusBlue',
+                  id: 3,
                   name: 'На проверке',
                   active: true,
                   'text-color': '#4375D8',
@@ -1177,7 +1272,7 @@ window.BX = {
                   author_name: 'Савельев Максим Олегович',
                   type: 'changed_status',
                   items: [],
-                  status: 'statusGreen',
+                  status: 1,
                   status_comment: '',
                 },
                 {
@@ -1187,7 +1282,7 @@ window.BX = {
                   author_name: 'Азарянц Ашот Александрович',
                   type: 'changed_status',
                   items: [],
-                  status: 'statusBlue',
+                  status: 3,
                   status_comment: '',
                 },
                 {
@@ -1282,7 +1377,7 @@ window.BX = {
                   author_name: 'Савельева Мария Евгеньевна',
                   type: 'changed_status',
                   items: [],
-                  status: 'statusRed',
+                  status: 2,
                   status_comment:
                     'Ашот Александрович, вы написали обращение в техническую поддержку сервисов СРО ААС. Мы не принимаем решений о том какие отчеты сдавать, не разрабатываем методологии. Вам стоит создать «Методологическое обращение».',
                 },
@@ -1293,7 +1388,7 @@ window.BX = {
                   author_name: 'Азарянц Ашот Александрович',
                   type: 'changed_status',
                   items: [],
-                  status: 'statusBlue',
+                  status: 3,
                   status_comment: '',
                 },
                 {
@@ -1411,7 +1506,7 @@ window.BX = {
                   write: false,
                   moderation: true,
                 },
-                status: 'statusGreen',
+                status: 1,
                 items: [
                   {
                     id: 2,
