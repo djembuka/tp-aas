@@ -405,7 +405,7 @@ window.addEventListener('load', () => {
     },
     props: ['block'],
     template: `
-      <div class="b-collapse-vc" :class="{slide: slide, open: open}" id="collapse2">
+      <div class="b-collapse-vc" :class="{slide: slide, open: open}">
         <div class="b-collapse-vc__head" @click.stop.prevent="toggleBody()">
           <a href="" @click.prevent>
             {{ block.name }}
@@ -1400,7 +1400,7 @@ window.addEventListener('load', () => {
       <div v-if="error" class="b-check-detail-fileload-error" @click="clickError">{{ error }}</div>
 
       <div v-if="loaded">
-        <div v-for="block in blocks">
+        <div v-for="block in blocks" :data-id="block.id">
           <collapse-block v-if="blockVisible(block)" :block="block" :key="block.id"></collapse-block>
         </div>
       </div>
