@@ -1223,7 +1223,7 @@ window.BX = {
                   'bg-color': '#F0F5FF',
                 },
               ],
-              errors: [],
+              errors: [{ message: 'Error message' }],
             });
           });
           break;

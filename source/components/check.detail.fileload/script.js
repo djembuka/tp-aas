@@ -27,7 +27,7 @@ window.addEventListener('load', () => {
     },
     mutations: {
       showError(state, { error }) {
-        state.error = error;
+        Vue.set(state, 'error', error);
       },
       changeBlockLoad(state, { blockId, load }) {
         const block = state.data.blocks.find(
@@ -256,7 +256,7 @@ window.addEventListener('load', () => {
                 if (r.status === 'success' && r.data) {
                   commit('setStatuses', { statuses: r.data });
                 } else {
-                  this.$store.commit('showError', { error: 'Server error' });
+                  commit('showError', { error: 'Server error' });
                 }
               },
               (error) => {
@@ -1397,9 +1397,13 @@ window.addEventListener('load', () => {
     store,
     template: `
     <div :class="{'b-check-detail-fileload-loader': !loaded}">
-      <div v-if="error" class="b-check-detail-fileload-error" @click="clickError">{{ error }}</div>
+      <div v-if="error" class="b-check-detail-fileload-error" @click="clickError">
+        <div class="b-check-detail-fileload-error__content">
+          {{ error }}
+        </div>
+      </div>
 
-      <div v-if="loaded">
+      <div v-else-if="loaded">
         <div v-for="block in blocks" :data-id="block.id">
           <collapse-block v-if="blockVisible(block)" :block="block" :key="block.id"></collapse-block>
         </div>
@@ -1419,7 +1423,7 @@ window.addEventListener('load', () => {
         return !!this.$store.state.data && !!this.$store.state.statuses;
       },
       error() {
-        return !!this.$store.state.error;
+        return this.$store.state.error;
       },
       blocks() {
         if (this.loaded) return this.$store.state.data.blocks;
