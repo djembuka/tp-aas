@@ -121,28 +121,35 @@
         &.b-copy-icon__note--show
           opacity 1
 
-    .table
+    .col-lg-6 table.table
+      margin-bottom 0
 
-      table&
-        margin-bottom 0
+      th,
+      td
+        border-bottom none !important
 
-        @media (max-width: 575px)
-          th:nth-child(2),
-          td:nth-child(2)
-            display table-cell
+      @media (max-width: 575px)
+        th:nth-child(2),
+        td:nth-child(2)
+          display table-cell
 
-      tr:first-child
+    .col-lg-6 .table
+      font-family $roboto
 
-        th,
-        td
+      tr
+        border-bottom 1px solid $line-color
+      
+        &:first-child
           border-top 1px solid $line-color
 
       th
         width 35%
+        vertical-align top
 
       td
         display flex
         align-items center
+        text-align left
         min-height 77px
 
         &:hover
