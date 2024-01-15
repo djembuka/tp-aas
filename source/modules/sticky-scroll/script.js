@@ -42,7 +42,7 @@ class twpxStickyScroll {
   }
 
   init() {
-    if (!this.initialized && window.matchMedia('(min-width: 768px)').matches) {
+    if (!this.initialized) {
       this.createHtml();
       this.createCss();
       this.scrollbarEvents();
@@ -103,6 +103,13 @@ class twpxStickyScroll {
       .twpx-sticky-scroll-content-wrapper {
         overflow: hidden;
       }
+
+      @media(max-width: 767px) {
+        .twpx-sticky-scroll-content-wrapper {
+          overflow-x: scroll;
+        }
+      }
+
       .twpx-sticky-scroll-scrollbar {
         height: 16px;
         background-color: ${this.options.scrollbarColor || '#f2f2f2'};
@@ -212,6 +219,15 @@ class twpxStickyScroll {
       .twpx-sticky-scroll:hover .twpx-sticky-scroll-arrow-left {
         transform: translateX(0);
         -webkit-transform: translateX(0);
+      }
+
+      @media(max-width 767px) {
+      .twpx-sticky-scroll-scrollbar,
+        .twpx-sticky-scroll-space-left,
+        .twpx-sticky-scroll-space-right,
+        .twpx-sticky-scroll-arrows {
+          display: none !important;
+        }
       }
     `;
     document.querySelector('head').appendChild(styleElement);
