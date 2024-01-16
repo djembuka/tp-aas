@@ -232,7 +232,7 @@ window.addEventListener('load', () => {
                 if (r.status === 'success' && r.data) {
                   commit('setState', { data: r.data });
                 } else {
-                  this.$store.commit('showError', { error: 'Server error' });
+                  commit('showError', { error: 'Server error' });
                 }
               },
               (error) => {
@@ -290,7 +290,7 @@ window.addEventListener('load', () => {
           );
         }
       },
-      async saveBlockBX(_, { formData }) {
+      async saveBlockBX({ commit }, { formData }) {
         if (window.BX) {
           return window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'saveBlock', {
@@ -1310,7 +1310,7 @@ window.addEventListener('load', () => {
               blockId: this.blockId,
               load: false,
             });
-            console.log(error);
+            this.$store.commit('showError', { error });
           }
         );
       },
