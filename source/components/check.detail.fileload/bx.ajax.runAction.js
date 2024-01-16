@@ -1230,27 +1230,27 @@ window.BX = {
           break;
         case 'saveBlock':
           result = new Promise((resolve, reject) => {
-            // resolve({
-            //   status: 'success',
-            //   data: {
-            //     status: 'moderating',
-            //     vkkrId: 'id12',
-            //     blockId: 'id123',
-            //     history: [
-            //       {
-            //         id: 'is12312',
-            //         date: '15 января 2020',
-            //         author_id: 'id1233',
-            //         author_name: 'Азарянц Ашот Александрович',
-            //         type: 'uploaded_files',
-            //         items: [],
-            //         status: 1,
-            //       },
-            //     ],
-            //   },
-            //   errors: [],
-            // });
-            reject(new Error('Response error.'));
+            resolve({
+              status: 'success',
+              data: {
+                status: 'moderating',
+                vkkrId: 'id12',
+                blockId: 'id123',
+                history: [
+                  {
+                    id: 'is12312',
+                    date: '15 января 2020',
+                    author_id: 'id1233',
+                    author_name: 'Азарянц Ашот Александрович',
+                    type: 'uploaded_files',
+                    items: [],
+                    status: 1,
+                  },
+                ],
+              },
+              errors: [],
+            });
+            // reject(new Error('Response error.'));
           });
           break;
         case 'setBlockStatus':
@@ -1264,9 +1264,9 @@ window.BX = {
           });
           break;
         case 'history':
-          result = new Promise((resolve) => {
+          result = new Promise((resolve, reject) => {
             resolve({
-              status: 'success',
+              status: 'err',
               data: [
                 {
                   id: 'historyId6',
@@ -1482,10 +1482,11 @@ window.BX = {
               ],
               errors: [],
             });
+            // reject(new Error('Response error.'));
           });
           break;
         case 'block':
-          result = new Promise((resolve) => {
+          result = new Promise((resolve, reject) => {
             resolve({
               status: 'success',
               data: {
@@ -1538,6 +1539,7 @@ window.BX = {
                 ],
               },
             });
+            // reject(new Error('Response error.'));
           });
           break;
       }

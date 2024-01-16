@@ -292,15 +292,15 @@ window.addEventListener('load', () => {
       },
       async saveBlockBX({ commit }, { formData }) {
         if (window.BX) {
-          return window.BX.ajax
-            .runComponentAction(`twinpx:vkkr.api`, 'saveBlock', {
+          return window.BX.ajax.runComponentAction(
+            `twinpx:vkkr.api`,
+            'saveBlock',
+            {
               mode: 'class',
               data: formData,
               dataType: 'json',
-            })
-            .then(_, (error) => {
-              commit('showError', { error });
-            });
+            }
+          );
         }
       },
       async blockBX({ state, commit }, { blockId }) {
@@ -321,7 +321,7 @@ window.addEventListener('load', () => {
                   commit('changeBlockLoad', { blockId, load: false });
                   commit('setNewBlock', { blockId, newBlock: r.data });
                 } else {
-                  this.$store.commit('showError', { error: 'Server error' });
+                  commit('showError', { error: 'Server error' });
                 }
               },
               (error) => {
@@ -333,30 +333,18 @@ window.addEventListener('load', () => {
       async historyBX({ state, commit }, { blockId }) {
         if (window.BX) {
           commit('changeBlockLoad', { blockId, load: true });
-          return window.BX.ajax
-            .runComponentAction(`twinpx:vkkr.api`, 'history', {
+          return window.BX.ajax.runComponentAction(
+            `twinpx:vkkr.api`,
+            'history',
+            {
               mode: 'class',
               data: {
                 vkkr_id: state.vkkrId,
                 block_id: blockId,
               },
               dataType: 'json',
-            })
-            .then(
-              (r) => {
-                if (r.status === 'success') {
-                  commit('changeBlockLoad', { blockId, load: false });
-                } else {
-                  commit('showError', { error: 'Server error' });
-                }
-                return new Promise((res, rej) => {
-                  res(r);
-                });
-              },
-              (error) => {
-                commit('showError', { error });
-              }
-            );
+            }
+          );
         }
       },
       setControlValue(
@@ -492,13 +480,14 @@ window.addEventListener('load', () => {
           (r) => {
             this.state = 'history';
             if (r && r.status === 'success' && r.data) {
+              this.$store.commit('changeBlockLoad', { blockId, load: false });
               this.history = this.splitToAttempts(r.data);
             } else {
               this.$store.commit('showError', { error: 'Server error' });
             }
           },
           (error) => {
-            console.log(error);
+            this.$store.commit('showError', { error });
           }
         );
       },
@@ -1191,7 +1180,7 @@ window.addEventListener('load', () => {
             }
           },
           (error) => {
-            console.log(error);
+            this.$store.commit('showError', { error });
           }
         );
       },
