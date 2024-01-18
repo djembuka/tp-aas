@@ -58,9 +58,7 @@ window.addEventListener('load', () => {
           };
         });
 
-        console.log(control, value);
         Vue.set(control, 'value', value);
-        console.log(control, value);
       },
       changeControl(
         _,
@@ -802,9 +800,14 @@ window.addEventListener('load', () => {
       },
     },
     beforeMount() {
-      this.$store.commit('createControlMultyProps', {
-        control: this.formControl,
-      });
+      if (
+        this.formControl.filename === null ||
+        typeof this.formControl.filename !== 'object'
+      ) {
+        this.$store.commit('createControlMultyProps', {
+          control: this.formControl,
+        });
+      }
     },
   });
 
