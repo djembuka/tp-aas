@@ -469,16 +469,20 @@ window.addEventListener('load', () => {
         this.open = !this.open;
       },
       showHistory() {
+        const blockId = this.block.id;
         //get history
         const pr = this.$store.dispatch('historyBX', {
-          blockId: this.block.id,
+          blockId,
         });
 
         pr.then(
           (r) => {
             this.state = 'history';
             if (r && r.status === 'success' && r.data) {
-              this.$store.commit('changeBlockLoad', { blockId, load: false });
+              this.$store.commit('changeBlockLoad', {
+                blockId,
+                load: false,
+              });
               this.history = this.splitToAttempts(r.data);
             } else {
               this.$store.commit('showError', { error: 'Server error' });
@@ -633,9 +637,9 @@ window.addEventListener('load', () => {
           <span class="b-docs-block__text">
             <a :href="file.filelink">{{ name }}</a>
             <span class="b-docs-block__data">
-              <span class="text-muted">{{ filesize }} .{{ ext }}</span>
-              <span class="text-muted">Дата публикации: {{ block.date }}</span>
-              <span class="text-muted">Автор: <a :href="'/person/'+block.author_id+'/'">{{ block.author_name }}</a></span>
+              <span class="text-muted" v-if="filesize">{{ filesize }} .{{ ext }}</span>
+              <span class="text-muted" v-if="date">Дата публикации: {{ date }}</span>
+              <span class="text-muted" v-if="block.author_name">Автор: <a :href="'/person/'+block.author_id+'/'">{{ block.author_name }}</a></span>
             </span>
           </span>
         </div>
@@ -663,6 +667,9 @@ window.addEventListener('load', () => {
       },
       filesize() {
         return this.formatSize(this.file.filesize);
+      },
+      date() {
+        return this.block.date || this.block.date_added || '';
       },
     },
     methods: {
@@ -1304,6 +1311,19 @@ window.addEventListener('load', () => {
             });
             this.$store.commit('showError', { error });
           }
+        ).then(
+          (r) => {
+            window.scrollTo({
+              top:
+                document
+                  .querySelector(`[data-id="${this.blockId}"]`)
+                  .getBoundingClientRect().top +
+                window.scrollY -
+                100,
+              behavior: 'smooth',
+            });
+          },
+          (error) => {}
         );
       },
     },

@@ -644,6 +644,7 @@ window.BX = {
 
                   {
                     id: 'id130',
+                    date_added: '25 декабря 2023',
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'Заполнен, с правами записи - moderating+write',
@@ -1266,7 +1267,7 @@ window.BX = {
         case 'history':
           result = new Promise((resolve, reject) => {
             resolve({
-              status: 'err',
+              status: 'success',
               data: [
                 {
                   id: 'historyId6',
