@@ -136,12 +136,12 @@ window.addEventListener('load', () => {
             <a :href="file.filelink">{{ name }}</a>
           </span>
         </div>
-        <div v-if="file.signed" class="b-docs-block__signed">
+        <div v-if="file.readonly || file.signed" class="b-docs-block__signed">
             <div v-if="file.date" v-html="file.date"></div>
             <div v-if="status" v-html="status"></div>
         </div>
         <div v-else class="b-docs-block__button">
-            <button class="btn btn-secondary" @click.prevent="click">Подписать</button>
+            <button class="btn btn-secondary btn-md" @click.prevent="click">Подписать</button>
         </div>
       </div>
     `,

@@ -3,10 +3,24 @@ window.checkDetailSignStore = {
   files: [
     {
       id: 6,
+      filename: 'Постановление о проведении',
+      filelink:
+        '/upload/iblock/0f3/blo6k046lx0ov82p38dd9bjukyoygi65/Ustav-SRO-AAS-ot-28-10-22_-utverzhdennyi_-Minyustom-s-otmetkami-MYU.pdf',
+      signed: false,
+    },
+    {
+      id: 1,
       filename:
         'Постановление о проведении проверки Ананьев Игорь Владимирович (11782631892674) №298374',
       filelink:
         '/upload/iblock/0f3/blo6k046lx0ov82p38dd9bjukyoygi65/Ustav-SRO-AAS-ot-28-10-22_-utverzhdennyi_-Minyustom-s-otmetkami-MYU.pdf',
+      status: {
+        id: 1,
+        name: 'Принят',
+        'text-color': '#74C37A',
+        'bg-color': '#EFFFF0',
+      },
+      readonly: true,
       signed: false,
     },
     {
