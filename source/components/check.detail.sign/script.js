@@ -17,7 +17,9 @@ window.addEventListener('load', () => {
       },
       setFileData(state, { file }) {
         if (!state.files) return;
-        const changedFile = state.files.find((f) => f.id === file.id);
+        const changedFile = state.files.find(
+          (f) => String(f.id) === String(file.id)
+        );
         if (!changedFile) return;
 
         for (key in file) {
@@ -113,6 +115,7 @@ window.addEventListener('load', () => {
         });
       },
       close() {
+        this.loading = false;
         this.$store.dispatch('hideModal');
       },
     },

@@ -422,6 +422,9 @@ window.addEventListener('load', () => {
                     <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
                   </div>
                 </div>
+                <div v-else-if="block.permissions.monitoring">
+                  <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+                </div>
                 <div v-else-if="block.permissions.read">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
                 </div>
@@ -605,14 +608,14 @@ window.addEventListener('load', () => {
 
         <hr>
 
-        <div v-if="block.state==='moderating' || block.state==='filled' || block.type==='uploaded_files'">
+        <div v-if="showInfo">
 
           <file-info v-for="file in collection.files" :key="file.id" :block="block" :file="file" :statusCode="status"></file-info>
 
           <hr v-if="!last">
 
         </div>
-        <div v-else-if="block.state==='empty'">
+        <div v-else-if="showInfoEmpty">
 
           <file-info-empty></file-info-empty>
 
@@ -621,6 +624,49 @@ window.addEventListener('load', () => {
         </div>
       </div>
     `,
+    computed: {
+      showInfo() {
+        let result = false;
+        if (this.block.type === 'uploaded_files') {
+          result = true;
+        } else if (
+          this.block.permissions.moderation &&
+          (this.block.state === 'moderating' || this.block.state === 'filled')
+        ) {
+          result = true;
+        } else if (
+          this.block.permissions.write &&
+          (this.block.state === 'moderating' || this.block.state === 'filled')
+        ) {
+          result = true;
+        } else if (
+          this.block.permissions.monitoring &&
+          (this.block.state === 'moderating' || this.block.state === 'filled')
+        ) {
+          result = true;
+        } else if (
+          this.block.permissions.read &&
+          this.block.state === 'filled'
+        ) {
+          result = true;
+        }
+
+        return result;
+      },
+      showInfoEmpty() {
+        let result = false;
+
+        if (
+          (this.block.permissions.moderation ||
+            this.block.permissions.monitoring) &&
+          this.block.state === 'empty'
+        ) {
+          result = true;
+        }
+
+        return result;
+      },
+    },
   });
 
   Vue.component('fileInfo', {
@@ -1446,6 +1492,7 @@ window.addEventListener('load', () => {
         return (
           block.permissions.moderation ||
           block.permissions.write ||
+          block.permissions.monitoring ||
           (block.permissions.read && block.state === 'filled')
         );
       },
