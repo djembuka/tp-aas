@@ -3,6 +3,7 @@ window.checkDetailSignStore = {
   files: [
     {
       id: 6,
+      fileid: 456,
       filename: 'Постановление о проведении',
       filelink:
         '/upload/iblock/0f3/blo6k046lx0ov82p38dd9bjukyoygi65/Ustav-SRO-AAS-ot-28-10-22_-utverzhdennyi_-Minyustom-s-otmetkami-MYU.pdf',
@@ -10,6 +11,7 @@ window.checkDetailSignStore = {
     },
     {
       id: 1,
+      fileid: 456,
       filename:
         'Постановление о проведении проверки Ананьев Игорь Владимирович (11782631892674) №298374',
       filelink:
@@ -25,6 +27,7 @@ window.checkDetailSignStore = {
     },
     {
       id: 7,
+      fileid: 456,
       filename:
         'Уведомление Планом внешних проверок деятельности работы аудиторских организаций (22006155925_7635.pdf)',
       filelink:
@@ -40,6 +43,7 @@ window.checkDetailSignStore = {
     },
     {
       id: 8,
+      fileid: 456,
       filename:
         'Обязательство о соблюдении конфиденциальности Ананьев Игорь Владимирович (11782631892674) №298374',
       filelink:

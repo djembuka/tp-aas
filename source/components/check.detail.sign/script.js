@@ -45,7 +45,8 @@ window.addEventListener('load', () => {
             mode: 'class',
             data: {
               vkkrId: state.vkkrid,
-              fileId: state.modal.file.id,
+              id: state.modal.file.id,
+              fileId: state.modal.file.fileid,
               userId: BX.message('USER_ID'),
             },
             dataType: 'json',
