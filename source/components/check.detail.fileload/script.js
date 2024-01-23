@@ -1219,23 +1219,37 @@ window.addEventListener('load', () => {
     },
     methods: {
       submit() {
+        const blockId = this.block.id;
         const formData = new FormData(this.$refs['fileload-form']);
         formData.append('vkkr_id', this.$store.state.vkkrId);
-        formData.append('block_id', this.block.id);
+        formData.append('block_id', blockId);
         formData.append('sessid', window.BX.bitrix_sessid());
+
+        this.$store.commit('changeBlockLoad', {
+          blockId,
+          load: true,
+        });
 
         const pr = this.$store.dispatch('saveBlockBX', { formData });
         pr.then(
           (r) => {
+            this.$store.commit('changeBlockLoad', {
+              blockId,
+              load: false,
+            });
             if (r.status === 'success') {
               return this.$store.dispatch('blockBX', {
-                blockId: this.block.id,
+                blockId,
               });
             } else {
               this.$store.commit('showError', { error: 'Server error' });
             }
           },
           (error) => {
+            this.$store.commit('changeBlockLoad', {
+              blockId,
+              load: false,
+            });
             this.$store.commit('showError', { error });
           }
         );
