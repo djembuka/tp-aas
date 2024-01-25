@@ -10,9 +10,9 @@ window.BX = {
       let result;
       switch (type) {
         case 'sign':
-          result = new Promise((resolve) => {
+          result = new Promise((resolve, reject) => {
             resolve({
-              status: 'success',
+              status: 'err',
               data: {
                 file: {
                   id: 8,
@@ -31,8 +31,9 @@ window.BX = {
                   },
                 },
               },
-              errors: [],
+              errors: ['you error'],
             });
+            // reject('Reject error');
           });
           break;
       }

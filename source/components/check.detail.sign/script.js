@@ -12,6 +12,9 @@ window.addEventListener('load', () => {
       },
     },
     mutations: {
+      showError(state, { error }) {
+        Vue.set(state, 'error', error);
+      },
       setModalProp(state, { prop, value }) {
         Vue.set(state.modal, prop, value);
       },
@@ -110,10 +113,20 @@ window.addEventListener('load', () => {
       sign() {
         this.loading = true;
         const pr = this.$store.dispatch('signAjax');
-        pr.then((response) => {
-          this.$store.commit('setFileData', { file: response.data.file });
-          this.close();
-        });
+        pr.then(
+          (r) => {
+            this.close();
+            if (r.status === 'success' && r.data) {
+              this.$store.commit('setFileData', { file: r.data.file });
+            } else {
+              this.$store.commit('showError', { error: r.errors[0] });
+            }
+          },
+          (error) => {
+            this.close();
+            this.$store.commit('showError', { error });
+          }
+        );
       },
       close() {
         this.loading = false;
@@ -170,6 +183,11 @@ window.addEventListener('load', () => {
     store,
     template: `
       <div>
+        <div v-if="error" class="b-check-detail-sign-error" @click="clickError">
+          <div class="b-check-detail-sign-error__content">
+            {{ error }}
+          </div>
+        </div>
         <div v-for="file in files" :data-id="file.id">
           <file-info :file="file" :key="file.id"></file-info>
         </div>
@@ -180,10 +198,14 @@ window.addEventListener('load', () => {
       files() {
         return this.$store.state.files;
       },
+      error() {
+        return this.$store.state.error;
+      },
     },
-    methods: {},
-    beforeMount() {
-      const vkkrId = this.$el.getAttribute('data-vkkrid');
+    methods: {
+      clickError() {
+        this.$store.commit('showError', { error: false });
+      },
     },
   };
 
