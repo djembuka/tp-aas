@@ -42,7 +42,24 @@ window.BX = {
                         id: 9,
                         name: 'Письмо-согласование сроков проведения проверки с уполномоченным экспертом',
                         type: 'collection',
-                        description: 'Это описание для коллекции',
+                        description: `<ol class="multy-level-2">
+                        <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!
+                          <ol>
+                            <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
+                          </ol>
+                        </li>
+                        <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
+                        <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!
+                          <ol>
+                            <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
+                            <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
+                            <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
+                          </ol>
+                        </li>
+                        <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
+                        <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
+                        <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
+                      </ol>`,
                         hint: 'Подсказка коллекции',
                         name_w: 'Название для объекта',
                         description_w: 'Название для объекта',
@@ -138,7 +155,10 @@ window.BX = {
                         id: 9,
                         name: 'Письмо-согласование сроков проведения проверки с уполномоченным экспертом',
                         type: 'collection',
-                        description: 'Это описание для коллекции',
+                        description: `<ul>
+                        <li>Организация системы внутреннего контроля (СВК) организациями, субъектами обязательного аудита (контрольная среда, оценка рисков, оценка внутреннего контроля, мониторинг).</li>
+                        <li>Особенности аудиторской проверки ключевых вопросов СВК в соответствии с международными стандартами аудита. Рабочие документы.</li>
+                      </ul>`,
                         hint: 'Подсказка коллекции',
                         name_w: 'Название для объекта',
                         description_w: 'Название для объекта',
