@@ -42,19 +42,9 @@ window.BX = {
                         id: 9,
                         name: 'Письмо-согласование сроков проведения проверки с уполномоченным экспертом',
                         type: 'collection',
-                        description: `<ol class="multy-level-2">
-                        <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!
-                          <ol>
-                            <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
-                          </ol>
-                        </li>
+                        description: `<ol>
                         <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
                         <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!
-                          <ol>
-                            <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
-                            <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
-                            <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
-                          </ol>
                         </li>
                         <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
                         <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Est laboriosam, eveniet beatae ratione cumque rerum sunt impedit cupiditate molestiae dolores suscipit adipisci sapiente officia, vero fuga? Repudiandae nulla quod a!</li>
