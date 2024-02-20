@@ -31,9 +31,10 @@ window.BX = {
                     needModerate: true,
                     permissions: {
                       read: false,
-                      write: true,
+                      write: false,
                       moderation: true,
                       monitoring: false,
+                      supervisor: true,
                     },
                     state: 'filled',
                     status: 3,
