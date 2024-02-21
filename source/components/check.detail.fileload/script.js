@@ -1175,7 +1175,12 @@ window.addEventListener('load', () => {
 
         <hr>
 
-        <div class="btn btn-secondary btn-lg" href="" @click="submit" :disabled="isBtnDisabled">Отправить</div>
+        <div class="b-check-detail-fileload-savebutton muted small d-flex align-items-center">
+          <div class="btn btn-secondary btn-lg" href="" @click="submit" :disabled="isBtnDisabled">Отправить</div>
+          <div class="b-check-detail-fileload-savetext" v-if="isBtnDisabled">Кнопка останется неактивной до тех пор, пока не будут заполнены все поля в каждой секции.
+          Пожалуйста, убедитесь, что все обязательные поля заполнены.</div>
+        </div>
+        
       </div>`,
     props: ['collections', 'block'],
     computed: {
