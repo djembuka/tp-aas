@@ -1,20 +1,4 @@
 window.addEventListener('load', () => {
-  function bitrixLogs(id, message) {
-    //AJAX Bitrix
-    if (window.BX) {
-      BX.ajax.post(
-        '/local/ajax/logs.php',
-        {
-          id,
-          el: document.querySelector('input[name = "APPEAL_ID"]').value,
-          message,
-          level: 1,
-        },
-        (result) => {}
-      );
-    }
-  }
-
   if (!window.Vue || !window.Vuex || !window.VueSelect) return;
 
   let velocity = window.Velocity || jQuery.Velocity;
@@ -425,6 +409,17 @@ window.addEventListener('load', () => {
                 <div v-else-if="block.permissions.monitoring">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
                 </div>
+                <div v-else-if="block.permissions.supervisor">
+                  <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
+
+                  <div v-if="block.state !== 'empty'">
+                    <h3>Сброс статуса файла</h3>
+                    <hr>
+                    <div class="b-check-detail-fileload__p">Вы имеете право возвращать статус документа к состоянию «Ничего не добавлено», при этом сохраняется история со всеми версиями файла. Применяйте эту функцию только в исключительных случаях, когда пользователь, проверяющий документ, допустил ошибку.</div>
+                    <hr>
+                    <reset-button></reset-button>
+                  </div>
+                </div>
                 <div v-else-if="block.permissions.read">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
                 </div>
@@ -510,6 +505,18 @@ window.addEventListener('load', () => {
       },
       toContent() {
         this.state = 'content';
+      },
+    },
+  });
+
+  Vue.component('resetButton', {
+    template: `
+      <div class="btn btn-danger btn-lg" @click="resetBlock">Сбросить</div>
+      <hr class="hr--sm">
+    `,
+    methods: {
+      resetBlock() {
+        console.log('reset');
       },
     },
   });
@@ -645,6 +652,11 @@ window.addEventListener('load', () => {
         ) {
           result = true;
         } else if (
+          this.block.permissions.supervisor &&
+          (this.block.state === 'moderating' || this.block.state === 'filled')
+        ) {
+          result = true;
+        } else if (
           this.block.permissions.read &&
           this.block.state === 'filled'
         ) {
@@ -658,7 +670,8 @@ window.addEventListener('load', () => {
 
         if (
           (this.block.permissions.moderation ||
-            this.block.permissions.monitoring) &&
+            this.block.permissions.monitoring ||
+            this.block.permissions.supervisor) &&
           this.block.state === 'empty'
         ) {
           result = true;
@@ -1469,6 +1482,62 @@ window.addEventListener('load', () => {
     methods: {},
   });
 
+  Vue.component('modalPopup', {
+    data() {
+      return {
+        loading: false,
+      };
+    },
+    template: `
+    <div class="modal--text modal fade" id="checkDetailSignModal" tabindex="-1" aria-labelledby="checkDetailSignModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <button class="close" type="button" @click="close" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );"></button>
+            <div class="modal-body">
+                <div class="progress-indicator" v-if="loading">
+                    <div class="item item-1"></div>
+                    <div class="item item-2"></div>
+                    <div class="item item-3"></div>
+                    <div class="item item-4"></div>
+                    <div class="item item-5"></div>
+                </div>
+                <div v-else>
+                    <h3 class="text-center">Вы подписываете документ простой цифровой подписью</h3>
+                    <hr>
+                    <p class="text-center">
+                    Обратите внимание, что вы подписываете документы, <b>«{{  }}»</b> с использованием простой цифровой подписи.
+                    </p>
+                    <hr class="hr--sl">
+                    <div class="text-center modal-buttons">
+                        <a class="btn btn-secondary btn-lg" @click="sign">Подписать</a>
+                        <a class="btn btn-light btn-lg" @click="close">Отменить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    `,
+    computed: {
+      show() {
+        return true;
+      },
+    },
+    watch: {
+      show(val) {
+        if (val) {
+          $('#checkDetailSignModal').modal('show');
+        } else {
+          $('#checkDetailSignModal').modal('hide');
+        }
+      },
+    },
+    methods: {
+      sign() {},
+      close() {},
+    },
+  });
+
   const App = {
     el: '#checkDetailFileload',
     store,
@@ -1494,6 +1563,7 @@ window.addEventListener('load', () => {
           <div class="circle circle-5"></div>
         </div>
       </div>
+      <modal-popup></modal-popup>
     </div>`,
     computed: {
       loaded() {
@@ -1512,6 +1582,7 @@ window.addEventListener('load', () => {
           block.permissions.moderation ||
           block.permissions.write ||
           block.permissions.monitoring ||
+          block.permissions.supervisor ||
           (block.permissions.read && block.state === 'filled')
         );
       },
