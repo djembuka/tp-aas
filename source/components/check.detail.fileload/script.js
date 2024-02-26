@@ -8,8 +8,20 @@ window.addEventListener('load', () => {
   const store = new Vuex.Store({
     state: {
       data: undefined,
+      modal: { show: false, blockId: null, loading: false },
     },
     mutations: {
+      changeModalState(state, { show, blockId, loading }) {
+        if (show !== undefined) {
+          Vue.set(state.modal, 'show', show === 'show' ? true : false);
+        }
+        if (blockId !== undefined) {
+          Vue.set(state.modal, 'blockId', blockId);
+        }
+        if (loading !== undefined) {
+          Vue.set(state.modal, 'loading', loading);
+        }
+      },
       showError(state, { error }) {
         Vue.set(state, 'error', error);
       },
@@ -142,9 +154,18 @@ window.addEventListener('load', () => {
         const index = state.data.blocks.findIndex((b) => b.id === blockId);
         Vue.set(state.data.blocks, index, newBlock);
       },
+      setBlockState(state, { blockId, blockState }) {
+        const block = state.data.blocks.find((b) => b.id === blockId);
+        if (block) {
+          Vue.set(block, 'state', blockState);
+          console.log(block.id, block.state);
+        }
+      },
       setBlockStatus(state, { blockId, status }) {
         const block = state.data.blocks.find((b) => b.id === blockId);
-        block.status = status;
+        if (block) {
+          block.status = status;
+        }
       },
       //collections
       addToMultipleCollection(_, { collection, collectIndex }) {
@@ -198,6 +219,47 @@ window.addEventListener('load', () => {
       },
     },
     actions: {
+      changeModalState({ commit }, { show, blockId, loading }) {
+        commit('changeModalState', { show, blockId, loading });
+      },
+      async resetBlock({ dispatch, commit }, { vkkr_id, block_id }) {
+        if (window.BX) {
+          window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'resetBlock', {
+              mode: 'class',
+              data: {
+                vkkr_id,
+                block_id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                if (r.status === 'success') {
+                  console.log('success');
+                  //set block state empty
+                  commit('setBlockState', {
+                    blockId: block_id,
+                    blockState: 'empty',
+                  });
+                  //close modal popup
+                  //remove load
+                  dispatch('changeModalState', {
+                    show: 'hide',
+                    blockId: null,
+                    loading: false,
+                  });
+                  //   commit('setState', { data: r.data });
+                } else {
+                  commit('showError', { error: 'Server error' });
+                }
+              },
+              (error) => {
+                commit('showError', { error });
+              }
+            );
+        }
+      },
       async loadState({ state, commit }) {
         if (window.BX) {
           window.BX.ajax
@@ -378,7 +440,7 @@ window.addEventListener('load', () => {
       <div class="b-collapse-vc" :class="{slide: slide, open: open}">
         <div class="b-collapse-vc__head" @click.stop.prevent="toggleBody()">
           <a href="" @click.prevent>
-            {{ block.name }}
+            {{ block.name }}, {{blockState}}, {{ block.id }}
           </a>
           <div class="b-collapse-vc__right">
             <div v-if="block.status" v-html="status" class="b-collapse-vc__status"></div>
@@ -387,6 +449,8 @@ window.addEventListener('load', () => {
         </div>
         <transition @enter="enter" @leave="leave" :css="false">
           <div class="b-collapse-vc__body" v-if="slide">
+
+          <pre>{{ block }}</pre>
 
             <div :class="{'b-check-detail-fileload__block': true, 'b-check-detail-fileload__block--load': block.load}" v-if="state==='content' || block.load">
 
@@ -417,7 +481,7 @@ window.addEventListener('load', () => {
                     <hr>
                     <div class="b-check-detail-fileload__p">Вы имеете право возвращать статус документа к состоянию «Ничего не добавлено», при этом сохраняется история со всеми версиями файла. Применяйте эту функцию только в исключительных случаях, когда пользователь, проверяющий документ, допустил ошибку.</div>
                     <hr>
-                    <reset-button></reset-button>
+                    <reset-button :blockId="block.id"></reset-button>
                   </div>
                 </div>
                 <div v-else-if="block.permissions.read">
@@ -442,6 +506,9 @@ window.addEventListener('load', () => {
           (s) => String(s.id) === String(this.block.status)
         );
         return `<div class="label-default"><span style="color:${status['text-color']}; background-color:${status['bg-color']}">${status.name}</span></div>`;
+      },
+      blockState() {
+        return this.block.state;
       },
     },
     methods: {
@@ -511,12 +578,16 @@ window.addEventListener('load', () => {
 
   Vue.component('resetButton', {
     template: `
-      <div class="btn btn-danger btn-lg" @click="resetBlock">Сбросить</div>
+      <div class="btn btn-danger btn-lg" @click="showModalPopup">Сбросить</div>
       <hr class="hr--sm">
     `,
+    props: ['blockId'],
     methods: {
-      resetBlock() {
-        console.log('reset');
+      showModalPopup() {
+        this.$store.dispatch('changeModalState', {
+          show: 'show',
+          blockId: this.blockId,
+        });
       },
     },
   });
@@ -1484,10 +1555,9 @@ window.addEventListener('load', () => {
 
   Vue.component('modalPopup', {
     data() {
-      return {
-        loading: false,
-      };
+      return {};
     },
+    props: ['blockId'],
     template: `
     <div class="modal--text modal fade" id="checkDetailSignModal" tabindex="-1" aria-labelledby="checkDetailSignModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -1502,14 +1572,13 @@ window.addEventListener('load', () => {
                     <div class="item item-5"></div>
                 </div>
                 <div v-else>
-                    <h3 class="text-center">Вы подписываете документ простой цифровой подписью</h3>
+                    <h3 class="text-center">Сброс статуса файла</h3>
                     <hr>
-                    <p class="text-center">
-                    Обратите внимание, что вы подписываете документы, <b>«{{  }}»</b> с использованием простой цифровой подписи.
+                    <p class="text-center">Вы хотите сбросить статус файла до «Ничего не добавлено». Пользователь создавший файл снова сможет добавить файл.
                     </p>
                     <hr class="hr--sl">
                     <div class="text-center modal-buttons">
-                        <a class="btn btn-secondary btn-lg" @click="sign">Подписать</a>
+                        <a class="btn btn-secondary btn-lg" @click="reset">Сбросить</a>
                         <a class="btn btn-light btn-lg" @click="close">Отменить</a>
                     </div>
                 </div>
@@ -1520,7 +1589,10 @@ window.addEventListener('load', () => {
     `,
     computed: {
       show() {
-        return true;
+        return this.$store.state.modal.show;
+      },
+      loading() {
+        return this.$store.state.modal.loading;
       },
     },
     watch: {
@@ -1533,8 +1605,21 @@ window.addEventListener('load', () => {
       },
     },
     methods: {
-      sign() {},
-      close() {},
+      reset() {
+        this.$store.dispatch('resetBlock', {
+          vkkr_id: this.$store.state.vkkrId,
+          block_id: this.$store.state.modal.blockId,
+        });
+        this.$store.dispatch('changeModalState', {
+          loading: true,
+        });
+      },
+      close() {
+        this.$store.dispatch('changeModalState', { show: 'hide' });
+        this.$store.dispatch('changeModalState', {
+          loading: false,
+        });
+      },
     },
   });
 
