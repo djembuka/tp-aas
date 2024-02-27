@@ -1488,7 +1488,7 @@ window.BX = {
                     ],
                   },
                   {
-                    id: 'id789456m',
+                    id: 'id789456s',
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     date_added: '15 января 2020',
@@ -1585,7 +1585,7 @@ window.BX = {
                     ],
                   },
                   {
-                    id: 'id129m',
+                    id: 'id129s',
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'filled+supervisor',

@@ -242,14 +242,24 @@ window.addEventListener('load', () => {
                     blockId: block_id,
                     blockState: 'empty',
                   });
-                  //close modal popup
-                  //remove load
+                  //close modal popup, remove load
                   dispatch('changeModalState', {
                     show: 'hide',
                     blockId: null,
                     loading: false,
                   });
-                  //   commit('setState', { data: r.data });
+                  //scroll window to the block
+                  const blockElem = document.querySelector(
+                    `div[data-id=${block_id}]`
+                  );
+                  if (blockElem) {
+                    window.scrollTo({
+                      top:
+                        blockElem.getBoundingClientRect().top -
+                        100 +
+                        window.scrollY,
+                    });
+                  }
                 } else {
                   commit('showError', { error: 'Server error' });
                 }
@@ -440,7 +450,7 @@ window.addEventListener('load', () => {
       <div class="b-collapse-vc" :class="{slide: slide, open: open}">
         <div class="b-collapse-vc__head" @click.stop.prevent="toggleBody()">
           <a href="" @click.prevent>
-            {{ block.name }}, {{blockState}}, {{ block.id }}
+            {{ block.name }}
           </a>
           <div class="b-collapse-vc__right">
             <div v-if="block.status" v-html="status" class="b-collapse-vc__status"></div>
@@ -449,8 +459,6 @@ window.addEventListener('load', () => {
         </div>
         <transition @enter="enter" @leave="leave" :css="false">
           <div class="b-collapse-vc__body" v-if="slide">
-
-          <pre>{{ block }}</pre>
 
             <div :class="{'b-check-detail-fileload__block': true, 'b-check-detail-fileload__block--load': block.load}" v-if="state==='content' || block.load">
 
