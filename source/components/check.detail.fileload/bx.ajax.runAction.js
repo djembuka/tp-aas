@@ -1792,7 +1792,7 @@ window.BX = {
                 {
                   id: 1,
                   name: 'Принят',
-                  active: true,
+                  active: false,
                   'text-color': '#74C37A',
                   'bg-color': '#EFFFF0',
                 },

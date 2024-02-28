@@ -154,13 +154,6 @@ window.addEventListener('load', () => {
         const index = state.data.blocks.findIndex((b) => b.id === blockId);
         Vue.set(state.data.blocks, index, newBlock);
       },
-      setBlockState(state, { blockId, blockState }) {
-        const block = state.data.blocks.find((b) => b.id === blockId);
-        if (block) {
-          Vue.set(block, 'state', blockState);
-          console.log(block.id, block.state);
-        }
-      },
       setBlockStatus(state, { blockId, status }) {
         const block = state.data.blocks.find((b) => b.id === blockId);
         if (block) {
@@ -236,30 +229,10 @@ window.addEventListener('load', () => {
             .then(
               (r) => {
                 if (r.status === 'success') {
-                  console.log('success');
-                  //set block state empty
-                  commit('setBlockState', {
+                  //load block info
+                  return dispatch('blockBX', {
                     blockId: block_id,
-                    blockState: 'empty',
                   });
-                  //close modal popup, remove load
-                  dispatch('changeModalState', {
-                    show: 'hide',
-                    blockId: null,
-                    loading: false,
-                  });
-                  //scroll window to the block
-                  const blockElem = document.querySelector(
-                    `div[data-id=${block_id}]`
-                  );
-                  if (blockElem) {
-                    window.scrollTo({
-                      top:
-                        blockElem.getBoundingClientRect().top -
-                        100 +
-                        window.scrollY,
-                    });
-                  }
                 } else {
                   commit('showError', { error: 'Server error' });
                 }
@@ -267,7 +240,27 @@ window.addEventListener('load', () => {
               (error) => {
                 commit('showError', { error });
               }
-            );
+            )
+            .then((r) => {
+              //close modal popup, remove load
+              dispatch('changeModalState', {
+                show: 'hide',
+                blockId: null,
+                loading: false,
+              });
+              //scroll window to the block
+              const blockElem = document.querySelector(
+                `div[data-id="${block_id}"]`
+              );
+              if (blockElem) {
+                window.scrollTo({
+                  top:
+                    blockElem.getBoundingClientRect().top -
+                    100 +
+                    window.scrollY,
+                });
+              }
+            });
         }
       },
       async loadState({ state, commit }) {
@@ -484,7 +477,7 @@ window.addEventListener('load', () => {
                 <div v-else-if="block.permissions.supervisor">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
 
-                  <div v-if="block.state !== 'empty'">
+                  <div v-if="block.state === 'filled'">
                     <h3>Сброс статуса файла</h3>
                     <hr>
                     <div class="b-check-detail-fileload__p">Вы имеете право возвращать статус документа к состоянию «Ничего не добавлено», при этом сохраняется история со всеми версиями файла. Применяйте эту функцию только в исключительных случаях, когда пользователь, проверяющий документ, допустил ошибку.</div>
@@ -1428,12 +1421,14 @@ window.addEventListener('load', () => {
         const statuses = this.$store.state.statuses;
         if (!statuses) return;
 
-        return statuses.map((s) => {
-          return {
-            label: s.name,
-            code: s.id,
-          };
-        });
+        return statuses
+          .filter((s) => s.active)
+          .map((s) => {
+            return {
+              label: s.name,
+              code: s.id,
+            };
+          });
       },
     },
     methods: {
