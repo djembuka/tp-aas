@@ -1577,7 +1577,7 @@ window.addEventListener('load', () => {
                 <div v-else>
                     <h3 class="text-center">Сброс статуса файла</h3>
                     <hr>
-                    <p class="text-center">Вы хотите сбросить статус файла до «Ничего не добавлено». Пользователь создавший файл снова сможет добавить файл.
+                    <p class="text-center">Вы хотите сбросить статус файла до «Ничего не добавлено»? Пользователь, создавший файл, снова сможет добавить файл.
                     </p>
                     <hr class="hr--sl">
                     <div class="text-center modal-buttons">

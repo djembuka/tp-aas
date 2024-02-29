@@ -147,7 +147,7 @@ window.addEventListener('load', () => {
         <div class="b-docs-block__body">
           <a class="b-docs-block__icon" :href="file.filelink" :style="icon"></a>
           <span class="b-docs-block__text">
-            <a :href="file.filelink">{{ name }}</a>
+            <a :href="file.filelink" target="_blank">{{ name }}</a>
           </span>
         </div>
         <div v-if="file.readonly || file.signed" class="b-docs-block__signed">
