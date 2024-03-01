@@ -88,7 +88,9 @@
             formControl = document.querySelector(`[name="${key}"]`);
             if (formControl) {
               formControl.value = result.DATA[key];
-              inputValidation(formControl);
+              if (formControl.getAttribute('required')) {
+                inputValidation(formControl);
+              }
               //set active label
               formControl.parentNode
                 .querySelector('label')
