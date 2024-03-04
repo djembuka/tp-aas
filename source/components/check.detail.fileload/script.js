@@ -477,7 +477,7 @@ window.addEventListener('load', () => {
                 <div v-else-if="block.permissions.supervisor">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
 
-                  <div v-if="block.state === 'filled'">
+                  <div v-if="block.state === 'filled' || block.state === 'moderating'">
                     <h3>Сброс статуса файла</h3>
                     <hr>
                     <div class="b-check-detail-fileload__p">Вы имеете право возвращать статус документа к состоянию «Ничего не добавлено», при этом сохраняется история со всеми версиями файла. Применяйте эту функцию только в исключительных случаях, когда пользователь, проверяющий документ, допустил ошибку.</div>
