@@ -1843,12 +1843,12 @@ window.BX = {
           break;
         case 'resetBlock':
           result = new Promise((resolve, reject) => {
-            resolve({
-              status: 'success',
-              data: {},
-              errors: [],
-            });
-            // reject(new Error('Response error.'));
+            // resolve({
+            //   status: 'success',
+            //   data: {},
+            //   errors: [],
+            // });
+            reject(new Error('Response error.'));
           });
           break;
         case 'setBlockStatus':
