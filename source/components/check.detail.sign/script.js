@@ -119,12 +119,12 @@ window.addEventListener('load', () => {
             if (r.status === 'success' && r.data) {
               this.$store.commit('setFileData', { file: r.data.file });
             } else {
-              this.$store.commit('showError', { error: r.errors[0] });
+              this.$store.commit('showError', { error: r.errors[0].message });
             }
           },
           (error) => {
             this.close();
-            this.$store.commit('showError', { error });
+            this.$store.commit('showError', { error: error.errors[0].message });
           }
         );
       },

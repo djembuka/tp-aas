@@ -234,11 +234,11 @@ window.addEventListener('load', () => {
                     blockId: block_id,
                   });
                 } else {
-                  commit('showError', { error: 'Server error' });
+                  commit('showError', { error: r.errors[0].message });
                 }
               },
               (error) => {
-                commit('showError', { error });
+                commit('showError', { error: error.errors[0].message });
               }
             )
             .then((r) => {
@@ -279,11 +279,11 @@ window.addEventListener('load', () => {
                 if (r.status === 'success' && r.data) {
                   commit('setState', { data: r.data });
                 } else {
-                  commit('showError', { error: 'Server error' });
+                  commit('showError', { error: r.errors[0].message });
                 }
               },
               (error) => {
-                commit('showError', { error });
+                commit('showError', { error: error.errors[0].message });
               }
             );
         }
@@ -303,11 +303,11 @@ window.addEventListener('load', () => {
                 if (r.status === 'success' && r.data) {
                   commit('setStatuses', { statuses: r.data });
                 } else {
-                  commit('showError', { error: 'Server error' });
+                  commit('showError', { error: r.errors[0].message });
                 }
               },
               (error) => {
-                commit('showError', { error });
+                commit('showError', { error: error.errors[0].message });
               }
             );
         }
@@ -368,11 +368,11 @@ window.addEventListener('load', () => {
                   commit('changeBlockLoad', { blockId, load: false });
                   commit('setNewBlock', { blockId, newBlock: r.data });
                 } else {
-                  commit('showError', { error: 'Server error' });
+                  commit('showError', { error: r.errors[0].message });
                 }
               },
               (error) => {
-                commit('showError', { error });
+                commit('showError', { error: error.errors[0].message });
               }
             );
         }
@@ -551,11 +551,11 @@ window.addEventListener('load', () => {
               });
               this.history = this.splitToAttempts(r.data);
             } else {
-              this.$store.commit('showError', { error: 'Server error' });
+              this.$store.commit('showError', { error: r.errors[0].message });
             }
           },
           (error) => {
-            this.$store.commit('showError', { error });
+            this.$store.commit('showError', { error: error.errors[0].message });
           }
         );
       },
@@ -1332,7 +1332,7 @@ window.addEventListener('load', () => {
                 blockId,
               });
             } else {
-              this.$store.commit('showError', { error: 'Server error' });
+              this.$store.commit('showError', { error: r.errors[0].message });
             }
           },
           (error) => {
@@ -1340,7 +1340,7 @@ window.addEventListener('load', () => {
               blockId,
               load: false,
             });
-            this.$store.commit('showError', { error });
+            this.$store.commit('showError', { error: error.errors[0].message });
           }
         );
       },
@@ -1453,7 +1453,7 @@ window.addEventListener('load', () => {
                 blockId: this.blockId,
               });
             } else {
-              this.$store.commit('showError', { error: 'Server error' });
+              this.$store.commit('showError', { error: r.errors[0].message });
             }
           },
           (error) => {
@@ -1461,7 +1461,7 @@ window.addEventListener('load', () => {
               blockId: this.blockId,
               load: false,
             });
-            this.$store.commit('showError', { error });
+            this.$store.commit('showError', { error: error.errors[0].message });
           }
         ).then(
           (r) => {
