@@ -691,6 +691,8 @@ window.addEventListener('load', () => {
 
           <file-info v-for="file in collection.files" :key="file.id" :block="block" :file="file" :statusCode="status"></file-info>
 
+          <files-archive></files-archive>
+
           <hr v-if="!last">
 
         </div>
@@ -835,6 +837,12 @@ window.addEventListener('load', () => {
           </span>
         </div>
       </div>
+    `,
+  });
+
+  Vue.component('filesArchive', {
+    template: `
+      <div>Files archive</div>
     `,
   });
 
