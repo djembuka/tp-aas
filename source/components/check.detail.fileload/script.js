@@ -691,9 +691,9 @@ window.addEventListener('load', () => {
 
           <file-info v-for="file in collection.files" :key="file.id" :block="block" :file="file" :statusCode="status"></file-info>
 
-          <files-archive></files-archive>
+          <hr>
 
-          <hr v-if="!last">
+          <files-archive v-if="last"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
@@ -842,7 +842,20 @@ window.addEventListener('load', () => {
 
   Vue.component('filesArchive', {
     template: `
-      <div>Files archive</div>
+    <div class="b-files-collection-archive">
+      <div class="b-files-collection-archive__title">Архив документов из последней попытки</div>
+      <div class="b-docs-block__item" href="/pages/news/">
+        <div class="b-docs-block__body">
+          <a class="b-docs-block__icon" href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );"></a>
+          <span class="b-docs-block__text">
+            <a href="/pages/news/">Анкета аудиторской организации, попытка 34</a>
+            <span class="b-docs-block__data">
+              <span class="text-muted">654 Кб .ZIP</span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
     `,
   });
 
