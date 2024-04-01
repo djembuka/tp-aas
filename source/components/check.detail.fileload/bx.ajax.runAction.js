@@ -15,6 +15,7 @@ window.BX = {
                 blocks: [
                   {
                     id: 1225,
+                    iterations: 1,
                     author_id: '19891',
                     author_name: 'Виктор (Программист)',
                     date_added: '25 декабря 2023',
@@ -119,6 +120,7 @@ window.BX = {
                   },
                   {
                     id: 1225,
+                    iterations: 1,
                     author_id: null,
                     author_name: null,
                     date_added: null,
@@ -218,6 +220,7 @@ window.BX = {
 
                   {
                     id: 12,
+                    iterations: 1,
                     author_name: 'Суппорт',
                     author_id: 1,
                     date_added: '12.12.2023 15:01:00',
@@ -281,6 +284,7 @@ window.BX = {
                   },
                   {
                     id: 12,
+                    iterations: 1,
                     author_name: 'Суппорт',
                     author_id: 1,
                     date_added: '12.12.2023 15:01:00',
@@ -346,6 +350,7 @@ window.BX = {
 
                   {
                     id: 'id123',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     name: 'Пример незаполненного блока с 1 полем - empty+write',
@@ -424,6 +429,7 @@ window.BX = {
                   },
                   {
                     id: 'id124',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1244',
                     date_added: '15 января 2020',
@@ -495,6 +501,7 @@ window.BX = {
                   },
                   {
                     id: 'id125',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     name: 'Пример незаполненного блока с мультиполем - empty-write',
@@ -558,6 +565,7 @@ window.BX = {
 
                   {
                     id: 'id126',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     name: 'Пример незаполненного блока с мультиколлекцией - empty+write',
@@ -609,6 +617,7 @@ window.BX = {
                   },
                   {
                     id: 'id126',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     name: 'Пример незаполненного блока с мультиколлекцией и мультиполем - empty+write',
@@ -672,6 +681,7 @@ window.BX = {
 
                   {
                     id: 'id130',
+                    iterations: 1,
                     date_added: '25 декабря 2023',
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
@@ -769,6 +779,7 @@ window.BX = {
                   },
                   {
                     id: 'id131',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'Промодерирован, с правами записи - filled+write',
@@ -865,6 +876,7 @@ window.BX = {
                   },
                   {
                     id: 'id128',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'Пустой, с правами модерации - empty+moderation',
@@ -943,6 +955,7 @@ window.BX = {
                   },
                   {
                     id: 'idModeratingExample',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     date_added: '15 января 2020',
@@ -1040,6 +1053,7 @@ window.BX = {
                   },
                   {
                     id: 'id129',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'Промодерирован, с правами модерации - filled+moderation',
@@ -1138,6 +1152,7 @@ window.BX = {
 
                   {
                     id: 'id128m',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'empty+monitoring',
@@ -1216,6 +1231,7 @@ window.BX = {
                   },
                   {
                     id: 'id789456m',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     date_added: '15 января 2020',
@@ -1313,6 +1329,7 @@ window.BX = {
                   },
                   {
                     id: 'id129m',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'filled+monitoring',
@@ -1411,6 +1428,7 @@ window.BX = {
 
                   {
                     id: 'id128m',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'empty+supervisor',
@@ -1489,6 +1507,7 @@ window.BX = {
                   },
                   {
                     id: 'id789456s',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     date_added: '15 января 2020',
@@ -1586,6 +1605,7 @@ window.BX = {
                   },
                   {
                     id: 'id129s',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'filled+supervisor',
@@ -1684,6 +1704,7 @@ window.BX = {
 
                   {
                     id: 'id132',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1323',
                     name: 'Промодерирован, с правами чтения - filled+read',

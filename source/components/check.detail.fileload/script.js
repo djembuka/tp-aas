@@ -394,6 +394,53 @@ window.addEventListener('load', () => {
           );
         }
       },
+      async downloadBX({ state, commit }, {}) {
+        if (window.BX) {
+          BX.ajax
+            .runComponentAction('twinpx:vkkr.api', 'download', {
+              mode: 'class',
+              data: {
+                vkkr_id: 8042,
+                block_id: 1328,
+              }, //data {Object|FormData} данные будут автоматически замаплены на параметры метода
+            })
+            .then(
+              function (response) {
+                console.log(response);
+                if (response.status === 'success' && response.data?.url) {
+                  window.location.href = response.data.url;
+                }
+                /**
+          {
+            "status": "success",
+            "data": {
+              "result": "Метод выполнен успешно"
+            },
+            "errors": []
+          }
+            **/
+              },
+              function (response) {
+                //сюда будут приходить все ответы, у которых status !== 'success'
+                console.log(response);
+
+                /**
+            {
+                "status": "error",
+            "data": {
+              "result": "Произошла ошибка"
+            },
+            "errors": [{
+              "message": "Не заполено поле Email",
+              "code": 0,
+              "customData": null
+            }]
+            }
+            **/
+              }
+            );
+        }
+      },
       setControlValue(
         { commit },
         { control, controlIndex, collection, collectIndex, value }
@@ -693,7 +740,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="last"></files-archive>
+          <files-archive v-if="last" :iterations="block.iterations"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
@@ -848,15 +895,21 @@ window.addEventListener('load', () => {
         <div class="b-docs-block__body">
           <a class="b-docs-block__icon" href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );"></a>
           <span class="b-docs-block__text">
-            <a href="/pages/news/">Анкета аудиторской организации, попытка 34</a>
+            <a href="" @click.prevent="click">Анкета аудиторской организации, попытка {{ iterations }}</a>
             <span class="b-docs-block__data">
-              <span class="text-muted">654 Кб .ZIP</span>
+              <span class="text-muted">.zip</span>
             </span>
           </span>
         </div>
       </div>
     </div>
     `,
+    props: ['iterations'],
+    methods: {
+      click() {
+        this.$store.dispatch('downloadBX', {});
+      },
+    },
   });
 
   Vue.component('formControlMulty', {
