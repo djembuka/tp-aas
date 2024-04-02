@@ -2163,6 +2163,17 @@ window.BX = {
             // reject(new Error('Response error.'));
           });
           break;
+        case 'download':
+          result = new Promise((resolve, reject) => {
+            resolve({
+              status: 'success',
+              data: {
+                url: '/',
+              },
+            });
+            // reject(new Error('Response error.'));
+          });
+          break;
       }
 
       return result;

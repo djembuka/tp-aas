@@ -394,49 +394,25 @@ window.addEventListener('load', () => {
           );
         }
       },
-      async downloadBX({ state, commit }, {}) {
+      async downloadBX(_, { vkkr_id, block_id }) {
+        console.log(vkkr_id, block_id);
         if (window.BX) {
           BX.ajax
             .runComponentAction('twinpx:vkkr.api', 'download', {
               mode: 'class',
               data: {
-                vkkr_id: 8042,
-                block_id: 1328,
-              }, //data {Object|FormData} данные будут автоматически замаплены на параметры метода
+                vkkr_id,
+                block_id,
+              },
             })
             .then(
-              function (response) {
-                console.log(response);
-                if (response.status === 'success' && response.data?.url) {
-                  window.location.href = response.data.url;
+              (r) => {
+                if (r.status === 'success' && r.data.url) {
+                  window.open(r.data.url, '_blank');
                 }
-                /**
-          {
-            "status": "success",
-            "data": {
-              "result": "Метод выполнен успешно"
-            },
-            "errors": []
-          }
-            **/
               },
-              function (response) {
-                //сюда будут приходить все ответы, у которых status !== 'success'
-                console.log(response);
-
-                /**
-            {
-                "status": "error",
-            "data": {
-              "result": "Произошла ошибка"
-            },
-            "errors": [{
-              "message": "Не заполено поле Email",
-              "code": 0,
-              "customData": null
-            }]
-            }
-            **/
+              (error) => {
+                console.log(error.errors[0].message);
               }
             );
         }
@@ -740,7 +716,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="last" :iterations="block.iterations"></files-archive>
+          <files-archive v-if="last" :block="block"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
@@ -895,7 +871,7 @@ window.addEventListener('load', () => {
         <div class="b-docs-block__body">
           <a class="b-docs-block__icon" href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );"></a>
           <span class="b-docs-block__text">
-            <a href="" @click.prevent="click">Анкета аудиторской организации, попытка {{ iterations }}</a>
+            <a href="" @click.prevent="click">Анкета аудиторской организации, попытка {{ block.iterations }}</a>
             <span class="b-docs-block__data">
               <span class="text-muted">.zip</span>
             </span>
@@ -904,10 +880,13 @@ window.addEventListener('load', () => {
       </div>
     </div>
     `,
-    props: ['iterations'],
+    props: ['block'],
     methods: {
       click() {
-        this.$store.dispatch('downloadBX', {});
+        this.$store.dispatch('downloadBX', {
+          vkkr_id: this.$store.state.vkkrId,
+          block_id: this.block.id,
+        });
       },
     },
   });
