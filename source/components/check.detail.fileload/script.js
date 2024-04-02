@@ -395,7 +395,6 @@ window.addEventListener('load', () => {
         }
       },
       async downloadBX(_, { vkkr_id, block_id }) {
-        console.log(vkkr_id, block_id);
         if (window.BX) {
           BX.ajax
             .runComponentAction('twinpx:vkkr.api', 'download', {
