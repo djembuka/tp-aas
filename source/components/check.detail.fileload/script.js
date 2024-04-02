@@ -871,7 +871,7 @@ window.addEventListener('load', () => {
         <div class="b-docs-block__body">
           <a class="b-docs-block__icon" href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );"></a>
           <span class="b-docs-block__text">
-            <a href="#" @click.prevent="click">{{ collection.name }} {{ block.iterations }}</a>
+            <a href="#" @click.prevent="click">{{ collection.name }}, попытка {{ block.iterations }}</a>
             <span class="b-docs-block__data">
               <span class="text-muted">.zip</span>
             </span>
