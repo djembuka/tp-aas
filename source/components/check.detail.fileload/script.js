@@ -716,7 +716,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="last" :block="block"></files-archive>
+          <files-archive v-if="last" :block="block" :collection="collection"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
@@ -871,7 +871,7 @@ window.addEventListener('load', () => {
         <div class="b-docs-block__body">
           <a class="b-docs-block__icon" href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );"></a>
           <span class="b-docs-block__text">
-            <a href="" @click.prevent="click">Анкета аудиторской организации, попытка {{ block.iterations }}</a>
+            <a href="#" @click.prevent="click">{{ collection.name }} {{ block.iterations }}</a>
             <span class="b-docs-block__data">
               <span class="text-muted">.zip</span>
             </span>
@@ -880,7 +880,7 @@ window.addEventListener('load', () => {
       </div>
     </div>
     `,
-    props: ['block'],
+    props: ['block', 'collection'],
     methods: {
       click() {
         this.$store.dispatch('downloadBX', {
