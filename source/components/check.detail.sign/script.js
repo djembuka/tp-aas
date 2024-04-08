@@ -148,7 +148,7 @@ window.addEventListener('load', () => {
   Vue.component('roleBlock', {
     props: ['role'],
     template: `
-      <div class="b-check-detail-sign__role-block">
+      <div class="b-check-detail-sign__role-block" v-if="files.length">
         <h3>{{ role.value }}</h3>
         <div v-for="file in files" :data-id="file.id">
           <file-info :file="file" :key="file.id"></file-info>
