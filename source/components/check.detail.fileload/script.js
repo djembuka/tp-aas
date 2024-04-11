@@ -866,9 +866,9 @@ window.addEventListener('load', () => {
     template: `
     <div class="b-files-collection-archive">
       <div class="b-files-collection-archive__title">Архив документов из последней попытки</div>
-      <div class="b-docs-block__item" href="/pages/news/">
+      <div class="b-docs-block__item">
         <div class="b-docs-block__body">
-          <a class="b-docs-block__icon" href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );"></a>
+          <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
           <span class="b-docs-block__text">
             <a href="#" @click.prevent="click">{{ collection.name }}, попытка {{ block.iterations }}</a>
             <span class="b-docs-block__data">
@@ -1678,6 +1678,72 @@ window.addEventListener('load', () => {
     },
   });
 
+  Vue.component('fullArchive', {
+    template: `
+        <div class="b-check-detail-fileload__full-archive" v-if="show">
+            <h3>Архив всех документов проверки</h3>
+            <div class="b-files-collection-archive">
+                <div class="b-files-collection-archive__title">Архив всех документов проверки</div>
+                <div class="b-docs-block__item">
+                    <div class="b-docs-block__body">
+                    <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
+                    <span class="b-docs-block__text">
+                        <a href="#" @click.prevent="click">Архив всех документов проверки</a>
+                        <span class="b-docs-block__data">
+                        <span class="text-muted">.zip</span>
+                        </span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+    computed: {
+      show() {
+        const blocks = this.$store.state.data.blocks.filter(
+          (b) => b.state === 'filled' || b.state === 'moderating'
+        );
+
+        let result = false;
+
+        blocks.forEach((b) => {
+          if (
+            b.permissions.moderation &&
+            (b.state === 'moderating' || b.state === 'filled')
+          ) {
+            result = true;
+          } else if (
+            b.permissions.write &&
+            (b.state === 'moderating' || b.state === 'filled')
+          ) {
+            result = true;
+          } else if (
+            b.permissions.monitoring &&
+            (b.state === 'moderating' || b.state === 'filled')
+          ) {
+            result = true;
+          } else if (
+            b.permissions.supervisor &&
+            (b.state === 'moderating' || b.state === 'filled')
+          ) {
+            result = true;
+          } else if (b.permissions.read && b.state === 'filled') {
+            result = true;
+          }
+        });
+
+        return result;
+      },
+    },
+    methods: {
+      click() {
+        this.$store.dispatch('downloadBX', {
+          vkkr_id: this.$store.state.vkkrId,
+        });
+      },
+    },
+  });
+
   const App = {
     el: '#checkDetailFileload',
     store,
@@ -1702,6 +1768,8 @@ window.addEventListener('load', () => {
         <div v-for="block in blocks" :data-id="block.id">
           <collapse-block v-if="blockVisible(block)" :block="block" :key="block.id"></collapse-block>
         </div>
+        <hr>
+        <full-archive></full-archive>
       </div>
       <div v-else>
         <div class="circle-loader">
