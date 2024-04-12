@@ -701,7 +701,14 @@ window.addEventListener('load', () => {
     data() {
       return {};
     },
-    props: ['block', 'collection', 'last', 'status'],
+    props: [
+      'block',
+      'collection',
+      'last',
+      'status',
+      'dontShowArchive',
+      'history',
+    ],
     template: `
       <div class="b-files-collection-info">
         <div class="b-files-collection__name">{{ collection.name }}</div>
@@ -715,7 +722,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="last" :block="block" :collection="collection"></files-archive>
+          <files-archive v-if="last && !dontShowArchive" :block="block" :collection="collection" :history="history"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
@@ -879,13 +886,18 @@ window.addEventListener('load', () => {
       </div>
     </div>
     `,
-    props: ['block', 'collection'],
+    props: ['block', 'collection', 'history'],
     methods: {
       click() {
-        this.$store.dispatch('downloadBX', {
+        const payload = {
           vkkr_id: this.$store.state.vkkrId,
           block_id: this.block.id,
-        });
+        };
+        if (this.history) {
+          payload.history = true;
+        }
+
+        this.$store.dispatch('downloadBX', payload);
       },
     },
   });
@@ -1555,7 +1567,7 @@ window.addEventListener('load', () => {
 
         <div class="b-check-detail-fileload__history-heading">Попытка {{ attemptIndex }}</div>
 
-        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :status="status" :last="index === attempt[0].items.length-1"></files-collection-info>
+        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :status="status" :last="index === attempt[0].items.length-1" :dontShowArchive="attemptIndex !== 1" :history="true"></files-collection-info>
 
         <hr>
 
