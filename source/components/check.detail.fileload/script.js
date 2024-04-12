@@ -877,7 +877,7 @@ window.addEventListener('load', () => {
         <div class="b-docs-block__body">
           <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
           <span class="b-docs-block__text">
-            <a href="#" @click.prevent="click">{{ collection.name }}, попытка {{ block.iterations }}</a>
+            <a href="#" @click.prevent="click">{{ name }}</a>
             <span class="b-docs-block__data">
               <span class="text-muted">.zip</span>
             </span>
@@ -887,6 +887,14 @@ window.addEventListener('load', () => {
     </div>
     `,
     props: ['block', 'collection', 'history'],
+    computed: {
+      name() {
+        if (this.history) {
+          return `${this.collection.name} (Архив)`;
+        }
+        return `${this.collection.name}, попытка ${this.block.iterations}`;
+      },
+    },
     methods: {
       click() {
         const payload = {
