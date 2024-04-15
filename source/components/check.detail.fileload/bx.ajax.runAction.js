@@ -3,7 +3,7 @@ window.BX = {
     return 'SESSID';
   },
   ajax: {
-    runComponentAction(_, type) {
+    runComponentAction(_, type, data) {
       let result;
       switch (type) {
         case 'blocks':
@@ -2164,6 +2164,7 @@ window.BX = {
           });
           break;
         case 'download':
+          console.log(data);
           result = new Promise((resolve, reject) => {
             resolve({
               status: 'success',

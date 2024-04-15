@@ -394,15 +394,24 @@ window.addEventListener('load', () => {
           );
         }
       },
-      async downloadBX(_, { vkkr_id, block_id }) {
+      async downloadBX(_, { vkkr_id, block_id, history }) {
         if (window.BX) {
+          const data = {
+            vkkr_id,
+          };
+
+          if (block_id !== undefined) {
+            data.block_id = block_id;
+          }
+
+          if (history !== undefined) {
+            data.history = history;
+          }
+
           BX.ajax
             .runComponentAction('twinpx:vkkr.api', 'download', {
               mode: 'class',
-              data: {
-                vkkr_id,
-                block_id,
-              },
+              data: data,
             })
             .then(
               (r) => {
@@ -514,8 +523,10 @@ window.addEventListener('load', () => {
               </div>
             </div>
 
-            <div v-else-if="state==='history'">
+            <div v-else-if="state === 'history'">
               <history-attempt v-for="(attempt, index) in history" :attempt="attempt" :attemptIndex="history.length - index" @toContent="toContent"></history-attempt>
+
+              <attempts-archive :block="block"></attempts-archive>
             </div>
           </div>
         </transition>
@@ -701,14 +712,7 @@ window.addEventListener('load', () => {
     data() {
       return {};
     },
-    props: [
-      'block',
-      'collection',
-      'last',
-      'status',
-      'dontShowArchive',
-      'history',
-    ],
+    props: ['block', 'collection', 'last', 'status', 'history'],
     template: `
       <div class="b-files-collection-info">
         <div class="b-files-collection__name">{{ collection.name }}</div>
@@ -722,7 +726,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="last && !dontShowArchive" :block="block" :collection="collection" :history="history"></files-archive>
+          <files-archive v-if="last" :block="block" :history="history"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
@@ -867,47 +871,6 @@ window.addEventListener('load', () => {
         </div>
       </div>
     `,
-  });
-
-  Vue.component('filesArchive', {
-    template: `
-    <div class="b-files-collection-archive">
-      <div class="b-files-collection-archive__title">Архив документов из последней попытки</div>
-      <div class="b-docs-block__item">
-        <div class="b-docs-block__body">
-          <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
-          <span class="b-docs-block__text">
-            <a href="#" @click.prevent="click">{{ name }}</a>
-            <span class="b-docs-block__data">
-              <span class="text-muted">.zip</span>
-            </span>
-          </span>
-        </div>
-      </div>
-    </div>
-    `,
-    props: ['block', 'collection', 'history'],
-    computed: {
-      name() {
-        if (this.history) {
-          return `${this.collection.name} (Архив)`;
-        }
-        return `${this.collection.name}, попытка ${this.block.iterations}`;
-      },
-    },
-    methods: {
-      click() {
-        const payload = {
-          vkkr_id: this.$store.state.vkkrId,
-          block_id: this.block.id,
-        };
-        if (this.history) {
-          payload.history = true;
-        }
-
-        this.$store.dispatch('downloadBX', payload);
-      },
-    },
   });
 
   Vue.component('formControlMulty', {
@@ -1575,7 +1538,7 @@ window.addEventListener('load', () => {
 
         <div class="b-check-detail-fileload__history-heading">Попытка {{ attemptIndex }}</div>
 
-        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :status="status" :last="index === attempt[0].items.length-1" :dontShowArchive="attemptIndex !== 1" :history="true"></files-collection-info>
+        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :status="status" :last="index === attempt[0].items.length-1" :history="true"></files-collection-info>
 
         <hr>
 
@@ -1708,7 +1671,7 @@ window.addEventListener('load', () => {
                     <div class="b-docs-block__body">
                     <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
                     <span class="b-docs-block__text">
-                        <a href="#" @click.prevent="click">Архив всех документов проверки</a>
+                        <a href="#" @click.prevent="click">Проверка {{ $store.state.vkkrId }} (Архив всех файлов)</a>
                         <span class="b-docs-block__data">
                         <span class="text-muted">.zip</span>
                         </span>
@@ -1724,41 +1687,78 @@ window.addEventListener('load', () => {
           (b) => b.state === 'filled' || b.state === 'moderating'
         );
 
-        let result = false;
-
-        blocks.forEach((b) => {
-          if (
-            b.permissions.moderation &&
-            (b.state === 'moderating' || b.state === 'filled')
-          ) {
-            result = true;
-          } else if (
-            b.permissions.write &&
-            (b.state === 'moderating' || b.state === 'filled')
-          ) {
-            result = true;
-          } else if (
-            b.permissions.monitoring &&
-            (b.state === 'moderating' || b.state === 'filled')
-          ) {
-            result = true;
-          } else if (
-            b.permissions.supervisor &&
-            (b.state === 'moderating' || b.state === 'filled')
-          ) {
-            result = true;
-          } else if (b.permissions.read && b.state === 'filled') {
-            result = true;
-          }
-        });
-
-        return result;
+        return !!blocks.length;
       },
     },
     methods: {
       click() {
         this.$store.dispatch('downloadBX', {
           vkkr_id: this.$store.state.vkkrId,
+        });
+      },
+    },
+  });
+
+  Vue.component('filesArchive', {
+    template: `
+    <div class="b-files-collection-archive" v-if="show">
+      <div class="b-files-collection-archive__title">Архив документов из последней попытки</div>
+      <div class="b-docs-block__item">
+        <div class="b-docs-block__body">
+          <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
+          <span class="b-docs-block__text">
+            <a href="#" @click.prevent="click">{{ block.name }}, попытка {{ block.iterations }}</a>
+            <span class="b-docs-block__data">
+              <span class="text-muted">.zip</span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    `,
+    props: ['block', 'history'],
+    computed: {
+      show() {
+        return !this.history;
+      },
+    },
+    methods: {
+      click() {
+        this.$store.dispatch('downloadBX', {
+          vkkr_id: this.$store.state.vkkrId,
+          block_id: this.block.id,
+        });
+      },
+    },
+  });
+
+  Vue.component('AttemptsArchive', {
+    template: `
+        <div class="b-check-detail-fileload__full-archive">
+            <h3>Архив всех попыток добавления документа</h3>
+            <div class="b-files-collection-archive">
+                <div class="b-files-collection-archive__title">Архив всех попыток добавления докумнета</div>
+                <div class="b-docs-block__item">
+                    <div class="b-docs-block__body">
+                    <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
+                    <span class="b-docs-block__text">
+                        <a href="#" @click.prevent="click">{{ block.name }} (архив)</a>
+                        <span class="b-docs-block__data">
+                        <span class="text-muted">.zip</span>
+                        </span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+    props: ['block'],
+    methods: {
+      click() {
+        this.$store.dispatch('downloadBX', {
+          vkkr_id: this.$store.state.vkkrId,
+          block_id: this.block.id,
+          history: true,
         });
       },
     },
