@@ -1,9 +1,15 @@
 @import '../../styl/component-include.styl'
 
 .b-pagination
-  font-family $roboto
+
+  &-all
+    font-family $roboto
+
+    ~ hr
+      display none
   
   &-block
+    font-family $roboto
 
     &.ph-block--animated
       opacity 1
@@ -31,9 +37,10 @@
       &:hover,
       &:active
         color $text-color
+        font-weight $bold
         opacity 1
       
-    @media( max-width 575px )
+    @media( max-width 767px )
       text-align center
       display flex
       justify-content space-around
@@ -50,4 +57,16 @@
           text-align center
           
           margin 0
+
+  @media(max-width 767px)
+
+    &-all 
+
+      ~ hr
+        display block
+        width 100%
+
+    &-all,
+    &-block
+      width: 100%
       

@@ -1,0 +1,30 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-search-result'
+  - var authorized = 'true'
+
+block title
+  title Результаты поиска | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/search
+
+  hr
+
+  .container-fluid
+  
+    h1 Поиск
+  
+    include ../../components/search.form/template
+
+    hr.hr--lg
+
+    include ../../components/search.result/template
+  
+    
