@@ -125,10 +125,10 @@ window.addEventListener('load', () => {
               });
             }
             Vue.set(control.value[controlIndex], 'val', value);
-            Vue.set(control.filename, controlIndex, value);
+            Vue.set(control.filename, controlIndex, value.name);
           } else {
             Vue.set(control, 'value', value);
-            Vue.set(control, 'filename', value);
+            Vue.set(control, 'filename', value.name);
           }
         }
       },
@@ -1200,7 +1200,7 @@ window.addEventListener('load', () => {
           controlIndex: this.controlIndex,
           collection: this.collection,
           collectIndex: this.collectIndex,
-          value: this.invalid ? '' : files[0].name,
+          value: this.invalid ? '' : files[0],
         });
       },
       clearInputFile() {
@@ -1311,7 +1311,7 @@ window.addEventListener('load', () => {
             if (c.value) {
               return c.value.every((cObj) => {
                 return Object.values(cObj.files).every((v) => {
-                  if (typeof v === 'object') {
+                  if (typeof v === 'object' && v.every) {
                     return v.every((obj) => !!obj.val);
                   } else {
                     return !!v;
@@ -1343,12 +1343,70 @@ window.addEventListener('load', () => {
       },
     },
     methods: {
+      getFilesData() {
+        let result;
+        result = this.collections.forEach((c) => {
+          if (c.multiple) {
+            if (c.value) {
+              return c.value.map((cObj) => {
+                return Object.values(cObj.files).map((v, cIdx) => {
+                  if (typeof v === 'object' && v.map) {
+                    return v.map((obj, vIdx) => {
+                      return {
+                        name: `${c.id}|${cIdx}|${v.id}|${vIdx}`,
+                        filename: obj.val.name,
+                        file: obj.val,
+                      };
+                    });
+                  } else {
+                    return {};
+                  }
+                });
+              });
+            } else {
+              return [];
+            }
+          } else {
+            return c.files.map((f, cIdx) => {
+              if (
+                f.multiple &&
+                typeof f.filename === 'object' &&
+                f.filename !== null
+              ) {
+                return f.value.map((obj, vIdx) => {
+                  return {
+                    name: `${c.id}|${cIdx}|${f.id}|${vIdx}`,
+                    filename: obj.val.name,
+                    file: obj.val,
+                  };
+                });
+              } else if (!f.multiple && f.filename) {
+                return f.value.map((obj, vIdx) => {
+                  return {
+                    name: `${c.id}|${cIdx}|${f.id}|${vIdx}`,
+                    filename: obj.val.name,
+                    file: obj.val,
+                  };
+                });
+              } else {
+                return [];
+              }
+            });
+          }
+        });
+
+        console.log(result);
+
+        return result;
+      },
       submit() {
         const blockId = this.block.id;
-        const formData = new FormData(this.$refs['fileload-form']);
+        const formData = new FormData(); //(this.$refs['fileload-form']);
         formData.append('vkkr_id', this.$store.state.vkkrId);
         formData.append('block_id', blockId);
         formData.append('sessid', window.BX.bitrix_sessid());
+
+        formData.append('files', this.getFilesData());
 
         this.$store.commit('changeBlockLoad', {
           blockId,
