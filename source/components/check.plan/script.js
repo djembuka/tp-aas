@@ -19,7 +19,9 @@ window.addEventListener('load', () => {
       },
       changeControlValue(state, { controlCode, controlValue }) {
         const control = state.filter.controls.find(
-          (control) => control.code === controlCode
+          (control) =>
+            String(control.code).toLowerCase() ===
+            String(controlCode).toLowerCase()
         );
         switch (control.type) {
           case 'text':
