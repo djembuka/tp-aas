@@ -1426,6 +1426,16 @@ window.addEventListener('load', () => {
           formData: this.formData,
         });
 
+        window.scrollTo({
+          top:
+            this.$refs['fileload-form']
+              .closest('.b-collapse-vc')
+              .getBoundingClientRect().top +
+            window.scrollY -
+            100,
+          behavior: 'smooth',
+        });
+
         pr.then(
           (r) => {
             this.$store.commit('changeBlockLoad', {
