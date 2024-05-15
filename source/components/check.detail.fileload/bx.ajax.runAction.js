@@ -119,7 +119,7 @@ window.BX = {
                     ],
                   },
                   {
-                    id: 1225,
+                    id: 12250,
                     iterations: 1,
                     author_id: null,
                     author_name: null,
@@ -616,7 +616,7 @@ window.BX = {
                     ],
                   },
                   {
-                    id: 'id126',
+                    id: 'id0126',
                     iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
@@ -637,7 +637,7 @@ window.BX = {
                     status: '0',
                     items: [
                       {
-                        id: 'collectionId4',
+                        id: 'collectionId41',
                         type: 'collection',
                         name: 'Название коллекции 4',
                         description: 'Описание коллекции 4',
@@ -652,7 +652,7 @@ window.BX = {
                         maxcollections: 3,
                         files: [
                           {
-                            id: 'id1263',
+                            id: 'id12631',
                             type: 'file',
                             name: 'USER_FILE_6',
                             multiple: false,
@@ -663,7 +663,7 @@ window.BX = {
                               'Пример простого поля. Приложите файл в формате Exel, файл, который вы приложите, будет считаться официальном документом, подписанным простой электронной подписью.',
                           },
                           {
-                            id: 'id1311',
+                            id: 'id13111',
                             type: 'file',
                             name: 'USER_FILE_3',
                             description: 'Пример мультиполя',

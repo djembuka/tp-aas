@@ -1344,58 +1344,65 @@ window.addEventListener('load', () => {
     },
     methods: {
       getFilesData() {
-        let result;
-        result = this.collections.forEach((c) => {
+        let result = [];
+        this.collections.forEach((c) => {
           if (c.multiple) {
+            //multiple conllection
             if (c.value) {
-              return c.value.map((cObj) => {
-                return Object.values(cObj.files).map((v, cIdx) => {
-                  if (typeof v === 'object' && v.map) {
-                    return v.map((obj, vIdx) => {
-                      return {
-                        name: `${c.id}|${cIdx}|${v.id}|${vIdx}`,
-                        filename: obj.val.name,
-                        file: obj.val,
-                      };
-                    });
-                  } else {
-                    return {};
+              c.value.forEach((vObj, cIdx) => {
+                Object.entries(vObj.files).forEach((fArr) => {
+                  const f = fArr[1];
+                  if (typeof f === 'object') {
+                    if (f.forEach) {
+                      //multiple control
+                      f.forEach((obj, fIdx) => {
+                        const id = fArr[0].substring(2);
+                        result.push({
+                          name: `${c.id}|${cIdx}|${id}|${fIdx}`,
+                          filename: obj.val ? obj.val.name : '',
+                          file: obj.val,
+                        });
+                      });
+                    } else {
+                      //single control
+                      const id = fArr[0].substring(2);
+                      result.push({
+                        name: `${c.id}|${cIdx}|${id}|0`,
+                        filename: fArr[1].name,
+                        file: fArr[1],
+                      });
+                    }
                   }
                 });
               });
-            } else {
-              return [];
             }
           } else {
-            return c.files.map((f, cIdx) => {
+            //single collection
+            c.files.forEach((f) => {
               if (
                 f.multiple &&
-                typeof f.filename === 'object' &&
-                f.filename !== null
+                typeof f.value === 'object' &&
+                f.value.forEach
               ) {
-                return f.value.map((obj, vIdx) => {
-                  return {
-                    name: `${c.id}|${cIdx}|${f.id}|${vIdx}`,
-                    filename: obj.val.name,
+                //multiple control
+                f.value.forEach((obj, fIdx) => {
+                  result.push({
+                    name: `${c.id}|0|${f.id}|${fIdx}`,
+                    filename: obj.val ? obj.val.name : '',
                     file: obj.val,
-                  };
+                  });
                 });
-              } else if (!f.multiple && f.filename) {
-                return f.value.map((obj, vIdx) => {
-                  return {
-                    name: `${c.id}|${cIdx}|${f.id}|${vIdx}`,
-                    filename: obj.val.name,
-                    file: obj.val,
-                  };
+              } else if (!f.multiple && f.value) {
+                //single control
+                result.push({
+                  name: `${c.id}|0|${f.id}|0`,
+                  filename: f.value.name,
+                  file: f.value,
                 });
-              } else {
-                return [];
               }
             });
           }
         });
-
-        console.log(result);
 
         return result;
       },
@@ -1414,6 +1421,7 @@ window.addEventListener('load', () => {
         });
 
         const pr = this.$store.dispatch('saveBlockBX', { formData });
+
         pr.then(
           (r) => {
             this.$store.commit('changeBlockLoad', {
