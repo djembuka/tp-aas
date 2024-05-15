@@ -1281,6 +1281,11 @@ window.addEventListener('load', () => {
   });
 
   Vue.component('FileloadForm', {
+    data() {
+      return {
+        formData: null,
+      };
+    },
     template: `
       <div>
         <form ref="fileload-form" action="" method="" enctype= multipart/form-data>
@@ -1344,7 +1349,6 @@ window.addEventListener('load', () => {
     },
     methods: {
       getFilesData() {
-        let result = [];
         this.collections.forEach((c) => {
           if (c.multiple) {
             //multiple conllection
@@ -1357,20 +1361,20 @@ window.addEventListener('load', () => {
                       //multiple control
                       f.forEach((obj, fIdx) => {
                         const id = fArr[0].substring(2);
-                        result.push({
-                          name: `${c.id}|${cIdx}|${id}|${fIdx}`,
-                          filename: obj.val ? obj.val.name : '',
-                          file: obj.val,
-                        });
+                        this.formData.append(
+                          `${c.id}|${cIdx}|${id}|${fIdx}`,
+                          obj.val,
+                          obj.val ? obj.val.name : ''
+                        );
                       });
                     } else {
                       //single control
                       const id = fArr[0].substring(2);
-                      result.push({
-                        name: `${c.id}|${cIdx}|${id}|0`,
-                        filename: fArr[1].name,
-                        file: fArr[1],
-                      });
+                      this.formData.append(
+                        `${c.id}|${cIdx}|${id}|0`,
+                        fArr[1],
+                        fArr[1].name
+                      );
                     }
                   }
                 });
@@ -1386,41 +1390,41 @@ window.addEventListener('load', () => {
               ) {
                 //multiple control
                 f.value.forEach((obj, fIdx) => {
-                  result.push({
-                    name: `${c.id}|0|${f.id}|${fIdx}`,
-                    filename: obj.val ? obj.val.name : '',
-                    file: obj.val,
-                  });
+                  this.formData.append(
+                    `${c.id}|0|${f.id}|${fIdx}`,
+                    obj.val,
+                    obj.val ? obj.val.name : ''
+                  );
                 });
               } else if (!f.multiple && f.value) {
                 //single control
-                result.push({
-                  name: `${c.id}|0|${f.id}|0`,
-                  filename: f.value.name,
-                  file: f.value,
-                });
+                this.formData.append(
+                  `${c.id}|0|${f.id}|0`,
+                  f.value,
+                  f.value.name
+                );
               }
             });
           }
         });
-
-        return result;
       },
       submit() {
         const blockId = this.block.id;
-        const formData = new FormData(); //(this.$refs['fileload-form']);
-        formData.append('vkkr_id', this.$store.state.vkkrId);
-        formData.append('block_id', blockId);
-        formData.append('sessid', window.BX.bitrix_sessid());
+        this.formData = new FormData(); //(this.$refs['fileload-form']);
+        this.formData.append('vkkr_id', this.$store.state.vkkrId);
+        this.formData.append('block_id', blockId);
+        this.formData.append('sessid', window.BX.bitrix_sessid());
 
-        formData.append('files', this.getFilesData());
+        this.getFilesData();
 
         this.$store.commit('changeBlockLoad', {
           blockId,
           load: true,
         });
 
-        const pr = this.$store.dispatch('saveBlockBX', { formData });
+        const pr = this.$store.dispatch('saveBlockBX', {
+          formData: this.formData,
+        });
 
         pr.then(
           (r) => {
