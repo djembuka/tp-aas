@@ -7,7 +7,7 @@ window.BX = {
       let result;
       switch (type) {
         case 'blocks':
-          result = new Promise((resolve) => {
+          result = new Promise((resolve, reject) => {
             resolve({
               status: 'success',
               data: {
@@ -1803,6 +1803,8 @@ window.BX = {
               },
               errors: [],
             });
+
+            // reject({ errors: [{ code: 1, message: 'blocks error' }] });
           });
           break;
         case 'statuses':
@@ -1834,7 +1836,7 @@ window.BX = {
               ],
               errors: [{ message: 'Error message' }],
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 2, message: 'statuses error' }] });
           });
           break;
         case 'saveBlock':
@@ -1859,17 +1861,17 @@ window.BX = {
               },
               errors: [],
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 3, message: 'saveBlock error' }] });
           });
           break;
         case 'resetBlock':
           result = new Promise((resolve, reject) => {
-            // resolve({
-            //   status: 'success',
-            //   data: {},
-            //   errors: [],
-            // });
-            reject(new Error('Response error.'));
+            resolve({
+              status: 'success',
+              data: {},
+              errors: [],
+            });
+            // reject({ errors: [{ code: 4, message: 'resetBlock error' }] });
           });
           break;
         case 'setBlockStatus':
@@ -1879,7 +1881,7 @@ window.BX = {
               data: {},
               errors: [],
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 5, message: 'setBlockStatus error' }] });
           });
           break;
         case 'history':
@@ -2101,7 +2103,7 @@ window.BX = {
               ],
               errors: [],
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 6, message: 'history error' }] });
           });
           break;
         case 'block':
@@ -2160,7 +2162,7 @@ window.BX = {
                 ],
               },
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 8, message: 'block error' }] });
           });
           break;
         case 'download':
@@ -2172,7 +2174,7 @@ window.BX = {
                 url: '/',
               },
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 8, message: 'download error' }] });
           });
           break;
       }

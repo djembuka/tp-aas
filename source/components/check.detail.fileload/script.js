@@ -22,8 +22,57 @@ window.addEventListener('load', () => {
           Vue.set(state.modal, 'loading', loading);
         }
       },
-      showError(state, { error }) {
-        Vue.set(state, 'error', error);
+      showError(state, { error, method }) {
+        if (typeof error === 'boolean') {
+          Vue.set(state, 'error', error);
+        } else if (typeof error === 'object') {
+          if (
+            error.errors &&
+            typeof error.errors === 'object' &&
+            error.errors[0] &&
+            error.errors[0].code
+          ) {
+            if (error.errors[0].code === 'NETWORK_ERROR') {
+              if (error.data && error.data.ajaxRejectData) {
+                if (error.data.ajaxRejectData.data) {
+                  Vue.set(
+                    state,
+                    'error',
+                    `Метод: ${method}.<br>Код ошибки: ${
+                      error.data.ajaxRejectData.data
+                    }.<br>Описание: ${
+                      window.BX.message(
+                        'ERROR_' + error.data.ajaxRejectData.data
+                      ) || window.BX.message('ERROR_SERVER')
+                    }`
+                  );
+                }
+              } else if (window.BX.message) {
+                Vue.set(
+                  state,
+                  'error',
+                  `Метод: ${method}.<br>Код ошибки: NETWORK_ERROR.<br>Описание: ${window.BX.message(
+                    'ERROR_OFFLINE'
+                  )}`
+                );
+              }
+            } else {
+              Vue.set(
+                state,
+                'error',
+                `Метод: ${method}.${
+                  error.errors[0].code
+                    ? '<br>Код ошибки: ' + error.errors[0].code + '.'
+                    : ''
+                } ${
+                  error.errors[0].message
+                    ? '<br>Описание: ' + error.errors[0].message + '.'
+                    : ''
+                }`
+              );
+            }
+          }
+        }
       },
       changeBlockLoad(state, { blockId, load }) {
         const block = state.data.blocks.find(
@@ -228,17 +277,12 @@ window.addEventListener('load', () => {
             })
             .then(
               (r) => {
-                if (r.status === 'success') {
-                  //load block info
-                  return dispatch('blockBX', {
-                    blockId: block_id,
-                  });
-                } else {
-                  commit('showError', { error: r.errors[0].message });
-                }
+                return dispatch('blockBX', {
+                  blockId: block_id,
+                });
               },
               (error) => {
-                commit('showError', { error: error.errors[0].message });
+                commit('showError', { error, method: 'resetBlock' });
               }
             )
             .then((r) => {
@@ -276,14 +320,10 @@ window.addEventListener('load', () => {
             })
             .then(
               (r) => {
-                if (r.status === 'success' && r.data) {
-                  commit('setState', { data: r.data });
-                } else {
-                  commit('showError', { error: r.errors[0].message });
-                }
+                commit('setState', { data: r.data });
               },
               (error) => {
-                commit('showError', { error: error.errors[0].message });
+                commit('showError', { error, method: 'blocks' });
               }
             );
         }
@@ -300,14 +340,10 @@ window.addEventListener('load', () => {
             })
             .then(
               (r) => {
-                if (r.status === 'success' && r.data) {
-                  commit('setStatuses', { statuses: r.data });
-                } else {
-                  commit('showError', { error: r.errors[0].message });
-                }
+                commit('setStatuses', { statuses: r.data });
               },
               (error) => {
-                commit('showError', { error: error.errors[0].message });
+                commit('showError', { error, method: 'statuses' });
               }
             );
         }
@@ -364,15 +400,11 @@ window.addEventListener('load', () => {
             })
             .then(
               (r) => {
-                if (r.status === 'success') {
-                  commit('changeBlockLoad', { blockId, load: false });
-                  commit('setNewBlock', { blockId, newBlock: r.data });
-                } else {
-                  commit('showError', { error: r.errors[0].message });
-                }
+                commit('changeBlockLoad', { blockId, load: false });
+                commit('setNewBlock', { blockId, newBlock: r.data });
               },
               (error) => {
-                commit('showError', { error: error.errors[0].message });
+                commit('showError', { error, method: 'block' });
               }
             );
         }
@@ -394,7 +426,7 @@ window.addEventListener('load', () => {
           );
         }
       },
-      async downloadBX(_, { vkkr_id, block_id, history }) {
+      async downloadBX({ commit }, { vkkr_id, block_id, history }) {
         if (window.BX) {
           const data = {
             vkkr_id,
@@ -415,12 +447,12 @@ window.addEventListener('load', () => {
             })
             .then(
               (r) => {
-                if (r.status === 'success' && r.data.url) {
+                if (r.data.url) {
                   window.open(r.data.url, '_blank');
                 }
               },
               (error) => {
-                console.log(error.errors[0].message);
+                commit('showError', { error, method: 'download' });
               }
             );
         }
@@ -577,18 +609,16 @@ window.addEventListener('load', () => {
         pr.then(
           (r) => {
             this.state = 'history';
-            if (r && r.status === 'success' && r.data) {
+            if (r.data) {
               this.$store.commit('changeBlockLoad', {
                 blockId,
                 load: false,
               });
               this.history = this.splitToAttempts(r.data);
-            } else {
-              this.$store.commit('showError', { error: r.errors[0].message });
             }
           },
           (error) => {
-            this.$store.commit('showError', { error: error.errors[0].message });
+            this.$store.commit('showError', { error, method: 'history' });
           }
         );
       },
@@ -1442,20 +1472,16 @@ window.addEventListener('load', () => {
               blockId,
               load: false,
             });
-            if (r.status === 'success') {
-              return this.$store.dispatch('blockBX', {
-                blockId,
-              });
-            } else {
-              this.$store.commit('showError', { error: r.errors[0].message });
-            }
+            return this.$store.dispatch('blockBX', {
+              blockId,
+            });
           },
           (error) => {
             this.$store.commit('changeBlockLoad', {
               blockId,
               load: false,
             });
-            this.$store.commit('showError', { error: error.errors[0].message });
+            this.$store.commit('showError', { error, method: 'saveBlock' });
           }
         );
       },
@@ -1563,20 +1589,19 @@ window.addEventListener('load', () => {
               blockId: this.blockId,
               load: false,
             });
-            if (r.status === 'success') {
-              return this.$store.dispatch('blockBX', {
-                blockId: this.blockId,
-              });
-            } else {
-              this.$store.commit('showError', { error: r.errors[0].message });
-            }
+            return this.$store.dispatch('blockBX', {
+              blockId: this.blockId,
+            });
           },
           (error) => {
             this.$store.commit('changeBlockLoad', {
               blockId: this.blockId,
               load: false,
             });
-            this.$store.commit('showError', { error: error.errors[0].message });
+            this.$store.commit('showError', {
+              error,
+              method: 'setBlockStatus',
+            });
           }
         ).then(
           (r) => {
