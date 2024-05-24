@@ -240,6 +240,33 @@
   &__text
     font-size $14px
 
+.b-reset-form
+
+  &__button
+    display flex
+    justify-content space-between
+    align-items center
+
+    .btn
+      margin-right 30px
+
+    .text-muted
+      width 100%
+      font-size $11px
+      line-height 1.2
+
+    @media(max-width 1200px)
+      display block
+
+      .btn
+        margin-bottom 15px
+
+      .text-muted
+        margin-bottom 30px
+
+  &__text
+    font-size $14px
+
 @keyframes circle
   0%
     transform( rotate(0))

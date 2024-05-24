@@ -8,9 +8,12 @@ window.addEventListener('load', () => {
   const store = new Vuex.Store({
     state: {
       data: undefined,
-      modal: { show: false, blockId: null, loading: false },
+      modal: { show: false, blockId: null, loading: false, status_comment: '' },
     },
     mutations: {
+      setModalStatusComment(state, { status_comment }) {
+        Vue.set(state.modal, 'status_comment', status_comment);
+      },
       changeModalState(state, { show, blockId, loading }) {
         if (show !== undefined) {
           Vue.set(state.modal, 'show', show === 'show' ? true : false);
@@ -264,7 +267,10 @@ window.addEventListener('load', () => {
       changeModalState({ commit }, { show, blockId, loading }) {
         commit('changeModalState', { show, blockId, loading });
       },
-      async resetBlock({ dispatch, commit }, { vkkr_id, block_id }) {
+      async resetBlock(
+        { dispatch, commit },
+        { vkkr_id, block_id, status_comment }
+      ) {
         if (window.BX) {
           window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'resetBlock', {
@@ -272,6 +278,7 @@ window.addEventListener('load', () => {
               data: {
                 vkkr_id,
                 block_id,
+                status_comment,
               },
               dataType: 'json',
             })
@@ -541,11 +548,7 @@ window.addEventListener('load', () => {
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
 
                   <div v-if="block.state === 'filled' || block.state === 'moderating'">
-                    <h3>Сброс статуса файла</h3>
-                    <hr>
-                    <div class="b-check-detail-fileload__p">Вы имеете право возвращать статус документа к состоянию «Ничего не добавлено», при этом сохраняется история со всеми версиями файла. Применяйте эту функцию только в исключительных случаях, когда пользователь, проверяющий документ, допустил ошибку.</div>
-                    <hr>
-                    <reset-button :blockId="block.id"></reset-button>
+                    <reset-form :blockId="block.id"></reset-form>
                   </div>
                 </div>
                 <div v-else-if="block.permissions.read">
@@ -640,14 +643,67 @@ window.addEventListener('load', () => {
     },
   });
 
-  Vue.component('resetButton', {
+  Vue.component('resetForm', {
+    data() {
+      return {
+        heading: 'Сброс статуса файла',
+        textarea: {
+          label: 'Комментарий для сотрудников СРО ААС',
+          name: 'RESET_COMMENT',
+        },
+        textareaValue: '',
+        button: {
+          text: 'Сбросить',
+          message: 'Для отправки необходимо заполнить все поля.',
+          disabled: true, //!textareaValue,
+        },
+      };
+    },
     template: `
-      <div class="btn btn-danger btn-lg" @click="showModalPopup">Сбросить</div>
-      <hr class="hr--sm">
+      <div>
+        <h3>{{ heading }}</h3>
+        <hr>
+        <form enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-sm-6">
+
+              <div>
+                <div class="b-float-label" :class="{invalid: textarea.invalid}">
+                  <textarea :name="textarea.name" autocomplete="off" required="required" v-model="textareaValue" :class="{active: textareaActive}"></textarea>
+                  <label>{{textarea.label}}</label>
+                </div>
+                <hr>
+              </div>
+
+              <div class="b-reset-form__button">
+                <div class="btn btn-danger btn-lg" @click="showModalPopup" :disabled="disabled">{{button.text}}</div>
+
+                <div class="text-muted">{{button.message}}</div>
+              </div>
+
+            </div>
+            <div class="col-sm-6 b-reset-form__text">
+              <p>Вы имеете право возвращать статус документа к состоянию «Ничего не добавлено», при этом сохраняется история со всеми версиями файла. Применяйте эту функцию только в исключительных случаях, когда пользователь, проверяющий документ, допустил ошибку.</p>
+            </div>
+          </div>
+          
+        </form>
+      </div>
     `,
     props: ['blockId'],
+    computed: {
+      textareaActive() {
+        return !!this.textareaValue;
+      },
+      disabled() {
+        return !this.textareaValue;
+      },
+    },
     methods: {
       showModalPopup() {
+        this.$store.commit('setModalStatusComment', {
+          status_comment: this.textareaValue,
+        });
         this.$store.dispatch('changeModalState', {
           show: 'show',
           blockId: this.blockId,
@@ -1749,9 +1805,11 @@ window.addEventListener('load', () => {
     },
     methods: {
       reset() {
+        console.log(this.$store.state.modal['status_comment']);
         this.$store.dispatch('resetBlock', {
           vkkr_id: this.$store.state.vkkrId,
           block_id: this.$store.state.modal.blockId,
+          status_comment: this.$store.state.modal['status_comment'],
         });
         this.$store.dispatch('changeModalState', {
           loading: true,
