@@ -38,9 +38,9 @@ window.addEventListener('load', () => {
                   Vue.set(
                     state,
                     'error',
-                    `Метод: ${method}.<br>Код ошибки: ${
+                    `Метод: ${method}<br>Код ошибки: ${
                       error.data.ajaxRejectData.data
-                    }.<br>Описание: ${
+                    }<br>Описание: ${
                       window.BX.message(
                         'ERROR_' + error.data.ajaxRejectData.data
                       ) || window.BX.message('ERROR_SERVER')
@@ -51,7 +51,7 @@ window.addEventListener('load', () => {
                 Vue.set(
                   state,
                   'error',
-                  `Метод: ${method}.<br>Код ошибки: NETWORK_ERROR.<br>Описание: ${window.BX.message(
+                  `Метод: ${method}<br>Код ошибки: NETWORK_ERROR<br>Описание: ${window.BX.message(
                     'ERROR_OFFLINE'
                   )}`
                 );
@@ -60,13 +60,13 @@ window.addEventListener('load', () => {
               Vue.set(
                 state,
                 'error',
-                `Метод: ${method}.${
+                `Метод: ${method}${
                   error.errors[0].code
-                    ? '<br>Код ошибки: ' + error.errors[0].code + '.'
+                    ? '<br>Код ошибки: ' + error.errors[0].code
                     : ''
                 } ${
                   error.errors[0].message
-                    ? '<br>Описание: ' + error.errors[0].message + '.'
+                    ? '<br>Описание: ' + error.errors[0].message
                     : ''
                 }`
               );
