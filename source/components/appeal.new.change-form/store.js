@@ -10,14 +10,14 @@ window.appealNewChangeFormStore = {
     },
   ],
   docsBlock: {
-    title: 'Документы необходимые для внесения изменения',
+    title: 'Документы, необходимые для внесения изменения',
     text: '',
     items: [
       {
         id: 6611,
         title: 'Справка-подтверждение. Приложение № 8а.',
         url: '/upload/iblock/a4b/Prilozhenie_8a_010121.docx',
-        icon: '/local/templates/aas/images/doc.svg',
+        icon: '/template/images/doc.svg',
         data: ['23.20 Кб .docx'],
       },
     ],
