@@ -53,9 +53,15 @@ window.onload = function () {
         if (!control) {
           control = state.confirmDocsBlock.items
             .map((item) => {
-              return item.controls.find(
+              let result = item.controls.find(
                 (control) => control.property === payload.property
               );
+              if (!result) {
+                result = item.controls.find(
+                  (control) => control.es.property === payload.property
+                );
+              }
+              return result;
             })
             .find((elem) => elem);
         }
@@ -1048,7 +1054,7 @@ window.onload = function () {
     template: `
     <div>
       <div class="row align-items-center">
-        <div class="col-lg-6 col-12">
+        <div class="col-12" :class="{'col-lg-6': !es}">
           <span class="b-float-label-file__clear" :class="{'btn--load-circle': loadCircle}" @click.prevent="clearInputFile" v-if="isClearable"></span>
           <div class="b-float-label--file" :class="{'filled': isFilled, 'progressing': isProgressing, 'deleting': loadCircle, 'invalid': !!isInvalid, 'clearable': isClearable }" ref="controlFile" >
             <span class="b-float-label-file__label">{{ formControl.label }}</span>
@@ -1062,9 +1068,13 @@ window.onload = function () {
             </div>
             <label :for="id" class="active" v-html="label" ref="dropzone" ></label>
           </div>
+          <div v-if="formControl.es" class="b-float-label-es">
+            <form-control-multy v-if="formControl.es.multy" :es="true" :formControl="formControl.es" fieldsetBlockIndex="0" :controlIndex="0" :controlId="formControl.es.id" @autosave="autosave"></form-control-multy>
+            <form-control-file v-else :es="true" :formControl="formControl.es" fieldsetBlockIndex="0" :controlIndex="0" :controlId="formControl.es.id" @autosave="autosave"></form-control-file>
+          </div>
         </div>
         <hr class="hr--xs d-block d-lg-none w-100">
-        <div class="col-lg-6 col-12 small" v-if="!formControl.multy || !controlIndex">
+        <div class="col-12 small" :class="{'col-lg-6': !es}" v-if="!formControl.multy || !controlIndex">
           <div v-if="formControl.completeBlock && formControl.completeBlock.comment" class="text-muted b-complete-comment">{{ formControl.completeBlock.comment }}</div>
         </div>
       </div>
@@ -1072,6 +1082,12 @@ window.onload = function () {
     </div>
     `,
     props: {
+      es: {
+        type: Boolean,
+        default() {
+          return false;
+        },
+      },
       formControl: Object,
       fieldsetBlockIndex: [Number, String],
       controlIndex: {
@@ -1175,6 +1191,9 @@ window.onload = function () {
       },
     },
     methods: {
+      autosave() {
+        this.$emit('autosave');
+      },
       uploadFile(files) {
         store.commit('setFile', {
           id: this.controlId,
@@ -1568,7 +1587,7 @@ window.onload = function () {
     data() {
       return {};
     },
-    props: ['formControl', 'fieldsetBlockIndex', 'controlId'],
+    props: ['es', 'formControl', 'fieldsetBlockIndex', 'controlId'],
     emits: ['autosave', 'timeoutAutosave'],
     template: `
       <div>
@@ -1576,7 +1595,7 @@ window.onload = function () {
         <div v-if="formControl.type==='file'">
           <transition-group name="list" tag="div" >
             <div v-for="(valueObject, idx) in formControl.value" :key="valueObject.id" class="multy-control-wrapper">
-              <form-control-file :formControl="formControl" :fieldsetBlockIndex="idx" :controlIndex="idx" :controlId="controlId" @autosave="autosave"></form-control-file>
+              <form-control-file :es="es" :formControl="formControl" :fieldsetBlockIndex="idx" :controlIndex="idx" :controlId="controlId" @autosave="autosave"></form-control-file>
               <div v-if="formControl.value.length > 1" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
             </div>
           </transition-group>
