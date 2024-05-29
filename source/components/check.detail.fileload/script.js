@@ -33,7 +33,7 @@ window.addEventListener('load', () => {
             error.errors &&
             typeof error.errors === 'object' &&
             error.errors[0] &&
-            error.errors[0].code
+            error.errors[0].code !== undefined
           ) {
             if (error.errors[0].code === 'NETWORK_ERROR') {
               if (error.data && error.data.ajaxRejectData) {
