@@ -37,6 +37,7 @@ window.addEventListener('load', () => {
         USER_ID: window.BX.message('USER_ID'),
         url: `${window.location.origin}/api/`,
       },
+      subjectid: window.subjectid,
     },
     mutations: {
       setList(state, payload) {
@@ -64,9 +65,15 @@ window.addEventListener('load', () => {
       async getList({ state, commit, dispatch }) {
         const formData = new FormData();
 
+        let method = 'notifications.getList';
+        if (this.$store.state.subjectid) {
+          method = 'notifications.getListForSubject';
+          formData.append('subjectid', this.$store.state.subjectid);
+        }
+
         formData.append('sessid', state.bx.sessid);
         formData.append('userid', state.bx.USER_ID);
-        formData.append('method', 'notifications.getList');
+        formData.append('method', method);
         formData.append('popup_status', 2);
         formData.append('read_status', 2);
         formData.append('confirm_status', 2);

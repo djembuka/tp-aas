@@ -1,0 +1,36 @@
+// start /components/profile/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'profile'
+else
+  - var componentsArray = [ 'profile' ]
+  
+.b-profile.ph-block
+
+  .ph
+
+    .ph__photo
+      div
+    .ph__text
+      div
+      div
+      div
+
+  .ph-content( itemscope itemtype="https://schema.org/Person" )
+
+    .b-profile__photo
+      i( style="background-image: url( '/upload/portrait.jpg' );" title="Иванов Петр Валерьевич" )
+        span(style="background-color: #f00;") Исключен
+
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/profile-out
+          
+      article.col-12.col-md-9
+
+        include ../../components/notifications.detail/out
+
+// end /components/profile/
