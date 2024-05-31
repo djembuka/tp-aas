@@ -464,7 +464,7 @@ window.addEventListener('load', () => {
             .then(
               (r) => {
                 if (r.data.url) {
-                  window.open(r.data.url, '_blank');
+                  window.location = r.data.url;
                 }
               },
               (error) => {
