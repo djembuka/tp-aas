@@ -1495,6 +1495,8 @@ window.addEventListener('load', () => {
         });
       },
       submit() {
+        this.bxLog();
+
         const blockId = this.block.id;
         this.formData = new FormData(); //(this.$refs['fileload-form']);
         this.formData.append('vkkr_id', this.$store.state.vkkrId);
@@ -1540,6 +1542,75 @@ window.addEventListener('load', () => {
             this.$store.commit('showError', { error, method: 'saveBlock' });
           }
         );
+      },
+      bxLog() {
+        const filesObject = {};
+
+        this.collections.forEach((c) => {
+          if (c.multiple) {
+            //multiple conllection
+            if (c.value) {
+              c.value.forEach((vObj, cIdx) => {
+                Object.entries(vObj.files).forEach((fArr) => {
+                  const f = fArr[1];
+                  if (typeof f === 'object') {
+                    if (f.forEach) {
+                      //multiple control
+                      f.forEach((obj, fIdx) => {
+                        filesObject[`${c.id}|${cIdx}|${id}|${fIdx}`] = fileInfo(
+                          obj.val
+                        );
+                      });
+                    } else {
+                      //single control
+                      filesObject[`${c.id}|${cIdx}|${id}|0`] = fileInfo(
+                        fArr[1]
+                      );
+                    }
+                  }
+                });
+              });
+            }
+          } else {
+            //single collection
+            c.files.forEach((f) => {
+              if (
+                f.multiple &&
+                typeof f.value === 'object' &&
+                f.value.forEach
+              ) {
+                //multiple control
+                f.value.forEach((obj, fIdx) => {
+                  filesObject[`${c.id}|0|${f.id}|${fIdx}`] = fileInfo(obj.val);
+                });
+              } else if (!f.multiple && f.value) {
+                //single control
+                filesObject[`${c.id}|0|${f.id}|0`] = fileInfo(f.value);
+              }
+            });
+          }
+        });
+
+        let result = {
+          method: 'saveBlock',
+          sessid: window.BX.bitrix_sessid(),
+          userid: window.BX.message.userid,
+          vkkr_id: this.$store.state.vkkrId,
+          block_id: this.block.id,
+          files: filesObject,
+        };
+
+        console.log(result);
+
+        function fileInfo(file) {
+          return {
+            lastModified: file.lastModified,
+            lastModifiedDate: file.lastModifiedDate,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+          };
+        }
       },
     },
   });
