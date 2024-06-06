@@ -33,7 +33,7 @@ window.addEventListener('load', () => {
             error.errors &&
             typeof error.errors === 'object' &&
             error.errors[0] &&
-            error.errors[0].code
+            error.errors[0].code !== undefined
           ) {
             if (error.errors[0].code === 'NETWORK_ERROR') {
               if (error.data && error.data.ajaxRejectData) {
@@ -41,35 +41,44 @@ window.addEventListener('load', () => {
                   Vue.set(
                     state,
                     'error',
-                    `Метод: ${method}<br>Код ошибки: ${
+                    `${window.BX.message('ERROR_SUPPORT')}
+                    <br>
+                    <br>
+                    Метод: ${method}. Код ошибки: ${
                       error.data.ajaxRejectData.data
-                    }<br>Описание: ${
+                    }. Описание: ${
                       window.BX.message(
                         'ERROR_' + error.data.ajaxRejectData.data
                       ) || window.BX.message('ERROR_SERVER')
-                    }`
+                    }.`
                   );
                 }
               } else if (window.BX.message) {
                 Vue.set(
                   state,
                   'error',
-                  `Метод: ${method}<br>Код ошибки: NETWORK_ERROR<br>Описание: ${window.BX.message(
+                  `${window.BX.message('ERROR_SUPPORT')}
+                  <br>
+                  <br>
+                  Метод: ${method}. Код ошибки: NETWORK_ERROR. Описание: ${window.BX.message(
                     'ERROR_OFFLINE'
-                  )}`
+                  )}.`
                 );
               }
             } else {
               Vue.set(
                 state,
                 'error',
-                `Метод: ${method}${
+                `${window.BX.message('ERROR_SUPPORT')}
+                <br>
+                <br>
+                Метод: ${method}.${
                   error.errors[0].code
-                    ? '<br>Код ошибки: ' + error.errors[0].code
+                    ? ' Код ошибки: ' + error.errors[0].code + '.'
                     : ''
                 } ${
                   error.errors[0].message
-                    ? '<br>Описание: ' + error.errors[0].message
+                    ? ' Описание: ' + error.errors[0].message + '.'
                     : ''
                 }`
               );
@@ -455,7 +464,7 @@ window.addEventListener('load', () => {
             .then(
               (r) => {
                 if (r.data.url) {
-                  window.open(r.data.url, '_blank');
+                  window.location = r.data.url;
                 }
               },
               (error) => {

@@ -2171,7 +2171,7 @@ window.BX = {
             resolve({
               status: 'success',
               data: {
-                url: '/',
+                url: '/template/archive.zip',
               },
             });
             // reject({ errors: [{ code: 8, message: 'download error' }] });

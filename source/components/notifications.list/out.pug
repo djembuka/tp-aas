@@ -1,0 +1,26 @@
+// start /components/notifications.list/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'notifications.list'
+else
+  - var componentsArray = [ 'notifications.list' ]
+
+.b-notifications-list.ph-block
+
+  .ph
+    .ph__table
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content
+
+    script
+      | window.subjectid = '456';
+
+    #notificationsList
+
+// end /components/notifications.list/
