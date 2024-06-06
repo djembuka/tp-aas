@@ -394,4 +394,62 @@
 
   &__status
     font-size $12px
+
+//check-detail
+.b-report
+
+  &__panel
+    background-color #FAFAFA
+    border-radius 10px
+    padding 20px 25px 20px 32px
+    min-height 96px
+    display flex
+    justify-content space-between
+    align-items center
+    font-family $roboto
+    font-size $14px
+
+    @media(max-width 767px)
+      padding 15px 15px 15px 20px
+
+    &__data
+      display flex
+      justify-content flex-start
+      align-items center
+      flex-wrap wrap
+      background-repeat no-repeat
+      background-position left center
+      background-size 24px
+      padding-left 37px
+
+      @media(max-width 767px)
+        background none !important
+        padding-left 0
+
+      div
+        margin-right 2rem
+
+    &__download
+      display flex
+      justify-content flex-end
+      align-items center
+
+      span
+        width 45px
+        height 51px
+        background-repeat no-repeat
+        background-position center
+        background-size contain
+        margin-left 10px
+        flex-shrink 0
+
+.b-collapse-block
+ 
+  .b-collapse-block__head,
+  .text-muted.small,
+  .text-muted.small + p
+    font-family $roboto
+
+
+
     

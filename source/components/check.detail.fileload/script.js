@@ -1504,13 +1504,13 @@ window.addEventListener('load', () => {
         });
       },
       submit() {
-        this.bxLog();
-
         const blockId = this.block.id;
         this.formData = new FormData(); //(this.$refs['fileload-form']);
         this.formData.append('vkkr_id', this.$store.state.vkkrId);
         this.formData.append('block_id', blockId);
         this.formData.append('sessid', window.BX.bitrix_sessid());
+
+        this.bxLog(this.formData);
 
         this.getFilesData();
 
@@ -1552,7 +1552,9 @@ window.addEventListener('load', () => {
           }
         );
       },
-      bxLog() {
+      async bxLog(fd) {
+        fd.append('userid', window.BX.message.userid);
+
         const filesObject = {};
 
         this.collections.forEach((c) => {
@@ -1600,16 +1602,25 @@ window.addEventListener('load', () => {
           }
         });
 
-        let result = {
-          method: 'saveBlock',
-          sessid: window.BX.bitrix_sessid(),
-          userid: window.BX.message.userid,
-          vkkr_id: this.$store.state.vkkrId,
-          block_id: this.block.id,
-          files: filesObject,
-        };
+        fd.append('files', JSON.stringify(filesObject));
 
-        console.log(result);
+        // let result = {
+        //   sessid: window.BX.bitrix_sessid(),
+        //   userid: window.BX.message.userid,
+        //   vkkr_id: this.$store.state.vkkrId,
+        //   block_id: this.block.id,
+        //   files: filesObject,
+        // };
+
+        // let formData = new FormData();
+        // formData.append('small', JSON.stringify(result));
+        // formData.append('real', JSON.stringify(fd));
+        // formData.append('store', JSON.stringify(this.$store.state));
+
+        await fetch(`/local/ajax/setlog.php`, {
+          method: 'POST',
+          body: fd,
+        });
 
         function fileInfo(file) {
           return {
