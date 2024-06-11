@@ -16,6 +16,9 @@ script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js")
 link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css")
 
 script( src="/components/appeal.inbox/store.js" )
+
+link( rel="stylesheet", href="/template/css/swiper.min.css" )
+script( src="/template/js/swiper.min.js" )
   
 .b-appeal-inbox.ph-block
 
@@ -32,20 +35,21 @@ script( src="/components/appeal.inbox/store.js" )
 
     .b-appeal-inbox-profiles
 
-        a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
-            i 9999
-            span Общий профиль
-        a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
-            span Общий профиль
-        a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
-            span Общий профиль
-        a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
-            span Общий профиль
-        a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
-            span Общий профиль
-        a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
-            span Общий профиль
-      
+      a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
+          i 9999
+          span Общий профиль
+      a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
+          span Общий профиль
+      a.active.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
+          i 99
+          span Общий профиль
+      a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
+          span Общий профиль
+      a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
+          span Общий профиль
+      a.b-appeal-inbox-profiles__item( href="/pages/appeal-inbox/" )
+          span Общий профиль
+  
 
     hr
 

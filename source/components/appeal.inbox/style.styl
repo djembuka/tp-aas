@@ -27,6 +27,17 @@
     padding-bottom 5px
     scrollbar-color #ccc #fff
     scrollbar-width thin
+    position relative
+
+    &:before,
+    &:after
+      position absolute
+      top 0
+      left 0
+      width 24px
+      height 100%
+      background-color #fff
+      z-index 10
     
     &::-webkit-scrollbar
         width 4px
@@ -76,6 +87,14 @@
 
             span
                 color #0A355Add
+
+        &.active
+          background-color #8393AA
+          cursor default
+          pointer-events none
+
+          span
+            color #fff
 
   h3
     margin-top 0

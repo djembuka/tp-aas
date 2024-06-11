@@ -38,9 +38,7 @@ window.addEventListener('load', () => {
   //tabs
   document.querySelectorAll('.b-check-detail').forEach(function (elem) {
     var nav = elem.querySelector('.b-check-detail__tabs');
-    //var menuLinks = nav.querySelectorAll('a');
     var activeLink = nav.querySelector('a.active');
-    //var tabsItems = elem.querySelectorAll('.b-check-detail__item');
 
     //swiper menu
     if (window.matchMedia('(max-width: 600px)').matches) {
