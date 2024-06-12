@@ -21,81 +21,6 @@
 
 .b-appeal-inbox
 
-  &-profiles
-    display flex
-    overflow auto
-    padding-bottom 5px
-    scrollbar-color #ccc #fff
-    scrollbar-width thin
-    position relative
-
-    &:before,
-    &:after
-      position absolute
-      top 0
-      left 0
-      width 24px
-      height 100%
-      background-color #fff
-      z-index 10
-    
-    &::-webkit-scrollbar
-        width 4px
-        height 4px
-        background-color #F0F5FC
-        
-    &::-webkit-scrollbar-thumb
-        background-color #ccc
-        border-radius 20px
-        
-    &::-webkit-scrollbar-thumb:hover
-        background-color #c0c0c0
-
-    &__item
-        display flex
-        justify-content center
-        align-items center
-        margin-right 20px
-        border-radius 7px
-        background-color #F0F5FC
-        padding 5px 15px
-        height 48px
-        cursor pointer
-
-        &:last-child
-            margin-right 0
-
-        span
-            white-space nowrap
-            font-size $14px
-            font-family $roboto
-            color #0A355A
-            
-        i
-            white-space nowrap
-            background #5F7696
-            color #fff
-            font-size $14px
-            border-radius 10px
-            height 20px
-            padding 0 7px
-            margin-right 8px
-            font-style normal
-
-        &:hover
-            background-color #F0F5FCdd 
-
-            span
-                color #0A355Add
-
-        &.active
-          background-color #8393AA
-          cursor default
-          pointer-events none
-
-          span
-            color #fff
-
   h3
     margin-top 0
     margin-bottom 40px
@@ -487,4 +412,160 @@
   .twpx-sticky-scroll-space-right,
   .twpx-sticky-scroll-arrows
     display none !important
+
+/*Scroll menu*/
+.twpx-scroll-menu {
+  position: relative;
+}
+.twpx-scroll-menu-overflow {
+  overflow: hidden;
+}
+.twpx-scroll-menu-wrapper {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  transition: margin-left 0.5s ease;
+  -webkit-transition: margin-left 0.5s ease-out;
+}
+.twpx-scroll-menu:before,
+.twpx-scroll-menu:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 100%;
+  background-image: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
+  z-index: 10;
+}
+.twpx-scroll-menu:after {
+  left: auto;
+  right: 0;
+  background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
+}
+.twpx-scroll-menu.twpx-scroll-menu--no-right:before,
+.twpx-scroll-menu.twpx-scroll-menu--no-left:after,
+.twpx-scroll-menu:hover:before,
+.twpx-scroll-menu:hover:after {
+  display: none;
+}
+.twpx-scroll-menu__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  border-radius: 7px;
+  background-color: #f0f5fc;
+  padding: 5px 15px;
+  height: 48px;
+  cursor: pointer;
+}
+.twpx-scroll-menu__item:last-child {
+  margin-right: 0;
+}
+.twpx-scroll-menu__item span {
+  white-space: nowrap;
+  font-size: 0.88rem;
+  font-family: Roboto, sans-serif;
+  color: #0a355a;
+}
+.twpx-scroll-menu__item i {
+  white-space: nowrap;
+  background: #5f7696;
+  color: #fff;
+  font-size: 0.88rem;
+  border-radius: 10px;
+  height: 20px;
+  padding: 0 7px;
+  margin-right: 8px;
+  font-style: normal;
+  display: flex;
+  align-items: center;
+}
+.twpx-scroll-menu__item:hover {
+  background-color: rgba(240, 245, 252, 0.867);
+}
+.twpx-scroll-menu__item:hover span {
+  color: rgba(10, 53, 90, 0.867);
+}
+.twpx-scroll-menu__item.active {
+  background-color: #8393aa;
+  cursor: default;
+  pointer-events: none;
+}
+.twpx-scroll-menu__item.active span {
+  color: #fff;
+}
+
+.twpx-scroll-menu-arrows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
+  width: 100%;
+}
+.twpx-scroll-menu:hover .twpx-scroll-menu-arrows {
+  opacity: 1;
+}
+.twpx-scroll-menu-arrow-left,
+.twpx-scroll-menu-arrow-right {
+  content: '';
+  position: absolute;
+  top: calc((48px - 64px) / 2);
+  left: -32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0px 3px 6px #00000029;
+  cursor: pointer;
+  opacity: 0;
+  transform( translateX(20px));
+  transition( all 0.3s ease);
+  z-index: 20;
+}
+.twpx-scroll-menu-arrow-right {
+  right: -32px;
+  left: auto;
+  transform( translateX(-20px));
+}
+.twpx-scroll-menu-arrow-left:after,
+.twpx-scroll-menu-arrow-right:after {
+  content: '';
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #074b84;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  transform( rotate(45deg));
+  z-index: 30;
+}
+.twpx-scroll-menu-arrow-left:after {
+  transform( rotate(-135deg));
+  left: 28px;
+  right: auto;
+}
+.twpx-scroll-menu-arrow-right:hover,
+.twpx-scroll-menu-arrow-left:hover {
+  background-color: #f2762e;
+}
+.twpx-scroll-menu-arrow-right:hover:after,
+.twpx-scroll-menu-arrow-left:hover:after {
+  border-top-color: #fff;
+  border-right-color: #fff;
+}
+.twpx-scroll-menu:hover .twpx-scroll-menu-arrow-right,
+.twpx-scroll-menu:hover .twpx-scroll-menu-arrow-left {
+  transform( translateX(0));
+  opacity: 1;
+}
+.twpx-scroll-menu.twpx-scroll-menu--no-left .twpx-scroll-menu-arrow-right,
+.twpx-scroll-menu.twpx-scroll-menu--no-right .twpx-scroll-menu-arrow-left {
+  opacity: 0 !important;
+}
 

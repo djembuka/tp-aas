@@ -11,6 +11,20 @@ window.addEventListener('load', () => {
       };
     },
     mutations: {
+      setDeafultProfile(state, { id }) {
+        if (!state.profiles) return;
+
+        state.profiles.forEach((p) => {
+          if (String(p.id) === String(id)) {
+            Vue.set(p, 'default', true);
+          } else if (p.default) {
+            Vue.set(p, 'default', undefined);
+          }
+        });
+      },
+      setProfiles(state, { profiles }) {
+        Vue.set(state, 'profiles', profiles);
+      },
       setNew(state, payload) {
         state.numBlocks.find((block) => block.new).num = payload;
       },
@@ -95,6 +109,48 @@ window.addEventListener('load', () => {
       },
     },
     actions: {
+      async profilesBX({ _, commit }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'profiles', {
+              mode: 'class',
+              data: {
+                userid: BX.bitrix_sessid,
+                sessionid: BX.bitrix_sessid,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setProfiles', { profiles: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'profiles' });
+              }
+            );
+        }
+      },
+      async setDeafultProfileBX({ _, commit }, { id }) {
+        commit('setDeafultProfile', { id });
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'setDeafultProfile', {
+              mode: 'class',
+              data: {
+                userid: BX.bitrix_sessid,
+                sessionid: BX.bitrix_sessid,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              () => {},
+              (error) => {
+                commit('showError', { error, method: 'setDeafultProfile' });
+              }
+            );
+        }
+      },
       renderTable({ state, commit, getters }) {
         commit('changeRenderingTable', true);
         (async () => {
@@ -156,6 +212,90 @@ window.addEventListener('load', () => {
 
   Vue.component('v-select', VueSelect.VueSelect);
   Vue.component('date-picker', DatePicker);
+
+  Vue.component('profileMenu', {
+    template: `
+      <div class="b-appeal-inbox-profiles">
+        <div class="twpx-scroll-menu" :class="{'twpx-scroll-menu--no-right': !arrows.right, 'twpx-scroll-menu--no-left': !arrows.left}" @mouseenter="hover" ref="sm">
+          <div class="twpx-scroll-menu-overflow">
+            <div class="twpx-scroll-menu-wrapper" :style="'margin-left: ' + margin + 'px;'" ref="wrapper">
+              <a href="/pages/appeal-inbox/" class="twpx-scroll-menu__item" :class="{'active': profile.default}" v-for="profile in profiles" :key="profile.id" @click.prevent='click(profile.id)'>
+                <i v-if="profile.newAppealsCount">{{ profile.newAppealsCount }}</i>
+                <span>{{ profile.name }}</span>
+              </a>
+            </div>
+          </div>
+          <div class="twpx-scroll-menu-arrows">
+            <div class="twpx-scroll-menu-arrow-right" @click="moveTo(-1 * $refs.sm.clientWidth)"></div>
+            <div class="twpx-scroll-menu-arrow-left" @click="moveTo($refs.sm.clientWidth)"></div>
+          </div>
+        </div>
+      </div>
+    `,
+    data() {
+      return {
+        initialized: false,
+        itemMarginRight: 20,
+        margin: 0,
+        arrows: {
+          right: false,
+          left: true,
+        },
+      };
+    },
+    computed: {
+      profiles() {
+        return this.$store.state.profiles;
+      },
+    },
+    methods: {
+      click(id) {
+        this.$store.dispatch('setDeafultProfileBX', { id });
+      },
+      hover() {
+        if (this.calculateWidth() <= this.$refs.sm.clientWidth) {
+          this.arrows.right = false;
+          this.arrows.left = false;
+        } else {
+          this.moveTo(0);
+        }
+      },
+      moveTo(dist) {
+        this.arrows.right = true;
+        this.arrows.left = true;
+        let left = this.margin || 0;
+        left = left + dist;
+
+        let width = this.calculateWidth();
+
+        if (left >= 0) {
+          left = 0;
+          this.arrows.right = false;
+        } else if (left <= -1 * (width - this.$refs.sm.clientWidth)) {
+          left = -1 * (width - this.$refs.sm.clientWidth);
+          this.arrows.left = false;
+        }
+
+        this.margin = left;
+      },
+      calculateWidth() {
+        let result = 0;
+        this.$refs.wrapper.childNodes.forEach((item) => {
+          if (item.classList) {
+            result += item.clientWidth;
+            result += this.itemMarginRight;
+          }
+        });
+
+        result -= this.itemMarginRight;
+
+        return result;
+      },
+    },
+    mounted() {
+      this.initialized = true;
+    },
+  });
 
   Vue.component('numBlocks', {
     template: `<div class="b-num-blocks" v-if="$store.state.numBlocks">
@@ -784,6 +924,9 @@ window.addEventListener('load', () => {
     store,
     template: `
       <div class="b-registry-report">
+        <profile-menu></profile-menu>
+        <hr>
+        <h3>Заявки на изменения в реестре</h3>
         <num-blocks></num-blocks>
         <hr>
         <inbox-filter ref="filter"></inbox-filter>
@@ -904,6 +1047,9 @@ window.addEventListener('load', () => {
 
       //render the table
       this.$store.dispatch('renderTable');
+
+      //get profiles
+      this.$store.dispatch('profilesBX');
     },
   });
 
@@ -928,293 +1074,4 @@ window.addEventListener('load', () => {
     }
     return query;
   }
-
-  //profiles
-  class TwpxScrollMenu {
-    /*options = {
-      arrowColor: '#fff',
-      arrowHoverColor: '#fff',
-      itemMarginRight: 20
-    }
-    /*
-    this.sm - .twpx-scroll-menu
-    this.wrapper - .twpx-scroll-menu-wrapper
-  
-    this.arrowLeft - .twpx-scroll-menu-arrow-left
-    this.arrowRight - .twpx-scroll-menu-arrow-right
-    */
-
-    constructor(elem, options = {}) {
-      this.elem = elem;
-      this.options = options;
-
-      this.itemMarginRight = this.options.itemMarginRight || 20;
-      this.initialized = false;
-
-      this.init();
-    }
-
-    init() {
-      if (!this.initialized) {
-        this.createHtml();
-        this.createCss();
-        this.arrowEvents();
-        this.hoverEvent();
-        this.initialized = true;
-      }
-    }
-
-    createHtml() {
-      this.elem.childNodes.forEach((item) => {
-        if (item.classList) {
-          item.classList.add('twpx-scroll-menu__item');
-        }
-      });
-      this.sm = document.createElement('div');
-      this.sm.className = 'twpx-scroll-menu';
-      this.sm.innerHTML = `
-        <div class="twpx-scroll-menu-overflow">
-          <div class="twpx-scroll-menu-wrapper">${this.elem.innerHTML}</div>
-        </div>
-        <div class="twpx-scroll-menu-arrows">
-          <div class="twpx-scroll-menu-arrow-right"></div>
-          <div class="twpx-scroll-menu-arrow-left"></div>
-        </div>
-      `;
-      this.wrapper = this.sm.querySelector('.twpx-scroll-menu-wrapper');
-      this.arrowLeft = this.sm.querySelector('.twpx-scroll-menu-arrow-left');
-      this.arrowRight = this.sm.querySelector('.twpx-scroll-menu-arrow-right');
-
-      this.elem.parentNode.insertBefore(this.sm, this.elem);
-      this.elem.remove();
-      this.sm.classList.add('twpx-scroll-menu--no-right');
-    }
-
-    createCss() {
-      const styleElement = document.createElement('style');
-      styleElement.innerHTML = `
-      .twpx-scroll-menu {
-        position: relative;
-      }
-      .twpx-scroll-menu-overflow {
-        overflow: hidden;
-      }
-      .twpx-scroll-menu-wrapper {
-        display: flex;
-        overflow: hidden;
-        position: relative;
-        transition: margin-left 0.5s ease;
-        -webkit-transition: margin-left 0.5s ease-out;
-      }
-      .twpx-scroll-menu:before,
-      .twpx-scroll-menu:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 24px;
-        height: 100%;
-        background-image: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
-        z-index: 10;
-      }
-      .twpx-scroll-menu:after {
-        left: auto;
-        right: 0;
-        background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
-      }
-      .twpx-scroll-menu.twpx-scroll-menu--no-right:before,
-      .twpx-scroll-menu.twpx-scroll-menu--no-left:after,
-      .twpx-scroll-menu:hover:before,
-      .twpx-scroll-menu:hover:after {
-        display: none;
-      }
-      .twpx-scroll-menu__item {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: 20px;
-        border-radius: 7px;
-        background-color: #f0f5fc;
-        padding: 5px 15px;
-        height: 48px;
-        cursor: pointer;
-      }
-      .twpx-scroll-menu__item:last-child {
-        margin-right: 0;
-      }
-      .twpx-scroll-menu__item span {
-        white-space: nowrap;
-        font-size: 0.88rem;
-        font-family: Roboto, sans-serif;
-        color: #0a355a;
-      }
-      .twpx-scroll-menu__item i {
-        white-space: nowrap;
-        background: #5f7696;
-        color: #fff;
-        font-size: 0.88rem;
-        border-radius: 10px;
-        height: 20px;
-        padding: 0 7px;
-        margin-right: 8px;
-        font-style: normal;
-        display: flex;
-        align-items: center;
-      }
-      .twpx-scroll-menu__item:hover {
-        background-color: rgba(240, 245, 252, 0.867);
-      }
-      .twpx-scroll-menu__item:hover span {
-        color: rgba(10, 53, 90, 0.867);
-      }
-      .twpx-scroll-menu__item.active {
-        background-color: #8393aa;
-        cursor: default;
-        pointer-events: none;
-      }
-      .twpx-scroll-menu__item.active span {
-        color: #fff;
-      }
-      
-      .twpx-scroll-menu-arrows {
-        position: absolute;
-        top: 0;
-        left: 0;
-        opacity: 0;
-        -webkit-transition: opacity 0.3s ease;
-        transition: opacity 0.3s ease;
-        width: 100%;
-      }
-      .twpx-scroll-menu:hover .twpx-scroll-menu-arrows {
-        opacity: 1;
-      }
-      .twpx-scroll-menu-arrow-left,
-      .twpx-scroll-menu-arrow-right {
-        content: '';
-        position: absolute;
-        top: calc((48px - 64px) / 2);
-        left: -32px;
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        background-color: #fff;
-        box-shadow: 0px 3px 6px #00000029;
-        cursor: pointer;
-        -webkit-transform: translateX(20px);
-        transform: translateX(20px);
-        -webkit-transition: background-color 0.3s ease, -webkit-transform 0.3s ease;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        z-index: 20;
-      }
-      .twpx-scroll-menu-arrow-right {
-        right: -32px;
-        left: auto;
-        -webkit-transform: translateX(-20px);
-        transform: translateX(-20px);
-      }
-      .twpx-scroll-menu-arrow-left:after,
-      .twpx-scroll-menu-arrow-right:after {
-        content: '';
-        position: absolute;
-        top: 24px;
-        right: 28px;
-        width: 15px;
-        height: 15px;
-        border: 2px solid ${this.options.arrowColor || '#074b84'};
-        border-bottom-color: transparent;
-        border-left-color: transparent;
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
-        z-index: 30;
-      }
-      .twpx-scroll-menu-arrow-left:after {
-        -webkit-transform: rotate(-135deg);
-        transform: rotate(-135deg);
-        left: 28px;
-        right: auto;
-      }
-      .twpx-scroll-menu-arrow-right:hover,
-      .twpx-scroll-menu-arrow-left:hover {
-        background-color: ${this.options.arrowHoverColor || '#f2762e'};
-      }
-      .twpx-scroll-menu-arrow-right:hover:after,
-      .twpx-scroll-menu-arrow-left:hover:after {
-        border-top-color: #fff;
-        border-right-color: #fff;
-      }
-      .twpx-scroll-menu:hover .twpx-scroll-menu-arrow-right,
-      .twpx-scroll-menu:hover .twpx-scroll-menu-arrow-left {
-        transform: translateX(0);
-        -webkit-transform: translateX(0);
-      }
-      .twpx-scroll-menu.twpx-scroll-menu--no-left .twpx-scroll-menu-arrow-right,
-      .twpx-scroll-menu.twpx-scroll-menu--no-right .twpx-scroll-menu-arrow-left {
-        opacity: 0 !important;
-      }
-      `;
-      document.querySelector('head').appendChild(styleElement);
-    }
-
-    hoverEvent() {
-      this.sm.addEventListener('mouseenter', (e) => {
-        if (this.calculateWidth() <= this.sm.clientWidth) {
-          this.sm.classList.add(
-            'twpx-scroll-menu--no-right',
-            'twpx-scroll-menu--no-left'
-          );
-        } else {
-          this.moveTo(0);
-        }
-      });
-    }
-
-    arrowEvents() {
-      this.arrowLeft.addEventListener('click', (e) => {
-        this.moveTo(this.sm.clientWidth);
-      });
-
-      this.arrowRight.addEventListener('click', (e) => {
-        this.moveTo(-1 * this.sm.clientWidth);
-      });
-    }
-
-    moveTo(dist) {
-      this.sm.classList.remove(
-        'twpx-scroll-menu--no-left',
-        'twpx-scroll-menu--no-right'
-      );
-      let left = parseInt(this.wrapper.style.marginLeft, 10) || 0;
-      left = left + dist;
-
-      let width = this.calculateWidth();
-
-      if (left >= 0) {
-        left = 0;
-        this.sm.classList.add('twpx-scroll-menu--no-right');
-      } else if (left <= -1 * (width - this.sm.clientWidth)) {
-        left = -1 * (width - this.sm.clientWidth);
-        this.sm.classList.add('twpx-scroll-menu--no-left');
-      }
-
-      this.wrapper.style.marginLeft = left + 'px';
-    }
-
-    calculateWidth() {
-      let result = 0;
-      this.wrapper.childNodes.forEach((item) => {
-        if (item.classList) {
-          result += item.clientWidth;
-          result += this.itemMarginRight;
-        }
-      });
-
-      result -= this.itemMarginRight;
-
-      return result;
-    }
-  }
-
-  document.querySelectorAll('.b-appeal-inbox-profiles').forEach((elem) => {
-    new TwpxScrollMenu(elem);
-  });
 });
