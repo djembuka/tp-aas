@@ -246,12 +246,179 @@ window.BX = {
                 excelLink: false,
                 items: [
                   {
+                    url: '/',
+                    cells: [
+                      {
+                        id: 1,
+                        type: 'id',
+                        value: '35',
+                      },
+                      {
+                        id: 3,
+                        type: 'date',
+                        value: '18 мая 2021<br>15:12:41',
+                      },
+                      {
+                        id: 4,
+                        type: 'author',
+                        value: 'Савельева Мария Евгеньевна<br>1398471982475',
+                      },
+                      {
+                        id: 5,
+                        type: 'object',
+                        value: 'Петров Петр Иванович<br>2200605151435',
+                      },
+                      {
+                        id: 5,
+                        type: 'type',
+                        value: 'Изменение в реестре',
+                      },
+                      {
+                        id: 5,
+                        type: 'status',
+                        value: 'На рассмотрении',
+                      },
+                    ],
+                  },
+                  {
                     url: '',
-                    column: {
-                      id: 1,
-                      type: 'id',
-                      value: '2',
-                    },
+                    cells: [
+                      {
+                        id: 1,
+                        type: 'id',
+                        value: '35',
+                      },
+                      {
+                        id: 3,
+                        type: 'date',
+                        value: '18 мая 2021<br>15:12:41',
+                      },
+                      {
+                        id: 4,
+                        type: 'author',
+                        value: 'Савельева Мария Евгеньевна<br>1398471982475',
+                      },
+                      {
+                        id: 5,
+                        type: 'object',
+                        value: 'Петров Петр Иванович<br>2200605151435',
+                      },
+                      {
+                        id: 5,
+                        type: 'type',
+                        value: 'Изменение в реестре',
+                      },
+                      {
+                        id: 5,
+                        type: 'status',
+                        value: 'На рассмотрении',
+                      },
+                    ],
+                  },
+                  {
+                    url: '',
+                    cells: [
+                      {
+                        id: 1,
+                        type: 'id',
+                        value: '35',
+                      },
+                      {
+                        id: 3,
+                        type: 'date',
+                        value: '18 мая 2021<br>15:12:41',
+                      },
+                      {
+                        id: 4,
+                        type: 'author',
+                        value: 'Савельева Мария Евгеньевна<br>1398471982475',
+                      },
+                      {
+                        id: 5,
+                        type: 'object',
+                        value: 'Петров Петр Иванович<br>2200605151435',
+                      },
+                      {
+                        id: 5,
+                        type: 'type',
+                        value: 'Изменение в реестре',
+                      },
+                      {
+                        id: 5,
+                        type: 'status',
+                        value: 'На рассмотрении',
+                      },
+                    ],
+                  },
+                  {
+                    url: '',
+                    cells: [
+                      {
+                        id: 1,
+                        type: 'id',
+                        value: '35',
+                      },
+                      {
+                        id: 3,
+                        type: 'date',
+                        value: '18 мая 2021<br>15:12:41',
+                      },
+                      {
+                        id: 4,
+                        type: 'author',
+                        value: 'Савельева Мария Евгеньевна<br>1398471982475',
+                      },
+                      {
+                        id: 5,
+                        type: 'object',
+                        value: 'Петров Петр Иванович<br>2200605151435',
+                      },
+                      {
+                        id: 5,
+                        type: 'type',
+                        value: 'Изменение в реестре',
+                      },
+                      {
+                        id: 5,
+                        type: 'status',
+                        value: 'На рассмотрении',
+                      },
+                    ],
+                  },
+                  {
+                    url: '',
+                    cells: [
+                      {
+                        id: 1,
+                        type: 'id',
+                        value: '35',
+                      },
+                      {
+                        id: 3,
+                        type: 'date',
+                        value: '18 мая 2021<br>15:12:41',
+                      },
+                      {
+                        id: 4,
+                        type: 'author',
+                        value: 'Савельева Мария Евгеньевна<br>1398471982475',
+                      },
+                      {
+                        id: 5,
+                        type: 'object',
+                        value: 'Петров Петр Иванович<br>2200605151435',
+                      },
+                      {
+                        id: 5,
+                        type: 'type',
+                        value: 'Изменение в реестре',
+                      },
+                      {
+                        id: 5,
+                        type: 'status',
+                        value: 'На рассмотрении',
+                      },
+                    ],
                   },
                 ],
               },
@@ -299,7 +466,7 @@ window.BX = {
             resolve({
               status: 'success',
               data: {
-                columnSort: '',
+                columnSort: '1',
                 sortType: 0,
               },
               errors: [{ message: 'Error message' }],

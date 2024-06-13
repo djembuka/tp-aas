@@ -11,6 +11,9 @@ window.addEventListener('load', () => {
       };
     },
     mutations: {
+      setProfiles(state, { profiles }) {
+        Vue.set(state, 'profiles', profiles);
+      },
       setDeafultProfile(state, { id }) {
         if (!state.profiles) return;
 
@@ -22,8 +25,14 @@ window.addEventListener('load', () => {
           }
         });
       },
-      setProfiles(state, { profiles }) {
-        Vue.set(state, 'profiles', profiles);
+      setColumnsNames(state, { columnsNames }) {
+        Vue.set(state, 'columnsNames', columnsNames);
+      },
+      setAppeals(state, { appeals }) {
+        Vue.set(state, 'appeals', appeals);
+      },
+      setDefaultSort(state, { defaultSortObject }) {
+        Vue.set(state, 'defaultSort', defaultSortObject);
       },
       setNew(state, payload) {
         state.numBlocks.find((block) => block.new).num = payload;
@@ -151,6 +160,72 @@ window.addEventListener('load', () => {
             );
         }
       },
+      async columnsNamesBX({ _, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'columnsNames', {
+              mode: 'class',
+              data: {
+                userid: BX.bitrix_sessid,
+                sessionid: BX.bitrix_sessid,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setColumnsNames', { columnsNames: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'columnsNames' });
+              }
+            );
+        }
+      },
+      async appealsBX({ _, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'appeals', {
+              mode: 'class',
+              data: {
+                userid: BX.bitrix_sessid,
+                sessionid: BX.bitrix_sessid,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setAppeals', { appeals: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'appeals' });
+              }
+            );
+        }
+      },
+      async defaultSortBX({ _, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'defaultSort', {
+              mode: 'class',
+              data: {
+                userid: BX.bitrix_sessid,
+                sessionid: BX.bitrix_sessid,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setDefaultSort', { defaultSortObject: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'defaultSort' });
+              }
+            );
+        }
+      },
       renderTable({ state, commit, getters }) {
         commit('changeRenderingTable', true);
         (async () => {
@@ -251,6 +326,8 @@ window.addEventListener('load', () => {
     methods: {
       click(id) {
         this.$store.dispatch('setDeafultProfileBX', { id });
+        this.$store.dispatch('columnsNamesBX', { id });
+        this.$store.dispatch('appealsBX', { id });
       },
       hover() {
         if (this.calculateWidth() <= this.$refs.sm.clientWidth) {
@@ -294,6 +371,43 @@ window.addEventListener('load', () => {
     },
     mounted() {
       this.initialized = true;
+    },
+  });
+
+  Vue.component('inboxTable', {
+    template: `
+      <div id="inbox-table" class="b-registry-report">
+        <div v-if="$store.state.columnsNames">
+          <table class="table table-responsive">
+            <thead>
+              <tr>
+                <th v-for="col in $store.state.columnsNames" :key="col.id" class="asc" @click="clickTh(col)">{{col.name}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="appeal in appeals.items" :class="{'tr--new': appeal.new}" :data-id="appeal.id" :data-url="appeal.url" :title="appeal.name" :data-target="appeal.url ? '_blank' : ''" @click="clickTr($event)">
+                <td v-for="cell in appeal.cells" v-html="cell.value" :class="String(cell.id) === String(defaultSort.id)"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else-if="$store.state.loading">Загрузка данных.</div>
+        <div v-else>Нет данных.</div>
+      </div>
+    `,
+    data() {
+      return {};
+    },
+    computed: {
+      columnsNames() {
+        return this.$store.state.columnsNames;
+      },
+      appeals() {
+        return this.$store.state.appeals;
+      },
+      defaultSort() {
+        return this.$store.state.defaultSort;
+      },
     },
   });
 
@@ -621,100 +735,6 @@ window.addEventListener('load', () => {
         </div>
       </div>`,
     methods: {},
-  });
-
-  Vue.component('inboxTable', {
-    data() {
-      return {
-        sorting: {
-          field: '',
-          sortType: '',
-        },
-      };
-    },
-    template: `<div id="inbox-table" class="b-registry-report">
-      <div v-if="$store.state.table.html.rows">
-        <table class="table table-responsive">
-          <thead>
-            <tr>
-              <th v-for="col in tableHtml.cols" :class="col.sortType" @click="clickTh(col)">{{col.title}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in tableHtml.rows" :class="{'tr--new': row.new}" :data-id="row.data.id" :data-url="row.url" :title="row.title" :data-target="row.target" @click="clickTr($event)">
-              <td v-for="(value, name) in row.data" v-html="value" :class="sorting.field === name ? sorting.sortType : ''"></td>
-            </tr>
-          </tbody>
-        </table>
-        <hr>
-        <div v-html="tableHtml.pagination" @click="clickPagination($event)"></div>
-      </div>
-      <div v-else-if="$store.state.renderingTable">Загрузка данных.</div>
-      <div v-else>Нет данных.</div>
-    </div>`,
-    computed: {
-      tableHtml() {
-        const tableHtml = store.state.table.html;
-        if (typeof tableHtml === 'object') {
-          const sortedCol = tableHtml.cols.filter((col) => col.sortType);
-          if (sortedCol.length) {
-            this.sorting = {
-              field: sortedCol[0].field,
-              sortType: sortedCol[0].sortType,
-            };
-          }
-        }
-        return tableHtml;
-      },
-    },
-    methods: {
-      clickTh(col) {
-        //sorting
-        this.sortTable(col.field, col.sortType);
-        //getting selected
-        if (store.getters.isDateFilled) {
-          store.dispatch('getSelected');
-        }
-      },
-      sortTable(sortField, sortType) {
-        sortType = sortType === 'asc' ? 'desc' : 'asc';
-        store.commit('changeSorting', { sortField, sortType });
-
-        //render table
-        this.$store.dispatch('renderTable');
-        //set url
-        this.$store.dispatch('seturl');
-        //set sessionStorage
-        this.$store.dispatch('setSessionStorage');
-      },
-      clickTr(event) {
-        event.preventDefault();
-        let url = event.target.closest('tr').getAttribute('data-url');
-        let target = event.target.closest('tr').getAttribute('data-target');
-        if (!url) return;
-        if (target === '_self') {
-          window.location.href = url;
-        } else if (target === '_blank') {
-          window.open(url, 'new');
-        }
-      },
-      clickPagination(e) {
-        e.preventDefault();
-        if (e.target.getAttribute('href')) {
-          //reset page
-          let page = parseQuery(
-            e.target.getAttribute('href').split('?')[1]
-          ).PAGEN_1;
-          store.commit('changePage', 1 * page);
-          //render Table
-          this.$store.dispatch('renderTable');
-          //set URL
-          this.$store.dispatch('seturl');
-          //set sessionStorage
-          this.$store.dispatch('setSessionStorage');
-        }
-      },
-    },
   });
 
   Vue.component('stickyScroll', {
@@ -1049,7 +1069,16 @@ window.addEventListener('load', () => {
       this.$store.dispatch('renderTable');
 
       //get profiles
-      this.$store.dispatch('profilesBX');
+      let profiles = this.$store.dispatch('profilesBX');
+      profiles.then(() => {
+        let defaultP = this.$store.state.profiles.find((p) => p.default);
+
+        if (!defaultP) return;
+
+        this.$store.dispatch('columnsNamesBX', { id: defaultP.id });
+        this.$store.dispatch('appealsBX', { id: defaultP.id });
+        this.$store.dispatch('defaultSortBX', { id: defaultP.id });
+      });
     },
   });
 
