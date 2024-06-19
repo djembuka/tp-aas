@@ -1,39 +1,79 @@
 .b-check-detail__reports
-  table.table.table-responsive
-    thead
-      tr
-        th.asc( data-field="title" ) Дата сдачи
-        th( data-field="id" ) Название отчета
-        th( data-field="start" ) Статус
-    tbody
-      tr( data-url="/pages/check-detail/reports-detail.html" data-target="_self" )
-        td.asc 03.11.2022
-        td Уточненный отчет аудиторской организации за первое полугодие 2022 года номер 192733, cоздан 99999999998
-        td 
-          .label-gray
-            span Черновик
+  h3.mt-0 Отчет организации
 
-      tr( data-url="/pages/check-detail/reports-detail.html" data-target="_self" )
-        td.asc 17.09.2022
-        td Отчет аудиторской организации за первое полугодие 2022 года номер 192733, cоздан 99999999998
-        td 
-          .label-blue
-            span Ожидает рассмотрения
-            
-      tr( data-url="/pages/check-detail/reports-detail.html" data-target="_self" )
-        td.asc 11.02.2022
-        td Уточненный отчет «Форма 2-аудит» за 2021 номер 198764, cоздан 99999999998
-        td 
-          .label-green
-            span Опубликован
-            
-      tr( data-url="/pages/check-detail/reports-detail.html" data-target="_self" )
-        td.asc 07.05.2020
-        td О наличии доступа к гос.тайне номер 156973, cоздан 99999999998
-        td 
-          .label-green
-            span Опубликован
+  .b-reports-list
+    .b-reports-list__item.b-reports-list__item--empty
+      .b-reports-list__year 2023
+      .b-reports-list__item-content
+        .b-reports-list__text
+          a.b-reports-list__title( href="" ) Годовой отчет аудиторской организации за 2022
+          .b-reports-list__date.small
+            .label-red
+              span Не сдан
+        .b-reports-list__button
 
-  hr.hr--xl
+  hr
 
-  include ../../modules/pagination/include
+  a.btn.btn-dark.btn-md( href="/pages/check-detail/reports-all.html" ) Все отчеты
+
+  hr
+
+  h3.mt-0 Отчеты сотрудников организации на 12 января 2023
+
+  .b-check-detail__employees
+
+    .b-employee-card
+      a.b-employee-card__photo( href='/pages/check-detail/employee.html' style="background-image: url( '/upload/search/1.jpg' );")
+      .b-employee-card__text
+        .b-employee-card__title
+          a( href='/pages/check-detail/employee.html' ) Вишневская Наталья Владимировна
+        .b-employee-card__ornz 22006014052
+        .b-employee-card__status Основное
+
+    .b-employee-card
+      a.b-employee-card__photo( href='/pages/check-detail/employee.html' style="background-image: url( '/upload/search/1.jpg' );")
+      .b-employee-card__text
+        .b-employee-card__title
+          a( href='/pages/check-detail/employee.html' ) Вишневская Наталья Владимировна
+        .b-employee-card__ornz 22006014052
+        .b-employee-card__status Основное
+
+    .b-employee-card
+      a.b-employee-card__photo( href='/pages/check-detail/employee.html' style="background-image: url( '/upload/search/1.jpg' );")
+      .b-employee-card__text
+        .b-employee-card__title
+          a( href='/pages/check-detail/employee.html' ) Вишневская Наталья Владимировна
+        .b-employee-card__ornz 22006014052
+        .b-employee-card__status Основное
+
+    .b-employee-card
+      a.b-employee-card__photo( href='/pages/check-detail/employee.html' style="background-image: url( '/upload/search/1.jpg' );")
+      .b-employee-card__text
+        .b-employee-card__title
+          a( href='/pages/check-detail/employee.html' ) Вишневская Наталья Владимировна
+        .b-employee-card__ornz 22006014052
+        .b-employee-card__status Основное
+
+    .b-employee-card
+      a.b-employee-card__photo( href='/pages/check-detail/employee.html' style="background-image: url( '/upload/search/1.jpg' );")
+      .b-employee-card__text
+        .b-employee-card__title
+          a( href='/pages/check-detail/employee.html' ) Вишневская Наталья Владимировна
+        .b-employee-card__ornz 22006014052
+        .b-employee-card__status Основное
+
+    .b-employee-card
+      a.b-employee-card__photo( href='/pages/check-detail/employee.html' style="background-image: url( '/upload/search/1.jpg' );")
+      .b-employee-card__text
+        .b-employee-card__title
+          a( href='/pages/check-detail/employee.html' ) Вишневская Наталья Владимировна
+        .b-employee-card__ornz 22006014052
+        .b-employee-card__status Основное
+
+    .b-employee-card
+      a.b-employee-card__photo( href='/pages/check-detail/employee.html' style="background-image: url( '/upload/search/1.jpg' );")
+      .b-employee-card__text
+        .b-employee-card__title
+          a( href='/pages/check-detail/employee.html' ) Вишневская Наталья Владимировна
+        .b-employee-card__ornz 22006014052
+        .b-employee-card__status Основное
