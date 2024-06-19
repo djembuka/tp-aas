@@ -154,7 +154,7 @@
       td
         display flex
         align-items center
-        text-align left
+        text-align left !important
 
         &:hover
         
@@ -166,15 +166,20 @@
     .table thead
 
       th
-        text-align center !important
+        text-align left !important
+        padding-left 2rem
         width 200px
 
         &:nth-child(2)
           text-align left
           width auto
 
-    td:first-child
-      text-align center
+    td
+      padding-left 2rem
+
+      &,
+      [class^="label-"]
+        text-align left !important
 
   #checkDetailChangesFilter,
   #checkDetailAppealsFilter
@@ -221,7 +226,7 @@
     .table thead
 
       th
-        text-align center !important
+        text-align left !important
 
         &:first-child,
         &:last-child
@@ -231,7 +236,7 @@
             width auto
 
     td
-      text-align center
+      text-align left
 
 
 
