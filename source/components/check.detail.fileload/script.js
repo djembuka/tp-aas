@@ -887,7 +887,7 @@ window.addEventListener('load', () => {
   Vue.component('fileInfo', {
     data() {
       return {
-        ext: this.file.filename.split('.').reverse()[0],
+        ext: this.file.filename.split('.').reverse()[0].toLowerCase(),
       };
     },
     props: ['block', 'file', 'statusCode'],

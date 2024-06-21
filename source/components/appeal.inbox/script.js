@@ -431,6 +431,11 @@ window.addEventListener('load', () => {
         };
       },
       clickTh(col) {
+        this.$store.dispatch('setDefaultSortBX', {
+          columnSort: col.id,
+          sortType: 0,
+        });
+
         //sorting
         this.sortTable(col.field, col.sortType);
         //getting selected
