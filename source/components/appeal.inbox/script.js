@@ -11,6 +11,18 @@ window.addEventListener('load', () => {
       };
     },
     mutations: {
+      setPredefinedFilters(state, { predefinedFilters }) {
+        Vue.set(state, 'predefinedFilters', predefinedFilters);
+      },
+      setFilters(state, { filters }) {
+        Vue.set(state, 'filters', filters);
+      },
+      setUserId(state, { id }) {
+        Vue.set(state, 'userId', id);
+      },
+      setSessId(state, { id }) {
+        Vue.set(state, 'sessId', id);
+      },
       setProfiles(state, { profiles }) {
         Vue.set(state, 'profiles', profiles);
       },
@@ -45,7 +57,7 @@ window.addEventListener('load', () => {
       },
       changeControlValue(state, payload) {
         //payload = {controlCode, controlValue}
-        const control = state.filter.controls.find(
+        const control = state.filters.find(
           (control) => control.code === payload.controlCode
         );
         switch (control.type) {
@@ -76,6 +88,12 @@ window.addEventListener('load', () => {
       },
     },
     getters: {
+      defaultProfile(state) {
+        if (state.profiles) {
+          return state.profiles.find((p) => p.default);
+        }
+        return {};
+      },
       requestObj(state) {
         const requestObj = {};
 
@@ -118,14 +136,14 @@ window.addEventListener('load', () => {
       },
     },
     actions: {
-      async profilesBX({ _, commit }) {
+      async profilesBX({ state, commit }) {
         if (window.BX) {
           return window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'profiles', {
               mode: 'class',
               data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
+                userid: state.userId,
+                sessionid: state.sessId,
               },
               dataType: 'json',
             })
@@ -139,15 +157,15 @@ window.addEventListener('load', () => {
             );
         }
       },
-      async setDeafultProfileBX({ _, commit }, { id }) {
+      async setDeafultProfileBX({ state, commit }, { id }) {
         commit('setDeafultProfile', { id });
         if (window.BX) {
           return window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'setDeafultProfile', {
               mode: 'class',
               data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
+                userid: state.userId,
+                sessionid: state.sessId,
                 profileid: id,
               },
               dataType: 'json',
@@ -160,14 +178,14 @@ window.addEventListener('load', () => {
             );
         }
       },
-      async columnsNamesBX({ _, commit }, { id }) {
+      async columnsNamesBX({ state, commit }, { id }) {
         if (window.BX) {
           return window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'columnsNames', {
               mode: 'class',
               data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
+                userid: state.userId,
+                sessionid: state.sessId,
                 profileid: id,
               },
               dataType: 'json',
@@ -182,14 +200,14 @@ window.addEventListener('load', () => {
             );
         }
       },
-      async appealsBX({ _, commit }, { id }) {
+      async appealsBX({ state, commit }, { id }) {
         if (window.BX) {
           return window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'appeals', {
               mode: 'class',
               data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
+                userid: state.userId,
+                sessionid: state.sessId,
                 profileid: id,
               },
               dataType: 'json',
@@ -204,14 +222,14 @@ window.addEventListener('load', () => {
             );
         }
       },
-      async defaultSortBX({ _, commit }, { id }) {
+      async defaultSortBX({ state, commit }, { id }) {
         if (window.BX) {
           return window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'defaultSort', {
               mode: 'class',
               data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
+                userid: state.userId,
+                sessionid: state.sessId,
                 profileid: id,
               },
               dataType: 'json',
@@ -222,6 +240,76 @@ window.addEventListener('load', () => {
               },
               (error) => {
                 commit('showError', { error, method: 'defaultSort' });
+              }
+            );
+        }
+      },
+      async setDefaultSortBX({ state, commit }, { id, columnSort, sortType }) {
+        commit('setDefaultSort', {
+          defaultSortObject: { columnSort, sortType },
+        });
+
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'setDefaultSort', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+                columnSort,
+                sortType,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {},
+              (error) => {
+                commit('showError', { error, method: 'setDefaultSort' });
+              }
+            );
+        }
+      },
+      async predefinedFiltersBX({ state, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'predefinedFilters', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setPredefinedFilters', { predefinedFilters: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'setDefaultSort' });
+              }
+            );
+        }
+      },
+      async filtersBX({ state, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'filters', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setFilters', { filters: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'setDefaultSort' });
               }
             );
         }
@@ -431,17 +519,21 @@ window.addEventListener('load', () => {
         };
       },
       clickTh(col) {
+        //sorting
+        // this.sortTable(col.field, col.sortType);
         this.$store.dispatch('setDefaultSortBX', {
+          id: this.$store.getters.defaultProfile.id,
           columnSort: col.id,
-          sortType: 0,
+          sortType:
+            String(this.defaultSort.columnSort) === String(col.id)
+              ? Number(!this.defaultSort.sortType)
+              : 0,
         });
 
-        //sorting
-        this.sortTable(col.field, col.sortType);
-        //getting selected
-        if (store.getters.isDateFilled) {
-          store.dispatch('getSelected');
-        }
+        //getting selected ???
+        // if (store.getters.isDateFilled) {
+        //   store.dispatch('getSelected');
+        // }
       },
       clickTr({ url, target }) {
         if (!url) return;
@@ -454,51 +546,72 @@ window.addEventListener('load', () => {
     },
   });
 
+  // predefined filters
   Vue.component('numBlocks', {
-    template: `<div class="b-num-blocks" v-if="$store.state.numBlocks">
-      <div class="b-num-block"
-        v-for="block in $store.state.numBlocks"
-        :class="{'inactive': !block.new && !block.selected, 'b-num-block--counter': block.new, 'b-num-block--selected': block.selected, 'b-num-block--none':( block.selected && !Number(block.num))}"
-        @click="click(block)">
-        <div class="b-num-block__data">
-          <i>{{ block.title }}</i>
-          <b :class="{'b-num-block__b': block.new}">{{ block.num }}</b>
+    template: `
+    <div class="b-predefined-filters">
+      <h3>Заявки на изменения в реестре</h3>
+      <div class="b-num-blocks" v-if="numBlocks">
+        <div class="b-num-block"
+          v-for="block in numBlocks"
+          :class="{'inactive': !block.selectable, 'b-num-block--counter': block.selectable, 'b-num-block--none': false}"
+          @click="click(block)">
+          <div class="b-num-block__data">
+            <i>{{ block.name }}</i>
+            <b :class="{'b-num-block__b': block.new}">{{ block.value }}</b>
+          </div>
         </div>
-        <div class="b-num-block__icon" v-if="block.selected">
-          <svg xmlns="http://www.w3.org/2000/svg" width="23.177" height="32" viewBox="0 0 23.177 32">
-            <g>
-              <path d="M28.171,8.7V29.869a2.062,2.062,0,0,1-2.062,2.063H7.056a2.062,2.062,0,0,1-2.062-2.063V1.994A2.062,2.062,0,0,1,7.056-.068H19.407Z" transform="translate(-4.994 0.068)" fill="#288c0a"/>
-            </g>
-            <path d="M20.6,8.506l7.569,3.118V8.7L23.88,7.429Z" transform="translate(-4.994 0.068)" fill="#0e5429"/>
-            <path d="M28.171,8.7h-6.7a2.062,2.062,0,0,1-2.062-2.063v-6.7Z" transform="translate(-4.994 0.068)" fill="#cef4ae"/>
-            <g transform="translate(5.029 11.693)">
-              <rect width="13.119" height="1.458" rx="0.729" transform="translate(0 2.577)" fill="#fff"/>
-              <rect width="7.853" height="1.458" rx="0.729" transform="translate(0 9.089)" fill="#fff"/>
-              <rect width="13.119" height="1.458" rx="0.729" transform="translate(2.511 13.119) rotate(-90)" fill="#fff"/>
-              <rect width="7.288" height="1.458" rx="0.729" transform="translate(9.149 7.29) rotate(-90)" fill="#fff"/>
-            </g>
-          </svg>
+        <div class="b-num-block b-num-block--selected"
+          v-if="$store.getters.defaultProfile.excelExportSupport"
+          @click="click(block)">
+          <div class="b-num-block__data">
+            <i>Выбрано</i>
+            <b>15</b>
+          </div>
+          <div class="b-num-block__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="23.177" height="32" viewBox="0 0 23.177 32">
+              <g>
+                <path d="M28.171,8.7V29.869a2.062,2.062,0,0,1-2.062,2.063H7.056a2.062,2.062,0,0,1-2.062-2.063V1.994A2.062,2.062,0,0,1,7.056-.068H19.407Z" transform="translate(-4.994 0.068)" fill="#288c0a"/>
+              </g>
+              <path d="M20.6,8.506l7.569,3.118V8.7L23.88,7.429Z" transform="translate(-4.994 0.068)" fill="#0e5429"/>
+              <path d="M28.171,8.7h-6.7a2.062,2.062,0,0,1-2.062-2.063v-6.7Z" transform="translate(-4.994 0.068)" fill="#cef4ae"/>
+              <g transform="translate(5.029 11.693)">
+                <rect width="13.119" height="1.458" rx="0.729" transform="translate(0 2.577)" fill="#fff"/>
+                <rect width="7.853" height="1.458" rx="0.729" transform="translate(0 9.089)" fill="#fff"/>
+                <rect width="13.119" height="1.458" rx="0.729" transform="translate(2.511 13.119) rotate(-90)" fill="#fff"/>
+                <rect width="7.288" height="1.458" rx="0.729" transform="translate(9.149 7.29) rotate(-90)" fill="#fff"/>
+              </g>
+            </svg>
+          </div>
         </div>
       </div>
     </div>`,
     data() {
       return {};
     },
+    computed: {
+      numBlocks() {
+        if (this.$store.state.predefinedFilters) {
+          return this.$store.state.predefinedFilters.predefinedFiltersList;
+        }
+        return [];
+      },
+    },
     methods: {
       click(block) {
-        if (block.new) {
-          this.getNew(block.new);
+        if (block.selectable) {
+          this.setFilters(block);
         } else if (block.selected) {
           this.getSelected(block.link);
         } else {
           return;
         }
       },
-      getNew(newFlag) {
-        if (!newFlag) return;
-        //reset values
-        this.$store.state.filter.controls.forEach((control) => {
-          if (control.newOptionCode) return;
+      setFilters(block) {
+        //reset
+        this.$store.state.filters.forEach((control) => {
+          if (block.filters.find((f) => f.id === control.id)) return;
+
           //control value
           let controlValue = '';
           if (control.type === 'select' && control.options) {
@@ -511,26 +624,16 @@ window.addEventListener('load', () => {
           });
         });
 
-        //New
-        const statusControl = this.$store.state.filter.controls.find(
-          (control) => control.newOptionCode
-        );
-        const newOption = statusControl.options.find(
-          (option) => option.code === statusControl.newOptionCode
-        );
-        this.$store.commit('changeControlValue', {
-          controlCode: statusControl.code,
-          controlValue: newOption,
+        //set filter
+        block.filters.forEach((f) => {
+          const control = this.$store.state.filters.find((c) => c.id === f.id);
+          if (control) {
+            this.$store.commit('changeControlValue', {
+              controlCode: control.code,
+              controlValue: f.value,
+            });
+          }
         });
-
-        //set url, render table
-        this.$store.commit('changePage', 1);
-        //render table
-        this.$store.dispatch('renderTable');
-        //set URL
-        this.$store.dispatch('seturl');
-        //set sessionStorage
-        this.$store.dispatch('setSessionStorage');
       },
       getSelected(link) {
         window.open(link);
@@ -986,10 +1089,9 @@ window.addEventListener('load', () => {
     el: '#appealInbox',
     store,
     template: `
-      <div class="b-registry-report">{{$store.state.defaultSort}}
+      <div class="b-registry-report">
         <profile-menu></profile-menu>
         <hr>
-        <h3>Заявки на изменения в реестре</h3>
         <num-blocks></num-blocks>
         <hr>
         <inbox-filter ref="filter"></inbox-filter>
@@ -1062,65 +1164,72 @@ window.addEventListener('load', () => {
       this.$store.dispatch('setSessionStorage');
     },
     mounted() {
-      const spaceStep = $.animateNumber.numberStepFactories.separator(' ');
-      //get new number
-      (async () => {
-        do {
-          //hide digit
-          const digitNode = document.querySelector('.b-num-block__b');
-          const currentNum = this.$store.state.numBlocks.find(
-            (block) => block.new
-          ).num;
+      // const spaceStep = $.animateNumber.numberStepFactories.separator(' ');
+      // //get new number
+      // (async () => {
+      //   do {
+      //     //hide digit
+      //     const digitNode = document.querySelector('.b-num-block__b');
+      //     const currentNum = this.$store.state.numBlocks.find(
+      //       (block) => block.new
+      //     ).num;
 
-          //make request
-          let response = await fetch(this.$store.state.paths.getNewNum);
-          if (response.ok) {
-            let json = await response.json();
-            if (json.STATUS === 'Y' && json.DATA) {
-              //if the filter is not applied
-              let filterFlag = false;
-              filterFlag = this.$store.state.filter.controls.some((control) => {
-                if (control.type === 'select') {
-                  return control.selected.code;
-                }
-                if (control.type === 'date') {
-                  return control.value[0] || control.value[1];
-                }
-                return control.value;
-              });
-              filterFlag =
-                filterFlag ||
-                Object.keys(this.$store.state.query).some(
-                  (q) => this.$store.state.query[q]
-                );
+      //     //make request
+      //     let response = await fetch(this.$store.state.paths.getNewNum);
+      //     if (response.ok) {
+      //       let json = await response.json();
+      //       if (json.STATUS === 'Y' && json.DATA) {
+      //         //if the filter is not applied
+      //         let filterFlag = false;
+      //         filterFlag = this.$store.state.filter.controls.some((control) => {
+      //           if (control.type === 'select') {
+      //             return control.selected.code;
+      //           }
+      //           if (control.type === 'date') {
+      //             return control.value[0] || control.value[1];
+      //           }
+      //           return control.value;
+      //         });
+      //         filterFlag =
+      //           filterFlag ||
+      //           Object.keys(this.$store.state.query).some(
+      //             (q) => this.$store.state.query[q]
+      //           );
 
-              if (!filterFlag && Number(json.DATA.num) !== Number(currentNum)) {
-                this.$store.dispatch('renderTable');
-                this.$store.commit('setNew', json.DATA.num);
-              }
-              $(digitNode).animateNumber({
-                number: json.DATA.num,
-                numberStep: spaceStep,
-              });
-            }
-          }
-          await new Promise((r) => setTimeout(r, this.$store.state.timeout));
-        } while (true);
-      })();
+      //         if (!filterFlag && Number(json.DATA.num) !== Number(currentNum)) {
+      //           this.$store.dispatch('renderTable');
+      //           this.$store.commit('setNew', json.DATA.num);
+      //         }
+      //         $(digitNode).animateNumber({
+      //           number: json.DATA.num,
+      //           numberStep: spaceStep,
+      //         });
+      //       }
+      //     }
+      //     await new Promise((r) => setTimeout(r, this.$store.state.timeout));
+      //   } while (true);
+      // })();
 
       //render the table
-      this.$store.dispatch('renderTable');
+      // this.$store.dispatch('renderTable');
 
       //get profiles
       let profiles = this.$store.dispatch('profilesBX');
       profiles.then(() => {
-        let defaultP = this.$store.state.profiles.find((p) => p.default);
+        let defaultP = this.$store.getters.defaultProfile;
 
         if (!defaultP) return;
 
+        this.$store.dispatch('predefinedFiltersBX', { id: defaultP.id });
+        this.$store.dispatch('filtersBX', { id: defaultP.id });
         this.$store.dispatch('columnsNamesBX', { id: defaultP.id });
         this.$store.dispatch('appealsBX', { id: defaultP.id });
         this.$store.dispatch('defaultSortBX', { id: defaultP.id });
+
+        if (window.BX) {
+          this.$store.commit('setUserId', { id: BX.bitrix_userid() });
+          this.$store.commit('setSessId', { id: BX.bitrix_sessid() });
+        }
       });
     },
   });

@@ -1,4 +1,7 @@
 window.BX = {
+  bitrix_userid() {
+    return 'USERID';
+  },
   bitrix_sessid() {
     return 'SESSID';
   },
@@ -15,7 +18,7 @@ window.BX = {
                   id: 1,
                   name: 'Общий профиль',
                   newAppealsCount: 99,
-                  excelExportSupport: false,
+                  excelExportSupport: true,
                   default: true,
                 },
                 {
@@ -67,13 +70,61 @@ window.BX = {
             resolve({
               status: 'success',
               data: {
-                predefinedFiltersTitle: 'Заголовок',
-                filtersList: [
+                predefinedFiltersTitle: 'Заявки на изменения в реестре',
+                predefinedFiltersList: [
                   {
                     id: 1,
-                    name: 'Название',
-                    value: '5',
+                    name: 'Новые',
+                    value: 78,
                     selectable: true,
+                    filters: [
+                      {
+                        id: 4,
+                        value: 'prop1',
+                      },
+                    ],
+                  },
+                  {
+                    id: 2,
+                    name: 'Завершены сегодня',
+                    value: 15,
+                  },
+                  {
+                    id: 3,
+                    name: 'Завершены за месяц',
+                    value: 254,
+                  },
+                  {
+                    id: 5,
+                    name: 'Тестовый',
+                    value: 8,
+                    selectable: true,
+                    filters: [
+                      {
+                        id: 1,
+                        value: '78945611',
+                      },
+                      {
+                        id: 2,
+                        value: '4567897',
+                      },
+                      {
+                        id: 3,
+                        value: 'Елена Евгеньевна',
+                      },
+                      {
+                        id: 4,
+                        value: 'prop2',
+                      },
+                      {
+                        id: 5,
+                        value: 'prop5',
+                      },
+                      {
+                        id: 6,
+                        value: [null, null],
+                      },
+                    ],
                   },
                 ],
               },
@@ -243,9 +294,9 @@ window.BX = {
                 resultCount: 10,
                 maxCountPerRequest: 20,
                 startIndex: 5,
-                excelLink: false,
                 items: [
                   {
+                    id: 1,
                     url: '/',
                     target: '_blank',
                     cells: [
@@ -255,17 +306,17 @@ window.BX = {
                         value: '35',
                       },
                       {
-                        id: 3,
+                        id: 2,
                         type: 'date',
                         value: '18 мая 2021<br>15:12:41',
                       },
                       {
-                        id: 4,
+                        id: 3,
                         type: 'author',
                         value: 'Савельева Мария Евгеньевна<br>1398471982475',
                       },
                       {
-                        id: 5,
+                        id: 4,
                         type: 'object',
                         value: 'Петров Петр Иванович<br>2200605151435',
                       },
@@ -275,13 +326,14 @@ window.BX = {
                         value: 'Изменение в реестре',
                       },
                       {
-                        id: 5,
+                        id: 6,
                         type: 'status',
                         value: 'На рассмотрении',
                       },
                     ],
                   },
                   {
+                    id: 2,
                     url: '',
                     new: true,
                     target: '_self',
@@ -292,17 +344,17 @@ window.BX = {
                         value: '35',
                       },
                       {
-                        id: 3,
+                        id: 2,
                         type: 'date',
                         value: '18 мая 2021<br>15:12:41',
                       },
                       {
-                        id: 4,
+                        id: 3,
                         type: 'author',
                         value: 'Савельева Мария Евгеньевна<br>1398471982475',
                       },
                       {
-                        id: 5,
+                        id: 4,
                         type: 'object',
                         value: 'Петров Петр Иванович<br>2200605151435',
                       },
@@ -319,6 +371,7 @@ window.BX = {
                     ],
                   },
                   {
+                    id: 3,
                     url: '',
                     cells: [
                       {
@@ -327,17 +380,17 @@ window.BX = {
                         value: '35',
                       },
                       {
-                        id: 3,
+                        id: 2,
                         type: 'date',
                         value: '18 мая 2021<br>15:12:41',
                       },
                       {
-                        id: 4,
+                        id: 3,
                         type: 'author',
                         value: 'Савельева Мария Евгеньевна<br>1398471982475',
                       },
                       {
-                        id: 5,
+                        id: 4,
                         type: 'object',
                         value: 'Петров Петр Иванович<br>2200605151435',
                       },
@@ -347,13 +400,14 @@ window.BX = {
                         value: 'Изменение в реестре',
                       },
                       {
-                        id: 5,
+                        id: 6,
                         type: 'status',
                         value: 'На рассмотрении',
                       },
                     ],
                   },
                   {
+                    id: 4,
                     url: '',
                     cells: [
                       {
@@ -362,17 +416,17 @@ window.BX = {
                         value: '35',
                       },
                       {
-                        id: 3,
+                        id: 2,
                         type: 'date',
                         value: '18 мая 2021<br>15:12:41',
                       },
                       {
-                        id: 4,
+                        id: 3,
                         type: 'author',
                         value: 'Савельева Мария Евгеньевна<br>1398471982475',
                       },
                       {
-                        id: 5,
+                        id: 4,
                         type: 'object',
                         value: 'Петров Петр Иванович<br>2200605151435',
                       },
@@ -382,13 +436,14 @@ window.BX = {
                         value: 'Изменение в реестре',
                       },
                       {
-                        id: 5,
+                        id: 6,
                         type: 'status',
                         value: 'На рассмотрении',
                       },
                     ],
                   },
                   {
+                    id: 5,
                     url: '',
                     cells: [
                       {
@@ -397,17 +452,17 @@ window.BX = {
                         value: '35',
                       },
                       {
-                        id: 3,
+                        id: 2,
                         type: 'date',
                         value: '18 мая 2021<br>15:12:41',
                       },
                       {
-                        id: 4,
+                        id: 3,
                         type: 'author',
                         value: 'Савельева Мария Евгеньевна<br>1398471982475',
                       },
                       {
-                        id: 5,
+                        id: 4,
                         type: 'object',
                         value: 'Петров Петр Иванович<br>2200605151435',
                       },
@@ -417,7 +472,7 @@ window.BX = {
                         value: 'Изменение в реестре',
                       },
                       {
-                        id: 5,
+                        id: 6,
                         type: 'status',
                         value: 'На рассмотрении',
                       },
@@ -455,6 +510,7 @@ window.BX = {
 
         case 'setDefaultSort':
           result = new Promise((resolve, reject) => {
+            console.log(data);
             resolve({
               status: 'success',
               data: null,
