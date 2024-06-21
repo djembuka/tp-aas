@@ -11,29 +11,6 @@ window.addEventListener('load', () => {
       };
     },
     mutations: {
-      setProfiles(state, { profiles }) {
-        Vue.set(state, 'profiles', profiles);
-      },
-      setDeafultProfile(state, { id }) {
-        if (!state.profiles) return;
-
-        state.profiles.forEach((p) => {
-          if (String(p.id) === String(id)) {
-            Vue.set(p, 'default', true);
-          } else if (p.default) {
-            Vue.set(p, 'default', undefined);
-          }
-        });
-      },
-      setColumnsNames(state, { columnsNames }) {
-        Vue.set(state, 'columnsNames', columnsNames);
-      },
-      setAppeals(state, { appeals }) {
-        Vue.set(state, 'appeals', appeals);
-      },
-      setDefaultSort(state, { defaultSortObject }) {
-        Vue.set(state, 'defaultSort', defaultSortObject);
-      },
       setNew(state, payload) {
         state.numBlocks.find((block) => block.new).num = payload;
       },
@@ -118,114 +95,6 @@ window.addEventListener('load', () => {
       },
     },
     actions: {
-      async profilesBX({ _, commit }) {
-        if (window.BX) {
-          return window.BX.ajax
-            .runComponentAction(`twinpx:vkkr.api`, 'profiles', {
-              mode: 'class',
-              data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
-              },
-              dataType: 'json',
-            })
-            .then(
-              (r) => {
-                commit('setProfiles', { profiles: r.data });
-              },
-              (error) => {
-                commit('showError', { error, method: 'profiles' });
-              }
-            );
-        }
-      },
-      async setDeafultProfileBX({ _, commit }, { id }) {
-        commit('setDeafultProfile', { id });
-        if (window.BX) {
-          return window.BX.ajax
-            .runComponentAction(`twinpx:vkkr.api`, 'setDeafultProfile', {
-              mode: 'class',
-              data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
-                profileid: id,
-              },
-              dataType: 'json',
-            })
-            .then(
-              () => {},
-              (error) => {
-                commit('showError', { error, method: 'setDeafultProfile' });
-              }
-            );
-        }
-      },
-      async columnsNamesBX({ _, commit }, { id }) {
-        if (window.BX) {
-          return window.BX.ajax
-            .runComponentAction(`twinpx:vkkr.api`, 'columnsNames', {
-              mode: 'class',
-              data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
-                profileid: id,
-              },
-              dataType: 'json',
-            })
-            .then(
-              (r) => {
-                commit('setColumnsNames', { columnsNames: r.data });
-              },
-              (error) => {
-                commit('showError', { error, method: 'columnsNames' });
-              }
-            );
-        }
-      },
-      async appealsBX({ _, commit }, { id }) {
-        if (window.BX) {
-          return window.BX.ajax
-            .runComponentAction(`twinpx:vkkr.api`, 'appeals', {
-              mode: 'class',
-              data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
-                profileid: id,
-              },
-              dataType: 'json',
-            })
-            .then(
-              (r) => {
-                commit('setAppeals', { appeals: r.data });
-              },
-              (error) => {
-                commit('showError', { error, method: 'appeals' });
-              }
-            );
-        }
-      },
-      async defaultSortBX({ _, commit }, { id }) {
-        if (window.BX) {
-          return window.BX.ajax
-            .runComponentAction(`twinpx:vkkr.api`, 'defaultSort', {
-              mode: 'class',
-              data: {
-                userid: BX.bitrix_sessid,
-                sessionid: BX.bitrix_sessid,
-                profileid: id,
-              },
-              dataType: 'json',
-            })
-            .then(
-              (r) => {
-                commit('setDefaultSort', { defaultSortObject: r.data });
-              },
-              (error) => {
-                commit('showError', { error, method: 'defaultSort' });
-              }
-            );
-        }
-      },
       renderTable({ state, commit, getters }) {
         commit('changeRenderingTable', true);
         (async () => {
@@ -287,167 +156,6 @@ window.addEventListener('load', () => {
 
   Vue.component('v-select', VueSelect.VueSelect);
   Vue.component('date-picker', DatePicker);
-
-  Vue.component('profileMenu', {
-    template: `
-      <div class="b-appeal-inbox-profiles">
-        <div class="twpx-scroll-menu" :class="{'twpx-scroll-menu--no-right': !arrows.right, 'twpx-scroll-menu--no-left': !arrows.left}" @mouseenter="hover" ref="sm">
-          <div class="twpx-scroll-menu-overflow">
-            <div class="twpx-scroll-menu-wrapper" :style="'margin-left: ' + margin + 'px;'" ref="wrapper">
-              <a href="/pages/appeal-inbox/" class="twpx-scroll-menu__item" :class="{'active': profile.default}" v-for="profile in profiles" :key="profile.id" @click.prevent='click(profile.id)'>
-                <i v-if="profile.newAppealsCount">{{ profile.newAppealsCount }}</i>
-                <span>{{ profile.name }}</span>
-              </a>
-            </div>
-          </div>
-          <div class="twpx-scroll-menu-arrows">
-            <div class="twpx-scroll-menu-arrow-right" @click="moveTo(-1 * $refs.sm.clientWidth)"></div>
-            <div class="twpx-scroll-menu-arrow-left" @click="moveTo($refs.sm.clientWidth)"></div>
-          </div>
-        </div>
-      </div>
-    `,
-    data() {
-      return {
-        initialized: false,
-        itemMarginRight: 20,
-        margin: 0,
-        arrows: {
-          right: false,
-          left: true,
-        },
-      };
-    },
-    computed: {
-      profiles() {
-        return this.$store.state.profiles;
-      },
-    },
-    methods: {
-      click(id) {
-        this.$store.dispatch('setDeafultProfileBX', { id });
-        this.$store.dispatch('columnsNamesBX', { id });
-        this.$store.dispatch('appealsBX', { id });
-      },
-      hover() {
-        if (this.calculateWidth() <= this.$refs.sm.clientWidth) {
-          this.arrows.right = false;
-          this.arrows.left = false;
-        } else {
-          this.moveTo(0);
-        }
-      },
-      moveTo(dist) {
-        this.arrows.right = true;
-        this.arrows.left = true;
-        let left = this.margin || 0;
-        left = left + dist;
-
-        let width = this.calculateWidth();
-
-        if (left >= 0) {
-          left = 0;
-          this.arrows.right = false;
-        } else if (left <= -1 * (width - this.$refs.sm.clientWidth)) {
-          left = -1 * (width - this.$refs.sm.clientWidth);
-          this.arrows.left = false;
-        }
-
-        this.margin = left;
-      },
-      calculateWidth() {
-        let result = 0;
-        this.$refs.wrapper.childNodes.forEach((item) => {
-          if (item.classList) {
-            result += item.clientWidth;
-            result += this.itemMarginRight;
-          }
-        });
-
-        result -= this.itemMarginRight;
-
-        return result;
-      },
-    },
-    mounted() {
-      this.initialized = true;
-    },
-  });
-
-  Vue.component('inboxTable', {
-    template: `
-      <div id="inbox-table" class="b-registry-report">
-        <div v-if="$store.state.columnsNames">
-          <table class="table table-responsive">
-            <thead>
-              <tr>
-                <th v-for="col in $store.state.columnsNames" :key="col.id" :class="thClass(col)" @click="clickTh(col)">{{col.name}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="appeal in appeals.items" :class="{'tr--new': appeal.new}" :data-id="appeal.id" :data-url="appeal.url" :title="appeal.name" :data-target="appeal.url ? '_blank' : ''" @click="clickTr.prevent({url: appeal.url, target: appeal.target})">
-                <td v-for="cell in appeal.cells" v-html="cell.value" :class="tdClass(cell)"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else-if="$store.state.loading">Загрузка данных.</div>
-        <div v-else>Нет данных.</div>
-      </div>
-    `,
-    data() {
-      return {};
-    },
-    computed: {
-      columnsNames() {
-        return this.$store.state.columnsNames;
-      },
-      appeals() {
-        return this.$store.state.appeals;
-      },
-      defaultSort() {
-        return this.$store.state.defaultSort;
-      },
-    },
-    methods: {
-      thClass(col) {
-        return {
-          asc:
-            String(this.defaultSort.columnSort) === String(col.id) &&
-            String(this.defaultSort.sortType) === '0',
-          desc:
-            String(this.defaultSort.columnSort) === String(col.id) &&
-            String(this.defaultSort.sortType) === '1',
-        };
-      },
-      tdClass(cell) {
-        return {
-          asc:
-            String(this.defaultSort.columnSort) === String(cell.id) &&
-            String(this.defaultSort.sortType) === '0',
-          desc:
-            String(this.defaultSort.columnSort) === String(cell.id) &&
-            String(this.defaultSort.sortType) === '1',
-        };
-      },
-      clickTh(col) {
-        //sorting
-        this.sortTable(col.field, col.sortType);
-        //getting selected
-        if (store.getters.isDateFilled) {
-          store.dispatch('getSelected');
-        }
-      },
-      clickTr({ url, target }) {
-        if (!url) return;
-        if (target === '_self') {
-          window.location.href = url;
-        } else {
-          window.open(url, 'new');
-        }
-      },
-    },
-  });
 
   Vue.component('numBlocks', {
     template: `<div class="b-num-blocks" v-if="$store.state.numBlocks">
@@ -775,6 +483,100 @@ window.addEventListener('load', () => {
     methods: {},
   });
 
+  Vue.component('inboxTable', {
+    data() {
+      return {
+        sorting: {
+          field: '',
+          sortType: '',
+        },
+      };
+    },
+    template: `<div id="inbox-table" class="b-registry-report">
+      <div v-if="$store.state.table.html.rows">
+        <table class="table table-responsive">
+          <thead>
+            <tr>
+              <th v-for="col in tableHtml.cols" :class="col.sortType" @click="clickTh(col)">{{col.title}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in tableHtml.rows" :class="{'tr--new': row.new}" :data-id="row.data.id" :data-url="row.url" :title="row.title" :data-target="row.target" @click="clickTr($event)">
+              <td v-for="(value, name) in row.data" v-html="value" :class="sorting.field === name ? sorting.sortType : ''"></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <div v-html="tableHtml.pagination" @click="clickPagination($event)"></div>
+      </div>
+      <div v-else-if="$store.state.renderingTable">Загрузка данных.</div>
+      <div v-else>Нет данных.</div>
+    </div>`,
+    computed: {
+      tableHtml() {
+        const tableHtml = store.state.table.html;
+        if (typeof tableHtml === 'object') {
+          const sortedCol = tableHtml.cols.filter((col) => col.sortType);
+          if (sortedCol.length) {
+            this.sorting = {
+              field: sortedCol[0].field,
+              sortType: sortedCol[0].sortType,
+            };
+          }
+        }
+        return tableHtml;
+      },
+    },
+    methods: {
+      clickTh(col) {
+        //sorting
+        this.sortTable(col.field, col.sortType);
+        //getting selected
+        if (store.getters.isDateFilled) {
+          store.dispatch('getSelected');
+        }
+      },
+      sortTable(sortField, sortType) {
+        sortType = sortType === 'asc' ? 'desc' : 'asc';
+        store.commit('changeSorting', { sortField, sortType });
+
+        //render table
+        this.$store.dispatch('renderTable');
+        //set url
+        this.$store.dispatch('seturl');
+        //set sessionStorage
+        this.$store.dispatch('setSessionStorage');
+      },
+      clickTr(event) {
+        event.preventDefault();
+        let url = event.target.closest('tr').getAttribute('data-url');
+        let target = event.target.closest('tr').getAttribute('data-target');
+        if (!url) return;
+        if (target === '_self') {
+          window.location.href = url;
+        } else if (target === '_blank') {
+          window.open(url, 'new');
+        }
+      },
+      clickPagination(e) {
+        e.preventDefault();
+        if (e.target.getAttribute('href')) {
+          //reset page
+          let page = parseQuery(
+            e.target.getAttribute('href').split('?')[1]
+          ).PAGEN_1;
+          store.commit('changePage', 1 * page);
+          //render Table
+          this.$store.dispatch('renderTable');
+          //set URL
+          this.$store.dispatch('seturl');
+          //set sessionStorage
+          this.$store.dispatch('setSessionStorage');
+        }
+      },
+    },
+  });
+
   Vue.component('stickyScroll', {
     data() {
       return {
@@ -981,10 +783,7 @@ window.addEventListener('load', () => {
     el: '#appealInbox',
     store,
     template: `
-      <div class="b-registry-report">{{$store.state.defaultSort}}
-        <profile-menu></profile-menu>
-        <hr>
-        <h3>Заявки на изменения в реестре</h3>
+      <div class="b-registry-report">
         <num-blocks></num-blocks>
         <hr>
         <inbox-filter ref="filter"></inbox-filter>
@@ -1105,18 +904,6 @@ window.addEventListener('load', () => {
 
       //render the table
       this.$store.dispatch('renderTable');
-
-      //get profiles
-      let profiles = this.$store.dispatch('profilesBX');
-      profiles.then(() => {
-        let defaultP = this.$store.state.profiles.find((p) => p.default);
-
-        if (!defaultP) return;
-
-        this.$store.dispatch('columnsNamesBX', { id: defaultP.id });
-        this.$store.dispatch('appealsBX', { id: defaultP.id });
-        this.$store.dispatch('defaultSortBX', { id: defaultP.id });
-      });
     },
   });
 
@@ -1141,4 +928,293 @@ window.addEventListener('load', () => {
     }
     return query;
   }
+
+  //profiles
+  class TwpxScrollMenu {
+    /*options = {
+      arrowColor: '#fff',
+      arrowHoverColor: '#fff',
+      itemMarginRight: 20
+    }
+    /*
+    this.sm - .twpx-scroll-menu
+    this.wrapper - .twpx-scroll-menu-wrapper
+  
+    this.arrowLeft - .twpx-scroll-menu-arrow-left
+    this.arrowRight - .twpx-scroll-menu-arrow-right
+    */
+
+    constructor(elem, options = {}) {
+      this.elem = elem;
+      this.options = options;
+
+      this.itemMarginRight = this.options.itemMarginRight || 20;
+      this.initialized = false;
+
+      this.init();
+    }
+
+    init() {
+      if (!this.initialized) {
+        this.createHtml();
+        this.createCss();
+        this.arrowEvents();
+        this.hoverEvent();
+        this.initialized = true;
+      }
+    }
+
+    createHtml() {
+      this.elem.childNodes.forEach((item) => {
+        if (item.classList) {
+          item.classList.add('twpx-scroll-menu__item');
+        }
+      });
+      this.sm = document.createElement('div');
+      this.sm.className = 'twpx-scroll-menu';
+      this.sm.innerHTML = `
+        <div class="twpx-scroll-menu-overflow">
+          <div class="twpx-scroll-menu-wrapper">${this.elem.innerHTML}</div>
+        </div>
+        <div class="twpx-scroll-menu-arrows">
+          <div class="twpx-scroll-menu-arrow-right"></div>
+          <div class="twpx-scroll-menu-arrow-left"></div>
+        </div>
+      `;
+      this.wrapper = this.sm.querySelector('.twpx-scroll-menu-wrapper');
+      this.arrowLeft = this.sm.querySelector('.twpx-scroll-menu-arrow-left');
+      this.arrowRight = this.sm.querySelector('.twpx-scroll-menu-arrow-right');
+
+      this.elem.parentNode.insertBefore(this.sm, this.elem);
+      this.elem.remove();
+      this.sm.classList.add('twpx-scroll-menu--no-right');
+    }
+
+    createCss() {
+      const styleElement = document.createElement('style');
+      styleElement.innerHTML = `
+      .twpx-scroll-menu {
+        position: relative;
+      }
+      .twpx-scroll-menu-overflow {
+        overflow: hidden;
+      }
+      .twpx-scroll-menu-wrapper {
+        display: flex;
+        overflow: hidden;
+        position: relative;
+        transition: margin-left 0.5s ease;
+        -webkit-transition: margin-left 0.5s ease-out;
+      }
+      .twpx-scroll-menu:before,
+      .twpx-scroll-menu:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 24px;
+        height: 100%;
+        background-image: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
+        z-index: 10;
+      }
+      .twpx-scroll-menu:after {
+        left: auto;
+        right: 0;
+        background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
+      }
+      .twpx-scroll-menu.twpx-scroll-menu--no-right:before,
+      .twpx-scroll-menu.twpx-scroll-menu--no-left:after,
+      .twpx-scroll-menu:hover:before,
+      .twpx-scroll-menu:hover:after {
+        display: none;
+      }
+      .twpx-scroll-menu__item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 20px;
+        border-radius: 7px;
+        background-color: #f0f5fc;
+        padding: 5px 15px;
+        height: 48px;
+        cursor: pointer;
+      }
+      .twpx-scroll-menu__item:last-child {
+        margin-right: 0;
+      }
+      .twpx-scroll-menu__item span {
+        white-space: nowrap;
+        font-size: 0.88rem;
+        font-family: Roboto, sans-serif;
+        color: #0a355a;
+      }
+      .twpx-scroll-menu__item i {
+        white-space: nowrap;
+        background: #5f7696;
+        color: #fff;
+        font-size: 0.88rem;
+        border-radius: 10px;
+        height: 20px;
+        padding: 0 7px;
+        margin-right: 8px;
+        font-style: normal;
+        display: flex;
+        align-items: center;
+      }
+      .twpx-scroll-menu__item:hover {
+        background-color: rgba(240, 245, 252, 0.867);
+      }
+      .twpx-scroll-menu__item:hover span {
+        color: rgba(10, 53, 90, 0.867);
+      }
+      .twpx-scroll-menu__item.active {
+        background-color: #8393aa;
+        cursor: default;
+        pointer-events: none;
+      }
+      .twpx-scroll-menu__item.active span {
+        color: #fff;
+      }
+      
+      .twpx-scroll-menu-arrows {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        -webkit-transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease;
+        width: 100%;
+      }
+      .twpx-scroll-menu:hover .twpx-scroll-menu-arrows {
+        opacity: 1;
+      }
+      .twpx-scroll-menu-arrow-left,
+      .twpx-scroll-menu-arrow-right {
+        content: '';
+        position: absolute;
+        top: calc((48px - 64px) / 2);
+        left: -32px;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background-color: #fff;
+        box-shadow: 0px 3px 6px #00000029;
+        cursor: pointer;
+        -webkit-transform: translateX(20px);
+        transform: translateX(20px);
+        -webkit-transition: background-color 0.3s ease, -webkit-transform 0.3s ease;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        z-index: 20;
+      }
+      .twpx-scroll-menu-arrow-right {
+        right: -32px;
+        left: auto;
+        -webkit-transform: translateX(-20px);
+        transform: translateX(-20px);
+      }
+      .twpx-scroll-menu-arrow-left:after,
+      .twpx-scroll-menu-arrow-right:after {
+        content: '';
+        position: absolute;
+        top: 24px;
+        right: 28px;
+        width: 15px;
+        height: 15px;
+        border: 2px solid ${this.options.arrowColor || '#074b84'};
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        z-index: 30;
+      }
+      .twpx-scroll-menu-arrow-left:after {
+        -webkit-transform: rotate(-135deg);
+        transform: rotate(-135deg);
+        left: 28px;
+        right: auto;
+      }
+      .twpx-scroll-menu-arrow-right:hover,
+      .twpx-scroll-menu-arrow-left:hover {
+        background-color: ${this.options.arrowHoverColor || '#f2762e'};
+      }
+      .twpx-scroll-menu-arrow-right:hover:after,
+      .twpx-scroll-menu-arrow-left:hover:after {
+        border-top-color: #fff;
+        border-right-color: #fff;
+      }
+      .twpx-scroll-menu:hover .twpx-scroll-menu-arrow-right,
+      .twpx-scroll-menu:hover .twpx-scroll-menu-arrow-left {
+        transform: translateX(0);
+        -webkit-transform: translateX(0);
+      }
+      .twpx-scroll-menu.twpx-scroll-menu--no-left .twpx-scroll-menu-arrow-right,
+      .twpx-scroll-menu.twpx-scroll-menu--no-right .twpx-scroll-menu-arrow-left {
+        opacity: 0 !important;
+      }
+      `;
+      document.querySelector('head').appendChild(styleElement);
+    }
+
+    hoverEvent() {
+      this.sm.addEventListener('mouseenter', (e) => {
+        if (this.calculateWidth() <= this.sm.clientWidth) {
+          this.sm.classList.add(
+            'twpx-scroll-menu--no-right',
+            'twpx-scroll-menu--no-left'
+          );
+        } else {
+          this.moveTo(0);
+        }
+      });
+    }
+
+    arrowEvents() {
+      this.arrowLeft.addEventListener('click', (e) => {
+        this.moveTo(this.sm.clientWidth);
+      });
+
+      this.arrowRight.addEventListener('click', (e) => {
+        this.moveTo(-1 * this.sm.clientWidth);
+      });
+    }
+
+    moveTo(dist) {
+      this.sm.classList.remove(
+        'twpx-scroll-menu--no-left',
+        'twpx-scroll-menu--no-right'
+      );
+      let left = parseInt(this.wrapper.style.marginLeft, 10) || 0;
+      left = left + dist;
+
+      let width = this.calculateWidth();
+
+      if (left >= 0) {
+        left = 0;
+        this.sm.classList.add('twpx-scroll-menu--no-right');
+      } else if (left <= -1 * (width - this.sm.clientWidth)) {
+        left = -1 * (width - this.sm.clientWidth);
+        this.sm.classList.add('twpx-scroll-menu--no-left');
+      }
+
+      this.wrapper.style.marginLeft = left + 'px';
+    }
+
+    calculateWidth() {
+      let result = 0;
+      this.wrapper.childNodes.forEach((item) => {
+        if (item.classList) {
+          result += item.clientWidth;
+          result += this.itemMarginRight;
+        }
+      });
+
+      result -= this.itemMarginRight;
+
+      return result;
+    }
+  }
+
+  document.querySelectorAll('.b-appeal-inbox-profiles').forEach((elem) => {
+    new TwpxScrollMenu(elem);
+  });
 });

@@ -247,6 +247,7 @@ window.BX = {
                 items: [
                   {
                     url: '/',
+                    target: '_blank',
                     cells: [
                       {
                         id: 1,
@@ -282,6 +283,8 @@ window.BX = {
                   },
                   {
                     url: '',
+                    new: true,
+                    target: '_self',
                     cells: [
                       {
                         id: 1,
