@@ -287,6 +287,7 @@ window.BX = {
           break;
 
         case 'appeals':
+          console.log(data);
           result = new Promise((resolve, reject) => {
             resolve({
               status: 'success',
@@ -510,7 +511,6 @@ window.BX = {
 
         case 'setDefaultSort':
           result = new Promise((resolve, reject) => {
-            console.log(data);
             resolve({
               status: 'success',
               data: null,
