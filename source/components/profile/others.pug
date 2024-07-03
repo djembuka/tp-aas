@@ -99,16 +99,15 @@ else
 
       include ../../components/profile/profile
 
-      .b-block-with-buttons
-        h3 Вы можете
-        .b-block-with-buttons__buttons
-        
-          button.btn.btn-secondary
-            span.icon( style="background-image: url( '/template/images/icon-excerpt.svg' );" )
-            span Получить выписку
+      hr.hr--sl
 
-          button.btn.btn-danger
-            span.icon( style="background-image: url( '/template/images/icon-complaint.svg' );" )
-            span Подать жалобу
+      include ../../modules/block-with-buttons/profile
+
+      #getExcerptModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="getExcerptModalLabel" aria-hidden="true")
+        .modal-dialog
+          .modal-content
+            button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+            .modal-body
+              #getExcerptApp
 
 // end /components/profile/
