@@ -1,8 +1,10 @@
 window.addEventListener('load', function () {
   //docs to sign modal window
   const modal = document.getElementById('docToSignModal');
-  const profileId = modal.getAttribute('data-profileid');
+  let profileId;
+
   if (modal) {
+    profileId = modal.getAttribute('data-profileid');
     $('#docToSignModal').modal('show');
 
     modal.addEventListener('click', (e) => {
