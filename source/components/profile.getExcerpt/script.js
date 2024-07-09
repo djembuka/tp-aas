@@ -28,7 +28,7 @@ window.addEventListener('load', () => {
           hint_external: '',
         },
         {
-          property: 'text',
+          property: 'tel',
           id: 'telId',
           name: 'TEL',
           label: 'Номер телефона',
@@ -41,7 +41,7 @@ window.addEventListener('load', () => {
           hint_external: '',
         },
         {
-          property: 'text',
+          property: 'email',
           id: 'emailId',
           name: 'EMAIL',
           label: 'Email',
@@ -77,6 +77,11 @@ window.addEventListener('load', () => {
         }
         return undefined;
       },
+      invalidControl(state) {
+        return state.controls.find((c) =>
+          c.required ? !c.value.trim() : false
+        );
+      },
     },
     mutations: {
       setProp(state, { prop, value }) {
@@ -91,6 +96,67 @@ window.addEventListener('load', () => {
         const control = state.controls.find((c) => c.id === controlId);
         if (control) {
           Vue.set(control, 'value', value);
+        }
+      },
+      showError(state, { error, method }) {
+        if (typeof error === 'boolean') {
+          Vue.set(state, 'error', error);
+        } else if (typeof error === 'object') {
+          if (
+            error.errors &&
+            typeof error.errors === 'object' &&
+            error.errors[0] &&
+            error.errors[0].code !== undefined
+          ) {
+            if (error.errors[0].code === 'NETWORK_ERROR') {
+              if (error.data && error.data.ajaxRejectData) {
+                if (error.data.ajaxRejectData.data) {
+                  Vue.set(
+                    state,
+                    'error',
+                    `${window.BX.message('ERROR_SUPPORT')}
+                    <br>
+                    <br>
+                    Метод: ${method}. Код ошибки: ${
+                      error.data.ajaxRejectData.data
+                    }. Описание: ${
+                      window.BX.message(
+                        'ERROR_' + error.data.ajaxRejectData.data
+                      ) || window.BX.message('ERROR_SERVER')
+                    }.`
+                  );
+                }
+              } else if (window.BX.message) {
+                Vue.set(
+                  state,
+                  'error',
+                  `${window.BX.message('ERROR_SUPPORT')}
+                  <br>
+                  <br>
+                  Метод: ${method}. Код ошибки: NETWORK_ERROR. Описание: ${window.BX.message(
+                    'ERROR_OFFLINE'
+                  )}.`
+                );
+              }
+            } else {
+              Vue.set(
+                state,
+                'error',
+                `${window.BX.message('ERROR_SUPPORT')}
+                <br>
+                <br>
+                Метод: ${method}.${
+                  error.errors[0].code
+                    ? ' Код ошибки: ' + error.errors[0].code + '.'
+                    : ''
+                } ${
+                  error.errors[0].message
+                    ? ' Описание: ' + error.errors[0].message + '.'
+                    : ''
+                }`
+              );
+            }
+          }
         }
       },
     },
@@ -108,14 +174,14 @@ window.addEventListener('load', () => {
             .then(
               (r) => {
                 commit('setProp', { prop: 'loading', value: false });
+                commit('setProp', { prop: 'step', value: 2 });
                 if (r.status === 'success' && r.data && r.data.id) {
                   commit('setProp', { prop: 'documentId', value: r.data.id });
                 }
               },
               (error) => {
                 commit('setProp', { prop: 'loading', value: false });
-                console.log(error);
-                //showError(error)
+                commit('showError', { error, method: 'requestDocument' });
               }
             );
         }
@@ -137,15 +203,14 @@ window.addEventListener('load', () => {
               (r) => {
                 commit('setProp', { prop: 'loading', value: false });
                 if (r.status === 'success') {
-                  //success
+                  commit('setProp', { prop: 'step', value: 3 });
                 } else {
                   //showErrorMessage
                 }
               },
               (error) => {
                 commit('setProp', { prop: 'loading', value: false });
-                console.log(error);
-                //showError(error)
+                commit('showError', { error, method: 'generateCode' });
               }
             );
         }
@@ -202,7 +267,6 @@ window.addEventListener('load', () => {
       selectType(typeId) {
         this.$store.commit('setSelectedType', { typeId });
         this.$store.dispatch('requestDocumentBX');
-        this.$store.commit('setProp', { prop: 'step', value: 2 });
       },
     },
   });
@@ -211,24 +275,31 @@ window.addEventListener('load', () => {
     template: `
       <div class="b-get-excerpt__two">
         <h3>Заказать выписку</h3>
-
+        <hr>
         <form @submit.prevent="submitForm">
   {{$store.state.fullName}}
           <div v-for="control in $store.state.controls" :key="control.id">
             <component :is="'control-'+control.property" :control="control" @input="({value}) => {setControlValue(control.id, value)}"></component>
             <hr>
           </div>
-          <button class="btn btn-secondary btn-lg" type="sumbit">Получить выписку</button>
+          <button class="btn btn-secondary btn-lg" type="sumbit" :class="{'btn-disabled': !valid}">Получить выписку</button>
         </form>
       </div>
     `,
     data() {
       return {};
     },
+    computed: {
+      valid() {
+        return !this.$store.getters.invalidControl;
+      },
+    },
     methods: {
       submitForm() {
+        if (!this.valid) {
+          return;
+        }
         this.$store.dispatch('generateCodeBX');
-        this.$store.commit('setProp', { prop: 'step', value: 3 });
       },
       setControlValue(controlId, value) {
         this.$store.commit('setControlValue', {
@@ -252,9 +323,9 @@ window.addEventListener('load', () => {
           {{ $store.state.count + 1 }}/{{ all }}
         </div>
         <hr>
-        <control-text :control="control" @input="({value}) => {control.value = value}"></control-text>
+        <control-text :control="control" @input="input"></control-text>
         <hr>
-        <button class="btn btn-secondary btn-lg" @click="sendCode">
+        <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled}" @click="sendCode">
           Отправить
         </button>
       </div>
@@ -263,6 +334,7 @@ window.addEventListener('load', () => {
       return {
         all: 3,
         invalid: false,
+        disabled: true,
         control: {
           property: 'text',
           id: 'codeId',
@@ -279,6 +351,14 @@ window.addEventListener('load', () => {
       };
     },
     methods: {
+      input({ value }) {
+        this.control.value = value;
+        if (value.length >= 6) {
+          this.disabled = false;
+        } else {
+          this.disabled = true;
+        }
+      },
       sendCode() {
         if (this.control.value.length < 6) {
           this.invalid = true;
@@ -319,8 +399,7 @@ window.addEventListener('load', () => {
             },
             (error) => {
               this.$store.commit('setProp', { prop: 'loading', value: false });
-              console.log(error);
-              //showError(error)
+              this.$store.commit('showError', { error, method: 'getFileLink' });
             }
           );
       },
@@ -356,20 +435,63 @@ window.addEventListener('load', () => {
         <p>
           Скачайте выписку, она будет доступна,<br />пока у вас открыто данное окно.
         </p>
-        <a :href="$store.state.file.fileLink">{{ $store.state.file.name }}</a>
+        <hr>
+        <div class="b-docs-block b-docs-block--small b-docs-block--gray b-docs-block--with-dots">
+          <div class="b-docs-block__item" :href="$store.state.file.fileLink">
+            <div class="b-docs-block__body">
+              <a class="b-docs-block__icon" :href="$store.state.file.fileLink" style="background-image: url( '/template/images/pdf.svg' );"></a>
+              <span class="b-docs-block__text">
+                <a :href="$store.state.file.fileLink">{{ $store.state.file.name }}</a>
+                <span class="b-docs-block__data">
+                  <span class="text-muted">654 Кб .doc</span>
+                  <span class="text-muted">Дата создания: 20 июня 2024 11:55:06</span>
+                </span>
+              </span>
+              <div v-if="$store.state.file.pdf || $store.state.file.sig" class="b-docs-block__more" @click.prevent="clickMore">
+                <a class="b-docs-block__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')"></a>
+                <div class="b-docs-block__more__files" :class="{'b-docs-block__more__files--show': show}">
+                  <span>Для некоторых сервисов требуется формат PDF + .sig</span>
+                  <a v-if="$store.state.file.pdf" :href="$store.state.file.pdf" target="_blank" style="background-image: url('/template/images/pdf.svg')">pdf</a>
+                  <a v-if="$store.state.file.sig" :href="$store.state.file.sig" target="_blank" style="background-image: url('/template/images/sig.svg')">sig</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     `,
+    data() {
+      return {
+        show: false,
+      };
+    },
+    methods: {
+      clickMore() {
+        this.show = true;
+      },
+    },
+    mounted() {
+      document.documentElement.addEventListener('click', (e) => {
+        if (
+          e.target.closest('.b-docs-block__more__files') ||
+          e.target.className.search('b-docs-block__more__files') !== -1 ||
+          e.target.className.search('b-docs-block__more__button') !== -1
+        ) {
+          return;
+        }
+        this.show = false;
+      });
+    },
   });
 
   Vue.component('controlText', {
     template: `
       <div
         :class="{
-          'twpx-form-control': true,
-          'twpx-form-control--text': true,
-          'twpx-form-control--active': active,
-          'twpx-form-control--invalid': invalid,
-          'twpx-form-control--disabled': disabled,
+          'b-float-label': true,
+          'active': active,
+          'invalid': invalid,
+          'disabled': disabled,
         }"
       >
         <img
@@ -377,7 +499,6 @@ window.addEventListener('load', () => {
           class="twpx-form-control__disabled-icon"
           v-if="false"
         />
-        <div class="twpx-form-control__label">{{ control.label }}</div>
         <input
           type="text"
           :id="controlId"
@@ -391,6 +512,7 @@ window.addEventListener('load', () => {
           :placeholder="placeholder"
           class="twpx-form-control__input"
         />
+        <label :for="controlId" :class="{'active': active}">{{ control.label }}</label>
         <div
           class="twpx-form-control__warning"
           v-html="warning"
@@ -490,11 +612,10 @@ window.addEventListener('load', () => {
     template: `
       <div
         :class="{
-          'twpx-form-control': true,
-          'twpx-form-control--text': true,
-          'twpx-form-control--active': active,
-          'twpx-form-control--invalid': invalid,
-          'twpx-form-control--disabled': disabled,
+          'b-float-label': true,
+          'active': active,
+          'invalid': invalid,
+          'disabled': disabled,
         }"
       >
         <img
@@ -502,7 +623,6 @@ window.addEventListener('load', () => {
           class="twpx-form-control__disabled-icon"
           v-if="false"
         />
-        <div class="twpx-form-control__label">{{ control.label }}</div>
         <input
           type="tel"
           :id="controlId"
@@ -510,12 +630,14 @@ window.addEventListener('load', () => {
           v-model="value"
           @focus="focus"
           @blur="blur"
+          @keydown="keydown"
           :disabled="disabled"
           ref="input"
           autocomplete="off"
           :placeholder="placeholder"
           class="twpx-form-control__input"
         />
+        <label :for="controlId" :class="{'active': active}">{{ control.label }}</label>
         <div
           class="twpx-form-control__warning"
           v-html="warning"
@@ -580,10 +702,45 @@ window.addEventListener('load', () => {
       focus() {
         this.focused = true;
         this.blured = false;
+        if (!this.value.trim()) {
+          this.value = '+7(';
+        }
       },
       blur() {
         this.focused = false;
         this.blured = true;
+        if (this.value.trim() === '+7(') {
+          this.value = '';
+        }
+      },
+      keydown($event) {
+        this.inputphone($event);
+      },
+      inputphone(e) {
+        let key = e.key;
+        not = key.replace(/([0-9])/, 1);
+
+        if (not == 1 || 'Backspace' === not) {
+          if ('Backspace' != not) {
+            if (this.value.length < 3 || this.value === '') {
+              this.value = '+7(';
+            }
+            if (this.value.length === 6) {
+              this.value = this.value + ') ';
+            }
+            if (this.value.length === 11) {
+              this.value = this.value + '-';
+            }
+            if (this.value.length === 14) {
+              this.value = this.value + '-';
+            }
+            if (this.value.length >= 17) {
+              this.value = this.value.substring(0, 16);
+            }
+          }
+        } else {
+          e.preventDefault();
+        }
       },
       validate() {
         if (
@@ -615,11 +772,10 @@ window.addEventListener('load', () => {
     template: `
       <div
         :class="{
-          'twpx-form-control': true,
-          'twpx-form-control--text': true,
-          'twpx-form-control--active': active,
-          'twpx-form-control--invalid': invalid,
-          'twpx-form-control--disabled': disabled,
+         'b-float-label': true,
+          'active': active,
+          'invalid': invalid,
+          'disabled': disabled,
         }"
       >
         <img
@@ -627,7 +783,6 @@ window.addEventListener('load', () => {
           class="twpx-form-control__disabled-icon"
           v-if="false"
         />
-        <div class="twpx-form-control__label">{{ control.label }}</div>
         <input
           type="email"
           :id="controlId"
@@ -641,6 +796,7 @@ window.addEventListener('load', () => {
           :placeholder="placeholder"
           class="twpx-form-control__input"
         />
+        <label :for="controlId" :class="{'active': active}">{{ control.label }}</label>
         <div
           class="twpx-form-control__warning"
           v-html="warning"
@@ -740,12 +896,10 @@ window.addEventListener('load', () => {
     template: `
       <div
         :class="{
-          'twpx-form-control': true,
-          'twpx-form-control--textarea': true,
-          'twpx-form-control--active': active,
-          'twpx-form-control--focused': focused,
-          'twpx-form-control--invalid': invalid,
-          'twpx-form-control--disabled': disabled,
+          'b-float-label': true,
+          'active': active,
+          'invalid': invalid,
+          'disabled': disabled,
         }"
       >
         <img
@@ -753,20 +907,18 @@ window.addEventListener('load', () => {
           class="twpx-form-control__disabled-icon"
           v-if="false"
         />
-        <div class="twpx-form-control__label">{{ control.label }}</div>
-        <div class="twpx-form-control__textarea">
-          <textarea
-            :id="controlId"
-            :name="controlName"
-            v-model="value"
-            @focus="focus"
-            @blur="blur"
-            :disabled="disabled"
-            ref="textarea"
-            contenteditable="true"
-            class="twpx-form-control__textarea-content"
-          ></textarea>
-        </div>
+        <textarea
+          :id="controlId"
+          :name="controlName"
+          v-model="value"
+          @focus="focus"
+          @blur="blur"
+          :disabled="disabled"
+          ref="textarea"
+          contenteditable="true"
+          class="twpx-form-control__textarea-content"
+        ></textarea>
+        <label :for="controlId" :class="{'active': active}">{{ control.label }}</label>
         <div
           class="twpx-form-control__warning"
           v-html="warning"
@@ -870,13 +1022,44 @@ window.addEventListener('load', () => {
     },
   });
 
+  Vue.component('TheErrorMessage', {
+    template: `
+      <div v-if="error" class="b-get-excerpt-error" @click="clickError($event)">
+        <div class="b-get-excerpt-error__content">
+          <div class="b-get-excerpt-error__text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M0,0V5" transform="translate(12 9)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path d="M10,18.817H3.939c-3.47,0-4.92-2.48-3.24-5.51l3.12-5.62,2.94-5.28c1.78-3.21,4.7-3.21,6.48,0l2.94,5.29,3.12,5.62c1.68,3.03.22,5.51-3.24,5.51H10Z" transform="translate(2 2.592)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path d="M0,0H.009" transform="translate(11.995 17)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+              <path d="M0,0H24V24H0Z" fill="none" opacity="0"/>
+            </svg>
+            <span v-html="error"></span>
+          </div>
+          <div class="btn btn-md" @click="clickError">Понятно</div>
+        </div>
+      </div>
+    `,
+    props: ['error'],
+    methods: {
+      clickError(event) {
+        if (
+          event.target.classList.contains('b-get-excerpt-error') ||
+          event.target.classList.contains('btn')
+        ) {
+          this.$store.commit('showError', { error: false });
+        }
+      },
+    },
+  });
+
   const App = {
     el: '#getExcerptApp',
     store,
     template: `
-      <div class="b-get-excerpt">
-        <TheLoading v-if="$store.state.loading"></TheLoading>
+      <div class="b-get-excerpt" id="getExcerptApp" ref="app">
+        <the-loading v-if="$store.state.loading"></the-loading>
         <component v-else :is="currentStep" />
+        <the-error-message v-if="error" :error="error"></the-error-message>
       </div>
     `,
     data() {
@@ -889,6 +1072,16 @@ window.addEventListener('load', () => {
       currentStep() {
         return this.steps[this.$store.state.step - 1];
       },
+      error() {
+        return this.$store.state.error;
+      },
+    },
+    mounted() {
+      this.$refs.app.addEventListener('getExcerptModalHidden', () => {
+        this.$store.commit('setProp', { prop: 'step', value: 1 });
+        this.$store.commit('setProp', { prop: 'loading', value: false });
+        this.$store.commit('setProp', { prop: 'error', value: false });
+      });
     },
   };
 

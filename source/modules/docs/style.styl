@@ -89,6 +89,8 @@
       width 30px
       height 40px
       margin-right 20px
+      margin-bottom 0
+      flex-shrink 0
 
     .b-docs-block__data
 
@@ -155,3 +157,76 @@
         &__item
           opacity 1
           transform( translateX(0))
+
+  &--gray
+    background-color $light-gray
+    padding 20px 16px !important
+    border-radius 8px
+
+  &--with-dots
+
+    .b-docs-block__icon
+      margin-right 10px !important
+
+    .b-docs-block__text
+
+      a
+        font-size $16px
+        font-weight $bold
+
+    .b-docs-block__data span
+      font-size $12px
+      line-height normal
+
+  &__more
+    position relative
+
+    &__button
+      display block
+      width 32px
+      height 32px
+      border-radius 5px
+      position relative
+      background-color #F0F5FC
+      background-repeat no-repeat
+      background-position center
+      background-size cover
+      margin-left 35px
+
+    &__files
+      position absolute
+      top calc( -54px / 2 - -32px / 2)
+      right 42px
+      box-shadow 0px 3px 6px #0000001A
+      background-color #fff
+      padding 11px 11px 11px 23px
+      border-radius 7px
+      display flex
+      justify-content space-between
+      align-items center
+      opacity 0
+      transition(opacity .3s ease)
+      z-index -1
+
+      &--show
+        opacity 1
+        z-index 1
+
+      span
+        font-size $12px
+        white-space nowrap
+        margin-right 14px
+
+      a
+        display inline-block
+        white-space nowrap
+        padding-left 34px
+        background-repeat no-repeat
+        background-position left center
+        background-size contain
+        line-height 32px
+        margin-left 16px
+        font-size $9px
+
+
+

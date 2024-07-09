@@ -1,4 +1,13 @@
 window.addEventListener('load', function () {
+  //get excerpt modal window
+  $('#getExcerptModal').on('hidden.bs.modal', function () {
+    const app = document.getElementById('getExcerptApp');
+    if (app) {
+      const event = new Event('getExcerptModalHidden');
+      app.dispatchEvent(event);
+    }
+  });
+
   //docs to sign modal window
   const modal = document.getElementById('docToSignModal');
   let profileId;
