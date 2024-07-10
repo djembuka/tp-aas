@@ -434,7 +434,7 @@ window.addEventListener('load', () => {
                 <th v-for="col in $store.state.columnsNames" :key="col.id" :class="thClass(col)" @click="clickTh(col)">{{col.name}}</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="appeals">
               <tr v-for="appeal in appeals.items" :class="{'tr--new': appeal.new}" :data-id="appeal.id" :data-url="appeal.url" :title="appeal.name" :data-target="appeal.url ? '_blank' : ''" @click="clickTr.prevent({url: appeal.url, target: appeal.target})">
                 <td v-for="cell in appeal.cells" v-html="cell.value" :class="tdClass(cell)"></td>
               </tr>
@@ -525,7 +525,7 @@ window.addEventListener('load', () => {
         </div>
         <div class="b-num-block b-num-block--selected"
           v-if="$store.getters.defaultProfile.excelExportSupport"
-          @click="click(block)">
+          @click="excelExport">
           <div class="b-num-block__data">
             <i>Выбрано</i>
             <b>15</b>
@@ -560,14 +560,14 @@ window.addEventListener('load', () => {
       },
     },
     methods: {
+      excelExport() {
+        window.open(this.$store.state.appeals.excelLink);
+      },
       click(block) {
         if (block.selectable) {
           this.setFilters(block);
-        } else if (block.selected) {
-          this.getSelected(block.link);
-        } else {
-          return;
         }
+        return;
       },
       setFilters(block) {
         //reset
@@ -1063,7 +1063,6 @@ window.addEventListener('load', () => {
     store,
     template: `
       <div class="b-registry-report">
-      {{$store.state.filters}}
         <profile-menu></profile-menu>
         <hr>
         <num-blocks></num-blocks>
