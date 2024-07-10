@@ -35,21 +35,21 @@ window.BX = {
 
         case 'getFileLink':
           result = new Promise((resolve, reject) => {
-            // resolve({
-            //   status: 'success',
-            //   data: {
-            //     file: {
-            //       fileLink: '/',
-            //       name: 'Выписка-152156-ФC/24',
-            //       size: '654 Кб',
-            //       date: '20 июня 2024 11:55:06',
-            //       pdf: '/',
-            //       sig: '/',
-            //     },
-            //   },
-            //   errors: [{ message: 'Error message' }],
-            // });
-            reject({ errors: [{ code: 3, message: 'getFileLink error' }] });
+            resolve({
+              status: 'success',
+              data: {
+                file: {
+                  fileLink: '/',
+                  name: 'Выписка-152156-ФC/24',
+                  size: '654 Кб',
+                  date: '20 июня 2024 11:55:06',
+                  pdf: '/',
+                  sig: '/',
+                },
+              },
+              errors: [{ message: 'Error message' }],
+            });
+            // reject({ errors: [{ code: 3, message: 'getFileLink error' }] });
           });
           break;
       }
