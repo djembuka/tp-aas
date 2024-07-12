@@ -40,7 +40,7 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
       background-color $primary-color
       border-color $primary-color
@@ -49,7 +49,7 @@
     &:focus
       box-shadow none
 
-    &:not(:disabled):not(.disabled)
+    &:not(:disabled):not(.btn-disabled)
 
       &.active,
       &:active
@@ -65,7 +65,7 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
       background-color $secondary-color
       border-color $secondary-color
@@ -74,7 +74,7 @@
     &:focus
       box-shadow none
 
-    &:not(:disabled):not(.disabled)
+    &:not(:disabled):not(.btn-disabled)
 
       &.active,
       &:active
@@ -90,7 +90,7 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
       color #3b3b3b
       background-color #f0f0f0
@@ -100,7 +100,7 @@
     &:focus
       box-shadow none
 
-    &:not(:disabled):not(.disabled)
+    &:not(:disabled):not(.btn-disabled)
 
       &.active,
       &:active
@@ -117,7 +117,7 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
       color #fff
       background-color #0A355A
@@ -127,7 +127,7 @@
     &:focus
       box-shadow none
 
-    &:not(:disabled):not(.disabled)
+    &:not(:disabled):not(.btn-disabled)
 
       &.active,
       &:active
@@ -144,7 +144,7 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
       color #fff
       background-color $success-color
@@ -154,7 +154,7 @@
     &:focus
       box-shadow none
 
-    &:not(:disabled):not(.disabled)
+    &:not(:disabled):not(.btn-disabled)
 
       &.active,
       &:active
@@ -171,7 +171,7 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
       color #fff
       background-color $danger-color
@@ -181,7 +181,7 @@
     &:focus
       box-shadow none
 
-    &:not(:disabled):not(.disabled)
+    &:not(:disabled):not(.btn-disabled)
 
       &.active,
       &:active
@@ -199,7 +199,7 @@
     &:active,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
       color #5F7696
       background-color $form-control-color
@@ -209,7 +209,7 @@
     &:focus
       box-shadow none
 
-    &:not(:disabled):not(.disabled)
+    &:not(:disabled):not(.btn-disabled)
 
       &.active,
       &:active
@@ -221,7 +221,7 @@
           box-shadow none
   
   &[disabled],
-  &.disabled
+  &.btn-disabled
     pointer-events none
     opacity 1
     
@@ -229,7 +229,7 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
       color #D5D5D5
       background-color #F4F4F4
@@ -249,17 +249,17 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
-    &.btn-light:not(:disabled):not(.disabled).active,
-    &.btn-light:not(:disabled):not(.disabled):active
+    &.btn-light:not(:disabled):not(.btn-disabled).active,
+    &.btn-light:not(:disabled):not(.btn-disabled):active
       color #F2762E
     
     &:hover,
     &.focus,
     &:focus,
-    &.btn-light:not(:disabled):not(.disabled).active,
-    &.btn-light:not(:disabled):not(.disabled):active
+    &.btn-light:not(:disabled):not(.btn-disabled).active,
+    &.btn-light:not(:disabled):not(.btn-disabled):active
       background-color #FFF9F0
 
   &-blue-color
@@ -272,17 +272,17 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
-    &.btn-light:not(:disabled):not(.disabled).active,
-    &.btn-light:not(:disabled):not(.disabled):active
+    &.btn-light:not(:disabled):not(.btn-disabled).active,
+    &.btn-light:not(:disabled):not(.btn-disabled):active
       color #5F7696
     
     &:hover,
     &.focus,
     &:focus,
-    &.btn-light:not(:disabled):not(.disabled).active,
-    &.btn-light:not(:disabled):not(.disabled):active
+    &.btn-light:not(:disabled):not(.btn-disabled).active,
+    &.btn-light:not(:disabled):not(.btn-disabled):active
       background-color #F2F7FF
 
   &-gray-color
@@ -295,17 +295,17 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
-    &.btn-light:not(:disabled):not(.disabled).active,
-    &.btn-light:not(:disabled):not(.disabled):active
+    &.btn-light:not(:disabled):not(.btn-disabled).active,
+    &.btn-light:not(:disabled):not(.btn-disabled):active
       color #9B9B9B
     
     &:hover,
     &.focus,
     &:focus,
-    &.btn-light:not(:disabled):not(.disabled).active,
-    &.btn-light:not(:disabled):not(.disabled):active
+    &.btn-light:not(:disabled):not(.btn-disabled).active,
+    &.btn-light:not(:disabled):not(.btn-disabled):active
       background-color #FFFFFF
 
   &-red-color
@@ -318,17 +318,17 @@
     &:hover,
     &.focus,
     &:focus,
-    &.disabled,
+    &.btn-disabled,
     &:disabled
-    &.btn-light:not(:disabled):not(.disabled).active,
-    &.btn-light:not(:disabled):not(.disabled):active
+    &.btn-light:not(:disabled):not(.btn-disabled).active,
+    &.btn-light:not(:disabled):not(.btn-disabled):active
       color #FF0000
     
     &:hover,
     &.focus,
     &:focus,
-    &.btn-light:not(:disabled):not(.disabled).active,
-    &.btn-light:not(:disabled):not(.disabled):active
+    &.btn-light:not(:disabled):not(.btn-disabled).active,
+    &.btn-light:not(:disabled):not(.btn-disabled):active
       background-color #FFF7F7
     
   &-lg
@@ -374,8 +374,8 @@
   &:hover,
   &:focus,
   &:active,
-  &:not(:disabled):not(.disabled).active,
-  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.btn-disabled).active,
+  &:not(:disabled):not(.btn-disabled):active,
   & a
     color transparent !important
 

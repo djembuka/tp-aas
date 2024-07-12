@@ -295,6 +295,7 @@ window.BX = {
                 resultCount: 10,
                 maxCountPerRequest: 20,
                 startIndex: 5,
+                excelLink: '/',
                 items: [
                   {
                     id: 1,

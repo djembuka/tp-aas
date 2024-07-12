@@ -2,6 +2,9 @@ window.BX = {
   bitrix_sessid() {
     return 'SESSID';
   },
+  message() {
+    return 456789;
+  },
   ajax: {
     runComponentAction(_, type, data) {
       let result;

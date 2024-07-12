@@ -66,6 +66,7 @@ String.prototype.deformat = function () {
 
 //phone mask
 document.querySelectorAll('[type=tel]').forEach(function (input) {
+  if (input.classList.contains('twpx-form-control__input')) return;
   var phoneMask = IMask(input, {
     mask: '+{7} (000) 000 00 00',
   });

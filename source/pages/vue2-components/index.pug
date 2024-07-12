@@ -1,0 +1,26 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-vue2-components'
+  - var authorized = 'true'
+
+block title
+  title Vue2 components | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/registry
+
+  hr
+
+  .container-fluid
+    
+    h1 Vue2 components
+    
+    include ../../components/vue2-components/template
+  
+    

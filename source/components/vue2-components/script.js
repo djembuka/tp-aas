@@ -1,3 +1,9 @@
+window.BX = {
+  message() {
+    return 456789;
+  },
+};
+
 window.addEventListener('load', () => {
   if (!window.Vue || !window.Vuex) return;
 
@@ -5,14 +11,8 @@ window.addEventListener('load', () => {
 
   const store = new Vuex.Store({
     state: {
-      ornz: 54321,
-      types: [
-        { id: 123, name: 'Стандартная выписка', selected: true },
-        { id: 456, name: 'Расширенная выписка' },
-      ],
-      step: 1,
+      error: false,
       loading: false,
-      count: 0,
       controls: [
         {
           property: 'text',
@@ -67,36 +67,18 @@ window.addEventListener('load', () => {
           hint_external: '',
         },
       ],
-      file: {},
-    },
-    getters: {
-      selectedTypeId(state) {
-        const selectedType = state.types.find((t) => t.selected);
-        if (selectedType) {
-          return selectedType.id;
-        }
-        return undefined;
-      },
-      invalidControl(state) {
-        return state.controls.find((c) =>
-          c.required ? !c.value.trim() : false
-        );
+      file: {
+        fileLink: '/',
+        name: 'Выписка-152156-ФC/24',
+        size: '654 Кб',
+        date: '20 июня 2024 11:55:06',
+        pdf: '/',
+        sig: '/',
       },
     },
     mutations: {
       setProp(state, { prop, value }) {
         Vue.set(state, prop, value);
-      },
-      setSelectedType(state, { typeId }) {
-        state.types.forEach((t) => {
-          Vue.set(t, 'selected', t.id === typeId);
-        });
-      },
-      setControlValue(state, { controlId, value }) {
-        const control = state.controls.find((c) => c.id === controlId);
-        if (control) {
-          Vue.set(control, 'value', value);
-        }
       },
       showError(state, { error, method }) {
         if (typeof error === 'boolean') {
@@ -159,71 +141,60 @@ window.addEventListener('load', () => {
           }
         }
       },
+      setControlValue(state, { controlId, value }) {
+        const control = state.controls.find((c) => c.id === controlId);
+        if (control) {
+          Vue.set(control, 'value', value);
+        }
+      },
     },
     actions: {
-      requestDocumentBX({ state, getters, commit }) {
+      requestExapmpleBX({ commit }) {
         commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
           window.BX.ajax
             .runAction(`requestDocument`, {
-              data: {
-                ornz: state.ornz,
-                typeId: getters.selectedTypeId,
-              },
+              data: {},
             })
             .then(
               (r) => {
-                commit('setProp', { prop: 'loading', value: false });
-                commit('setProp', { prop: 'step', value: 2 });
                 if (r.status === 'success' && r.data && r.data.id) {
-                  commit('setProp', { prop: 'documentId', value: r.data.id });
                 }
               },
               (error) => {
-                commit('setProp', { prop: 'loading', value: false });
                 commit('showError', { error, method: 'requestDocument' });
               }
             );
         }
       },
-      generateCodeBX({ state, commit }) {
-        commit('setProp', { prop: 'loading', value: true });
-        if (window.BX) {
-          window.BX.ajax
-            .runAction(`generateCode`, {
-              data: {
-                documentId: state.documentId,
-                fullName: state.fullName,
-                phone: state.phone,
-                email: state.email,
-                message: state.message,
-              },
-            })
-            .then(
-              (r) => {
-                commit('setProp', { prop: 'loading', value: false });
-                if (r.status === 'success') {
-                  commit('setProp', { prop: 'step', value: 3 });
-                } else {
-                  //showErrorMessage
-                }
-              },
-              (error) => {
-                commit('setProp', { prop: 'loading', value: false });
-                commit('showError', { error, method: 'generateCode' });
-              }
-            );
-        }
-      },
-      getFileLinkBX({ state, commit }, { code }) {
-        commit('setProp', { prop: 'loading', value: true });
-        if (window.BX) {
-          return window.BX.ajax.runAction(`getFileLink`, {
-            data: {
-              documentId: state.documentId,
-              code,
-            },
-          });
+    },
+  });
+
+  Vue.component('TheErrorMessage', {
+    template: `
+      <div v-if="error" class="vue2-component-error" @click="clickError($event)">
+        <div class="vue2-component-error__content">
+          <div class="vue2-component-error__text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M0,0V5" transform="translate(12 9)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path d="M10,18.817H3.939c-3.47,0-4.92-2.48-3.24-5.51l3.12-5.62,2.94-5.28c1.78-3.21,4.7-3.21,6.48,0l2.94,5.29,3.12,5.62c1.68,3.03.22,5.51-3.24,5.51H10Z" transform="translate(2 2.592)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path d="M0,0H.009" transform="translate(11.995 17)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+              <path d="M0,0H24V24H0Z" fill="none" opacity="0"/>
+            </svg>
+            <span v-html="error"></span>
+          </div>
+          <div class="btn btn-md" @click="clickError">Понятно</div>
+        </div>
+      </div>
+    `,
+    props: ['error'],
+    methods: {
+      clickError(event) {
+        if (
+          event.target.classList.contains('vue2-component-error') ||
+          event.target.classList.contains('btn')
+        ) {
+          this.$store.commit('showError', { error: false });
         }
       },
     },
@@ -231,7 +202,7 @@ window.addEventListener('load', () => {
 
   Vue.component('TheLoading', {
     template: `
-    <div class="b-get-excerpt__loading">
+    <div class="vue2-component__loading">
       <div class="circle-loader">
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
@@ -243,248 +214,7 @@ window.addEventListener('load', () => {
     `,
   });
 
-  Vue.component('StepOne', {
-    template: `
-      <div class="b-get-excerpt__one">
-        <h3>Выберите тип выписки</h3>
-        <p>Вы можете заказать выписки следующих типов:</p>
-        <hr class="hr--sl">
-        <div class="b-get-excerpt__types">
-          <div
-            class="b-get-excerpt__type"
-            v-for="type in $store.state.types"
-            :key="type.id"
-          >
-            <span>{{ type.name }}</span>
-            <button class="btn btn-secondary btn-md" @click="selectType(type.id)">
-              Получить выписку
-            </button>
-          </div>
-        </div>
-      </div>
-    `,
-    methods: {
-      selectType(typeId) {
-        this.$store.commit('setSelectedType', { typeId });
-        this.$store.dispatch('requestDocumentBX');
-      },
-    },
-  });
-
-  Vue.component('StepTwo', {
-    template: `
-      <div class="b-get-excerpt__two">
-        <h3>Заказать выписку</h3>
-        <hr>
-        <form @submit.prevent="submitForm">
-  {{$store.state.fullName}}
-          <div v-for="control in $store.state.controls" :key="control.id">
-            <component :is="'control-'+control.property" :control="control" @input="({value}) => {setControlValue(control.id, value)}"></component>
-            <hr>
-          </div>
-          <button class="btn btn-secondary btn-lg" type="sumbit" :class="{'btn-disabled': !valid}">Получить выписку</button>
-        </form>
-      </div>
-    `,
-    data() {
-      return {};
-    },
-    computed: {
-      valid() {
-        return !this.$store.getters.invalidControl;
-      },
-    },
-    methods: {
-      submitForm() {
-        if (!this.valid) {
-          return;
-        }
-        this.$store.dispatch('generateCodeBX');
-      },
-      setControlValue(controlId, value) {
-        this.$store.commit('setControlValue', {
-          controlId,
-          value,
-        });
-      },
-    },
-  });
-
-  Vue.component('StepThree', {
-    template: `
-      <div class="b-get-excerpt__three">
-        <h3>Подтверждение</h3>
-        <p>
-          На вашу почту отправлено письмо с кодом подтверждения, введите его для
-          получения доступа к выпискам.
-        </p>
-        <hr>
-        <div class="b-get-excerpt__count">
-          {{ $store.state.count + 1 }}/{{ all }}
-        </div>
-        <hr>
-        <control-text :control="control" @input="input"></control-text>
-        <hr>
-        <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled}" @click="sendCode">
-          Отправить
-        </button>
-      </div>
-    `,
-    data() {
-      return {
-        all: 3,
-        invalid: false,
-        disabled: true,
-        control: {
-          property: 'text',
-          id: 'codeId',
-          name: 'CODE',
-          label: 'Код',
-          value: '',
-          required: true,
-          disabled: false,
-          regexp: '',
-          regexp_description: '',
-          hint_internal: '',
-          hint_external: '',
-        },
-      };
-    },
-    methods: {
-      input({ value }) {
-        this.control.value = value;
-        if (value.length >= 6) {
-          this.disabled = false;
-        } else {
-          this.disabled = true;
-        }
-      },
-      sendCode() {
-        if (this.control.value.length < 6) {
-          this.invalid = true;
-          return;
-        }
-
-        this.$store
-          .dispatch('getFileLinkBX', {
-            code: this.control.value,
-          })
-          .then(
-            (r) => {
-              this.$store.commit('setProp', { prop: 'loading', value: false });
-              if (r.status === 'success') {
-                if (r.data) {
-                  //go to the next step
-                  this.$store.commit('setProp', { prop: 'step', value: 5 });
-                  this.$store.commit('setProp', {
-                    prop: 'file',
-                    value: r.data.file,
-                  });
-                }
-              } else if (r.status === 'error' && r.errors[0]) {
-                const newCount = this.$store.state.count + 1;
-                if (newCount < 3) {
-                  this.$store.commit('setProp', {
-                    prop: 'count',
-                    value: newCount,
-                  });
-                  this.invalid = true;
-                } else {
-                  this.$store.commit('setProp', { prop: 'count', value: 0 });
-                  this.$store.commit('setProp', { prop: 'step', value: 4 });
-                }
-                //show next attempt if less of equal to 3
-                //show button if grosser then 3
-              }
-            },
-            (error) => {
-              this.$store.commit('setProp', { prop: 'loading', value: false });
-              this.$store.commit('showError', { error, method: 'getFileLink' });
-            }
-          );
-      },
-    },
-  });
-
-  Vue.component('StepFour', {
-    template: `
-      <div class="b-get-excerpt__four">
-        <h3>Отправьте код повторно</h3>
-        <p>
-          Вы 3 раза ввели неверный код.<br />Получите новый код для входа повторив
-          попытку.
-        </p>
-        <hr>
-        <button class="btn btn-secondary btn-lg" @click="repeat">
-          Повторить попытку
-        </button>
-      </div>
-    `,
-    methods: {
-      repeat() {
-        this.$store.dispatch('generateCodeBX');
-        this.$store.commit('setProp', { prop: 'step', value: 3 });
-      },
-    },
-  });
-
-  Vue.component('StepFive', {
-    template: `
-      <div class="b-get-excerpt__five">
-        <h3>Ваша выписка создана</h3>
-        <p>
-          Скачайте выписку, она будет доступна,<br />пока у вас открыто данное окно.
-        </p>
-        <hr>
-        <div class="b-docs-block b-docs-block--small b-docs-block--gray b-docs-block--with-dots">
-          <div class="b-docs-block__item" :href="$store.state.file.fileLink">
-            <div class="b-docs-block__body">
-              <a class="b-docs-block__icon" :href="$store.state.file.fileLink" style="background-image: url( '/template/images/pdf.svg' );"></a>
-              <span class="b-docs-block__text">
-                <a :href="$store.state.file.fileLink">{{ $store.state.file.name }}</a>
-                <span class="b-docs-block__data">
-                  <span class="text-muted">654 Кб .doc</span>
-                  <span class="text-muted">Дата создания: 20 июня 2024 11:55:06</span>
-                </span>
-              </span>
-              <div v-if="$store.state.file.pdf || $store.state.file.sig" class="b-docs-block__more" @click.prevent="clickMore">
-                <a class="b-docs-block__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')"></a>
-                <div class="b-docs-block__more__files" :class="{'b-docs-block__more__files--show': show}">
-                  <span>Для некоторых сервисов требуется формат PDF + .sig</span>
-                  <a v-if="$store.state.file.pdf" :href="$store.state.file.pdf" target="_blank" style="background-image: url('/template/images/pdf.svg')">pdf</a>
-                  <a v-if="$store.state.file.sig" :href="$store.state.file.sig" target="_blank" style="background-image: url('/template/images/sig.svg')">sig</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `,
-    data() {
-      return {
-        show: false,
-      };
-    },
-    methods: {
-      clickMore() {
-        this.show = true;
-      },
-    },
-    mounted() {
-      document.documentElement.addEventListener('click', (e) => {
-        if (
-          e.target.closest('.b-docs-block__more__files') ||
-          e.target.className.search('b-docs-block__more__files') !== -1 ||
-          e.target.className.search('b-docs-block__more__button') !== -1
-        ) {
-          return;
-        }
-        this.show = false;
-      });
-    },
-  });
-
-  Vue.component('controlText', {
+  Vue.component('ControlText', {
     template: `
       <div
         :class="{
@@ -608,7 +338,7 @@ window.addEventListener('load', () => {
     },
   });
 
-  Vue.component('controlTel', {
+  Vue.component('ControlTel', {
     template: `
       <div
         :class="{
@@ -768,7 +498,7 @@ window.addEventListener('load', () => {
     },
   });
 
-  Vue.component('controlEmail', {
+  Vue.component('ControlEmail', {
     template: `
       <div
         :class="{
@@ -892,7 +622,7 @@ window.addEventListener('load', () => {
     },
   });
 
-  Vue.component('controlTextarea', {
+  Vue.component('ControlTextarea', {
     template: `
       <div
         :class="{
@@ -1022,66 +752,124 @@ window.addEventListener('load', () => {
     },
   });
 
-  Vue.component('TheErrorMessage', {
+  Vue.component('DocWithDots', {
     template: `
-      <div v-if="error" class="b-get-excerpt-error" @click="clickError($event)">
-        <div class="b-get-excerpt-error__content">
-          <div class="b-get-excerpt-error__text">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <path d="M0,0V5" transform="translate(12 9)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-              <path d="M10,18.817H3.939c-3.47,0-4.92-2.48-3.24-5.51l3.12-5.62,2.94-5.28c1.78-3.21,4.7-3.21,6.48,0l2.94,5.29,3.12,5.62c1.68,3.03.22,5.51-3.24,5.51H10Z" transform="translate(2 2.592)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-              <path d="M0,0H.009" transform="translate(11.995 17)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-              <path d="M0,0H24V24H0Z" fill="none" opacity="0"/>
-            </svg>
-            <span v-html="error"></span>
+      <div class="b-docs-block b-docs-block--small b-docs-block--gray b-docs-block--with-dots">
+        <div class="b-docs-block__item" :href="file.fileLink">
+          <div class="b-docs-block__body">
+            <a class="b-docs-block__icon" :href="file.fileLink" style="background-image: url( '/template/images/pdf.svg' );"></a>
+            <span class="b-docs-block__text">
+              <a :href="file.fileLink">{{ file.name }}</a>
+              <span class="b-docs-block__data">
+                <span class="text-muted">654 Кб .doc</span>
+                <span class="text-muted">Дата создания: 20 июня 2024 11:55:06</span>
+              </span>
+            </span>
+            <div v-if="file.pdf || file.sig" class="b-docs-block__more" @click.prevent="clickMore">
+              <a class="b-docs-block__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')"></a>
+              <div class="b-docs-block__more__files" :class="{'b-docs-block__more__files--show': show}">
+                <span>Для некоторых сервисов требуется формат PDF + .sig</span>
+                <a v-if="file.pdf" :href="file.pdf" target="_blank" style="background-image: url('/template/images/pdf.svg')">pdf</a>
+                <a v-if="file.sig" :href="file.sig" target="_blank" style="background-image: url('/template/images/sig.svg')">sig</a>
+              </div>
+            </div>
           </div>
-          <div class="btn btn-md" @click="clickError">Понятно</div>
         </div>
-      </div>
+      </div
     `,
-    props: ['error'],
+    data() {
+      return {
+        show: false,
+      };
+    },
+    props: ['file'],
     methods: {
-      clickError(event) {
-        if (
-          event.target.classList.contains('b-get-excerpt-error') ||
-          event.target.classList.contains('btn')
-        ) {
-          this.$store.commit('showError', { error: false });
-        }
+      clickMore() {
+        this.show = true;
       },
+    },
+    mounted() {
+      document.documentElement.addEventListener('click', (e) => {
+        if (
+          e.target.closest('.b-docs-block__more__files') ||
+          e.target.className.search('b-docs-block__more__files') !== -1 ||
+          e.target.className.search('b-docs-block__more__button') !== -1
+        ) {
+          return;
+        }
+        this.show = false;
+      });
     },
   });
 
   const App = {
-    el: '#getExcerptApp',
+    el: '#vue2ComponentsApp',
     store,
     template: `
-      <div class="b-get-excerpt" id="getExcerptApp" ref="app">
-        <the-loading v-if="$store.state.loading"></the-loading>
-        <component v-else :is="currentStep" />
-        <the-error-message v-if="error" :error="error"></the-error-message>
+      <div>
+        <div>
+          <h3>TheErrorMessage</h3>
+          <button class="btn btn-primary" @click="showError">Show error</button>
+          <the-error-message v-if="error" :error="error"></the-error-message>
+          <hr class="hr--sm">
+          <p>Использование: переносим компонент, стили style/the-error-message/styl. В $store.state свойство error, в мутациях showError. В приложении App добавляем компонент, как в текущем приложении - &lt;the-error-message v-if="error" :error="error"&gt;&lt;/the-error-message&gt;</p>
+        </div>
+        <hr>
+        <div>
+          <h3>TheLoading</h3>
+          <button class="btn btn-secondary" @click="toggleLoading">Toggle loading</button>
+          <hr class="hr--sm">
+          <the-loading v-if="loading"></the-loading>
+          <p>Использование: переносим компонент, стили уже есть в template_styles.css. В $store.state свойство loading, в мутациях setProp. В приложении App добавляем компонент, как в текущем приложении - &lt;the-loading v-if="loading"&gt;&lt;/the-loading&gt;, показываем и убираем при обращении к серверу, с помощью изменения $store.state.loading через setProp.</p>
+        </div>
+        <hr>
+        <div>
+          <h3>Controls</h3>
+          <div v-for="control in controls" :key="control.id">
+            <component :is="'control-'+control.property" :control="control" @input="({value}) => {setControlValue(control.id, value)}"></component>
+            <hr>
+          </div>
+          <p>Использование: компоненты полей формы получают на вход объект компонента, на выходе отдают объект со свойством value. Генерируют событие input при каждом изменении значения поля. Стили полей формы находятся в template_styles.css.</p>
+        </div>
+        <hr>
+        <div>
+          <h3>DocWithDots</h3>
+          <doc-with-dots :file="$store.state.file"></doc-with-dots>
+        </div>
       </div>
     `,
     data() {
       return {
-        currentStepIndex: 0,
-        steps: ['StepOne', 'StepTwo', 'StepThree', 'StepFour', 'StepFive'],
+        controls: this.$store.state.controls,
       };
     },
     computed: {
-      currentStep() {
-        return this.steps[this.$store.state.step - 1];
-      },
       error() {
         return this.$store.state.error;
       },
+      loading() {
+        return this.$store.state.loading;
+      },
     },
-    mounted() {
-      this.$refs.app.addEventListener('getExcerptModalHidden', () => {
-        this.$store.commit('setProp', { prop: 'step', value: 1 });
-        this.$store.commit('setProp', { prop: 'loading', value: false });
-        this.$store.commit('setProp', { prop: 'error', value: false });
-      });
+    methods: {
+      showError() {
+        this.$store.commit('showError', {
+          error: { errors: [{ code: 1, message: 'requestExample error' }] },
+          method: 'requestExample',
+        });
+      },
+      toggleLoading() {
+        this.$store.commit('setProp', {
+          prop: 'loading',
+          value: !this.$store.state.loading,
+        });
+      },
+      setControlValue(controlId, value) {
+        this.$store.commit('setControlValue', {
+          controlId,
+          value,
+        });
+      },
     },
   };
 
