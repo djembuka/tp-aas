@@ -287,7 +287,6 @@ window.BX = {
           break;
 
         case 'appeals':
-          console.log(data);
           result = new Promise((resolve, reject) => {
             resolve({
               status: 'success',

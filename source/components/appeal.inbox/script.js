@@ -1102,12 +1102,44 @@ window.addEventListener('load', () => {
         });
     },
     mounted() {
+      (async () => {
+        do {
+          await new Promise((r) => {
+            setTimeout(r, 120000);
+          });
+
+          let oldCount = this.$store.getters.defaultProfile.newAppealsCount;
+
+          this.$store
+            .dispatch('profilesBX')
+            .then(() => {
+              let defaultP = this.$store.getters.defaultProfile;
+
+              if (!defaultP) return;
+
+              this.$store.dispatch('predefinedFiltersBX', { id: defaultP.id });
+            })
+            .then(() => {
+              let defaultP = this.$store.getters.defaultProfile;
+
+              if (!defaultP) return;
+
+              if (
+                oldCount === this.$store.getters.defaultProfile.newAppealsCount
+              )
+                return;
+
+              this.$store.dispatch('appealsBX', { id: defaultP.id });
+            });
+        } while (true);
+      })();
+
       // const spaceStep = $.animateNumber.numberStepFactories.separator(' ');
-      // //get new number
+      //get new number
       // (async () => {
       //   do {
       //     //hide digit
-      //     const digitNode = document.querySelector('.b-num-block__b');
+      //     const digitNode = document.querySelector('.b-num-block b');
       //     const currentNum = this.$store.state.numBlocks.find(
       //       (block) => block.new
       //     ).num;
