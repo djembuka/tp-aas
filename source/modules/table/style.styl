@@ -7,7 +7,7 @@
   th,
   td
     font-size $14px
-    text-align center
+    text-align left
     vertical-align middle
     padding 1.25rem 1.5rem
     border-top none
@@ -16,6 +16,9 @@
     &.asc,
     &.desc
       background-color #f2e4d866
+
+    [class^="label-"]
+      text-align left
 
   thead th
     border-top none
@@ -27,12 +30,6 @@
     font-weight 600
     line-height 1rem
     cursor pointer
-    padding-right 35px
-    padding-left 35px
-
-    &:first-child
-      text-align left
-      padding-left 1.5rem
 
     &.asc,
     &.desc

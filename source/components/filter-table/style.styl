@@ -19,13 +19,24 @@
         opacity 0
         z-index -1
 
-/*@keyframes rotateDigit
-  from
-    transform(rotate(0))
-  to
-    transform(rotate(360deg))*/
-
 .b-filter-table
+
+  &__pagination
+    display flex
+    justify-content space-between
+    align-items center
+
+    @media( max-width 767px )
+      flex-wrap wrap
+
+  &__all
+    text-align left
+
+    @media( max-width 767px )
+      text-align center
+      width 100%
+      order 2
+      margin-top 30px
 
   h3
     margin-top 0
@@ -41,24 +52,20 @@
 
   #inbox-filter
     display flex
-    justify-content space-between
+    justify-content flex-start
+    gap 30px
 
     > div
       width calc((100% - 30px * 4) / 9 * 2)
-      margin-right 30px
 
       &:first-child
         width calc((100% - 30px * 4) / 9 * 1)
-
-      &:last-child
-        margin-right 0
 
     @media( max-width 1199px )
       flex-wrap wrap
       
       > div
         width calc( (100% - 30px) / 2 )
-        margin 0 0 30px
 
         &:first-child
           width 100%
@@ -68,7 +75,6 @@
       
       > div
         width 100%
-        margin 0 0 30px
 
         &:last-child
           margin-bottom 0
@@ -129,7 +135,7 @@
     th,
     td
       font-size $14px
-      text-align center
+      text-align left
       vertical-align middle
       border-top none
       border-bottom 1px solid $line-color
@@ -160,12 +166,6 @@
       //     display table-cell
 
     th
-      padding-right 35px
-      padding-left 35px
-
-      &:first-child
-        text-align left
-        padding-left 1.5rem
 
       &.asc,
       &.desc
