@@ -1,0 +1,118 @@
+// start /components/dc.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'dc.detail'
+else
+  - var componentsArray = [ 'dc.detail' ]
+
+.b-dc-detail.ph-block
+
+  .ph
+    div
+    div
+    div
+
+  .ph-content 
+
+    .b-num-blocks
+
+      a.b-num-block.b-num-block--counter( href="" )
+        span.b-num-block__data
+          i Заседаний
+          b 185
+          
+      a.b-num-block.b-num-block--counter( href="" )
+        span.b-num-block__data
+          i Вопросов рассмотрено
+          b 4&nbsp;871
+          
+      a.b-num-block.b-num-block--counter( href="" )
+        span.b-num-block__data
+          i Дел
+          b 1&nbsp;789
+
+    hr.hr--lg
+
+    .d-lg-flex.d-md-flex.justify-content-between.align-items-center
+      h2.mb-0 Ближайшее заседание
+      a.btn.btn-primary.btn-md( href="" ) Создать заседание
+
+    hr
+
+    include ../../modules/meeting-item/include
+
+    h2 Последние заседания
+
+    table.table.table-responsive( data-result="/components/registry/result.json" )
+      thead
+        tr
+          th( data-field="date" ) Дата
+          th( data-field="meeting-num" ) Номер заседания
+          th( data-field="type" ) Тип
+          th( data-field="questions" ) Вопросов
+          th( data-field="status" ) Статус
+      tbody
+        tr( data-url="/pages/dc-item/" data-target="_self" )
+          td 18 июля 2024<br>18:00
+          td 150
+          td Очное заседание
+          td 560
+          td 
+            span.label-green
+              span Опубликован протокол
+        tr( data-url="/pages/dc-item/" data-target="_self" )
+          td 18 июля 2024<br>18:00
+          td 150
+          td Очное заседание
+          td 560
+          td 
+            span.label-green
+              span Опубликован протокол
+        tr( data-url="/pages/dc-item/" data-target="_self" )
+          td 18 июля 2024<br>18:00
+          td 150
+          td Очное заседание
+          td 560
+          td 
+            span.label-green
+              span Опубликован протокол
+        tr( data-url="/pages/dc-item/" data-target="_self" )
+          td 18 июля 2024<br>18:00
+          td 150
+          td Очное заседание
+          td 560
+          td 
+            span.label-green
+              span Опубликован протокол
+        tr( data-url="/pages/dc-item/" data-target="_self" )
+          td 18 июля 2024<br>18:00
+          td 150
+          td Очное заседание
+          td 560
+          td 
+            span.label-green
+              span Опубликован протокол
+        tr( data-url="/pages/dc-item/" data-target="_self" )
+          td 18 июля 2024<br>18:00
+          td 150
+          td Очное заседание
+          td 560
+          td 
+            span.label-green
+              span Опубликован протокол
+
+    hr.hr--xl
+
+    include ../../modules/pagination/include
+
+    hr.hr--xl
+
+    a.btn.btn-serve.btn-md( href="" ) Все заседания
+
+    hr.hr--xxl
+
+    include ../../modules/appeal-item/dc
+      
+
+// end /components/dc.detail/

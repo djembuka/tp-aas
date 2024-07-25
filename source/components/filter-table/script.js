@@ -370,7 +370,7 @@ window.addEventListener('load', () => {
         },
       };
     },
-    template: `<div id="inbox-table" class="b-registry-report">
+    template: `<div>
       <div v-if="$store.state.table.html.rows">
         <table class="table table-responsive">
           <thead>

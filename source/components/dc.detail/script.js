@@ -460,7 +460,7 @@ window.addEventListener('load', () => {
     el: '#filterTable',
     store,
     template: `
-      <div class="b-dc-registry">
+      <div class="b-dc-questions">
         <inbox-filter ref="filter"></inbox-filter>
         <hr>
         <inbox-table></inbox-table>

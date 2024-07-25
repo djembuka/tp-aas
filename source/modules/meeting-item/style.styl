@@ -1,0 +1,26 @@
+@import '../../styl/component-include.styl'
+
+.b-meeting-item
+  border 1px solid $line-color
+  padding 20px
+  display flex
+  flex-direction column
+  gap 16px
+  font-family $roboto
+
+  &__date
+    font-size $16px
+    display flex
+    gap 24px
+
+  &__title
+    font-size $20px
+    font-weight $bold
+
+  &__tags
+    font-size $14px
+    display flex
+    gap 30px
+
+    [class^="label-"]
+      line-height auto
