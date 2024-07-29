@@ -32,17 +32,19 @@ else
           i Дел
           b 1&nbsp;789
 
-    hr.hr--lg
+    hr.hr--sl
 
     .d-lg-flex.d-md-flex.justify-content-between.align-items-center
       h2.mb-0 Ближайшее заседание
-      a.btn.btn-primary.btn-md( href="" ) Создать заседание
+      a.btn.btn-secondary.btn-md( href="" ) Создать заседание
 
     hr
 
     include ../../modules/meeting-item/include
 
     h2 Последние заседания
+
+    hr
 
     table.table.table-responsive( data-result="/components/registry/result.json" )
       thead
@@ -102,11 +104,7 @@ else
             span.label-green
               span Опубликован протокол
 
-    hr.hr--xl
-
-    include ../../modules/pagination/include
-
-    hr.hr--xl
+    hr.hr--sl
 
     a.btn.btn-serve.btn-md( href="" ) Все заседания
 
