@@ -16,11 +16,14 @@
   &__title
     font-size $20px
     font-weight $bold
+    line-height 1.2
 
   &__tags
     font-size $14px
     display flex
-    gap 30px
+    flex-wrap wrap
+    column-gap 30px
+    row-gap 10px
 
     [class^="label-"]
       line-height 1.5

@@ -8,7 +8,6 @@
   h3
     margin 0 0 16px 0
 
-
   &__buttons
     display flex
     justify-content flex-start
@@ -20,3 +19,14 @@
     
       &:first-child
         margin-right 24px
+
+    @media(max-width 767px)
+      display block
+
+      .btn
+        display flex
+        width 100%
+
+        &:first-child
+          margin-right 0
+          margin-bottom 10px

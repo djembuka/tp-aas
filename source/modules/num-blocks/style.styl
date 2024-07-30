@@ -3,17 +3,19 @@
 .b-num-blocks
   display flex
   flex-wrap wrap
+  column-gap 30px
+  row-gap 10px
 
   @media( max-width 600px )
-    justify-content space-between
+    flex-wrap nowrap
+    overflow auto
+    padding-bottom 5px
 
 .b-num-block
   background-color #F0F5FC
   padding 15px
   border-radius 10px
   color #5F7696
-  margin-right 30px
-  margin-bottom 30px
   width 138px
   display flex
   justify-content space-between
@@ -49,10 +51,7 @@
     display none
 
   @media( max-width 600px )
-    width calc((100% - 15px * 2) / 3)
-    margin-right 0
-    margin-bottom 10px
-    padding 10px
+    flex-shrink 0
 
   i
     font-size $10px
@@ -66,6 +65,3 @@
     font-size $24px
     font-weight $bold
     line-height normal
-
-    @media( max-width 600px )
-      font-size $18px
