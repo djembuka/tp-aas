@@ -354,11 +354,86 @@ window.addEventListener('load', () => {
   Vue.component('inboxFilter', {
     template: `
       <div id="inbox-filter">
-        <div v-for="control in $store.state.filter.controls">
-          <component :is="'form-control-'+control.type" :control="control" :ref="control.code"></component>
+        <div class="twpx-scroll-menu" :class="{'twpx-scroll-menu--no-right': !arrows.right, 'twpx-scroll-menu--no-left': !arrows.left}" @mouseenter="hover" ref="sm">
+          <div class="twpx-scroll-menu-overflow">
+            <div class="twpx-scroll-menu-wrapper" :style="'margin-left: ' + margin + 'px;'" ref="wrapper">
+              <div v-for="control in $store.state.filter.controls">
+                <component :is="'form-control-'+control.type" :control="control" :ref="control.code"></component>
+              </div>
+            </div>
+          </div>
+          <div class="twpx-scroll-menu-arrows">
+            <div class="twpx-scroll-menu-arrow-right" @click="moveTo(-1 * $refs.sm.clientWidth)"></div>
+            <div class="twpx-scroll-menu-arrow-left" @click="moveTo($refs.sm.clientWidth)"></div>
+          </div>
         </div>
-      </div>`,
-    methods: {},
+      </div>
+    `,
+    data() {
+      return {
+        initialized: false,
+        itemMarginRight: 30,
+        margin: 0,
+        arrows: {
+          right: false,
+          left: true,
+        },
+      };
+    },
+    computed: {
+      profiles() {
+        return this.$store.state.profiles;
+      },
+    },
+    methods: {
+      click(id) {
+        this.$store.dispatch('setDeafultProfileBX', { id });
+        this.$store.dispatch('columnsNamesBX', { id });
+        this.$store.dispatch('appealsBX', { id });
+      },
+      hover() {
+        if (this.calculateWidth() <= this.$refs.sm.clientWidth) {
+          this.arrows.right = false;
+          this.arrows.left = false;
+        } else {
+          this.moveTo(0);
+        }
+      },
+      moveTo(dist) {
+        this.arrows.right = true;
+        this.arrows.left = true;
+        let left = this.margin || 0;
+        left = left + dist;
+
+        let width = this.calculateWidth();
+
+        if (left >= 0) {
+          left = 0;
+          this.arrows.right = false;
+        } else if (left <= -1 * (width - this.$refs.sm.clientWidth)) {
+          left = -1 * (width - this.$refs.sm.clientWidth);
+          this.arrows.left = false;
+        }
+
+        this.margin = left;
+      },
+      calculateWidth() {
+        let result = 0;
+        this.$refs.wrapper.childNodes.forEach((item) => {
+          if (item.classList) {
+            result += item.clientWidth;
+            result += this.itemMarginRight;
+          }
+        });
+
+        result -= this.itemMarginRight;
+
+        return result;
+      },
+    },
+    mounted() {
+      this.initialized = true;
+    },
   });
 
   Vue.component('inboxTable', {
