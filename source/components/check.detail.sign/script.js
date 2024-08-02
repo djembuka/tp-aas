@@ -89,7 +89,7 @@ window.addEventListener('load', () => {
                     <div class="item item-5"></div>
                 </div>
                 <div v-else>
-                    <h3 class="text-center">Вы подписываете документ простой цифровой подписью</h3>
+                    <h4 class="text-center">Вы подписываете документ простой цифровой подписью</h4>
                     <hr>
                     <p class="text-center">
                     Обратите внимание, что вы подписываете документы, <b>«{{ $store.state.modal.file.filename }}»</b> с использованием простой цифровой подписи.
@@ -149,7 +149,7 @@ window.addEventListener('load', () => {
     props: ['role'],
     template: `
       <div class="b-check-detail-sign__role-block" v-if="files.length">
-        <h3>{{ role.value }}</h3>
+        <h4>{{ role.value }}</h4>
         <div v-for="file in files" :data-id="file.id">
           <file-info :file="file" :key="file.id"></file-info>
         </div>
