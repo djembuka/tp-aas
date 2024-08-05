@@ -264,7 +264,7 @@ window.appealNewChangeFormStore = {
               property: 1,
               word: 'FILES[0]',
               label: 'Подпись к документу',
-              type: 'file',
+              type: 'es-file',
               multy: 3,
               maxSize: 10240000,
               required: true,
