@@ -1,6 +1,6 @@
 .b-dc-case-detail__data
 
-  h3 Общие данные
+  h3.mt-0 Общие данные
 
   .row
     .col-lg-6 
@@ -134,6 +134,8 @@
             td +7 919 919 19 19
               span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
 
+include ../../components/dc.case.detail.violations/template
+
 .b-dc-case-detail__table
 
   h3 Заседания
@@ -208,4 +210,12 @@
 
 hr.hr--xxl
 
-include ../../modules/appeal-item/dc
+include ../../components/dc.case.detail.actions/template
+
+hr.hr--sl
+
+include ../../modules/block-with-buttons/dc
+
+hr.hr--sl
+
+include ../../modules/appeal-item/dc-no-heading

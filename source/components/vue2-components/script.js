@@ -11,6 +11,7 @@ window.addEventListener('load', () => {
 
   const store = new Vuex.Store({
     state: {
+      modal: false,
       error: false,
       loading: false,
       controls: [
@@ -170,6 +171,46 @@ window.addEventListener('load', () => {
     },
   });
 
+  Vue.component('modalPopup', {
+    template: `
+    <div class="modal--text modal fade" :id="id" tabindex="-1" :aria-labelledby="id + 'Label'" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <button class="close" type="button" @click="close" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );"></button>
+            <div class="modal-body">
+                <slot></slot>
+            </div>
+        </div>
+      </div>
+    </div>
+    `,
+    props: ['id'],
+    computed: {
+      show() {
+        return this.$store.state.modal;
+      },
+    },
+    watch: {
+      show(val) {
+        if (val) {
+          $(`#${this.id}`).modal('show');
+        } else {
+          $(`#${this.id}`).modal('hide');
+        }
+      },
+    },
+    methods: {
+      close() {
+        this.$store.commit('setProp', { prop: 'modal', value: false });
+      },
+    },
+    mounted() {
+      $(`#${this.id}`).on('hide.bs.modal', () => {
+        this.$store.commit('setProp', { prop: 'modal', value: false });
+      });
+    },
+  });
+
   Vue.component('TheErrorMessage', {
     template: `
       <div v-if="error" class="vue2-component-error" @click="clickError($event)">
@@ -187,7 +228,11 @@ window.addEventListener('load', () => {
         </div>
       </div>
     `,
-    props: ['error'],
+    computed: {
+      error() {
+        return this.$store.state.error;
+      },
+    },
     methods: {
       clickError(event) {
         if (
@@ -808,9 +853,19 @@ window.addEventListener('load', () => {
     template: `
       <div>
         <div>
+          <h3>Modal popup</h3>
+          <button class="btn btn-success" @click="showModal">Show modal</button>
+          <modal-popup id="dcCasesModal">
+            <p>Здесь может быть любой текст или компонент.</p>
+          </modal-popup>
+          <hr class="hr--sm">
+          <p></p>
+        </div>
+        <hr>
+        <div>
           <h3>TheErrorMessage</h3>
           <button class="btn btn-primary" @click="showError">Show error</button>
-          <the-error-message v-if="error" :error="error"></the-error-message>
+          <the-error-message></the-error-message>
           <hr class="hr--sm">
           <p>Использование: переносим компонент, стили style/the-error-message/styl. В $store.state свойство error, в мутациях showError. В приложении App добавляем компонент, как в текущем приложении - &lt;the-error-message v-if="error" :error="error"&gt;&lt;/the-error-message&gt;</p>
         </div>
@@ -844,14 +899,14 @@ window.addEventListener('load', () => {
       };
     },
     computed: {
-      error() {
-        return this.$store.state.error;
-      },
       loading() {
         return this.$store.state.loading;
       },
     },
     methods: {
+      showModal() {
+        this.$store.commit('setProp', { prop: 'modal', value: true });
+      },
       showError() {
         this.$store.commit('showError', {
           error: { errors: [{ code: 1, message: 'requestExample error' }] },
