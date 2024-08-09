@@ -167,6 +167,7 @@ window.addEventListener('load', () => {
         }
       },
       addViolation(state, { violation }) {
+        console.log(violation);
         state.violations.tr.push(violation);
       },
     },
@@ -179,7 +180,7 @@ window.addEventListener('load', () => {
       async addBX({ commit }, { data }) {
         if (window.BX) {
           return window.BX.ajax
-            .runComponentAction(`twinpx:dc.api`, 'add', data)
+            .runComponentAction(`twinpx:dc.api`, 'addViolation', data)
             .then(
               (r) => {
                 commit('addViolation', { violation: r.data });
@@ -236,8 +237,8 @@ window.addEventListener('load', () => {
   Vue.component('ViolationsTable', {
     template: `
       <div class="b-dc-case-detail-violations">
-        <h3>Нарушения<span class="text-muted">&nbsp;{{ $store.getters.violationsCount }}</span></h3>
-        <button class="btn btn-primary" @click="showModal">Show modal</button>
+        <h3>Нарушения<span class="text-blue">&nbsp;&nbsp;{{ $store.getters.violationsCount }}</span></h3>
+        <!--<button class="btn btn-primary" @click="showModal">Show modal</button>-->
         <table class="table table-responsive">
           <colgroup> 
             <col v-for="(violation, index) in violations.th" :key="index * Math.floor(Math.random() * 100000)" :style="'width:' +  ($store.state.cols[index] || 'auto') + ';'">

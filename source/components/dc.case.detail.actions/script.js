@@ -115,7 +115,7 @@ window.addEventListener('load', () => {
       async addBX({ commit }, { data }) {
         if (window.BX) {
           return window.BX.ajax
-            .runComponentAction(`twinpx:dc.api`, 'add', data)
+            .runComponentAction(`twinpx:dc.api`, 'addAction', data)
             .then(
               (r) => {
                 commit('addAction', { action: r.data });
@@ -162,8 +162,8 @@ window.addEventListener('load', () => {
   Vue.component('ActionsTable', {
     template: `
       <div class="b-dc-case-detail-actions">
-        <h3>Меры<span class="text-muted">&nbsp;{{ $store.getters.actionsCount }}</span></h3>
-        <button class="btn btn-primary" @click="showModal">Show modal</button>
+        <h3>Меры<span class="text-blue">&nbsp;&nbsp;{{ $store.getters.actionsCount }}</span></h3>
+        <!--<button class="btn btn-primary" @click="showModal">Show modal</button>-->
         <table class="table table-responsive">
           <colgroup> 
             <col v-for="(action, index) in actions.th" :key="index * Math.floor(Math.random() * 100000)" :style="'width:' +  ($store.state.cols[index] || 'auto') + ';'">
