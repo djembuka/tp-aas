@@ -5,12 +5,34 @@
   border 1px solid $line-color
   padding 40px
   font-family $roboto
+
+  --aas-docs-block-icon-width 65px
+  --aas-docs-block-icon-height 86px
+  --aas-docs-block-icon-margin 40px
+  --aas-docs-block-button-width 0px
+  --aas-docs-block-button-margin 0px
   
   @media( max-width 767px )
     padding 15px
 
   &__item
     font-family $roboto
+
+    &--button
+      --aas-docs-block-icon-margin 16px
+      --aas-docs-block-button-width 38px
+      --aas-docs-block-button-margin 16px
+        
+
+    &--gray
+      background-color $bg-color
+      padding 1rem
+
+    &--32x44
+
+      .b-docs-block__icon
+        --aas-docs-block-icon-width 32px
+        --aas-docs-block-icon-height 44px
 
   &__body
     display flex
@@ -20,12 +42,12 @@
       align-items flex-start
 
   &__icon
-    width 65px
-    height 86px
+    width var(--aas-docs-block-icon-width)
+    height var(--aas-docs-block-icon-height)
     background-repeat no-repeat
     background-position center
     background-size contain
-    margin-right 40px
+    margin-right var(--aas-docs-block-icon-margin)
     margin-bottom 5px
     
     @media( max-width 767px )
@@ -34,7 +56,7 @@
       margin-right 15px
 
   &__text
-    width calc( 100% - 48px - 40px )
+    width calc( 100% - var(--aas-docs-block-icon-width) - var(--aas-docs-block-icon-margin) - var(--aas-docs-block-button-width) - var(--aas-docs-block-button-margin) )
     
     a
       display inline-block
