@@ -4,6 +4,25 @@
 
   p Документы дисциплинарного дела. Создаются сотрудником СРО ААС и доступны только членам дисциплинарной комиссии.
 
-  h3 Файлы заседания
+    h3 Файлы заседания
 
-  include ../../modules/docs/single-delete
+    .b-dc-case-detail__docs__files
+      include ../../modules/docs/single-remove
+      include ../../modules/docs/single-remove
+      include ../../modules/docs/single-remove
+
+    hr.hr--sl
+
+    include ../../components/dc.case.detail.docs/template
+
+  #removeDocConsent.modal--text.modal.fade(tabindex="-1" aria-labelledby="removeDocConsentLabel" aria-hidden="true")
+    .modal-dialog
+      .modal-content
+        button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+        .modal-body
+          h3 Вы удаляете файл
+          p Вы удаляете файл <b>ОченьДлинноеНазваниеФайлаКоторыйУдаляют.pdf</b>
+
+          .text-center.modal-buttons
+            button.btn.btn-light.btn-lg( data-dismiss="modal" ) Отменить
+            button.btn.btn-danger.btn-lg Удалить

@@ -639,6 +639,7 @@ window.addEventListener('load', () => {
     template: `
       <div class="b-registry-report">
         <quick-filter-blocks></quick-filter-blocks>
+        <hr>
         <inbox-filter ref="filter"></inbox-filter>
         <hr>
         <inbox-table></inbox-table>

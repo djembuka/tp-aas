@@ -655,6 +655,7 @@ window.addEventListener('load', () => {
     template: `
       <div>
         <quick-filter-blocks></quick-filter-blocks>
+        <hr>
         <inbox-filter ref="filter"></inbox-filter>
         <hr>
         <inbox-table></inbox-table>
