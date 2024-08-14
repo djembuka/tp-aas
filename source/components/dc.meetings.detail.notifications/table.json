@@ -1,0 +1,48 @@
+{
+  "cols": [
+    { "field": "notification", "title": "Уведомление" },
+    { "field": "object", "title": "Объект" },
+    { "field": "question", "title": "Вопрос" },
+    { "field": "case", "title": "Дело" },
+    { "field": "status", "title": "Статус" },
+    { "field": "sent", "title": "Отправлено" }
+  ],
+  "rows": [
+    {
+      "url": "/",
+      "target": "_self",
+      "data": {
+        "notification": "<a href=''><b>Оплата членского взноса за 4 квартал 2021</b></a>",
+        "object": "Абдулгужина Иван Петрович Дуля<br>22006343891",
+        "question": "23",
+        "case": "3654",
+        "status": "<div class='label-red'><span>Не прочитано</span></div>",
+        "sent": "31.11.2020"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_self",
+      "data": {
+        "notification": "<a href=''><b>Оплата членского взноса за 4 квартал 2021</b></a>",
+        "object": "Абдулгужина Иван Петрович Дуля<br>22006343891",
+        "question": "23",
+        "case": "3654",
+        "status": "<div class='label-red'><span>Не прочитано</span></div>",
+        "sent": "31.11.2020"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_self",
+      "data": {
+        "notification": "<a href=''><b>Оплата членского взноса за 4 квартал 2021</b></a>",
+        "object": "Абдулгужина Иван Петрович Дуля<br>22006343891",
+        "question": "23",
+        "case": "3654",
+        "status": "<div class='label-red'><span>Не прочитано</span></div>",
+        "sent": "31.11.2020"
+      }
+    }
+  ]
+}

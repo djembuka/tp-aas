@@ -1,0 +1,29 @@
+// start /components/dc.meetings.detail.notifications/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'dc.meetings.detail.notifications'
+else
+  - var componentsArray = [ 'dc.meetings.detail.notifications' ]
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="/components/dc.meetings.detail.notifications/store.js" )
+  
+.b-filter-table.ph-block
+
+  .ph
+
+    .ph__title
+    
+    .ph__num-blocks
+      div
+      div
+      div
+
+  .ph-content
+  
+    #filterTable
+
+// end /components/dc.meetings.detail.notifications/

@@ -1,0 +1,42 @@
+// start /components/dc.meetings.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'dc.meetings.detail'
+else
+  - var componentsArray = [ 'dc.meetings.detail' ]
+  
+.b-dc-meetings-detail.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content 
+  
+    .b-tabs-menu
+
+      .b-tabs-menu__wrapper
+
+        a( class=tab === 'data' ? 'active' : '' href="/pages/dc-meetings-detail/" ) Общие данные
+        a( class=tab === 'questions' ? 'active' : '' href="/pages/dc-meetings-detail/questions.html" ) Вопросы
+        a( class=tab === 'members' ? 'active' : '' href="/pages/dc-meetings-detail/members.html" ) Участники
+        a( class=tab === 'notifications' ? 'active' : '' href="/pages/dc-meetings-detail/notifications.html" ) Уведомления
+
+    hr
+    
+    .b-dc-case-detail__block
+      hr
+      if tab === 'data'
+        include data
+      else if tab === 'questions'
+        include questions
+      else if tab === 'members'
+        include members
+      else if tab === 'notifications'
+        include notifications
+
+// end /components/dc.meetings.detail/

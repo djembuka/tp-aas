@@ -1,0 +1,45 @@
+{
+  "cols": [
+    { "field": "date", "title": "Дата создания" },
+    { "field": "meetingNum", "title": "Номер заседания" },
+    { "field": "type", "title": "Тип" },
+    { "field": "num", "title": "Вопросов" },
+    { "field": "status", "title": "Статус" }
+  ],
+  "rows": [
+    {
+      "url": "/",
+      "target": "_self",
+      "data": {
+        "date": "18 сентября 2021<br>18:00",
+        "meetingNum": "150",
+        "type": "Очное заседание",
+        "num": "86",
+        "status": "<div class='label-orange'><span>Идет</span></div>"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_self",
+      "data": {
+        "date": "18 сентября 2021<br>18:00",
+        "meetingNum": "150",
+        "type": "Очное заседание",
+        "num": "86",
+        "status": "<div class='label-orange'><span>Идет</span></div>"
+      }
+    },
+    {
+      "url": "/",
+      "target": "_self",
+      "data": {
+        "date": "18 сентября 2021<br>18:00",
+        "meetingNum": "150",
+        "type": "Очное заседание",
+        "num": "86",
+        "status": "<div class='label-orange'><span>Идет</span></div>"
+      }
+    }
+  ],
+  "pagination": "<div class=\"b-filter-table__pagination\"><div class=\"b-filter-table__all\">Всего: 560</div><div class=\"b-pagination-block text-right ph-block sys-pagination-aas ph-block--animated\"><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">1</a><span class=\"main-ui-pagination-page main-ui-pagination-active i-active\">2</span><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">3</a><a class=\"main-ui-pagination-page main-ui-pagination-dots\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=151\">...</a><a class=\"main-ui-pagination-page\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=298\">298</a><a class=\"main-ui-pagination-arrow main-ui-pagination-prev i-backward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=1\">Предыдущая</a><a class=\"main-ui-pagination-arrow main-ui-pagination-next i-forward\" href=\"/profile/moderate/auditor/?userId=&amp;status=&amp;start=&amp;end=&amp;PAGEN_1=3\">Следующая</a></div></div>"
+}
