@@ -8,6 +8,7 @@ window.addEventListener('load', () => {
       return {
         ...window.dcMeetings,
         renderingTable: null,
+        cols: ['auto', '20%', '20%', '20%', '100px'],
       };
     },
     mutations: {
@@ -373,6 +374,9 @@ window.addEventListener('load', () => {
     template: `<div id="inbox-table">
       <div v-if="$store.state.table.html.rows">
         <table class="table table-responsive">
+          <colgroup>
+            <col v-for="(td, index) in tableHtml.cols" :key="index * Math.floor(Math.random() * 100000)" :style="'width:' +  ($store.state.cols[index] || 'auto') + ';'">
+          </colgroup>
           <thead>
             <tr>
               <th v-for="col in tableHtml.cols" :class="col.sortType" @click="clickTh(col)">{{col.title}}</th>
