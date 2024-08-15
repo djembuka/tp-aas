@@ -22,7 +22,7 @@ body
       height 100%
       background-color #074c86
       opacity 0
-      transition( opacity .5s ease )
+      transition-fn( opacity .5s ease )
       z-index -1
 
     &.shutter .b-body-shutter
@@ -50,7 +50,7 @@ body
     padding-left 35px !important
   
 a
-  transition( all .5s ease )
+  transition-fn( all .5s ease )
 
   &,
   &:hover,
@@ -227,7 +227,7 @@ h1,.h1
       margin-right 250px !important
 
   &.no-transition
-    transition(none)
+    transition-fn(none)
 
   &.ph-block--animated
     color #3b3b3b
@@ -553,7 +553,7 @@ label
   font-size $11px
   color #9b9b9b
   opacity 0
-  transition(opacity .2s ease )
+  transition-fn(opacity .2s ease )
 
   + .input--num
     padding-right 80px !important
@@ -638,7 +638,7 @@ label
 
   &-frame
     display none
-    transition( opacity .5s ease-out )
+    transition-fn( opacity .5s ease-out )
     opacity 0
 
     &.modal-frame--active

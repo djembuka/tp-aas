@@ -1,6 +1,6 @@
 .b-header
   height 144px
-  transition( height .5s ease-in-out )
+  transition-fn( height .5s ease-in-out )
   background-color #fff
   
   @media( max-width 767px )
@@ -12,7 +12,7 @@
   .container-fluid:not(.notification__content)
     position relative
     top 0
-    transition( top .5s ease )
+    transition-fn( top .5s ease )
     
     @media( min-width 768px )
   
@@ -35,7 +35,7 @@
   
   &-fixed-wrapper
     background-color #fff
-    transition( all .5s ease )
+    transition-fn( all .5s ease )
     position fixed
     top 0
     left 0
@@ -53,7 +53,7 @@
     display flex
     justify-content space-between
     align-items center
-    transition( all .5s ease )
+    transition-fn( all .5s ease )
     
     .ph-block--animated &
       opacity 1
@@ -77,7 +77,7 @@
       @media( min-width 768px )
         width 80px
         height 56px
-        transition( top .5s ease )
+        transition-fn( top .5s ease )
         position absolute
         top 19px
         left 35px
@@ -100,7 +100,7 @@
       position absolute
       top 23px
       right 35px
-      transition( top .5s ease )
+      transition-fn( top .5s ease )
       z-index 995
       
       .header-fixed &
@@ -110,7 +110,7 @@
         width 50px
     
     a.d-none
-      transition( transform .5s ease )
+      transition-fn( transform .5s ease )
       white-space nowrap
 
       .header-fixed:not( .not-authorized ) &
@@ -148,7 +148,7 @@
     display flex
     justify-content space-between
     align-items center
-    transition( all .5s ease )
+    transition-fn( all .5s ease )
     position relative
     
     .ph-block--animated &
@@ -164,7 +164,7 @@
       border-bottom none
       overflow scroll
       margin 0 -15px
-      transition( none )
+      transition-fn( none )
 
     [ id^="bx_incl_area" ]
 
@@ -241,7 +241,7 @@
         font-size $20px
         opacity 0
         transform( translateX( 50px ))
-        transition( all .5s ease .7s )
+        transition-fn( all .5s ease .7s )
 
         &:nth-child(1)
           transition-delay .1s
@@ -313,7 +313,7 @@
       right 10px
       width 16px
       height 16px
-      transition( transform .3s ease )
+      transition-fn( transform .3s ease )
       background-color $form-control-color
       border-radius 5px
       padding 0
@@ -328,7 +328,7 @@
         width 0
         height 10px
         border-right 1px solid #73879c
-        transition(transform 0.5s ease)
+        transition-fn(transform 0.5s ease)
 
       .b-header__menu-item.open &:before
         transform(rotate(270deg))
@@ -448,7 +448,7 @@
         a,
         i
           padding 0
-          transition( all .3s ease )
+          transition-fn( all .3s ease )
 
       .b-header__menu-dropdown__b
         display block
@@ -474,7 +474,7 @@
     top 15px
     left calc( 100% - 20px )
     width 20px
-    transition( all .5s ease )
+    transition-fn( all .5s ease )
     overflow hidden
     background-color #fff
     z-index 994
@@ -506,7 +506,7 @@
       padding 0 0 0 35px
       font-size $14px
       opacity 0
-      transition( opacity .5s ease )
+      transition-fn( opacity .5s ease )
       
       &:focus
         border none !important
@@ -536,7 +536,7 @@
     background-position center
     background-size cover
     opacity 0
-    transition( opacity .5s ease )
+    transition-fn( opacity .5s ease )
     z-index 1000
     
     .b-header__bottom--search &
@@ -567,7 +567,7 @@
       border-bottom 1px solid $line-color
       opacity 0
       transform( translateX( 50px ))
-      transition( all .5s ease .7s )
+      transition-fn( all .5s ease .7s )
       position relative
 
       &:nth-child(1)
@@ -662,7 +662,7 @@
 
       .cls-1
         fill #c6c6c6
-        transition( fill .3s ease )
+        transition-fn( fill .3s ease )
 
       .cls-2
         fill #fff

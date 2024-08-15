@@ -216,7 +216,7 @@ h1
     margin-left 10px
     vertical-align text-bottom
     opacity 0
-    transition( opacity .2s ease )
+    transition-fn( opacity .2s ease )
 
     @media( max-width 991px )
       display none
@@ -310,7 +310,7 @@ h1
     tbody
 
       tr
-        transition( all .3s ease )
+        transition-fn( all .3s ease )
 
         &.removing
           opacity 0
@@ -342,7 +342,7 @@ h1
 .b-add-input-block__item
   opacity 0
   height 0
-  transition( all .3s ease )
+  transition-fn( all .3s ease )
 
   &.show
     height 81px
@@ -353,10 +353,10 @@ h1
   input:not([type=checkbox]),
   input:not([type=radio]),
   textarea
-    transition( background-color 1s ease )
+    transition-fn( background-color 1s ease )
 
   label
-    transition( all .2s ease )
+    transition-fn( all .2s ease )
 
   &.new
 
@@ -386,7 +386,7 @@ h1
 .b-add-fieldset-block__item
   opacity 0
   height 0
-  transition( all .3s ease )
+  transition-fn( all .3s ease )
 
   &.show
     height calc(481px + 20px)
@@ -404,10 +404,10 @@ h1
   input:not([type=radio]),
   textarea,
   .ik_select_link_text
-    transition( background-color 1s ease )
+    transition-fn( background-color 1s ease )
 
   label
-    transition( all .2s ease )
+    transition-fn( all .2s ease )
 
   &.new
 

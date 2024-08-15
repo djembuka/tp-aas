@@ -131,7 +131,7 @@
     tbody
 
       &.body--new
-        transition( all 0.3s ease)
+        transition-fn( all 0.3s ease)
         overflow hidden
         
         tr
@@ -142,7 +142,7 @@
           opacity 0
 
       tr
-        transition( background-color .5s ease )
+        transition-fn( background-color .5s ease )
       
         &:hover
           background-color #fcfcfc
@@ -172,7 +172,7 @@
   left 15px
   font-size 0.69rem
   cursor text
-  transition( transform 0.2s ease-out)
+  transition-fn( transform 0.2s ease-out)
   transform-origin 0% 100%
   text-align initial
   transform( translateY(-22px))
@@ -523,7 +523,7 @@
   cursor: pointer;
   opacity: 0;
   transform( translateX(20px));
-  transition( all 0.3s ease);
+  transition-fn( all 0.3s ease);
   z-index: 20;
 }
 .twpx-scroll-menu-arrow-right {

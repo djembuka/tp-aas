@@ -7,7 +7,7 @@
   border-radius 10px
   padding 30px 30px 40px
   cursor pointer
-  transition( all .3s ease )
+  transition-fn( all .3s ease )
   min-height 110px
 
   &.i-block
@@ -105,7 +105,7 @@
     content: ''
     left: 0
     position: absolute
-    transition( all .25s )
+    transition-fn( all .25s )
     z-index 1
 
   [type="checkbox"].filled-in:not(:checked)+span:before
@@ -172,7 +172,7 @@
         top 0
         width 32px
         height 32px
-        transition( .28s ease )
+        transition-fn( .28s ease )
         z-index 0
 
   [type="radio"]:checked+span:after,

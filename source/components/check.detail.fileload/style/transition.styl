@@ -1,6 +1,6 @@
 .fade-enter-active,
 .fade-leave-active
-  transition( opacity .5s )
+  transition-fn( opacity .5s )
 
 .fade-enter,
 .fade-leave-to
@@ -65,19 +65,19 @@
 }
 .list-enter-active .b-float-label label,*/
 .list-enter-active .b-float-label--file label a {
-  transition(color 5s linear)
+  transition-fn(color 5s linear)
 }
 .list-enter-active .b-float-label input:not([type=checkbox]),
 .list-enter-active .b-float-label input:not([type=radio]),
 .list-enter-active .b-float-label textarea,
 .list-enter-active .b-float-label--file label {
-  transition( background-color 5s ease)
+  transition-fn( background-color 5s ease)
 }
 .list-enter-active .b-float-label--file .a,
 .list-enter-active .b-float-label--file .b,
 .list-enter-active .b-float-label--file .c,
 .list-enter-active .b-float-label--file .d {
-  transition( fill 5s ease)
+  transition-fn( fill 5s ease)
 }
 .list-leave {
   opacity 1
@@ -88,5 +88,5 @@
   margin-top -70px
 }
 .list-leave-active {
-  transition( all .3s linear)
+  transition-fn( all .3s linear)
 }

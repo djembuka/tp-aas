@@ -40,7 +40,7 @@
     @media( max-width 650px )
       transform( translateX( 100px ))
       opacity 0
-      transition( all .5s ease )
+      transition-fn( all .5s ease )
       
       &.animate
         opacity 1
@@ -74,7 +74,7 @@
     bottom -1px
     left 0
     border-top 1px solid #999
-    transition( all .5s ease )
+    transition-fn( all .5s ease )
 
   .b-copy-icon
     width 16px
@@ -84,8 +84,8 @@
     background-size contain
     margin-left 16px
     flex-shrink 0
-    -webkit-transition( opacity .2s linear )
-    transition( opacity .2s linear )
+    -webkit-transition-fn( opacity .2s linear )
+    transition-fn( opacity .2s linear )
     opacity 0
     position relative
 
@@ -105,8 +105,8 @@
       padding 0 10px
       white-space nowrap
       opacity 0
-      -webkit-transition( opacity .2s linear )
-      transition( opacity .2s linear )
+      -webkit-transition-fn( opacity .2s linear )
+      transition-fn( opacity .2s linear )
       pointer-events none
 
       &.b-copy-icon__note--show
