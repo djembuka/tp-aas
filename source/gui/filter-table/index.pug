@@ -5,7 +5,7 @@ block vars
   - var authorized = 'true'
 
 block title
-  title Vue таблица с фильтром | AAS
+  title Таблица с фильтром | AAS
 
 block content
 
@@ -28,6 +28,8 @@ block content
         include ../../components/left-menu/news
           
       article.col-12.col-md-9
+
+        p Старая версия таблицы с фильтром. Работает на Vue2, Vuex3. Недостатки - не работает по API, Vue, Vuex и плагины подключаются на странице. Не работает через Bitrix extensions.
         
         include ../../components/filter-table/template
   
