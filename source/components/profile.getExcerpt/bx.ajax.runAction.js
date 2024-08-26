@@ -6,7 +6,7 @@ window.BX = {
     return 456789;
   },
   ajax: {
-    runAction(type, data) {
+    runComponentAction(name, type, data) {
       let result;
       switch (type) {
         case 'requestDocument':

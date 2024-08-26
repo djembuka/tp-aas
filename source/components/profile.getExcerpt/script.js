@@ -5,11 +5,8 @@ window.addEventListener('load', () => {
 
   const store = new Vuex.Store({
     state: {
-      ornz: 54321,
-      types: [
-        { id: 123, name: 'Стандартная выписка', selected: true },
-        { id: 456, name: 'Расширенная выписка' },
-      ],
+      ornz: '',
+      types: [],
       step: 1,
       loading: false,
       count: 0,
@@ -165,10 +162,14 @@ window.addEventListener('load', () => {
         commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
           window.BX.ajax
-            .runAction(`requestDocument`, {
+            .runComponentAction('twinpx:excerpt.external', 'requestDocument', {
+              mode: 'class',
               data: {
                 ornz: state.ornz,
-                typeId: getters.selectedTypeId,
+                type: getters.selectedTypeId,
+                sessid: BX.bitrix_sessid(),
+                signedParameters:
+                  'YTowOnt9.147fc70288d2a689b2fff6cf0141f70c6e6ada1c8da6388b628cc5c7b3146beb',
               },
             })
             .then(
@@ -190,13 +191,17 @@ window.addEventListener('load', () => {
         commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
           window.BX.ajax
-            .runAction(`generateCode`, {
+            .runComponentAction('twinpx:excerpt.external', 'generateCode', {
+              mode: 'class',
               data: {
-                documentId: state.documentId,
+                xml_id: state.documentId,
                 fullName: state.fullName,
                 phone: state.phone,
                 email: state.email,
                 message: state.message,
+                sessid: BX.bitrix_sessid(),
+                signedParameters:
+                  'YTowOnt9.147fc70288d2a689b2fff6cf0141f70c6e6ada1c8da6388b628cc5c7b3146beb',
               },
             })
             .then(
@@ -218,12 +223,20 @@ window.addEventListener('load', () => {
       getFileLinkBX({ state, commit }, { code }) {
         commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
-          return window.BX.ajax.runAction(`getFileLink`, {
-            data: {
-              documentId: state.documentId,
-              code,
-            },
-          });
+          return window.BX.ajax.runComponentAction(
+            'twinpx:excerpt.external',
+            'getFileLink',
+            {
+              mode: 'class',
+              data: {
+                xml_id: state.documentId,
+                code,
+                sessid: BX.bitrix_sessid(),
+                signedParameters:
+                  'YTowOnt9.147fc70288d2a689b2fff6cf0141f70c6e6ada1c8da6388b628cc5c7b3146beb',
+              },
+            }
+          );
         }
       },
     },
@@ -1075,6 +1088,19 @@ window.addEventListener('load', () => {
       error() {
         return this.$store.state.error;
       },
+    },
+    beforeCreate() {
+      const app = document.querySelector('#getExcerptApp');
+
+      this.$store.commit('setProp', {
+        prop: 'ornz',
+        value: app.getAttribute('data-ornz'),
+      });
+
+      this.$store.commit('setProp', {
+        prop: 'types',
+        value: JSON.parse(app.getAttribute('data-types')),
+      });
     },
     mounted() {
       this.$refs.app.addEventListener('getExcerptModalHidden', () => {
