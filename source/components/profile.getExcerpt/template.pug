@@ -11,6 +11,28 @@ script( src="/components/profile.getExcerpt/bx.ajax.runAction.js" )
 script( src="https://cdn.jsdelivr.net/npm/vue@2" )
 script( src="https://unpkg.com/vuex@3" )
 
-#getExcerptApp( data-ornz='54321' data-types='[{ "id": "123", "name": "Стандартная выписка", "selected": "true" },{ "id": "456", "name": "Расширенная выписка" }]')
+#getExcerptApp
+
+script 
+  | var getExcerptVars = {
+  |  "ornz": "22006297080",
+  |  "types": [
+  |     {
+  |          "id": "cancel",
+  |          "name": "Выписка о прекращении членства",
+  |            "selected": "true"
+  |      },
+  |     {
+  |          "id": "123",
+  |          "name": "Стандартная выписка"
+  |      },
+  |     {
+  |          "id": "456",
+  |          "name": "Расширенная выписка"
+  |      }
+  |  ],
+  |  "sessid": "4234e0e6e0c1a9918bcbd821a8826b0a",
+  |  "signedParameters": "YTowOnt9.147fc70288d2a689b2fff6cf0141f70c6e6ada1c8da6388b628cc5c7b3146beb"
+  | };
   
 // end /components/profile.getExcerpt/

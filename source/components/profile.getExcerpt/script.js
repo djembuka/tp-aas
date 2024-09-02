@@ -200,9 +200,8 @@ window.addEventListener('load', () => {
                 // email: state.email,
                 // message: state.message,
                 formdata,
-                sessid: BX.bitrix_sessid(),
-                signedParameters:
-                  'YTowOnt9.147fc70288d2a689b2fff6cf0141f70c6e6ada1c8da6388b628cc5c7b3146beb',
+                sessid: state.sessid,
+                signedParameters: state.signedParameters,
               },
             })
             .then(
@@ -246,12 +245,12 @@ window.addEventListener('load', () => {
   Vue.component('TheLoading', {
     template: `
     <div class="b-get-excerpt__loading">
-      <div class="circle-loader">
-        <div class="circle circle-1"></div>
-        <div class="circle circle-2"></div>
-        <div class="circle circle-3"></div>
-        <div class="circle circle-4"></div>
-        <div class="circle circle-5"></div>
+      <div class="progress-indicator">
+        <div class="item item-1"></div>
+        <div class="item item-2"></div>
+        <div class="item item-3"></div>
+        <div class="item item-4"></div>
+        <div class="item item-5"></div>
       </div>
     </div>
     `,
@@ -1113,16 +1112,28 @@ window.addEventListener('load', () => {
       },
     },
     beforeCreate() {
-      const app = document.querySelector('#getExcerptApp');
+      if (!window.getExcerptVars) {
+        return;
+      }
 
       this.$store.commit('setProp', {
         prop: 'ornz',
-        value: app.getAttribute('data-ornz'),
+        value: window.getExcerptVars.ornz,
       });
 
       this.$store.commit('setProp', {
         prop: 'types',
-        value: JSON.parse(app.getAttribute('data-types')),
+        value: window.getExcerptVars.types,
+      });
+
+      this.$store.commit('setProp', {
+        prop: 'sessid',
+        value: window.getExcerptVars.sessid,
+      });
+
+      this.$store.commit('setProp', {
+        prop: 'signedParameters',
+        value: window.getExcerptVars.signedParameters,
       });
     },
     mounted() {
