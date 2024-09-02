@@ -1621,9 +1621,9 @@ window.BX = {
                     state: 'filled',
                     permissions: {
                       read: false,
-                      write: false,
+                      write: true,
                       moderation: false,
-                      monitoring: false,
+                      monitoring: true,
                       supervisor: true,
                     },
                     status: 1,

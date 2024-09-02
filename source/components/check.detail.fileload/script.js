@@ -537,8 +537,15 @@ window.addEventListener('load', () => {
               <div v-if="!block.load">
 
                 <div class="b-check-detail-fileload__history-icon" v-html="historyIcon" v-if="status" @click.prevent="showHistory"></div>
+                
+                <div v-if="block.permissions.supervisor">
+                  <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
 
-                <div v-if="block.permissions.moderation">
+                  <div v-if="block.state === 'filled' || block.state === 'moderating'">
+                    <reset-form :blockId="block.id"></reset-form>
+                  </div>
+                </div>
+                <div v-else-if="block.permissions.moderation">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
 
                   <moderation-form :blockId="block.id" v-if="block.state==='moderating'"></moderation-form>
@@ -552,13 +559,6 @@ window.addEventListener('load', () => {
                 </div>
                 <div v-else-if="block.permissions.monitoring">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
-                </div>
-                <div v-else-if="block.permissions.supervisor">
-                  <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
-
-                  <div v-if="block.state === 'filled' || block.state === 'moderating'">
-                    <reset-form :blockId="block.id"></reset-form>
-                  </div>
                 </div>
                 <div v-else-if="block.permissions.read">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
@@ -839,6 +839,11 @@ window.addEventListener('load', () => {
         if (this.block.type === 'uploaded_files') {
           result = true;
         } else if (
+          this.block.permissions.supervisor &&
+          (this.block.state === 'moderating' || this.block.state === 'filled')
+        ) {
+          result = true;
+        } else if (
           this.block.permissions.moderation &&
           (this.block.state === 'moderating' || this.block.state === 'filled')
         ) {
@@ -850,11 +855,6 @@ window.addEventListener('load', () => {
           result = true;
         } else if (
           this.block.permissions.monitoring &&
-          (this.block.state === 'moderating' || this.block.state === 'filled')
-        ) {
-          result = true;
-        } else if (
-          this.block.permissions.supervisor &&
           (this.block.state === 'moderating' || this.block.state === 'filled')
         ) {
           result = true;
@@ -871,9 +871,9 @@ window.addEventListener('load', () => {
         let result = false;
 
         if (
-          (this.block.permissions.moderation ||
-            this.block.permissions.monitoring ||
-            this.block.permissions.supervisor) &&
+          (this.block.permissions.supervisor ||
+            this.block.permissions.moderation ||
+            this.block.permissions.monitoring) &&
           this.block.state === 'empty'
         ) {
           result = true;
@@ -2070,10 +2070,10 @@ window.addEventListener('load', () => {
     methods: {
       blockVisible(block) {
         return (
+          block.permissions.supervisor ||
           block.permissions.moderation ||
           block.permissions.write ||
           block.permissions.monitoring ||
-          block.permissions.supervisor ||
           (block.permissions.read && block.state === 'filled')
         );
       },
