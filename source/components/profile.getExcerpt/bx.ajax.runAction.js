@@ -2,8 +2,54 @@ window.BX = {
   bitrix_sessid() {
     return 'SESSID';
   },
-  message() {
-    return 456789;
+  message(code) {
+    let result = '';
+    switch (code) {
+      case 'STEP_ONE_HEADING':
+        result = 'Выберите тип выписки';
+        break;
+      case 'STEP_ONE_TEXT':
+        result = 'Вы можете заказать выписки следующих типов:';
+        break;
+      case 'STEP_ONE_BUTTON':
+        result = 'Получить выписку';
+        break;
+      case 'STEP_TWO_HEADING':
+        result = 'Заказать выписку';
+        break;
+      case 'STEP_TWO_BUTTON':
+        result = 'Получить выписку';
+        break;
+      case 'STEP_THREE_HEADING':
+        result = 'Подтверждение';
+        break;
+      case 'STEP_THREE_TEXT':
+        result =
+          'На вашу почту отправлено письмо с кодом подтверждения, введите его для получения доступа к выпискам.';
+        break;
+      case 'STEP_THREE_BUTTON':
+        result = 'Отправить';
+        break;
+      case 'STEP_FOUR_HEADING':
+        result = 'Отправьте код повторно';
+        break;
+      case 'STEP_FOUR_TEXT':
+        result =
+          'Вы 3 раза ввели неверный код.<br />Получите новый код для входа повторив попытку.';
+        break;
+      case 'STEP_FOUR_BUTTON':
+        result = 'Повторить попытку';
+        break;
+      case 'STEP_FIVE_HEADING':
+        result = 'Ваша выписка создана';
+        break;
+      case 'STEP_FIVE_TEXT':
+        result =
+          'Скачайте выписку, она будет доступна,<br />пока у вас открыто данное окно.';
+        break;
+    }
+
+    return result;
   },
   ajax: {
     runComponentAction(name, type, data) {

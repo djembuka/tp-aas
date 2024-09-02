@@ -187,7 +187,7 @@ window.addEventListener('load', () => {
             );
         }
       },
-      generateCodeBX({ state, commit }) {
+      generateCodeBX({ state, commit }, { formdata }) {
         commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
           window.BX.ajax
@@ -195,10 +195,11 @@ window.addEventListener('load', () => {
               mode: 'class',
               data: {
                 xml_id: state.documentId,
-                fullName: state.fullName,
-                phone: state.phone,
-                email: state.email,
-                message: state.message,
+                // fullName: state.fullName,
+                // phone: state.phone,
+                // email: state.email,
+                // message: state.message,
+                formdata,
                 sessid: BX.bitrix_sessid(),
                 signedParameters:
                   'YTowOnt9.147fc70288d2a689b2fff6cf0141f70c6e6ada1c8da6388b628cc5c7b3146beb',
@@ -259,8 +260,8 @@ window.addEventListener('load', () => {
   Vue.component('StepOne', {
     template: `
       <div class="b-get-excerpt__one">
-        <h3>Выберите тип выписки</h3>
-        <p>Вы можете заказать выписки следующих типов:</p>
+        <h3>{{ h3 }}</h3>
+        <p v-html="text"></p>
         <hr class="hr--sl">
         <div class="b-get-excerpt__types">
           <div
@@ -269,13 +270,20 @@ window.addEventListener('load', () => {
             :key="type.id"
           >
             <span>{{ type.name }}</span>
-            <button class="btn btn-secondary btn-md" @click="selectType(type.id)">
-              Получить выписку
-            </button>
+            <button class="btn btn-secondary btn-md" @click="selectType(type.id)">{{ button }}</button>
           </div>
         </div>
       </div>
     `,
+    data() {
+      return {
+        h3: window.BX.message('STEP_ONE_HEADING') || 'Выберите тип выписки',
+        text:
+          window.BX.message('STEP_ONE_TEXT') ||
+          'Вы можете заказать выписки следующих типов:',
+        button: window.BX.message('STEP_ONE_BUTTON') || 'Получить выписку',
+      };
+    },
     methods: {
       selectType(typeId) {
         this.$store.commit('setSelectedType', { typeId });
@@ -287,20 +295,23 @@ window.addEventListener('load', () => {
   Vue.component('StepTwo', {
     template: `
       <div class="b-get-excerpt__two">
-        <h3>Заказать выписку</h3>
+        <h3>{{ h3 }}</h3>
         <hr>
-        <form @submit.prevent="submitForm">
-  {{$store.state.fullName}}
+        <form @submit.prevent="submitForm" ref="form">
+          {{$store.state.fullName}}
           <div v-for="control in $store.state.controls" :key="control.id">
             <component :is="'control-'+control.property" :control="control" @input="({value}) => {setControlValue(control.id, value)}"></component>
             <hr>
           </div>
-          <button class="btn btn-secondary btn-lg" type="sumbit" :class="{'btn-disabled': !valid}">Получить выписку</button>
+          <button class="btn btn-secondary btn-lg" type="sumbit" :class="{'btn-disabled': !valid}">{{ button }}</button>
         </form>
       </div>
     `,
     data() {
-      return {};
+      return {
+        h3: window.BX.message('STEP_TWO_HEADING') || 'Заказать выписку',
+        button: window.BX.message('STEP_TWO_BUTTON') || 'Получить выписку',
+      };
     },
     computed: {
       valid() {
@@ -312,7 +323,9 @@ window.addEventListener('load', () => {
         if (!this.valid) {
           return;
         }
-        this.$store.dispatch('generateCodeBX');
+        this.$store.dispatch('generateCodeBX', {
+          formdata: new FormData(this.$refs.form),
+        });
       },
       setControlValue(controlId, value) {
         this.$store.commit('setControlValue', {
@@ -326,11 +339,8 @@ window.addEventListener('load', () => {
   Vue.component('StepThree', {
     template: `
       <div class="b-get-excerpt__three">
-        <h3>Подтверждение</h3>
-        <p>
-          На вашу почту отправлено письмо с кодом подтверждения, введите его для
-          получения доступа к выпискам.
-        </p>
+        <h3>{{ h3 }}</h3>
+        <p v-html="text"></p>
         <hr>
         <div class="b-get-excerpt__count">
           {{ $store.state.count + 1 }}/{{ all }}
@@ -339,12 +349,18 @@ window.addEventListener('load', () => {
         <control-text :control="control" @input="input"></control-text>
         <hr>
         <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled}" @click="sendCode">
-          Отправить
+          {{ button }}
         </button>
       </div>
     `,
     data() {
       return {
+        h3: window.BX.message('STEP_THREE_HEADING') || 'Подтверждение',
+        text:
+          window.BX.message('STEP_THREE_TEXT') ||
+          'На вашу почту отправлено письмо с кодом подтверждения, введите его для          получения доступа к выпискам.',
+        button: window.BX.message('STEP_THREE_BUTTON') || 'Отправить',
+
         all: 3,
         invalid: false,
         disabled: true,
@@ -422,17 +438,21 @@ window.addEventListener('load', () => {
   Vue.component('StepFour', {
     template: `
       <div class="b-get-excerpt__four">
-        <h3>Отправьте код повторно</h3>
-        <p>
-          Вы 3 раза ввели неверный код.<br />Получите новый код для входа повторив
-          попытку.
-        </p>
+        <h3>{{ h3 }}</h3>
+        <p v-html="text"></p>
         <hr>
-        <button class="btn btn-secondary btn-lg" @click="repeat">
-          Повторить попытку
-        </button>
+        <button class="btn btn-secondary btn-lg" @click="repeat">{{ button }}</button>
       </div>
     `,
+    data() {
+      return {
+        h3: window.BX.message('STEP_FOUR_HEADING') || 'Отправьте код повторно',
+        text:
+          window.BX.message('STEP_FOUR_TEXT') ||
+          'Вы 3 раза ввели неверный код.<br />Получите новый код для входа повторив попытку.',
+        button: window.BX.message('STEP_FOUR_BUTTON') || 'Повторить попытку',
+      };
+    },
     methods: {
       repeat() {
         this.$store.dispatch('generateCodeBX');
@@ -444,10 +464,8 @@ window.addEventListener('load', () => {
   Vue.component('StepFive', {
     template: `
       <div class="b-get-excerpt__five">
-        <h3>Ваша выписка создана</h3>
-        <p>
-          Скачайте выписку, она будет доступна,<br />пока у вас открыто данное окно.
-        </p>
+        <h3>{{ h3 }}</h3>
+        <p v-html="text"></p>
         <hr>
         <div class="b-docs-block b-docs-block--small b-docs-block--gray b-docs-block--with-dots">
           <div class="b-docs-block__item" :href="$store.state.file.fileLink">
@@ -475,6 +493,11 @@ window.addEventListener('load', () => {
     `,
     data() {
       return {
+        h3: window.BX.message('STEP_FIVE_HEADING') || 'Ваша выписка создана',
+        text:
+          window.BX.message('STEP_FIVE_TEXT') ||
+          'Скачайте выписку, она будет доступна,<br />пока у вас открыто данное окно.',
+
         show: false,
       };
     },
