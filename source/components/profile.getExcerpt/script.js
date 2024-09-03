@@ -167,9 +167,8 @@ window.addEventListener('load', () => {
               data: {
                 ornz: state.ornz,
                 type: getters.selectedTypeId,
-                sessid: BX.bitrix_sessid(),
-                signedParameters:
-                  'YTowOnt9.147fc70288d2a689b2fff6cf0141f70c6e6ada1c8da6388b628cc5c7b3146beb',
+                sessid: state.sessid,
+                signedParameters: state.signedParameters,
               },
             })
             .then(
@@ -190,19 +189,14 @@ window.addEventListener('load', () => {
       generateCodeBX({ state, commit }, { formdata }) {
         commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
+          formdata.append('xml_id', state.documentId);
+          formdata.append('sessid', state.sessid);
+          formdata.append('signedParameters', state.signedParameters);
+
           window.BX.ajax
             .runComponentAction('twinpx:excerpt.external', 'generateCode', {
               mode: 'class',
-              data: {
-                xml_id: state.documentId,
-                // fullName: state.fullName,
-                // phone: state.phone,
-                // email: state.email,
-                // message: state.message,
-                formdata,
-                sessid: state.sessid,
-                signedParameters: state.signedParameters,
-              },
+              data: formdata,
             })
             .then(
               (r) => {
@@ -231,9 +225,8 @@ window.addEventListener('load', () => {
               data: {
                 xml_id: state.documentId,
                 code,
-                sessid: BX.bitrix_sessid(),
-                signedParameters:
-                  'YTowOnt9.147fc70288d2a689b2fff6cf0141f70c6e6ada1c8da6388b628cc5c7b3146beb',
+                sessid: state.sessid,
+                signedParameters: state.signedParameters,
               },
             }
           );
@@ -322,6 +315,7 @@ window.addEventListener('load', () => {
         if (!this.valid) {
           return;
         }
+
         this.$store.dispatch('generateCodeBX', {
           formdata: new FormData(this.$refs.form),
         });
