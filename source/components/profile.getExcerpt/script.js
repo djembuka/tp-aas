@@ -114,13 +114,11 @@ window.addEventListener('load', () => {
                     `${window.BX.message('ERROR_SUPPORT')}
                     <br>
                     <br>
-                    Метод: ${method}. Код ошибки: ${
-                      error.data.ajaxRejectData.data
-                    }. Описание: ${
+                    ${
                       window.BX.message(
                         'ERROR_' + error.data.ajaxRejectData.data
                       ) || window.BX.message('ERROR_SERVER')
-                    }.`
+                    }`
                   );
                 }
               } else if (window.BX.message) {
@@ -130,9 +128,7 @@ window.addEventListener('load', () => {
                   `${window.BX.message('ERROR_SUPPORT')}
                   <br>
                   <br>
-                  Метод: ${method}. Код ошибки: NETWORK_ERROR. Описание: ${window.BX.message(
-                    'ERROR_OFFLINE'
-                  )}.`
+                  ${window.BX.message('ERROR_OFFLINE')}`
                 );
               }
             } else {
@@ -142,15 +138,7 @@ window.addEventListener('load', () => {
                 `${window.BX.message('ERROR_SUPPORT')}
                 <br>
                 <br>
-                Метод: ${method}.${
-                  error.errors[0].code
-                    ? ' Код ошибки: ' + error.errors[0].code + '.'
-                    : ''
-                } ${
-                  error.errors[0].message
-                    ? ' Описание: ' + error.errors[0].message + '.'
-                    : ''
-                }`
+                ${error.errors[0].message ? error.errors[0].message : ''}`
               );
             }
           }
@@ -217,19 +205,20 @@ window.addEventListener('load', () => {
       getFileLinkBX({ state, commit }, { code }) {
         commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
-          return window.BX.ajax.runComponentAction(
-            'twinpx:excerpt.external',
-            'getFileLink',
-            {
-              mode: 'class',
-              data: {
-                xml_id: state.documentId,
-                code,
-                sessid: state.sessid,
-                signedParameters: state.signedParameters,
-              },
-            }
-          );
+          return new Promise((res, rej) => {
+            window.BX.ajax
+              .runComponentAction('twinpx:excerpt.external', 'getFileLink', {
+                mode: 'class',
+                data: {
+                  xml_id: state.documentId,
+                  code,
+                  sessid: state.sessid,
+                  signedParameters: state.signedParameters,
+                },
+              })
+              .then(res)
+              .error(rej);
+          });
         }
       },
     },
@@ -467,7 +456,7 @@ window.addEventListener('load', () => {
               <span class="b-docs-block__text">
                 <a :href="$store.state.file.fileLink">{{ $store.state.file.name }}</a>
                 <span class="b-docs-block__data">
-                  <span class="text-muted">{{ $store.state.file.size }} .doc</span>
+                  <span class="text-muted">{{ formatSize($store.state.file.size) }} .pdf</span>
                   <span class="text-muted">Дата создания: {{ $store.state.file.date }}</span>
                 </span>
               </span>
@@ -497,6 +486,15 @@ window.addEventListener('load', () => {
     methods: {
       clickMore() {
         this.show = true;
+      },
+      formatSize(length) {
+        var i = 0,
+          type = ['б', 'Кб', 'Мб', 'Гб', 'Тб', 'Пб'];
+        while ((length / 1024) | 0 && i < type.length - 1) {
+          length /= 1024;
+          i++;
+        }
+        return parseInt(length) + ' ' + type[i];
       },
     },
     mounted() {
@@ -749,8 +747,8 @@ window.addEventListener('load', () => {
         let key = e.key;
         not = key.replace(/([0-9])/, 1);
 
-        if (not == 1 || 'Backspace' === not) {
-          if ('Backspace' != not) {
+        if (not == 1 || 'Backspace' === not || 'Tab' === not) {
+          if ('Backspace' != not || 'Tab' != not) {
             if (this.value.length < 3 || this.value === '') {
               this.value = '+7(';
             }
