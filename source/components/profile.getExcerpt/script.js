@@ -467,8 +467,8 @@ window.addEventListener('load', () => {
               <span class="b-docs-block__text">
                 <a :href="$store.state.file.fileLink">{{ $store.state.file.name }}</a>
                 <span class="b-docs-block__data">
-                  <span class="text-muted">654 Кб .doc</span>
-                  <span class="text-muted">Дата создания: 20 июня 2024 11:55:06</span>
+                  <span class="text-muted">{{ $store.state.file.size }} .doc</span>
+                  <span class="text-muted">Дата создания: {{ $store.state.file.date }}</span>
                 </span>
               </span>
               <div v-if="$store.state.file.pdf || $store.state.file.sig" class="b-docs-block__more" @click.prevent="clickMore">
