@@ -65,6 +65,7 @@ window.addEventListener('load', () => {
         },
       ],
       file: {},
+      formdata: {},
     },
     getters: {
       selectedTypeId(state) {
@@ -174,9 +175,12 @@ window.addEventListener('load', () => {
             );
         }
       },
-      generateCodeBX({ state, commit }, { formdata }) {
+      generateCodeBX({ state, commit }) {
         commit('setProp', { prop: 'loading', value: true });
+
         if (window.BX) {
+          let formdata = state.formdata;
+
           formdata.append('xml_id', state.documentId);
           formdata.append('sessid', state.sessid);
           formdata.append('signedParameters', state.signedParameters);
@@ -216,8 +220,7 @@ window.addEventListener('load', () => {
                   signedParameters: state.signedParameters,
                 },
               })
-              .then(res)
-              .error(rej);
+              .then(res, rej);
           });
         }
       },
@@ -305,9 +308,12 @@ window.addEventListener('load', () => {
           return;
         }
 
-        this.$store.dispatch('generateCodeBX', {
-          formdata: new FormData(this.$refs.form),
+        this.$store.commit('setProp', {
+          prop: 'formdata',
+          value: new FormData(this.$refs.form),
         });
+
+        this.$store.dispatch('generateCodeBX');
       },
       setControlValue(controlId, value) {
         this.$store.commit('setControlValue', {
@@ -382,17 +388,23 @@ window.addEventListener('load', () => {
           })
           .then(
             (r) => {
+              //status === success
               this.$store.commit('setProp', { prop: 'loading', value: false });
-              if (r.status === 'success') {
-                if (r.data) {
-                  //go to the next step
-                  this.$store.commit('setProp', { prop: 'step', value: 5 });
-                  this.$store.commit('setProp', {
-                    prop: 'file',
-                    value: r.data.file,
-                  });
-                }
-              } else if (r.status === 'error' && r.errors[0]) {
+
+              if (r.data) {
+                //go to the next step
+                this.$store.commit('setProp', { prop: 'step', value: 5 });
+                this.$store.commit('setProp', {
+                  prop: 'file',
+                  value: r.data.file,
+                });
+              }
+            },
+            (r) => {
+              //status === error
+              this.$store.commit('setProp', { prop: 'loading', value: false });
+
+              if (r.status === 'error') {
                 const newCount = this.$store.state.count + 1;
                 if (newCount < 3) {
                   this.$store.commit('setProp', {
@@ -406,11 +418,16 @@ window.addEventListener('load', () => {
                 }
                 //show next attempt if less of equal to 3
                 //show button if grosser then 3
+              } else {
+                this.$store.commit('setProp', {
+                  prop: 'loading',
+                  value: false,
+                });
+                this.$store.commit('showError', {
+                  error: r,
+                  method: 'getFileLink',
+                });
               }
-            },
-            (error) => {
-              this.$store.commit('setProp', { prop: 'loading', value: false });
-              this.$store.commit('showError', { error, method: 'getFileLink' });
             }
           );
       },
@@ -748,7 +765,7 @@ window.addEventListener('load', () => {
         not = key.replace(/([0-9])/, 1);
 
         if (not == 1 || 'Backspace' === not || 'Tab' === not) {
-          if ('Backspace' != not || 'Tab' != not) {
+          if ('Backspace' != not && 'Tab' != not) {
             if (this.value.length < 3 || this.value === '') {
               this.value = '+7(';
             }
