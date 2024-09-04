@@ -336,7 +336,7 @@ window.addEventListener('load', () => {
         <hr>
         <control-text :control="control" @input="input"></control-text>
         <hr>
-        <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled, btn--load-circle: loading}" @click="sendCode">
+        <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled, 'btn--load-circle': loadingCode}" @click="sendCode">
           {{ button }}
         </button>
       </div>
@@ -352,7 +352,7 @@ window.addEventListener('load', () => {
         all: 3,
         invalid: false,
         disabled: true,
-        loading: false,
+        loadingCode: false,
         control: {
           property: 'text',
           id: 'codeId',
@@ -383,6 +383,9 @@ window.addEventListener('load', () => {
           return;
         }
 
+        this.loadingCode = true;
+        this.disabled = true;
+
         this.$store
           .dispatch('getFileLinkBX', {
             code: this.control.value,
@@ -391,6 +394,8 @@ window.addEventListener('load', () => {
             (r) => {
               //status === success
               // this.$store.commit('setProp', { prop: 'loading', value: false });
+              this.loadingCode = false;
+              this.disabled = false;
 
               if (r.data) {
                 //go to the next step
@@ -404,6 +409,8 @@ window.addEventListener('load', () => {
             (r) => {
               //status === error
               // this.$store.commit('setProp', { prop: 'loading', value: false });
+              this.loadingCode = false;
+              this.disabled = false;
 
               if (r.status === 'error') {
                 const newCount = this.$store.state.count + 1;
@@ -420,10 +427,12 @@ window.addEventListener('load', () => {
                 //show next attempt if less of equal to 3
                 //show button if grosser then 3
               } else {
-                this.$store.commit('setProp', {
-                  prop: 'loading',
-                  value: false,
-                });
+                // this.$store.commit('setProp', {
+                //   prop: 'loading',
+                //   value: false,
+                // });
+                this.loadingCode = false;
+                this.disabled = false;
                 this.$store.commit('showError', {
                   error: r,
                   method: 'getFileLink',
@@ -455,7 +464,6 @@ window.addEventListener('load', () => {
     },
     methods: {
       repeat() {
-        this.$store.dispatch('generateCodeBX');
         this.$store.commit('setProp', { prop: 'step', value: 1 });
       },
     },
