@@ -207,7 +207,7 @@ window.addEventListener('load', () => {
         }
       },
       getFileLinkBX({ state, commit }, { code }) {
-        commit('setProp', { prop: 'loading', value: true });
+        // commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
           return new Promise((res, rej) => {
             window.BX.ajax
@@ -326,7 +326,7 @@ window.addEventListener('load', () => {
 
   Vue.component('StepThree', {
     template: `
-      <div class="b-get-excerpt__three">
+      <div class="b-get-excerpt__three" :class="{'b-get-excerpt__three--invalid': invalid}">
         <h3>{{ h3 }}</h3>
         <p v-html="text"></p>
         <hr>
@@ -336,7 +336,7 @@ window.addEventListener('load', () => {
         <hr>
         <control-text :control="control" @input="input"></control-text>
         <hr>
-        <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled}" @click="sendCode">
+        <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled, btn--load-circle: loading}" @click="sendCode">
           {{ button }}
         </button>
       </div>
@@ -352,6 +352,7 @@ window.addEventListener('load', () => {
         all: 3,
         invalid: false,
         disabled: true,
+        loading: false,
         control: {
           property: 'text',
           id: 'codeId',
@@ -389,7 +390,7 @@ window.addEventListener('load', () => {
           .then(
             (r) => {
               //status === success
-              this.$store.commit('setProp', { prop: 'loading', value: false });
+              // this.$store.commit('setProp', { prop: 'loading', value: false });
 
               if (r.data) {
                 //go to the next step
@@ -402,7 +403,7 @@ window.addEventListener('load', () => {
             },
             (r) => {
               //status === error
-              this.$store.commit('setProp', { prop: 'loading', value: false });
+              // this.$store.commit('setProp', { prop: 'loading', value: false });
 
               if (r.status === 'error') {
                 const newCount = this.$store.state.count + 1;
@@ -455,7 +456,7 @@ window.addEventListener('load', () => {
     methods: {
       repeat() {
         this.$store.dispatch('generateCodeBX');
-        this.$store.commit('setProp', { prop: 'step', value: 3 });
+        this.$store.commit('setProp', { prop: 'step', value: 1 });
       },
     },
   });
