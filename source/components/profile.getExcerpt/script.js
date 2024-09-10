@@ -9,7 +9,6 @@ window.addEventListener('load', () => {
       types: [],
       step: 1,
       loading: false,
-      count: 0,
       controls: [
         {
           property: 'text',
@@ -66,6 +65,7 @@ window.addEventListener('load', () => {
       ],
       file: {},
       formdata: {},
+      invalidCode: false,
     },
     getters: {
       selectedTypeId(state) {
@@ -330,13 +330,9 @@ window.addEventListener('load', () => {
         <h3>{{ h3 }}</h3>
         <p v-html="text"></p>
         <hr>
-        <div class="b-get-excerpt__count">
-          {{ $store.state.count + 1 }}/{{ all }}
-        </div>
+        <control-text :control="control" @input="input" @focus="focus"></control-text>
         <hr>
-        <control-text :control="control" @input="input"></control-text>
-        <hr>
-        <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled, 'btn--load-circle': loadingCode}" @click="sendCode">
+        <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled}" @click="sendCode">
           {{ button }}
         </button>
       </div>
@@ -349,10 +345,8 @@ window.addEventListener('load', () => {
           'На вашу почту отправлено письмо с кодом подтверждения, введите его для          получения доступа к выпискам.',
         button: window.BX.message('STEP_THREE_BUTTON') || 'Отправить',
 
-        all: 3,
         invalid: false,
         disabled: true,
-        loadingCode: false,
         control: {
           property: 'text',
           id: 'codeId',
@@ -377,13 +371,15 @@ window.addEventListener('load', () => {
           this.disabled = true;
         }
       },
+      focus() {
+        this.invalid = false;
+      },
       sendCode() {
         if (this.control.value.length < 6) {
           this.invalid = true;
           return;
         }
 
-        this.loadingCode = true;
         this.disabled = true;
 
         this.$store
@@ -393,8 +389,6 @@ window.addEventListener('load', () => {
           .then(
             (r) => {
               //status === success
-              // this.$store.commit('setProp', { prop: 'loading', value: false });
-              this.loadingCode = false;
               this.disabled = false;
 
               if (r.data) {
@@ -408,31 +402,26 @@ window.addEventListener('load', () => {
             },
             (r) => {
               //status === error
-              // this.$store.commit('setProp', { prop: 'loading', value: false });
-              this.loadingCode = false;
               this.disabled = false;
 
               if (r.status === 'error') {
-                const newCount = this.$store.state.count + 1;
-                if (newCount < 3) {
-                  this.$store.commit('setProp', {
-                    prop: 'count',
-                    value: newCount,
-                  });
-                  this.invalid = true;
-                } else {
-                  this.$store.commit('setProp', { prop: 'count', value: 0 });
-                  this.$store.commit('setProp', { prop: 'step', value: 4 });
+                this.$store.commit('showError', {
+                  error: r,
+                  method: 'getFileLink',
+                });
+                switch (r.errors[0].code) {
+                  case 100:
+                  case 103:
+                  case 104:
+                    this.invalid = true;
+                    break;
+                  case 101:
+                  case 102:
+                  case 105:
+                    this.$store.commit('setProp', { prop: 'step', value: 4 });
+                    break;
                 }
-                //show next attempt if less of equal to 3
-                //show button if grosser then 3
               } else {
-                // this.$store.commit('setProp', {
-                //   prop: 'loading',
-                //   value: false,
-                // });
-                this.loadingCode = false;
-                this.disabled = false;
                 this.$store.commit('showError', {
                   error: r,
                   method: 'getFileLink',
@@ -585,7 +574,7 @@ window.addEventListener('load', () => {
       };
     },
     props: ['control', 'id', 'name'],
-    emits: ['input'],
+    emits: ['input', 'focus'],
     computed: {
       value: {
         get() {
@@ -630,6 +619,7 @@ window.addEventListener('load', () => {
       focus() {
         this.focused = true;
         this.blured = false;
+        this.$emit('focus');
       },
       blur() {
         this.focused = false;

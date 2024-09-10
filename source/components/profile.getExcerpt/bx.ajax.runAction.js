@@ -82,7 +82,7 @@ window.BX = {
         case 'getFileLink':
           result = new Promise((resolve, reject) => {
             resolve({
-              status: 'success',
+              status: 'error',
               data: {
                 file: {
                   fileLink: '/',
@@ -93,7 +93,14 @@ window.BX = {
                   sig: '/',
                 },
               },
-              errors: [{ message: 'Error message' }],
+              errors: [
+                {
+                  message:
+                    '\u0424\u043e\u0440\u043c\u0430\u0442 \u043a\u043e\u0434\u0430 \u043d\u0435\u0432\u0435\u0440\u043d\u044b\u0439',
+                  code: 103,
+                  customData: null,
+                },
+              ],
             });
             // reject({ errors: [{ code: 3, message: 'getFileLink error' }] });
           });

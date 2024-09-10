@@ -1,6 +1,6 @@
 @import '../../styl/component-include.styl'
 
-#getExcerptModal
+#getExcerptApp
 
   &.modal--text .modal-body
     max-width 100%
@@ -40,7 +40,7 @@
     pointer-events: none;
     line-height: 1.1;
   }
-  .twpx-form-control--text.twpx-form-control--invalid .twpx-form-control__label {
+  .b-float-label.twpx-form-control--invalid .twpx-form-control__label {
     color: #ff0000;
   }
   .twpx-form-control--text.twpx-form-control--disabled .twpx-form-control__label {
@@ -206,6 +206,9 @@
 
 .b-get-excerpt
   text-align center
+
+  .b-float-label .twpx-form-control__input
+    border 1px solid transparent
 
   .b-float-label textarea
     height 100px
