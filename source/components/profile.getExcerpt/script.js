@@ -66,6 +66,7 @@ window.addEventListener('load', () => {
       file: {},
       formdata: {},
       invalidCode: false,
+      code: '',
     },
     getters: {
       selectedTypeId(state) {
@@ -207,7 +208,7 @@ window.addEventListener('load', () => {
         }
       },
       getFileLinkBX({ state, commit }, { code }) {
-        // commit('setProp', { prop: 'loading', value: true });
+        commit('setProp', { prop: 'loading', value: true });
         if (window.BX) {
           return new Promise((res, rej) => {
             window.BX.ajax
@@ -326,7 +327,7 @@ window.addEventListener('load', () => {
 
   Vue.component('StepThree', {
     template: `
-      <div class="b-get-excerpt__three" :class="{'b-get-excerpt__three--invalid': invalid}">
+      <div class="b-get-excerpt__three" :class="{'b-get-excerpt__three--invalid': $store.state.invalidCode}">
         <h3>{{ h3 }}</h3>
         <p v-html="text"></p>
         <hr>
@@ -352,7 +353,7 @@ window.addEventListener('load', () => {
           id: 'codeId',
           name: 'CODE',
           label: 'Код',
-          value: '',
+          value: this.$store.state.code,
           required: true,
           disabled: false,
           regexp: '',
@@ -372,11 +373,16 @@ window.addEventListener('load', () => {
         }
       },
       focus() {
-        this.invalid = false;
+        this.$store.commit('setProp', { prop: 'invalidCode', value: false });
       },
       sendCode() {
+        this.$store.commit('setProp', {
+          prop: 'code',
+          value: this.control.value,
+        });
+
         if (this.control.value.length < 6) {
-          this.invalid = true;
+          this.$store.commit('setProp', { prop: 'invalidCode', value: true });
           return;
         }
 
@@ -389,6 +395,7 @@ window.addEventListener('load', () => {
           .then(
             (r) => {
               //status === success
+              this.$store.commit('setProp', { prop: 'loading', value: false });
               this.disabled = false;
 
               if (r.data) {
@@ -402,6 +409,7 @@ window.addEventListener('load', () => {
             },
             (r) => {
               //status === error
+              this.$store.commit('setProp', { prop: 'loading', value: false });
               this.disabled = false;
 
               if (r.status === 'error') {
@@ -413,7 +421,10 @@ window.addEventListener('load', () => {
                   case 100:
                   case 103:
                   case 104:
-                    this.invalid = true;
+                    this.$store.commit('setProp', {
+                      prop: 'invalidCode',
+                      value: true,
+                    });
                     break;
                   case 101:
                   case 102:
@@ -445,9 +456,7 @@ window.addEventListener('load', () => {
     data() {
       return {
         h3: window.BX.message('STEP_FOUR_HEADING') || 'Отправьте код повторно',
-        text:
-          window.BX.message('STEP_FOUR_TEXT') ||
-          'Вы 3 раза ввели неверный код.<br />Получите новый код для входа повторив попытку.',
+        text: window.BX.message('STEP_FOUR_TEXT') || '',
         button: window.BX.message('STEP_FOUR_BUTTON') || 'Повторить попытку',
       };
     },
