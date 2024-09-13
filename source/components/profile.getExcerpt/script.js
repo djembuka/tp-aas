@@ -460,7 +460,10 @@ window.addEventListener('load', () => {
     data() {
       return {
         h3: window.BX.message('STEP_FOUR_HEADING') || 'Отправьте код повторно',
-        text: window.BX.message('STEP_FOUR_TEXT') || '',
+        text:
+          window.BX.message('STEP_FOUR_TEXT') ||
+          this.$store.state.errorCode ||
+          '',
         button: window.BX.message('STEP_FOUR_BUTTON') || 'Повторить попытку',
       };
     },
