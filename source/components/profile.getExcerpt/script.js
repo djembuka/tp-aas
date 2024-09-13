@@ -537,13 +537,12 @@ window.addEventListener('load', () => {
     mounted() {
       document.documentElement.addEventListener('click', (e) => {
         if (
-          e.target.closest('.b-docs-block__more__files') ||
-          e.target.className.search('b-docs-block__more__files') !== -1 ||
-          e.target.className.search('b-docs-block__more__button') !== -1
+          (!e.target.closest('.b-docs-block__more__files') &&
+            e.target.className.search('b-docs-block__more__files') === -1) ||
+          e.target.className.search('b-docs-block__more__button') === -1
         ) {
-          return;
+          this.show = false;
         }
-        this.show = false;
       });
     },
   });
