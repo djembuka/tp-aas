@@ -66,6 +66,7 @@ window.addEventListener('load', () => {
       file: {},
       formdata: {},
       invalidCode: false,
+      errorCode: '',
       code: '',
     },
     getters: {
@@ -332,6 +333,7 @@ window.addEventListener('load', () => {
         <p v-html="text"></p>
         <hr>
         <control-text :control="control" @input="input" @focus="focus"></control-text>
+        <div class="b-get-excerpt__three__error" v-if="$store.state.errorCode">{{$store.state.errorCode}}</div>
         <hr>
         <button class="btn btn-secondary btn-lg" :class="{'btn-disabled': disabled}" @click="sendCode">
           {{ button }}
@@ -343,7 +345,7 @@ window.addEventListener('load', () => {
         h3: window.BX.message('STEP_THREE_HEADING') || 'Подтверждение',
         text:
           window.BX.message('STEP_THREE_TEXT') ||
-          'На вашу почту отправлено письмо с кодом подтверждения, введите его для          получения доступа к выпискам.',
+          'На вашу почту отправлено письмо с кодом подтверждения, введите его для получения доступа к выпискам.',
         button: window.BX.message('STEP_THREE_BUTTON') || 'Отправить',
 
         invalid: false,
@@ -373,6 +375,7 @@ window.addEventListener('load', () => {
         }
       },
       focus() {
+        this.$store.commit('setProp', { prop: 'errorCode', value: '' });
         this.$store.commit('setProp', { prop: 'invalidCode', value: false });
       },
       sendCode() {
@@ -413,10 +416,11 @@ window.addEventListener('load', () => {
               this.disabled = false;
 
               if (r.status === 'error') {
-                this.$store.commit('showError', {
-                  error: r,
-                  method: 'getFileLink',
+                this.$store.commit('setProp', {
+                  prop: 'errorCode',
+                  value: r.errors[0].message,
                 });
+
                 switch (r.errors[0].code) {
                   case 100:
                   case 103:
@@ -462,7 +466,13 @@ window.addEventListener('load', () => {
     },
     methods: {
       repeat() {
-        this.$store.commit('setProp', { prop: 'step', value: 1 });
+        $('#getExcerptModal').modal('hide');
+        $('#getExcerptModal').on('hidden.bs.modal', () => {
+          this.$store.commit('setProp', { prop: 'step', value: 1 });
+          this.$store.commit('setProp', { prop: 'invalidCode', value: false });
+          this.$store.commit('setProp', { prop: 'errorCode', value: '' });
+          this.$store.commit('setProp', { prop: 'code', value: '' });
+        });
       },
     },
   });
