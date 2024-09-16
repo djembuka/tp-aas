@@ -494,11 +494,11 @@ window.addEventListener('load', () => {
                 <a :href="$store.state.file.fileLink">{{ $store.state.file.name }}</a>
                 <span class="b-docs-block__data">
                   <span class="text-muted">{{ formatSize($store.state.file.size) }} .pdf</span>
-                  <span class="text-muted">Дата создания: {{ $store.state.file.date }}</span>
+                  <span class="text-muted">Дата создания: {{ $store.state.file.create }}</span>
                 </span>
               </span>
-              <div v-if="$store.state.file.pdf || $store.state.file.sig" class="b-docs-block__more" @click.prevent="clickMore">
-                <a class="b-docs-block__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')"></a>
+              <div v-if="$store.state.file.pdf || $store.state.file.sig" class="b-docs-block__more">
+                <a class="b-docs-block__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')" @click.prevent="clickMore"></a>
                 <div class="b-docs-block__more__files" :class="{'b-docs-block__more__files--show': show}">
                   <span>Для некоторых сервисов требуется формат PDF + .sig</span>
                   <a v-if="$store.state.file.pdf" :href="$store.state.file.pdf" target="_blank" style="background-image: url('/template/images/pdf.svg')">pdf</a>
@@ -537,8 +537,8 @@ window.addEventListener('load', () => {
     mounted() {
       document.documentElement.addEventListener('click', (e) => {
         if (
-          (!e.target.closest('.b-docs-block__more__files') &&
-            e.target.className.search('b-docs-block__more__files') === -1) ||
+          !e.target.closest('.b-docs-block__more__files') &&
+          e.target.className.search('b-docs-block__more__files') === -1 &&
           e.target.className.search('b-docs-block__more__button') === -1
         ) {
           this.show = false;
