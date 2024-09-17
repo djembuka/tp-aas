@@ -700,6 +700,10 @@ window.onload = function () {
           this.isActive = false;
         }
 
+        if (this.time) {
+          this.controlValue = this.controlValue.slice(0, 5);
+        }
+
         this.$store.dispatch('validateControl', {
           formControl: this.formControl,
           blockIndex: this.blockIndex,
