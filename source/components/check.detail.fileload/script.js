@@ -566,7 +566,7 @@ window.addEventListener('load', () => {
             <div v-else-if="state === 'history'">
               <history-attempt v-for="(attempt, index) in history" :attempt="attempt" :attemptIndex="history.length - index" @toContent="toContent"></history-attempt>
 
-              <attempts-archive :block="block"></attempts-archive>
+              <attempts-archive v-if="!block.cloud" :block="block"></attempts-archive>
             </div>
           </div>
         </transition>
@@ -817,7 +817,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="last" :block="block" :history="history"></files-archive>
+          <files-archive v-if="last && !block.cloud" :block="block" :history="history"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">

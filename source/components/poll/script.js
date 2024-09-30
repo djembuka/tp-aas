@@ -10,17 +10,17 @@ window.onload = function () {
     window.pollStore.groups.forEach(function (group) {
       group.questions.forEach(function (question) {
         if (question.type === 'number') {
-            question.answers.forEach(function (answer) {
-                if (storageObj[answer.name] !== undefined) {
-                    answer.value = storageObj[answer.name];
-                }
-            });
+          question.answers.forEach(function (answer) {
+            if (storageObj[answer.name] !== undefined) {
+              answer.value = storageObj[answer.name];
+            }
+          });
         } else {
-            question.answers.forEach(function (answer) {
-                if (storageObj[answer.value] !== undefined) {
-                    answer.checked = storageObj[answer.value];
-                }
-            });
+          question.answers.forEach(function (answer) {
+            if (storageObj[answer.value] !== undefined) {
+              answer.checked = storageObj[answer.value];
+            }
+          });
         }
       });
     });
@@ -363,7 +363,7 @@ window.onload = function () {
     template: `
       <div class="b-poll__groups" :data-id="$store.state.pollId">
         <div class="b-poll__groups__item" v-for="(group, groupIndex) in pollData.groups">
-          <h3>{{group.title}}</h3>
+          <h2>{{group.title}}</h2>
           <p v-html="group.description"></p>
           <hr>
           <div class="b-poll__questions">

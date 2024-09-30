@@ -18,6 +18,7 @@ window.BX = {
                 blocks: [
                   {
                     id: 1225,
+                    cloud: true,
                     iterations: 1,
                     author_id: '19891',
                     author_name: 'Виктор (Программист)',
