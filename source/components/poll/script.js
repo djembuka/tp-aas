@@ -257,6 +257,7 @@ window.onload = function () {
 
       <h3>{{question.title}}</h3>
       <p v-html="question.description"></p>
+      <hr class="hr--lg" />
       <div class="b-poll__questions__note" :class="getNoteClass()" v-if="question.type === 'checkbox' && question.allowed"><div>Выбрано {{question.checkedNum}} из допустимых {{question.allowed}}</div></div>
 
       <div class="b-poll__questions__set">

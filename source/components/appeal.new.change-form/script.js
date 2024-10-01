@@ -96,6 +96,7 @@ window.onload = function () {
         payload.control.value.splice(payload.index, 1);
       },
       setFile(state, payload) {
+        console.log(payload);
         const item = state.confirmDocsBlock.items.find(
           (item) => item.id === payload.id
         );
@@ -198,6 +199,7 @@ window.onload = function () {
     },
     props: ['index', 'control', 'blockFlag'],
     template: `<div class="b-form-control-vc" :class="{'i-active': $store.state.confirmDocsBlock.items[index].checked, 'i-block': blockFlag}">
+
       <label :class="{'i-active': checked}" class="b-form-control-vc__top">
         <div class="b-form-control-vc__content">
           <div class="b-form-control-vc__text"><b v-if="!blockFlag" v-html="control.title"></b><span v-html="control.text"></span></div>
@@ -205,10 +207,14 @@ window.onload = function () {
         
         <div class="b-radio-vc"><input type="radio" :name="control.name" :checked="checked" :value="control.value" class="with-gap" @change="change"><span></span></div>
       </label>
+
       <div class="b-form-control-vc__fields" v-show="blockFlag || $store.state.confirmDocsBlock.items[index].checked">
+
         <hr class="hr--line" style="margin-bottom: 2.5rem;">
+
         <div v-for="(formControl, controlIndex) in control.controls">
           <form-control-multy v-if="formControl.multy" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" :controlId="control.id" @autosave="autosave"></form-control-multy>
+          
           <form-control-file v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" :controlId="control.id" @autosave="autosave"></form-control-file>
         </div>
         
@@ -1210,6 +1216,7 @@ window.onload = function () {
         this.$emit('autosave');
       },
       uploadFile(files) {
+        console.log(this.formControl);
         store.commit('setFile', {
           id: this.controlId,
           property: this.formControl.property,
@@ -1719,7 +1726,7 @@ window.onload = function () {
             </div>
           </transition-group>
         </div>
-        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
+        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled, 'left-margin': formControl.type==='es-file'}" @click.prevent="add">Добавить еще</button>
         <hr class="hr--sl">
       </div>
     `,
@@ -1773,6 +1780,8 @@ window.onload = function () {
             })
             .find((elem) => elem);
         }
+
+        // console.log(this.formControl, this.formControl.value);
 
         let controlValue = control.value;
 
@@ -2387,12 +2396,16 @@ window.onload = function () {
   Vue.component('confirmDocsBlock', {
     template: `
     <div>
+
       <h2 v-if="$store.state.confirmDocsBlock.title">{{ $store.state.confirmDocsBlock.title }}</h2>
+
       <p v-if="$store.state.confirmDocsBlock.items.length !== 1 && $store.state.confirmDocsBlock.text" v-html="$store.state.confirmDocsBlock.text"></p>
+
       <div v-for="(doc, index) in $store.state.confirmDocsBlock.items">
         <form-control-radio-with-controls :index="index" :control="doc" :blockFlag="$store.state.confirmDocsBlock.items.length === 1"></form-control-radio-with-controls>
         <hr>
       </div>
+
     </div>`,
   });
 

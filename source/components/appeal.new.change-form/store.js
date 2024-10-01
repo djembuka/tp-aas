@@ -10,7 +10,7 @@ window.appealNewChangeFormStore = {
     },
   ],
   docsBlock: {
-    title: 'Документы, необходимые для внесения изменения',
+    title: 'docsBlock - Документы, необходимые для внесения изменения',
     text: '',
     items: [
       {
@@ -23,7 +23,7 @@ window.appealNewChangeFormStore = {
     ],
   },
   controlsBlock: {
-    title: 'Данные для изменения',
+    title: 'controlsBlock - Данные для изменения',
     text: '',
     controls: [
       /*{
@@ -188,7 +188,7 @@ window.appealNewChangeFormStore = {
     ],
   },
   confirmDocsBlock: {
-    title: 'Документы',
+    title: 'confirmDocsBlock - Документы',
     text: '',
     items: [
       {
@@ -271,7 +271,7 @@ window.appealNewChangeFormStore = {
               filename: [''],
               value: [
                 {
-                  id: 15444,
+                  id: 15448,
                   val: '',
                 },
               ],
