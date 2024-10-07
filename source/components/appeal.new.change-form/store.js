@@ -134,7 +134,7 @@ window.appealNewChangeFormStore = {
           value: '',
           comment: 'Comment',
         },
-      },
+      },*/
       {
         property: 42,
         word: 'PROPERTY',
@@ -150,7 +150,7 @@ window.appealNewChangeFormStore = {
           value: '',
           comment: '',
         },
-      },*/
+      },
       {
         property: 142,
         word: 'PROPERTY',

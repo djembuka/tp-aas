@@ -491,7 +491,7 @@ window.onload = function () {
 
             <div class="b-input-clear" @click.prevent="clearInput()" v-show="isClearable"></div>
             <div class="b-input-hint">
-              <div v-for="(user, index) in users" :data-id="user.ID" :data-ornz="user.ORNZ" :class="{active: activeHint[index]}" class="b-input-hint__item" @click.prevent="clickHint($event)"><div class="b-input-hint__img" :style="user.PHOTO"></div><a href="" class="b-input-hint__text">{{user.ORNZ}}<br>{{user.FIO}}</a></div>
+              <div v-for="(user, index) in users" :data-id="user.ID" :data-ornz="user.ORNZ" :class="{active: activeHint[index]}" class="b-input-hint__item" @click.prevent="clickHint($event)"><div class="b-input-hint__img" :style="user.PHOTO"></div><a href="" class="b-input-hint__text">{{user.ORNZ}}<span v-if="user.EXCLUDED">, <span class="b-input-hint__excluded" v-html="user.EXCLUDED"></span></span><br>{{user.FIO}}</a></div>
             </div>
           </div></div>
           <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
