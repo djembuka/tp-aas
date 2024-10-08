@@ -22,26 +22,53 @@ else
 
     .b-poll-list__item
       .b-poll-list__content
-        a.b-poll-list__title( href="/pages/poll/" ) Название голосования может быть большим, а может быть очень маленьким
+        .b-poll-list__text
+
+          a.b-poll-list__title( href="/pages/poll/" ) Название голосования может быть большим, а может быть очень маленьким
+
+          .b-poll-list__note.text-muted Короткое описание опроса или голосования с пояснением, может занимать несколько строк.
+
+          b До 22 апреля 2021 (56 дней)
+
         .b-poll-list__data
-          span До 22 апреля 2021 (56 дней)
+
+          span.label-blue
+            span Не голосовали
+
           a.btn.btn-secondary.btn-md( href="/pages/poll/" ) Голосовать
-      .b-poll-list__note Короткое описание опроса или голосования с пояснением, может занимать несколько строк.
 
     .b-poll-list__item
       .b-poll-list__content
-        a.b-poll-list__title( href="/pages/poll/" ) Название голосования
-        .b-poll-list__data
-          span До 29 cентября 2021 (288 дней)
-          a.btn.btn-secondary.btn-md( href="/pages/poll/" ) Голосовать
-      .b-poll-list__note Короткое описание опроса или голосования с пояснением, может занимать несколько строк.
+        .b-poll-list__text
 
+          a.b-poll-list__title( href="/pages/poll/" ) Общее территориальное собрание Сибирского-Дальневосточного округа
+
+          .b-poll-list__note.text-muted Опросный лист для голосования на очередном Общем территориальном собрании членов Саморегулируемой организации аудиторов Ассоциация «Содружество» по Ценральному округу.
+
+        .b-poll-list__data
+
+          span.label-blue
+            span Не голосовали
+
+          a.btn.btn-secondary.btn-md( href="/pages/poll/" disabled="disabled" ) Закончено
+        
     .b-poll-list__item
       .b-poll-list__content
-        a.b-poll-list__title( href="/pages/poll/" ) Название голосования может быть большим, а может быть очень маленьким
+        .b-poll-list__text
+
+          .b-poll-list__title Общее территориальное собрание Сибирского-Дальневосточного округа
+
+          .b-poll-list__note.text-muted Опросный лист для голосования на очередном Общем территориальном собрании членов Саморегулируемой организации аудиторов Ассоциация «Содружество» по Ценральному округу.
+
         .b-poll-list__data
-          span До 22 марта 2021 (56 дней)
-          .b-poll-list__status( style="background-image: url('/template/images/poll-status.svg');") 21 марта 2021
-      .b-poll-list__note Короткое описание опроса или голосования с пояснением, может занимать несколько строк.
+
+          span.label-green
+            span Проголосовали
+
+          a.btn.btn-secondary.btn-md( href="/pages/poll/" disabled="disabled" ) Закончено
+
+      hr.hr--md
+
+      include ../../modules/docs/single-no-pad-32x44
 
 // end /components/poll-list/
