@@ -984,7 +984,7 @@ window.addEventListener('load', () => {
             </div>
           </transition-group>
         </div>
-        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
+        <button class="btn btn-success btn-md" :class="{'btn-disabled': isBtnDisabled}" @click.prevent="add">Добавить еще</button>
         <hr class="hr--sl">
       </div>
     `,
