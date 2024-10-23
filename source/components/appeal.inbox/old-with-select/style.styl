@@ -1,0 +1,498 @@
+@import '../../../styl/component-include.styl'
+
+.b-appeal-inbox
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+
+.b-appeal-inbox
+
+  &-profiles
+    position relative
+
+    &__container
+      background $bg-color
+      padding 25px
+      border-radius 10px
+      font-size $14px
+      transition-fn(all .3s ease)
+      opacity 0
+      overflow hidden
+      margin-bottom calc(-2rem - 50px)
+
+      @media(max-width 767px)
+        margin-bottom -2rem
+
+      .h3
+        font-size $20px
+        margin-top 0
+
+      .b-float-label
+        max-width 530px
+      
+    &__button
+      position absolute
+      top 0
+      right 0
+      display flex
+      align-items center
+      transition-fn(all .3s ease)
+      z-index 10
+
+      span
+        display inline-block
+        width 32px
+        height 32px
+        background-color #F1F5FB
+        border-radius 5px
+        position relative
+        cursor pointer
+
+        &:before,
+        &:after
+          content ''
+          position absolute
+          top 8px
+          left 15px
+          width 0
+          height 16px
+          border-right 1px solid #666666
+          transition-fn( transform .5s ease )
+
+        &:before
+
+          .b-appeal-inbox-profiles--open &
+            transform( rotate( 270 deg ))
+
+        &:after
+          transform( rotate( 90deg ))
+
+          .b-appeal-inbox-profiles--open &
+            transform( rotate( 450 deg ))
+
+    i
+      color #8393AA
+      font-size $12px
+      margin-right 10px
+      font-style normal
+      transition-fn(opacity .3s ease)
+
+    &.b-appeal-inbox-profiles--open
+
+      .b-appeal-inbox-profiles__container
+        opacity 1
+        margin-bottom 0
+
+      .b-appeal-inbox-profiles__button
+        top 24px
+        right 24px
+      
+        i
+          opacity 0
+
+  h3
+    margin-top 0
+    margin-bottom 40px
+
+  .b-num-block
+  
+    &--counter
+      cursor pointer
+
+      &__b
+        display inline-block
+
+        span
+          display inline-block
+
+        &.hide-down
+          //transform(rotate(360deg))
+          //animation-duration .3s
+          //animation-name rotateDigit
+          //animation-iteration-count 1
+
+  #inbox-filter
+    display flex
+    justify-content space-between
+
+    > div
+      width calc((100% - 30px * 4) / 9 * 2)
+      margin-right 30px
+
+      &:first-child
+        width calc((100% - 30px * 4) / 9 * 1)
+
+      &:last-child
+        margin-right 0
+
+    @media( max-width 1199px )
+      flex-wrap wrap
+      
+      > div
+        width calc( (100% - 30px) / 2 )
+        margin 0 0 30px
+
+        &:first-child
+          width 100%
+
+    @media( max-width 767px )
+      flex-wrap wrap
+      
+      > div
+        width 100%
+        margin 0 0 30px
+
+        &:last-child
+          margin-bottom 0
+
+  &__form
+
+    form
+      display flex
+      justify-content space-between
+      align-items flex-end
+
+      @media( max-width 575px )
+        display block
+
+  .b-form
+
+    &-field
+      width calc( 100% - 178px )
+
+      label
+        font-size $10px
+        display block
+        margin-bottom 8px
+
+      @media( max-width 575px )
+        width 100%
+
+  input.b-form-input
+    background-color $line-color
+    border-radius 5px
+    padding 10px 15px
+    height 48px
+    line-height 28px
+    font-size $14px
+    border 0
+    width 100%
+
+    &::selection
+      background-color $secondary-color
+      color #fff
+    
+    &[type=search]:focus
+      outline none
+      border-bottom 0
+
+  input[type="search"]
+    -webkit-appearance textfield
+    -moz-box-sizing border-box
+    -webkit-box-sizing border-box
+    box-sizing border-box
+
+  table.table
+
+    td.normal
+      color $secondary-color-2
+
+    tbody
+
+      &.body--new
+        transition-fn( all 0.3s ease)
+        overflow hidden
+        
+        tr
+          opacity 1
+
+        tr:not(.tr--show)
+          display none
+          opacity 0
+
+      tr
+        transition-fn( background-color .5s ease )
+      
+        &:hover
+          background-color #fcfcfc
+
+        &.tr--new
+
+          td
+            background-color #F0F5FC
+
+            &.desc,
+            &.asc
+              background-color #F1F2F5
+
+  .table tbody+tbody
+    border-top 0
+
+.text-normal
+  color #F2762E
+
+.form-control-wrapper
+  position relative
+
+.form-control-select + label
+  color #2b2b2b
+  position absolute
+  top 0
+  left 15px
+  font-size 0.69rem
+  cursor text
+  transition-fn( transform 0.2s ease-out)
+  transform-origin 0% 100%
+  text-align initial
+  transform( translateY(-22px))
+
+.form-control-select .vs__dropdown-toggle {
+  background-color: $form-control-color;
+  border: 0;
+  border-radius: 3px;
+}
+.form-control-select .vs__search, .form-control-select .vs__search:focus {
+  height: 48px;
+  margin: 0;
+  padding: 0 15px;
+  border: 0;
+}
+.form-control-select input.vs__search[type=search], .form-control-select input.vs__search:focus[type=search] {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+.form-control-select .vs__dropdown-toggle {
+  padding: 0;
+}
+.form-control-select .vs__selected-options {
+  padding: 0;
+}
+.form-control-select .vs__selected {
+  position: absolute;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  height: 48px;
+  padding: 0 15px;
+  font-size $14px
+  z-index: 1;
+}
+.form-control-select input[type=search]:focus:not([readonly]) {
+  border: 0 !important;
+}
+.form-control-select .vs__dropdown-menu {
+  padding: 0;
+  box-shadow: 0 5px 5px #eee;
+  border: 0;
+  border-radius: 0 0 5px 5px;
+  font-size $14px
+}
+.form-control-select .vs__dropdown-option {
+  line-height 1.2
+  padding 12px 15px
+  white-space normal
+	color: #3b3b3b;
+  margin: 0;
+}
+.form-control-select .vs__dropdown-option:hover {
+	cursor: pointer
+}
+.form-control-select .vs__dropdown-option--highlight {
+  background: $form-control-color;
+	color: #5F7696
+
+}
+.form-control-select .vs__clear {
+  display: none !important;
+}
+.form-control-select input[type=search] {
+  width: 0;
+}
+.form-control-select .vs__actions {
+  padding: 0 15px 0 3px;
+}
+.form-control-select .vs__search
+  
+  &,
+  &:focus
+    font-size $14px
+
+.mx-input {
+  font-size: 0.88rem !important;
+  padding: 0 30px 0 15px !important;
+}
+.mx-icon-calendar {
+  width: 16px;
+  height: 16px;
+  background: url('/local/templates/aas/images/calendar.svg') no-repeat center;
+  background-size: cover;
+  cursor: pointer;
+  right: 15px !important;
+}
+.mx-icon-calendar svg {
+  display: none;
+}
+.b-appeal-inbox .mx-datepicker {
+  width: 100% !important;
+}
+.mx-datepicker+label {
+  pointer-events: none;
+}
+
+.b-input-clear {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background: url( 'https://auditor-sro.org/local/templates/aas/images/cancel.svg' ) no-repeat center;
+  background-size: 16px;
+  margin-top: -8px;
+  z-index: 1;
+}
+
+
+//sticky scroll
+.twpx-sticky-scroll {
+  position: relative;
+}
+.twpx-sticky-scroll-content-wrapper
+  overflow hidden
+
+  @media(max-width 767px)
+    overflow-x scroll
+
+.twpx-sticky-scroll-scrollbar {
+  height: 16px;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  position: sticky;
+  bottom: 10px;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
+  z-index: 50;
+}
+.twpx-sticky-scroll:hover .twpx-sticky-scroll-scrollbar {
+  opacity: 1;
+}
+.twpx-sticky-scroll-scrollbar-thumb {
+  width: 150px;
+  height: 16px;
+  background-color: #ea5e21;
+  border-radius: 8px;
+  cursor: default;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+.twpx-sticky-scroll-space-left,
+.twpx-sticky-scroll-space-right {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 100%;
+  z-index: 10;
+}
+.twpx-sticky-scroll-space-right {
+  right: 0;
+  left: auto;
+}
+.twpx-sticky-scroll-arrows {
+  position: sticky;
+  top: 50%;
+  left: 0;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
+  z-index: 20;
+}
+.twpx-sticky-scroll:hover .twpx-sticky-scroll-arrows {
+  opacity: 1;
+}
+.twpx-sticky-scroll-arrow-left,
+.twpx-sticky-scroll-arrow-right {
+  content: '';
+  position: absolute;
+  top: -32px;
+  left: -32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0px 3px 6px #00000029;
+  cursor: pointer;
+  -webkit-transform: translateX(20px);
+  transform: translateX(20px);
+  -webkit-transition: background-color 0.3s ease, -webkit-transform 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 20;
+}
+.twpx-sticky-scroll-arrow-right {
+  right: -32px;
+  left: auto;
+  -webkit-transform: translateX(-20px);
+  transform: translateX(-20px);
+}
+.twpx-sticky-scroll-arrow-left:after,
+.twpx-sticky-scroll-arrow-right:after {
+  content: '';
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #074b84;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  z-index: 30;
+}
+.twpx-sticky-scroll-arrow-left:after {
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+  left: 28px;
+  right: auto;
+}
+.twpx-sticky-scroll-arrow-right:hover,
+.twpx-sticky-scroll-arrow-left:hover {
+  background-color: #f2762e;
+}
+.twpx-sticky-scroll-arrow-right:hover:after,
+.twpx-sticky-scroll-arrow-left:hover:after {
+  border-top-color: #fff;
+  border-right-color: #fff;
+}
+.twpx-sticky-scroll:hover .twpx-sticky-scroll-arrow-right,
+.twpx-sticky-scroll:hover .twpx-sticky-scroll-arrow-left {
+  transform: translateX(0);
+  -webkit-transform: translateX(0);
+}
+
+@media(max-width 767px)
+  .twpx-sticky-scroll-scrollbar,
+  .twpx-sticky-scroll-space-left,
+  .twpx-sticky-scroll-space-right,
+  .twpx-sticky-scroll-arrows
+    display none !important
+

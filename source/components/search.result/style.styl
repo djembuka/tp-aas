@@ -1,0 +1,49 @@
+@import '../../styl/component-include.styl'
+
+.b-search-result
+
+  &.ph-block
+    
+    &.ph-block--animated
+      
+      .ph-content
+        position static
+        width auto
+        opacity 1
+        
+      .ph
+        position absolute
+        top 0
+        left 0
+        width 100%
+        opacity 0
+        z-index -1
+    
+.b-search-result
+
+  &__item
+    padding-top .5rem
+    width 100%
+    max-width 1100px
+
+  &__title
+    font-family $roboto
+    font-weight $bold
+    font-size $24px
+    line-height 1.2
+    margin-bottom 1.25rem
+
+    @media(max-width 767px)
+      font-size $18px
+      line-height 1.3
+
+  &__text
+    font-family $open-sans
+    margin-bottom 1.25rem
+
+  &__info
+    font-family $roboto
+    font-size $12px
+
+    span
+      margin-right 2rem

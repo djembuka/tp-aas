@@ -8,9 +8,45 @@ window.addEventListener('load', () => {
       return {
         ...window.appealIndexStore,
         renderingTable: null,
+        startIndex: 0,
       };
     },
     mutations: {
+      setPredefinedFilters(state, { predefinedFilters }) {
+        Vue.set(state, 'predefinedFilters', predefinedFilters);
+      },
+      setFilters(state, { filters }) {
+        Vue.set(state, 'filters', filters);
+      },
+      setUserId(state, { id }) {
+        Vue.set(state, 'userId', id);
+      },
+      setSessId(state, { id }) {
+        Vue.set(state, 'sessId', id);
+      },
+      setProfiles(state, { profiles }) {
+        Vue.set(state, 'profiles', profiles);
+      },
+      setDeafultProfile(state, { id }) {
+        if (!state.profiles) return;
+
+        state.profiles.forEach((p) => {
+          if (String(p.id) === String(id)) {
+            Vue.set(p, 'default', true);
+          } else if (p.default) {
+            Vue.set(p, 'default', undefined);
+          }
+        });
+      },
+      setColumnsNames(state, { columnsNames }) {
+        Vue.set(state, 'columnsNames', columnsNames);
+      },
+      setAppeals(state, { appeals }) {
+        Vue.set(state, 'appeals', appeals);
+      },
+      setDefaultSort(state, { defaultSortObject }) {
+        Vue.set(state, 'defaultSort', defaultSortObject);
+      },
       setNew(state, payload) {
         state.numBlocks.find((block) => block.new).num = payload;
       },
@@ -22,7 +58,7 @@ window.addEventListener('load', () => {
       },
       changeControlValue(state, payload) {
         //payload = {controlCode, controlValue}
-        const control = state.filter.controls.find(
+        const control = state.filters.find(
           (control) => control.code === payload.controlCode
         );
         switch (control.type) {
@@ -53,48 +89,197 @@ window.addEventListener('load', () => {
       },
     },
     getters: {
-      requestObj(state) {
-        const requestObj = {};
-
-        state.filter.controls.forEach((control) => {
-          switch (control.type) {
-            case 'text':
-              if (
-                control.value &&
-                control.count &&
-                control.value.length >= control.count
-              ) {
-                requestObj[control.code] = control.value;
-              }
-              break;
-            case 'select':
-              if (control.selected.code) {
-                requestObj[control.code] = control.selected.code;
-              }
-              break;
-            case 'date':
-              if (control.value[0]) {
-                requestObj.start = control.value[0];
-              }
-              if (control.value[1]) {
-                requestObj.end = control.value[1];
-              }
-          }
-        });
-
-        Object.keys(state.query).forEach((q) => {
-          if (state.table[q]) {
-            requestObj[q] = state.table[q];
-          }
-        });
-
-        return requestObj;
-      },
-      isDateFilled(state) {
-        return state.filter.controls.find((c) => c.type === 'date').value[0];
+      defaultProfile(state) {
+        if (state.profiles) {
+          return state.profiles.find((p) => p.default);
+        }
+        return {};
       },
     },
     actions: {
+      async profilesBX({ state, commit }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'profiles', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setProfiles', { profiles: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'profiles' });
+              }
+            );
+        }
+      },
+      async setDeafultProfileBX({ state, commit }, { id }) {
+        commit('setDeafultProfile', { id });
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'setDeafultProfile', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              () => {},
+              (error) => {
+                commit('showError', { error, method: 'setDeafultProfile' });
+              }
+            );
+        }
+      },
+      async columnsNamesBX({ state, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'columnsNames', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setColumnsNames', { columnsNames: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'columnsNames' });
+              }
+            );
+        }
+      },
+      async appealsBX({ state, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'appeals', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+                startIndex: state.startIndex,
+                // maxCountPerRequest: 100,
+                filters: state.filters,
+                columnSort: state.defaultSort.columnSort,
+                sortType: state.defaultSort.sortType,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setAppeals', { appeals: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'appeals' });
+              }
+            );
+        }
+      },
+      async defaultSortBX({ state, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'defaultSort', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setDefaultSort', { defaultSortObject: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'defaultSort' });
+              }
+            );
+        }
+      },
+      async setDefaultSortBX({ state, commit }, { id, columnSort, sortType }) {
+        commit('setDefaultSort', {
+          defaultSortObject: { columnSort, sortType },
+        });
+
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'setDefaultSort', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+                columnSort,
+                sortType,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {},
+              (error) => {
+                commit('showError', { error, method: 'setDefaultSort' });
+              }
+            );
+        }
+      },
+      async predefinedFiltersBX({ state, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'predefinedFilters', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setPredefinedFilters', { predefinedFilters: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'setDefaultSort' });
+              }
+            );
+        }
+      },
+      async filtersBX({ state, commit }, { id }) {
+        if (window.BX) {
+          return window.BX.ajax
+            .runComponentAction(`twinpx:vkkr.api`, 'filters', {
+              mode: 'class',
+              data: {
+                userid: state.userId,
+                sessionid: state.sessId,
+                profileid: id,
+              },
+              dataType: 'json',
+            })
+            .then(
+              (r) => {
+                commit('setFilters', { filters: r.data });
+              },
+              (error) => {
+                commit('showError', { error, method: 'setDefaultSort' });
+              }
+            );
+        }
+      },
       renderTable({ state, commit, getters }) {
         commit('changeRenderingTable', true);
         (async () => {
@@ -131,10 +316,6 @@ window.addEventListener('load', () => {
       seturl({ getters }) {
         window.history.pushState('', '', getQuery(getters.requestObj));
       },
-      setSessionStorage({ getters }) {
-        let string = JSON.stringify(getters.requestObj);
-        window.sessionStorage.aasAppealInbox = string;
-      },
       getSelected({ commit, state }) {
         (async () => {
           const response = await fetch(
@@ -157,51 +338,242 @@ window.addEventListener('load', () => {
   Vue.component('v-select', VueSelect.VueSelect);
   Vue.component('date-picker', DatePicker);
 
-  Vue.component('numBlocks', {
-    template: `<div class="b-num-blocks" v-if="$store.state.numBlocks">
-      <div class="b-num-block"
-        v-for="block in $store.state.numBlocks"
-        :class="{'inactive': !block.new && !block.selected, 'b-num-block--counter': block.new, 'b-num-block--selected': block.selected, 'b-num-block--none':( block.selected && !Number(block.num))}"
-        @click="click(block)">
-        <div class="b-num-block__data">
-          <i>{{ block.title }}</i>
-          <b :class="{'b-num-block__b': block.new}">{{ block.num }}</b>
+  Vue.component('profileMenu', {
+    template: `
+      <div class="b-appeal-inbox-profiles">
+        <div class="twpx-scroll-menu" :class="{'twpx-scroll-menu--no-right': !arrows.right, 'twpx-scroll-menu--no-left': !arrows.left}" @mouseenter="hover" ref="sm">
+          <div class="twpx-scroll-menu-overflow">
+            <div class="twpx-scroll-menu-wrapper" :style="'margin-left: ' + margin + 'px;'" ref="wrapper">
+              <a href="/pages/appeal-inbox/" class="twpx-scroll-menu__item" :class="{'active': profile.default}" v-for="profile in profiles" :key="profile.id" @click.prevent='click(profile.id)'>
+                <i v-if="profile.newAppealsCount">{{ profile.newAppealsCount }}</i>
+                <span>{{ profile.name }}</span>
+              </a>
+            </div>
+          </div>
+          <div class="twpx-scroll-menu-arrows">
+            <div class="twpx-scroll-menu-arrow-right" @click="moveTo(-1 * $refs.sm.clientWidth)"></div>
+            <div class="twpx-scroll-menu-arrow-left" @click="moveTo($refs.sm.clientWidth)"></div>
+          </div>
         </div>
-        <div class="b-num-block__icon" v-if="block.selected">
-          <svg xmlns="http://www.w3.org/2000/svg" width="23.177" height="32" viewBox="0 0 23.177 32">
-            <g>
-              <path d="M28.171,8.7V29.869a2.062,2.062,0,0,1-2.062,2.063H7.056a2.062,2.062,0,0,1-2.062-2.063V1.994A2.062,2.062,0,0,1,7.056-.068H19.407Z" transform="translate(-4.994 0.068)" fill="#288c0a"/>
-            </g>
-            <path d="M20.6,8.506l7.569,3.118V8.7L23.88,7.429Z" transform="translate(-4.994 0.068)" fill="#0e5429"/>
-            <path d="M28.171,8.7h-6.7a2.062,2.062,0,0,1-2.062-2.063v-6.7Z" transform="translate(-4.994 0.068)" fill="#cef4ae"/>
-            <g transform="translate(5.029 11.693)">
-              <rect width="13.119" height="1.458" rx="0.729" transform="translate(0 2.577)" fill="#fff"/>
-              <rect width="7.853" height="1.458" rx="0.729" transform="translate(0 9.089)" fill="#fff"/>
-              <rect width="13.119" height="1.458" rx="0.729" transform="translate(2.511 13.119) rotate(-90)" fill="#fff"/>
-              <rect width="7.288" height="1.458" rx="0.729" transform="translate(9.149 7.29) rotate(-90)" fill="#fff"/>
-            </g>
-          </svg>
+      </div>
+    `,
+    data() {
+      return {
+        initialized: false,
+        itemMarginRight: 20,
+        margin: 0,
+        arrows: {
+          right: false,
+          left: true,
+        },
+      };
+    },
+    computed: {
+      profiles() {
+        return this.$store.state.profiles;
+      },
+    },
+    methods: {
+      click(id) {
+        this.$store.dispatch('setDeafultProfileBX', { id });
+        this.$store.dispatch('columnsNamesBX', { id });
+        this.$store.dispatch('appealsBX', { id });
+      },
+      hover() {
+        if (this.calculateWidth() <= this.$refs.sm.clientWidth) {
+          this.arrows.right = false;
+          this.arrows.left = false;
+        } else {
+          this.moveTo(0);
+        }
+      },
+      moveTo(dist) {
+        this.arrows.right = true;
+        this.arrows.left = true;
+        let left = this.margin || 0;
+        left = left + dist;
+
+        let width = this.calculateWidth();
+
+        if (left >= 0) {
+          left = 0;
+          this.arrows.right = false;
+        } else if (left <= -1 * (width - this.$refs.sm.clientWidth)) {
+          left = -1 * (width - this.$refs.sm.clientWidth);
+          this.arrows.left = false;
+        }
+
+        this.margin = left;
+      },
+      calculateWidth() {
+        let result = 0;
+        this.$refs.wrapper.childNodes.forEach((item) => {
+          if (item.classList) {
+            result += item.clientWidth;
+            result += this.itemMarginRight;
+          }
+        });
+
+        result -= this.itemMarginRight;
+
+        return result;
+      },
+    },
+    mounted() {
+      this.initialized = true;
+    },
+  });
+
+  Vue.component('inboxTable', {
+    template: `
+      <div id="inbox-table" class="b-registry-report">
+        <div v-if="$store.state.columnsNames">
+          <table class="table table-responsive">
+            <thead>
+              <tr>
+                <th v-for="col in $store.state.columnsNames" :key="col.id" :class="thClass(col)" @click="clickTh(col)">{{col.name}}</th>
+              </tr>
+            </thead>
+            <tbody v-if="appeals">
+              <tr v-for="appeal in appeals.items" :class="{'tr--new': appeal.new}" :data-id="appeal.id" :data-url="appeal.url" :title="appeal.name" :data-target="appeal.url ? '_blank' : ''" @click="clickTr.prevent({url: appeal.url, target: appeal.target})">
+                <td v-for="cell in appeal.cells" v-html="cell.value" :class="tdClass(cell)"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else-if="$store.state.loading">Загрузка данных.</div>
+        <div v-else>Нет данных.</div>
+      </div>
+    `,
+    data() {
+      return {};
+    },
+    computed: {
+      columnsNames() {
+        return this.$store.state.columnsNames;
+      },
+      appeals() {
+        return this.$store.state.appeals;
+      },
+      defaultSort() {
+        return this.$store.state.defaultSort;
+      },
+    },
+    methods: {
+      thClass(col) {
+        return {
+          asc:
+            String(this.defaultSort.columnSort) === String(col.id) &&
+            String(this.defaultSort.sortType) === '0',
+          desc:
+            String(this.defaultSort.columnSort) === String(col.id) &&
+            String(this.defaultSort.sortType) === '1',
+        };
+      },
+      tdClass(cell) {
+        return {
+          asc:
+            String(this.defaultSort.columnSort) === String(cell.id) &&
+            String(this.defaultSort.sortType) === '0',
+          desc:
+            String(this.defaultSort.columnSort) === String(cell.id) &&
+            String(this.defaultSort.sortType) === '1',
+        };
+      },
+      clickTh(col) {
+        //sorting
+        // this.sortTable(col.field, col.sortType);
+        this.$store.dispatch('setDefaultSortBX', {
+          id: this.$store.getters.defaultProfile.id,
+          columnSort: col.id,
+          sortType:
+            String(this.defaultSort.columnSort) === String(col.id)
+              ? Number(!this.defaultSort.sortType)
+              : 0,
+        });
+
+        //getting selected ???
+        // if (store.getters.isDateFilled) {
+        //   store.dispatch('getSelected');
+        // }
+      },
+      clickTr({ url, target }) {
+        if (!url) return;
+        if (target === '_self') {
+          window.location.href = url;
+        } else {
+          window.open(url, 'new');
+        }
+      },
+    },
+  });
+
+  // predefined filters
+  Vue.component('numBlocks', {
+    template: `
+    <div class="b-predefined-filters">
+      <h3>Заявки на изменения в реестре</h3>
+      <div class="b-num-blocks" v-if="numBlocks">
+        <div class="b-num-block"
+          v-for="block in numBlocks"
+          :class="{'inactive': !block.selectable, 'b-num-block--counter': block.selectable, 'b-num-block--none': false}"
+          @click="click(block)">
+          <div class="b-num-block__data">
+            <i>{{ block.name }}</i>
+            <b :class="{'b-num-block__b': block.new}">{{ block.value }}</b>
+          </div>
+        </div>
+        <div class="b-num-block b-num-block--selected"
+          v-if="$store.getters.defaultProfile.excelExportSupport"
+          @click="excelExport">
+          <div class="b-num-block__data">
+            <i>Выбрано</i>
+            <b>15</b>
+          </div>
+          <div class="b-num-block__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="23.177" height="32" viewBox="0 0 23.177 32">
+              <g>
+                <path d="M28.171,8.7V29.869a2.062,2.062,0,0,1-2.062,2.063H7.056a2.062,2.062,0,0,1-2.062-2.063V1.994A2.062,2.062,0,0,1,7.056-.068H19.407Z" transform="translate(-4.994 0.068)" fill="#288c0a"/>
+              </g>
+              <path d="M20.6,8.506l7.569,3.118V8.7L23.88,7.429Z" transform="translate(-4.994 0.068)" fill="#0e5429"/>
+              <path d="M28.171,8.7h-6.7a2.062,2.062,0,0,1-2.062-2.063v-6.7Z" transform="translate(-4.994 0.068)" fill="#cef4ae"/>
+              <g transform="translate(5.029 11.693)">
+                <rect width="13.119" height="1.458" rx="0.729" transform="translate(0 2.577)" fill="#fff"/>
+                <rect width="7.853" height="1.458" rx="0.729" transform="translate(0 9.089)" fill="#fff"/>
+                <rect width="13.119" height="1.458" rx="0.729" transform="translate(2.511 13.119) rotate(-90)" fill="#fff"/>
+                <rect width="7.288" height="1.458" rx="0.729" transform="translate(9.149 7.29) rotate(-90)" fill="#fff"/>
+              </g>
+            </svg>
+          </div>
         </div>
       </div>
     </div>`,
     data() {
       return {};
     },
-    methods: {
-      click(block) {
-        if (block.new) {
-          this.getNew(block.new);
-        } else if (block.selected) {
-          this.getSelected(block.link);
-        } else {
-          return;
+    computed: {
+      numBlocks() {
+        if (this.$store.state.predefinedFilters) {
+          return this.$store.state.predefinedFilters.predefinedFiltersList;
         }
+        return [];
       },
-      getNew(newFlag) {
-        if (!newFlag) return;
-        //reset values
-        this.$store.state.filter.controls.forEach((control) => {
-          if (control.newOptionCode) return;
+    },
+    methods: {
+      excelExport() {
+        window.open(this.$store.state.appeals.excelLink);
+      },
+      click(block) {
+        if (block.selectable) {
+          this.setFilters(block);
+        }
+        return;
+      },
+      setFilters(block) {
+        //reset
+        this.$store.state.filters.forEach((control) => {
+          if (block.filters.find((f) => f.id === control.id)) return;
+
           //control value
           let controlValue = '';
           if (control.type === 'select' && control.options) {
@@ -214,26 +586,21 @@ window.addEventListener('load', () => {
           });
         });
 
-        //New
-        const statusControl = this.$store.state.filter.controls.find(
-          (control) => control.newOptionCode
-        );
-        const newOption = statusControl.options.find(
-          (option) => option.code === statusControl.newOptionCode
-        );
-        this.$store.commit('changeControlValue', {
-          controlCode: statusControl.code,
-          controlValue: newOption,
-        });
+        //set filter
+        block.filters.forEach((f) => {
+          const control = this.$store.state.filters.find((c) => c.id === f.id);
+          if (control) {
+            let controlValue = f.value;
+            if (control.type === 'select' && control.options) {
+              controlValue = control.options.find((o) => o.code === f.value);
+            }
 
-        //set url, render table
-        this.$store.commit('changePage', 1);
-        //render table
-        this.$store.dispatch('renderTable');
-        //set URL
-        this.$store.dispatch('seturl');
-        //set sessionStorage
-        this.$store.dispatch('setSessionStorage');
+            this.$store.commit('changeControlValue', {
+              controlCode: control.code,
+              controlValue,
+            });
+          }
+        });
       },
       getSelected(link) {
         window.open(link);
@@ -242,16 +609,10 @@ window.addEventListener('load', () => {
   });
 
   Vue.component('formControlDate', {
-    template: `<div class="b-float-label" data-src="${window.appealIndexStore.paths.src}calendar.svg">
-      <date-picker :input-attr="{name: control.name}" :lang="lang" v-model="$store.state.filter.controls[inputIndex].value" value-type="X" range format="DD.MM.YYYY" @open="openInput" @close="closeInput" @input="inputDateRange"></date-picker>
-      <label for="DATE" :class="{ active: isActive || focusFlag }">{{ control.label }}</label>
-    </div>`,
     data() {
       return {
         focusFlag: false,
-        inputIndex: this.$store.state.filter.controls.findIndex(
-          (ctr) => ctr.code === this.control.code
-        ),
+        controlObject: this.control,
         lang: {
           // the locale of formatting and parsing function
           formatLocale: {
@@ -341,12 +702,24 @@ window.addEventListener('load', () => {
         },
       };
     },
+    template: `<div class="b-float-label" data-src="${window.appealIndexStore.paths.src}calendar.svg">
+      <date-picker :input-attr="{name: control.name}" :lang="lang" v-model="controlObject.value" value-type="X" range format="DD.MM.YYYY" @open="openInput" @close="closeInput" @input="inputDateRange"></date-picker>
+      <label for="DATE" :class="{ active: isActive || focusFlag }">{{ control.label }}</label>
+    </div>`,
     props: {
       control: Object,
     },
+    watch: {
+      controlObject(val) {
+        this.$store.commit('changeControlValue', {
+          controlCode: val.code,
+          controlValue: val.value,
+        });
+      },
+    },
     computed: {
       dateRange() {
-        return this.$store.state.filter.controls[this.inputIndex].value;
+        return this.controlObject.value;
       },
       isActive() {
         return !!this.dateRange[0];
@@ -360,20 +733,15 @@ window.addEventListener('load', () => {
         this.focusFlag = false;
       },
       inputDateRange() {
+        let defaultP = this.$store.getters.defaultProfile;
+        if (!defaultP) return;
+        this.$store.dispatch('appealsBX', { id: defaultP.id });
         //get selected
-        if (this.dateRange[0]) {
-          store.dispatch('getSelected');
-        } else {
-          store.commit('setSelected', { num: null, link: null });
-        }
-        //reset page
-        store.commit('changePage', 1);
-        //render table
-        this.$store.dispatch('renderTable');
-        //set URL
-        this.$store.dispatch('seturl');
-        //set sessionStorage
-        this.$store.dispatch('setSessionStorage');
+        // if (this.dateRange[0]) {
+        //   store.dispatch('getSelected');
+        // } else {
+        //   store.commit('setSelected', { num: null, link: null });
+        // }
       },
     },
   });
@@ -382,33 +750,34 @@ window.addEventListener('load', () => {
     data() {
       return {
         options: this.control.options,
-        inputIndex: this.$store.state.filter.controls.findIndex(
-          (ctr) => ctr.code === this.control.code
-        ),
+        controlObject: this.control,
       };
     },
     template: `<div class="form-control-wrapper">
-      <v-select :searchable="false" :options="options" :value="options[0]" class="form-control-select" @input="onSelect()" v-model="$store.state.filter.controls[inputIndex].selected">
+      <v-select :searchable="false" :options="options" :value="options[0]" class="form-control-select" @input="onSelect()" v-model="controlObject.selected">
       </v-select>
       <label>{{ control.label }}</label>
     </div>`,
     props: {
       control: Object,
     },
+    watch: {
+      controlObject(val) {
+        this.$store.commit('changeControlValue', {
+          controlCode: val.code,
+          controlValue: val.selected,
+        });
+      },
+    },
     methods: {
       onSelect() {
+        let defaultP = this.$store.getters.defaultProfile;
+        if (!defaultP) return;
+        this.$store.dispatch('appealsBX', { id: defaultP.id });
         //get selected
-        if (store.getters.isDateFilled) {
-          store.dispatch('getSelected');
-        }
-        //reset page
-        store.commit('changePage', 1);
-        //render table
-        this.$store.dispatch('renderTable');
-        //set URL
-        this.$store.dispatch('seturl');
-        //set sessionStorage
-        this.$store.dispatch('setSessionStorage');
+        // if (store.getters.isDateFilled) {
+        //   store.dispatch('getSelected');
+        // }
       },
     },
   });
@@ -417,17 +786,28 @@ window.addEventListener('load', () => {
     data() {
       return {
         hover: false,
-        inputIndex: this.$store.state.filter.controls.findIndex(
-          (ctr) => ctr.code === this.control.code
-        ),
+        controlObject: this.control,
       };
     },
+    template: `<div class="b-float-label" @mouseover="hover=true" @mouseout="hover=false">
+      <input :id="'inbox-filter-' + control.code" type="text" :name="control.name" required="" autocomplete="off" v-model="controlObject.value" @input="changeInput">
+      <label :for="'inbox-filter-' + control.code" :class="{active: isActive}">{{control.label}}</label>
+      <div class="b-input-clear" @click.prevent="clearInput()" v-show="isClearable"></div>
+    </div>`,
     props: {
       control: Object,
     },
+    watch: {
+      controlObject() {
+        this.$store.commit('changeControlValue', {
+          controlCode: val.code,
+          controlValue: val.value,
+        });
+      },
+    },
     computed: {
       inputText() {
-        return this.$store.state.filter.controls[this.inputIndex].value;
+        return this.controlObject.value;
       },
       isClearable() {
         return this.inputText !== '' && this.hover ? true : false;
@@ -436,20 +816,15 @@ window.addEventListener('load', () => {
         return !!this.inputText;
       },
     },
-
-    template: `<div class="b-float-label" @mouseover="hover=true" @mouseout="hover=false">
-      <input :id="'inbox-filter-' + control.code" type="text" :name="control.name" required="" autocomplete="off" v-model="$store.state.filter.controls[inputIndex].value" @input="changeInput">
-      <label :for="'inbox-filter-' + control.code" :class="{active: isActive}">{{control.label}}</label>
-      <div class="b-input-clear" @click.prevent="clearInput()" v-show="isClearable"></div>
-    </div>`,
-
     methods: {
       changeInput() {
-        this.getTableData();
+        let defaultP = this.$store.getters.defaultProfile;
+        if (!defaultP) return;
+        this.$store.dispatch('appealsBX', { id: defaultP.id });
         //get selected
-        if (store.getters.isDateFilled) {
-          store.dispatch('getSelected');
-        }
+        // if (store.getters.isDateFilled) {
+        //   store.dispatch('getSelected');
+        // }
       },
       clearInput() {
         //clear text
@@ -467,8 +842,6 @@ window.addEventListener('load', () => {
         this.$store.dispatch('renderTable');
         //set URL
         this.$store.dispatch('seturl');
-        //set sessionStorage
-        this.$store.dispatch('setSessionStorage');
       },
     },
   });
@@ -476,105 +849,11 @@ window.addEventListener('load', () => {
   Vue.component('inboxFilter', {
     template: `
       <div id="inbox-filter">
-        <div v-for="control in $store.state.filter.controls">
+        <div v-for="control in $store.state.filters">
           <component :is="'form-control-'+control.type" :control="control" :ref="control.code"></component>
         </div>
       </div>`,
     methods: {},
-  });
-
-  Vue.component('inboxTable', {
-    data() {
-      return {
-        sorting: {
-          field: '',
-          sortType: '',
-        },
-      };
-    },
-    template: `<div id="inbox-table" class="b-registry-report">
-      <div v-if="$store.state.table.html.rows">
-        <table class="table table-responsive">
-          <thead>
-            <tr>
-              <th v-for="col in tableHtml.cols" :class="col.sortType" @click="clickTh(col)">{{col.title}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in tableHtml.rows" :class="{'tr--new': row.new}" :data-id="row.data.id" :data-url="row.url" :title="row.title" :data-target="row.target" @click="clickTr($event)">
-              <td v-for="(value, name) in row.data" v-html="value" :class="sorting.field === name ? sorting.sortType : ''"></td>
-            </tr>
-          </tbody>
-        </table>
-        <hr>
-        <div v-html="tableHtml.pagination" @click="clickPagination($event)"></div>
-      </div>
-      <div v-else-if="$store.state.renderingTable">Загрузка данных.</div>
-      <div v-else>Нет данных.</div>
-    </div>`,
-    computed: {
-      tableHtml() {
-        const tableHtml = store.state.table.html;
-        if (typeof tableHtml === 'object') {
-          const sortedCol = tableHtml.cols.filter((col) => col.sortType);
-          if (sortedCol.length) {
-            this.sorting = {
-              field: sortedCol[0].field,
-              sortType: sortedCol[0].sortType,
-            };
-          }
-        }
-        return tableHtml;
-      },
-    },
-    methods: {
-      clickTh(col) {
-        //sorting
-        this.sortTable(col.field, col.sortType);
-        //getting selected
-        if (store.getters.isDateFilled) {
-          store.dispatch('getSelected');
-        }
-      },
-      sortTable(sortField, sortType) {
-        sortType = sortType === 'asc' ? 'desc' : 'asc';
-        store.commit('changeSorting', { sortField, sortType });
-
-        //render table
-        this.$store.dispatch('renderTable');
-        //set url
-        this.$store.dispatch('seturl');
-        //set sessionStorage
-        this.$store.dispatch('setSessionStorage');
-      },
-      clickTr(event) {
-        event.preventDefault();
-        let url = event.target.closest('tr').getAttribute('data-url');
-        let target = event.target.closest('tr').getAttribute('data-target');
-        if (!url) return;
-        if (target === '_self') {
-          window.location.href = url;
-        } else if (target === '_blank') {
-          window.open(url, 'new');
-        }
-      },
-      clickPagination(e) {
-        e.preventDefault();
-        if (e.target.getAttribute('href')) {
-          //reset page
-          let page = parseQuery(
-            e.target.getAttribute('href').split('?')[1]
-          ).PAGEN_1;
-          store.commit('changePage', 1 * page);
-          //render Table
-          this.$store.dispatch('renderTable');
-          //set URL
-          this.$store.dispatch('seturl');
-          //set sessionStorage
-          this.$store.dispatch('setSessionStorage');
-        }
-      },
-    },
   });
 
   Vue.component('stickyScroll', {
@@ -784,6 +1063,8 @@ window.addEventListener('load', () => {
     store,
     template: `
       <div class="b-registry-report">
+        <profile-menu></profile-menu>
+        <hr>
         <num-blocks></num-blocks>
         <hr>
         <inbox-filter ref="filter"></inbox-filter>
@@ -795,115 +1076,109 @@ window.addEventListener('load', () => {
     `,
     methods: {},
     beforeMount() {
-      //set store variables
-      let queryObject = parseQuery(window.location.search);
-
-      if (
-        !Object.entries(queryObject).length &&
-        window.sessionStorage.aasAppealInbox
-      ) {
-        queryObject = JSON.parse(window.sessionStorage.aasAppealInbox);
+      if (window.BX) {
+        this.$store.commit('setUserId', { id: BX.bitrix_userid() });
+        this.$store.commit('setSessId', { id: BX.bitrix_sessid() });
       }
 
-      Object.keys(queryObject).forEach((key) => {
-        let control = store.state.filter.controls.find((c) => c.code === key);
+      //get profiles
+      let profiles = this.$store.dispatch('profilesBX');
+      profiles
+        .then(() => {
+          let defaultP = this.$store.getters.defaultProfile;
 
-        if (control) {
-          switch (control.type) {
-            case 'text':
-              store.commit('changeControlValue', {
-                controlCode: control.code,
-                controlValue: queryObject[key] || '',
-              });
-              break;
-            case 'select':
-              store.commit('changeControlValue', {
-                controlCode: control.code,
-                controlValue: control.options.find(
-                  (option) => option.code === queryObject[key]
-                ) || { label: '', code: '' },
-              });
-              break;
-          }
-        } else {
-          switch (key) {
-            case 'start':
-              store.commit('changeControlValue', {
-                controlCode: this.$store.state.filter.controls.find(
-                  (control) => control.type === 'date'
-                ).code,
-                controlValue: [queryObject.start || '', queryObject.end || ''],
-              });
+          if (!defaultP) return;
 
-              //get selected block
-              store.dispatch('getSelected');
-              break;
-            case 'sortField' || 'sortType':
-              store.commit('changeSorting', {
-                field: queryObject.sortField || '',
-                sortType: queryObject.sortType || '',
-              });
-              break;
-            case 'PAGEN_1':
-              store.commit('changePage', queryObject[key] || '');
-              break;
-          }
-        }
-      });
-      //set URL
-      this.$store.dispatch('seturl');
-      //set sessionStorage
-      this.$store.dispatch('setSessionStorage');
+          this.$store.dispatch('predefinedFiltersBX', { id: defaultP.id });
+          this.$store.dispatch('filtersBX', { id: defaultP.id });
+          this.$store.dispatch('columnsNamesBX', { id: defaultP.id });
+          return this.$store.dispatch('defaultSortBX', { id: defaultP.id });
+        })
+        .then(() => {
+          let defaultP = this.$store.getters.defaultProfile;
+
+          if (!defaultP) return;
+          this.$store.dispatch('appealsBX', { id: defaultP.id });
+        });
     },
     mounted() {
-      const spaceStep = $.animateNumber.numberStepFactories.separator(' ');
-      //get new number
       (async () => {
         do {
-          //hide digit
-          const digitNode = document.querySelector('.b-num-block__b');
-          const currentNum = this.$store.state.numBlocks.find(
-            (block) => block.new
-          ).num;
+          await new Promise((r) => {
+            setTimeout(r, 120000);
+          });
 
-          //make request
-          let response = await fetch(this.$store.state.paths.getNewNum);
-          if (response.ok) {
-            let json = await response.json();
-            if (json.STATUS === 'Y' && json.DATA) {
-              //if the filter is not applied
-              let filterFlag = false;
-              filterFlag = this.$store.state.filter.controls.some((control) => {
-                if (control.type === 'select') {
-                  return control.selected.code;
-                }
-                if (control.type === 'date') {
-                  return control.value[0] || control.value[1];
-                }
-                return control.value;
-              });
-              filterFlag =
-                filterFlag ||
-                Object.keys(this.$store.state.query).some(
-                  (q) => this.$store.state.query[q]
-                );
+          let oldCount = this.$store.getters.defaultProfile.newAppealsCount;
 
-              if (!filterFlag && Number(json.DATA.num) !== Number(currentNum)) {
-                this.$store.dispatch('renderTable');
-                this.$store.commit('setNew', json.DATA.num);
-              }
-              $(digitNode).animateNumber({
-                number: json.DATA.num,
-                numberStep: spaceStep,
-              });
-            }
-          }
-          await new Promise((r) => setTimeout(r, this.$store.state.timeout));
+          this.$store
+            .dispatch('profilesBX')
+            .then(() => {
+              let defaultP = this.$store.getters.defaultProfile;
+
+              if (!defaultP) return;
+
+              this.$store.dispatch('predefinedFiltersBX', { id: defaultP.id });
+            })
+            .then(() => {
+              let defaultP = this.$store.getters.defaultProfile;
+
+              if (!defaultP) return;
+
+              if (
+                oldCount === this.$store.getters.defaultProfile.newAppealsCount
+              )
+                return;
+
+              this.$store.dispatch('appealsBX', { id: defaultP.id });
+            });
         } while (true);
       })();
 
+      // const spaceStep = $.animateNumber.numberStepFactories.separator(' ');
+      //get new number
+      // (async () => {
+      //   do {
+      //     //hide digit
+      //     const digitNode = document.querySelector('.b-num-block b');
+      //     const currentNum = this.$store.state.numBlocks.find(
+      //       (block) => block.new
+      //     ).num;
+      //     //make request
+      //     let response = await fetch(this.$store.state.paths.getNewNum);
+      //     if (response.ok) {
+      //       let json = await response.json();
+      //       if (json.STATUS === 'Y' && json.DATA) {
+      //         //if the filter is not applied
+      //         let filterFlag = false;
+      //         filterFlag = this.$store.state.filters.some((control) => {
+      //           if (control.type === 'select') {
+      //             return control.selected.code;
+      //           }
+      //           if (control.type === 'date') {
+      //             return control.value[0] || control.value[1];
+      //           }
+      //           return control.value;
+      //         });
+      //         filterFlag =
+      //           filterFlag ||
+      //           Object.keys(this.$store.state.query).some(
+      //             (q) => this.$store.state.query[q]
+      //           );
+      //         if (!filterFlag && Number(json.DATA.num) !== Number(currentNum)) {
+      //           this.$store.dispatch('renderTable');
+      //           this.$store.commit('setNew', json.DATA.num);
+      //         }
+      //         $(digitNode).animateNumber({
+      //           number: json.DATA.num,
+      //           numberStep: spaceStep,
+      //         });
+      //       }
+      //     }
+      //     await new Promise((r) => setTimeout(r, this.$store.state.timeout));
+      //   } while (true);
+      // })();
       //render the table
-      this.$store.dispatch('renderTable');
+      // this.$store.dispatch('renderTable');
     },
   });
 
@@ -913,123 +1188,5 @@ window.addEventListener('load', () => {
       result.push(k + '=' + queryObject[k]);
     }
     return '?' + result.join('&');
-  }
-
-  function parseQuery(queryString) {
-    var query = {};
-    var pairs = (
-      queryString[0] === '?' ? queryString.substr(1) : queryString
-    ).split('&');
-    for (var i = 0; i < pairs.length; i++) {
-      if (pairs[i] !== '') {
-        var pair = pairs[i].split('=');
-        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
-      }
-    }
-    return query;
-  }
-
-  //profiles
-  if (document.querySelector('.b-appeal-inbox-profiles')) {
-    let profilesSelect = document.querySelector(
-      '.b-appeal-inbox-profiles select'
-    );
-
-    let profilesSelectValue = window.localStorage.getItem(
-      'aasAppealInboxProfileSelect'
-    );
-
-    profilesSelect.addEventListener('change', (e) => {
-      window.location.href = profilesSelect.value;
-      window.localStorage.setItem(
-        'aasAppealInboxProfileSelect',
-        profilesSelect.value
-      );
-    });
-
-    setTimeout(() => {
-      profilesSelect
-        .closest('.b-float-label')
-        .querySelector('.ik-custom-class')
-        .addEventListener('click', (e) => {
-          window.location.href = profilesSelect.value;
-          window.localStorage.setItem(
-            'aasAppealInboxProfileSelect',
-            profilesSelect.value
-          );
-        });
-    }, 0);
-
-    let profilesButton = document.querySelector(
-      '.b-appeal-inbox-profiles__button'
-    );
-
-    profilesButton.addEventListener('click', (e) => {
-      profilesButton
-        .closest('.b-appeal-inbox-profiles')
-        .classList.toggle('b-appeal-inbox-profiles--open');
-
-      let mode = profilesButton
-        .closest('.b-appeal-inbox-profiles')
-        .classList.contains('b-appeal-inbox-profiles--open')
-        ? 'open'
-        : 'closed';
-
-      //height
-      let container = profilesButton
-        .closest('.b-appeal-inbox-profiles')
-        .querySelector('.b-appeal-inbox-profiles__container');
-      let height = container.clientHeight;
-
-      if (mode === 'closed') {
-        container.style.height = `${height}px`;
-        container.setAttribute('data-height', height);
-        setTimeout(() => {
-          container.style.height = 0;
-        }, 0);
-      } else {
-        container.style.height = 0;
-        setTimeout(() => {
-          container.style.height = `${
-            container.setAttribute('data-height', height) || 217
-          }px`;
-        }, 0);
-
-        setTimeout(() => {
-          container.removeAttribute('style');
-        }, 500);
-      }
-
-      //storage
-      window.localStorage.setItem('aasAppealInboxProfilesButton', mode);
-    });
-
-    let profilesButtonValue = window.localStorage.getItem(
-      'aasAppealInboxProfilesButton'
-    );
-    if (profilesSelectValue) {
-      profilesSelect.value = profilesSelectValue;
-    }
-    if (profilesButtonValue) {
-      if (profilesButtonValue === 'open') {
-        profilesButton
-          .closest('.b-appeal-inbox-profiles')
-          .classList.add('b-appeal-inbox-profiles--open');
-
-        profilesButton
-          .closest('.b-appeal-inbox-profiles')
-          .querySelector('.b-appeal-inbox-profiles__container')
-          .removeAttribute('style');
-      } else {
-        profilesButton
-          .closest('.b-appeal-inbox-profiles')
-          .classList.remove('b-appeal-inbox-profiles--open');
-
-        profilesButton
-          .closest('.b-appeal-inbox-profiles')
-          .querySelector('.b-appeal-inbox-profiles__container').style.height =
-          '0px';
-      }
-    }
   }
 });

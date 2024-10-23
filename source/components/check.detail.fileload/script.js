@@ -8,9 +8,12 @@ window.addEventListener('load', () => {
   const store = new Vuex.Store({
     state: {
       data: undefined,
-      modal: { show: false, blockId: null, loading: false },
+      modal: { show: false, blockId: null, loading: false, status_comment: '' },
     },
     mutations: {
+      setModalStatusComment(state, { status_comment }) {
+        Vue.set(state.modal, 'status_comment', status_comment);
+      },
       changeModalState(state, { show, blockId, loading }) {
         if (show !== undefined) {
           Vue.set(state.modal, 'show', show === 'show' ? true : false);
@@ -22,8 +25,66 @@ window.addEventListener('load', () => {
           Vue.set(state.modal, 'loading', loading);
         }
       },
-      showError(state, { error }) {
-        Vue.set(state, 'error', error);
+      showError(state, { error, method }) {
+        if (typeof error === 'boolean') {
+          Vue.set(state, 'error', error);
+        } else if (typeof error === 'object') {
+          if (
+            error.errors &&
+            typeof error.errors === 'object' &&
+            error.errors[0] &&
+            error.errors[0].code !== undefined
+          ) {
+            if (error.errors[0].code === 'NETWORK_ERROR') {
+              if (error.data && error.data.ajaxRejectData) {
+                if (error.data.ajaxRejectData.data) {
+                  Vue.set(
+                    state,
+                    'error',
+                    `${window.BX.message('ERROR_SUPPORT')}
+                    <br>
+                    <br>
+                    Метод: ${method}. Код ошибки: ${
+                      error.data.ajaxRejectData.data
+                    }. Описание: ${
+                      window.BX.message(
+                        'ERROR_' + error.data.ajaxRejectData.data
+                      ) || window.BX.message('ERROR_SERVER')
+                    }.`
+                  );
+                }
+              } else if (window.BX.message) {
+                Vue.set(
+                  state,
+                  'error',
+                  `${window.BX.message('ERROR_SUPPORT')}
+                  <br>
+                  <br>
+                  Метод: ${method}. Код ошибки: NETWORK_ERROR. Описание: ${window.BX.message(
+                    'ERROR_OFFLINE'
+                  )}.`
+                );
+              }
+            } else {
+              Vue.set(
+                state,
+                'error',
+                `${window.BX.message('ERROR_SUPPORT')}
+                <br>
+                <br>
+                Метод: ${method}.${
+                  error.errors[0].code
+                    ? ' Код ошибки: ' + error.errors[0].code + '.'
+                    : ''
+                } ${
+                  error.errors[0].message
+                    ? ' Описание: ' + error.errors[0].message + '.'
+                    : ''
+                }`
+              );
+            }
+          }
+        }
       },
       changeBlockLoad(state, { blockId, load }) {
         const block = state.data.blocks.find(
@@ -125,10 +186,10 @@ window.addEventListener('load', () => {
               });
             }
             Vue.set(control.value[controlIndex], 'val', value);
-            Vue.set(control.filename, controlIndex, value);
+            Vue.set(control.filename, controlIndex, value.name);
           } else {
             Vue.set(control, 'value', value);
-            Vue.set(control, 'filename', value);
+            Vue.set(control, 'filename', value.name);
           }
         }
       },
@@ -215,7 +276,10 @@ window.addEventListener('load', () => {
       changeModalState({ commit }, { show, blockId, loading }) {
         commit('changeModalState', { show, blockId, loading });
       },
-      async resetBlock({ dispatch, commit }, { vkkr_id, block_id }) {
+      async resetBlock(
+        { dispatch, commit },
+        { vkkr_id, block_id, status_comment }
+      ) {
         if (window.BX) {
           window.BX.ajax
             .runComponentAction(`twinpx:vkkr.api`, 'resetBlock', {
@@ -223,22 +287,18 @@ window.addEventListener('load', () => {
               data: {
                 vkkr_id,
                 block_id,
+                status_comment,
               },
               dataType: 'json',
             })
             .then(
               (r) => {
-                if (r.status === 'success') {
-                  //load block info
-                  return dispatch('blockBX', {
-                    blockId: block_id,
-                  });
-                } else {
-                  commit('showError', { error: r.errors[0].message });
-                }
+                return dispatch('blockBX', {
+                  blockId: block_id,
+                });
               },
               (error) => {
-                commit('showError', { error: error.errors[0].message });
+                commit('showError', { error, method: 'resetBlock' });
               }
             )
             .then((r) => {
@@ -276,14 +336,10 @@ window.addEventListener('load', () => {
             })
             .then(
               (r) => {
-                if (r.status === 'success' && r.data) {
-                  commit('setState', { data: r.data });
-                } else {
-                  commit('showError', { error: r.errors[0].message });
-                }
+                commit('setState', { data: r.data });
               },
               (error) => {
-                commit('showError', { error: error.errors[0].message });
+                commit('showError', { error, method: 'blocks' });
               }
             );
         }
@@ -300,14 +356,10 @@ window.addEventListener('load', () => {
             })
             .then(
               (r) => {
-                if (r.status === 'success' && r.data) {
-                  commit('setStatuses', { statuses: r.data });
-                } else {
-                  commit('showError', { error: r.errors[0].message });
-                }
+                commit('setStatuses', { statuses: r.data });
               },
               (error) => {
-                commit('showError', { error: error.errors[0].message });
+                commit('showError', { error, method: 'statuses' });
               }
             );
         }
@@ -364,15 +416,11 @@ window.addEventListener('load', () => {
             })
             .then(
               (r) => {
-                if (r.status === 'success') {
-                  commit('changeBlockLoad', { blockId, load: false });
-                  commit('setNewBlock', { blockId, newBlock: r.data });
-                } else {
-                  commit('showError', { error: r.errors[0].message });
-                }
+                commit('changeBlockLoad', { blockId, load: false });
+                commit('setNewBlock', { blockId, newBlock: r.data });
               },
               (error) => {
-                commit('showError', { error: error.errors[0].message });
+                commit('showError', { error, method: 'block' });
               }
             );
         }
@@ -392,6 +440,37 @@ window.addEventListener('load', () => {
               dataType: 'json',
             }
           );
+        }
+      },
+      async downloadBX({ commit }, { vkkr_id, block_id, history }) {
+        if (window.BX) {
+          const data = {
+            vkkr_id,
+          };
+
+          if (block_id !== undefined) {
+            data.block_id = block_id;
+          }
+
+          if (history !== undefined) {
+            data.history = history;
+          }
+
+          BX.ajax
+            .runComponentAction('twinpx:vkkr.api', 'download', {
+              mode: 'class',
+              data: data,
+            })
+            .then(
+              (r) => {
+                if (r.data.url) {
+                  window.location = r.data.url;
+                }
+              },
+              (error) => {
+                commit('showError', { error, method: 'download' });
+              }
+            );
         }
       },
       setControlValue(
@@ -458,11 +537,14 @@ window.addEventListener('load', () => {
               <div v-if="!block.load">
 
                 <div class="b-check-detail-fileload__history-icon" v-html="historyIcon" v-if="status" @click.prevent="showHistory"></div>
-
-                <div v-if="block.permissions.moderation">
+                
+                <div v-if="block.permissions.supervisor || block.permissions.moderation">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
 
-                  <moderation-form :blockId="block.id" v-if="block.state==='moderating'"></moderation-form>
+                  <div v-if="block.state === 'filled' || block.state === 'moderating'">
+                    <moderation-form :blockId="block.id" v-if="block.permissions.moderation && block.state==='moderating'"></moderation-form>
+                    <reset-form :blockId="block.id" v-if="block.permissions.supervisor"></reset-form>
+                  </div>
                 </div>
                 <div v-else-if="block.permissions.write">
                   <fileload-form v-if="block.state==='empty'" :collections="block.items" :block="block"></fileload-form>
@@ -474,17 +556,6 @@ window.addEventListener('load', () => {
                 <div v-else-if="block.permissions.monitoring">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
                 </div>
-                <div v-else-if="block.permissions.supervisor">
-                  <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
-
-                  <div v-if="block.state === 'filled' || block.state === 'moderating'">
-                    <h3>Сброс статуса файла</h3>
-                    <hr>
-                    <div class="b-check-detail-fileload__p">Вы имеете право возвращать статус документа к состоянию «Ничего не добавлено», при этом сохраняется история со всеми версиями файла. Применяйте эту функцию только в исключительных случаях, когда пользователь, проверяющий документ, допустил ошибку.</div>
-                    <hr>
-                    <reset-button :blockId="block.id"></reset-button>
-                  </div>
-                </div>
                 <div v-else-if="block.permissions.read">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
                 </div>
@@ -492,8 +563,10 @@ window.addEventListener('load', () => {
               </div>
             </div>
 
-            <div v-else-if="state==='history'">
+            <div v-else-if="state === 'history'">
               <history-attempt v-for="(attempt, index) in history" :attempt="attempt" :attemptIndex="history.length - index" @toContent="toContent"></history-attempt>
+
+              <attempts-archive v-if="!block.cloud" :block="block"></attempts-archive>
             </div>
           </div>
         </transition>
@@ -544,18 +617,16 @@ window.addEventListener('load', () => {
         pr.then(
           (r) => {
             this.state = 'history';
-            if (r && r.status === 'success' && r.data) {
+            if (r.data) {
               this.$store.commit('changeBlockLoad', {
                 blockId,
                 load: false,
               });
               this.history = this.splitToAttempts(r.data);
-            } else {
-              this.$store.commit('showError', { error: r.errors[0].message });
             }
           },
           (error) => {
-            this.$store.commit('showError', { error: error.errors[0].message });
+            this.$store.commit('showError', { error, method: 'history' });
           }
         );
       },
@@ -577,14 +648,67 @@ window.addEventListener('load', () => {
     },
   });
 
-  Vue.component('resetButton', {
+  Vue.component('resetForm', {
+    data() {
+      return {
+        heading: 'Сброс статуса файла',
+        textarea: {
+          label: 'Комментарий для сотрудников СРО ААС',
+          name: 'RESET_COMMENT',
+        },
+        textareaValue: '',
+        button: {
+          text: 'Сбросить',
+          message: 'Для отправки необходимо заполнить все поля.',
+          disabled: true, //!textareaValue,
+        },
+      };
+    },
     template: `
-      <div class="btn btn-danger btn-lg" @click="showModalPopup">Сбросить</div>
-      <hr class="hr--sm">
+      <div>
+        <h3>{{ heading }}</h3>
+        <hr>
+        <form enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-sm-6">
+
+              <div>
+                <div class="b-float-label" :class="{invalid: textarea.invalid}">
+                  <textarea :name="textarea.name" autocomplete="off" required="required" v-model="textareaValue" :class="{active: textareaActive}"></textarea>
+                  <label>{{textarea.label}}</label>
+                </div>
+                <hr>
+              </div>
+
+              <div class="b-reset-form__button">
+                <div class="btn btn-danger btn-lg" @click="showModalPopup" :disabled="disabled">{{button.text}}</div>
+
+                <div class="text-muted">{{button.message}}</div>
+              </div>
+
+            </div>
+            <div class="col-sm-6 b-reset-form__text">
+              <p>Вы имеете право возвращать статус документа к состоянию «Ничего не добавлено», при этом сохраняется история со всеми версиями файла. Применяйте эту функцию только в исключительных случаях, когда пользователь, проверяющий документ, допустил ошибку.</p>
+            </div>
+          </div>
+          
+        </form>
+      </div>
     `,
     props: ['blockId'],
+    computed: {
+      textareaActive() {
+        return !!this.textareaValue;
+      },
+      disabled() {
+        return !this.textareaValue;
+      },
+    },
     methods: {
       showModalPopup() {
+        this.$store.commit('setModalStatusComment', {
+          status_comment: this.textareaValue,
+        });
         this.$store.dispatch('changeModalState', {
           show: 'show',
           blockId: this.blockId,
@@ -679,7 +803,7 @@ window.addEventListener('load', () => {
     data() {
       return {};
     },
-    props: ['block', 'collection', 'last', 'status'],
+    props: ['block', 'collection', 'last', 'status', 'history'],
     template: `
       <div class="b-files-collection-info">
         <div class="b-files-collection__name">{{ collection.name }}</div>
@@ -693,7 +817,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="last"></files-archive>
+          <files-archive v-if="last && !block.cloud" :block="block" :history="history"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
@@ -711,6 +835,11 @@ window.addEventListener('load', () => {
         if (this.block.type === 'uploaded_files') {
           result = true;
         } else if (
+          this.block.permissions.supervisor &&
+          (this.block.state === 'moderating' || this.block.state === 'filled')
+        ) {
+          result = true;
+        } else if (
           this.block.permissions.moderation &&
           (this.block.state === 'moderating' || this.block.state === 'filled')
         ) {
@@ -722,11 +851,6 @@ window.addEventListener('load', () => {
           result = true;
         } else if (
           this.block.permissions.monitoring &&
-          (this.block.state === 'moderating' || this.block.state === 'filled')
-        ) {
-          result = true;
-        } else if (
-          this.block.permissions.supervisor &&
           (this.block.state === 'moderating' || this.block.state === 'filled')
         ) {
           result = true;
@@ -743,9 +867,9 @@ window.addEventListener('load', () => {
         let result = false;
 
         if (
-          (this.block.permissions.moderation ||
-            this.block.permissions.monitoring ||
-            this.block.permissions.supervisor) &&
+          (this.block.permissions.supervisor ||
+            this.block.permissions.moderation ||
+            this.block.permissions.monitoring) &&
           this.block.state === 'empty'
         ) {
           result = true;
@@ -759,7 +883,7 @@ window.addEventListener('load', () => {
   Vue.component('fileInfo', {
     data() {
       return {
-        ext: this.file.filename.split('.').reverse()[0],
+        ext: this.file.filename.split('.').reverse()[0].toLowerCase(),
       };
     },
     props: ['block', 'file', 'statusCode'],
@@ -840,25 +964,6 @@ window.addEventListener('load', () => {
     `,
   });
 
-  Vue.component('filesArchive', {
-    template: `
-    <div class="b-files-collection-archive">
-      <div class="b-files-collection-archive__title">Архив документов из последней попытки</div>
-      <div class="b-docs-block__item" href="/pages/news/">
-        <div class="b-docs-block__body">
-          <a class="b-docs-block__icon" href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );"></a>
-          <span class="b-docs-block__text">
-            <a href="/pages/news/">Анкета аудиторской организации, попытка 34</a>
-            <span class="b-docs-block__data">
-              <span class="text-muted">654 Кб .ZIP</span>
-            </span>
-          </span>
-        </div>
-      </div>
-    </div>
-    `,
-  });
-
   Vue.component('formControlMulty', {
     data() {
       return {};
@@ -879,7 +984,7 @@ window.addEventListener('load', () => {
             </div>
           </transition-group>
         </div>
-        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
+        <button class="btn btn-success btn-md" :class="{'btn-disabled': isBtnDisabled}" @click.prevent="add">Добавить еще</button>
         <hr class="hr--sl">
       </div>
     `,
@@ -1186,7 +1291,7 @@ window.addEventListener('load', () => {
           controlIndex: this.controlIndex,
           collection: this.collection,
           collectIndex: this.collectIndex,
-          value: this.invalid ? '' : files[0].name,
+          value: this.invalid ? '' : files[0],
         });
       },
       clearInputFile() {
@@ -1267,6 +1372,11 @@ window.addEventListener('load', () => {
   });
 
   Vue.component('FileloadForm', {
+    data() {
+      return {
+        formData: null,
+      };
+    },
     template: `
       <div>
         <form ref="fileload-form" action="" method="" enctype= multipart/form-data>
@@ -1297,7 +1407,7 @@ window.addEventListener('load', () => {
             if (c.value) {
               return c.value.every((cObj) => {
                 return Object.values(cObj.files).every((v) => {
-                  if (typeof v === 'object') {
+                  if (typeof v === 'object' && v.every) {
                     return v.every((obj) => !!obj.val);
                   } else {
                     return !!v;
@@ -1329,41 +1439,194 @@ window.addEventListener('load', () => {
       },
     },
     methods: {
+      getFilesData() {
+        this.collections.forEach((c) => {
+          if (c.multiple) {
+            //multiple conllection
+            if (c.value) {
+              c.value.forEach((vObj, cIdx) => {
+                Object.entries(vObj.files).forEach((fArr) => {
+                  const f = fArr[1];
+                  if (typeof f === 'object') {
+                    if (f.forEach) {
+                      //multiple control
+                      f.forEach((obj, fIdx) => {
+                        const id = fArr[0].substring(2);
+                        this.formData.append(
+                          `${c.id}|${cIdx}|${id}|${fIdx}`,
+                          obj.val,
+                          obj.val ? obj.val.name : ''
+                        );
+                      });
+                    } else {
+                      //single control
+                      const id = fArr[0].substring(2);
+                      this.formData.append(
+                        `${c.id}|${cIdx}|${id}|0`,
+                        fArr[1],
+                        fArr[1].name
+                      );
+                    }
+                  }
+                });
+              });
+            }
+          } else {
+            //single collection
+            c.files.forEach((f) => {
+              if (
+                f.multiple &&
+                typeof f.value === 'object' &&
+                f.value.forEach
+              ) {
+                //multiple control
+                f.value.forEach((obj, fIdx) => {
+                  this.formData.append(
+                    `${c.id}|0|${f.id}|${fIdx}`,
+                    obj.val,
+                    obj.val ? obj.val.name : ''
+                  );
+                });
+              } else if (!f.multiple && f.value) {
+                //single control
+                this.formData.append(
+                  `${c.id}|0|${f.id}|0`,
+                  f.value,
+                  f.value.name
+                );
+              }
+            });
+          }
+        });
+      },
       submit() {
         const blockId = this.block.id;
-        const formData = new FormData(this.$refs['fileload-form']);
-        formData.append('vkkr_id', this.$store.state.vkkrId);
-        formData.append('block_id', blockId);
-        formData.append('sessid', window.BX.bitrix_sessid());
+        this.formData = new FormData(); //(this.$refs['fileload-form']);
+        this.formData.append('vkkr_id', this.$store.state.vkkrId);
+        this.formData.append('block_id', blockId);
+        this.formData.append('sessid', window.BX.bitrix_sessid());
+
+        this.bxLog(this.formData);
+
+        this.getFilesData();
 
         this.$store.commit('changeBlockLoad', {
           blockId,
           load: true,
         });
 
-        const pr = this.$store.dispatch('saveBlockBX', { formData });
+        const pr = this.$store.dispatch('saveBlockBX', {
+          formData: this.formData,
+        });
+
+        window.scrollTo({
+          top:
+            this.$refs['fileload-form']
+              .closest('.b-collapse-vc')
+              .getBoundingClientRect().top +
+            window.scrollY -
+            100,
+          behavior: 'smooth',
+        });
+
         pr.then(
           (r) => {
             this.$store.commit('changeBlockLoad', {
               blockId,
               load: false,
             });
-            if (r.status === 'success') {
-              return this.$store.dispatch('blockBX', {
-                blockId,
-              });
-            } else {
-              this.$store.commit('showError', { error: r.errors[0].message });
-            }
+            return this.$store.dispatch('blockBX', {
+              blockId,
+            });
           },
           (error) => {
             this.$store.commit('changeBlockLoad', {
               blockId,
               load: false,
             });
-            this.$store.commit('showError', { error: error.errors[0].message });
+            this.$store.commit('showError', { error, method: 'saveBlock' });
           }
         );
+      },
+      async bxLog(fd) {
+        fd.append('userid', window.BX.message.userid);
+
+        const filesObject = {};
+
+        this.collections.forEach((c) => {
+          if (c.multiple) {
+            //multiple conllection
+            if (c.value) {
+              c.value.forEach((vObj, cIdx) => {
+                Object.entries(vObj.files).forEach((fArr) => {
+                  const f = fArr[1];
+                  if (typeof f === 'object') {
+                    if (f.forEach) {
+                      //multiple control
+                      f.forEach((obj, fIdx) => {
+                        filesObject[`${c.id}|${cIdx}|${id}|${fIdx}`] = fileInfo(
+                          obj.val
+                        );
+                      });
+                    } else {
+                      //single control
+                      filesObject[`${c.id}|${cIdx}|${id}|0`] = fileInfo(
+                        fArr[1]
+                      );
+                    }
+                  }
+                });
+              });
+            }
+          } else {
+            //single collection
+            c.files.forEach((f) => {
+              if (
+                f.multiple &&
+                typeof f.value === 'object' &&
+                f.value.forEach
+              ) {
+                //multiple control
+                f.value.forEach((obj, fIdx) => {
+                  filesObject[`${c.id}|0|${f.id}|${fIdx}`] = fileInfo(obj.val);
+                });
+              } else if (!f.multiple && f.value) {
+                //single control
+                filesObject[`${c.id}|0|${f.id}|0`] = fileInfo(f.value);
+              }
+            });
+          }
+        });
+
+        fd.append('files', JSON.stringify(filesObject));
+
+        // let result = {
+        //   sessid: window.BX.bitrix_sessid(),
+        //   userid: window.BX.message.userid,
+        //   vkkr_id: this.$store.state.vkkrId,
+        //   block_id: this.block.id,
+        //   files: filesObject,
+        // };
+
+        // let formData = new FormData();
+        // formData.append('small', JSON.stringify(result));
+        // formData.append('real', JSON.stringify(fd));
+        // formData.append('store', JSON.stringify(this.$store.state));
+
+        await fetch(`/local/ajax/setlog.php`, {
+          method: 'POST',
+          body: fd,
+        });
+
+        function fileInfo(file) {
+          return {
+            lastModified: file.lastModified,
+            lastModifiedDate: file.lastModifiedDate,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+          };
+        }
       },
     },
   });
@@ -1469,20 +1732,19 @@ window.addEventListener('load', () => {
               blockId: this.blockId,
               load: false,
             });
-            if (r.status === 'success') {
-              return this.$store.dispatch('blockBX', {
-                blockId: this.blockId,
-              });
-            } else {
-              this.$store.commit('showError', { error: r.errors[0].message });
-            }
+            return this.$store.dispatch('blockBX', {
+              blockId: this.blockId,
+            });
           },
           (error) => {
             this.$store.commit('changeBlockLoad', {
               blockId: this.blockId,
               load: false,
             });
-            this.$store.commit('showError', { error: error.errors[0].message });
+            this.$store.commit('showError', {
+              error,
+              method: 'setBlockStatus',
+            });
           }
         ).then(
           (r) => {
@@ -1524,7 +1786,7 @@ window.addEventListener('load', () => {
 
         <div class="b-check-detail-fileload__history-heading">Попытка {{ attemptIndex }}</div>
 
-        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :status="status" :last="index === attempt[0].items.length-1"></files-collection-info>
+        <files-collection-info v-for="(collection, index) in attempt[0].items" :block="attempt[0]" :collection="collection" :status="status" :last="index === attempt[0].items.length-1" :history="true"></files-collection-info>
 
         <hr>
 
@@ -1630,9 +1892,11 @@ window.addEventListener('load', () => {
     },
     methods: {
       reset() {
+        console.log(this.$store.state.modal['status_comment']);
         this.$store.dispatch('resetBlock', {
           vkkr_id: this.$store.state.vkkrId,
           block_id: this.$store.state.modal.blockId,
+          status_comment: this.$store.state.modal['status_comment'],
         });
         this.$store.dispatch('changeModalState', {
           loading: true,
@@ -1642,6 +1906,109 @@ window.addEventListener('load', () => {
         this.$store.dispatch('changeModalState', { show: 'hide' });
         this.$store.dispatch('changeModalState', {
           loading: false,
+        });
+      },
+    },
+  });
+
+  Vue.component('fullArchive', {
+    template: `
+        <div class="b-check-detail-fileload__full-archive" v-if="show">
+            <h3>Архив всех документов проверки</h3>
+            <div class="b-files-collection-archive">
+                <div class="b-files-collection-archive__title">Архив всех документов проверки</div>
+                <div class="b-docs-block__item">
+                    <div class="b-docs-block__body">
+                    <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
+                    <span class="b-docs-block__text">
+                        <a href="#" @click.prevent="click">Проверка {{ $store.state.vkkrId }} (Архив всех файлов)</a>
+                        <span class="b-docs-block__data">
+                        <span class="text-muted">.zip</span>
+                        </span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+    computed: {
+      show() {
+        const blocks = this.$store.state.data.blocks.filter(
+          (b) => b.state === 'filled' || b.state === 'moderating'
+        );
+
+        return !!blocks.length;
+      },
+    },
+    methods: {
+      click() {
+        this.$store.dispatch('downloadBX', {
+          vkkr_id: this.$store.state.vkkrId,
+        });
+      },
+    },
+  });
+
+  Vue.component('filesArchive', {
+    template: `
+    <div class="b-files-collection-archive" v-if="show">
+      <div class="b-files-collection-archive__title">Архив документов из последней попытки</div>
+      <div class="b-docs-block__item">
+        <div class="b-docs-block__body">
+          <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
+          <span class="b-docs-block__text">
+            <a href="#" @click.prevent="click">{{ block.name }}, попытка {{ block.iterations }}</a>
+            <span class="b-docs-block__data">
+              <span class="text-muted">.zip</span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    `,
+    props: ['block', 'history'],
+    computed: {
+      show() {
+        return !this.history;
+      },
+    },
+    methods: {
+      click() {
+        this.$store.dispatch('downloadBX', {
+          vkkr_id: this.$store.state.vkkrId,
+          block_id: this.block.id,
+        });
+      },
+    },
+  });
+
+  Vue.component('AttemptsArchive', {
+    template: `
+        <div class="b-check-detail-fileload__full-archive">
+            <h3>Архив всех попыток добавления документа</h3>
+            <div class="b-files-collection-archive">
+                <div class="b-files-collection-archive__title">Архив всех попыток добавления докумнета</div>
+                <div class="b-docs-block__item">
+                    <div class="b-docs-block__body">
+                    <a class="b-docs-block__icon" href="#" @click.prevent="click" style="background-image: url( '/template/images/zip.svg' );"></a>
+                    <span class="b-docs-block__text">
+                        <a href="#" @click.prevent="click">{{ block.name }} (архив)</a>
+                        <span class="b-docs-block__data">
+                        <span class="text-muted">.zip</span>
+                        </span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+    props: ['block'],
+    methods: {
+      click() {
+        this.$store.dispatch('downloadBX', {
+          vkkr_id: this.$store.state.vkkrId,
+          block_id: this.block.id,
+          history: true,
         });
       },
     },
@@ -1671,6 +2038,8 @@ window.addEventListener('load', () => {
         <div v-for="block in blocks" :data-id="block.id">
           <collapse-block v-if="blockVisible(block)" :block="block" :key="block.id"></collapse-block>
         </div>
+        <hr>
+        <full-archive></full-archive>
       </div>
       <div v-else>
         <div class="circle-loader">
@@ -1697,10 +2066,10 @@ window.addEventListener('load', () => {
     methods: {
       blockVisible(block) {
         return (
+          block.permissions.supervisor ||
           block.permissions.moderation ||
           block.permissions.write ||
           block.permissions.monitoring ||
-          block.permissions.supervisor ||
           (block.permissions.read && block.state === 'filled')
         );
       },

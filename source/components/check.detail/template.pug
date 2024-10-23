@@ -25,7 +25,7 @@ script( src="/template/js/swiper.min.js" )
       .swiper-container
         .swiper-wrapper
           a.swiper-slide( class=tab === 'data' ? 'active' : '' href="/pages/check-detail/" data-tab="tab1" ) Общие данные
-          a.swiper-slide( class=tab === 'reports' ? 'active' : '' href="/pages/check-detail/reports.html" data-tab="tab2" ) Отчеты
+          a.swiper-slide( class=tab === 'reports' ? 'active' : (tab === 'reports-detail' || tab === 'reports-all') ? 'active in' : ''  href="/pages/check-detail/reports.html" data-tab="tab2" ) Отчеты
           a.swiper-slide( class=tab === 'registry' ? 'active' : '' href="/pages/check-detail/registry.html" data-tab="tab3" ) Реестр
           a.swiper-slide( class=tab === 'employees' ? 'active' : tab === 'employee' ? 'active in' : '' href="/pages/check-detail/employees.html" data-tab="tab6" ) Сотрудники
           a.swiper-slide( class=tab === 'changes' ? 'active' : '' href="/pages/check-detail/changes.html" data-tab="tab4" ) Изменения в реестре
@@ -42,6 +42,10 @@ script( src="/template/js/swiper.min.js" )
         include data
       else if tab === 'reports'
         include reports
+      else if tab === 'reports-all'
+        include reports-all
+      else if tab === 'reports-detail'
+        include reports-detail
       else if tab === 'registry'
         include registry
       else if tab === 'employees'

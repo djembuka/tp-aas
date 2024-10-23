@@ -1,0 +1,36 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-dc-case-detail'
+  - var authorized = 'true'
+
+block title
+  title Дисциплинарное дело детально | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/dc
+
+  hr
+
+  .container-fluid
+  
+    h1 Дисциплинарное дело 150
+
+    hr
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/dc
+          
+      article.col-12.col-md-9
+
+        - var tab = 'meetings'
+        
+        include ../../components/dc.case.detail/template

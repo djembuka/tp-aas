@@ -85,7 +85,7 @@
     justify-content space-between
     align-items center
     cursor pointer
-    transition( all .3s ease )
+    transition-fn( all .3s ease )
     min-height 110px
 
     @media( max-width 767px )
@@ -169,7 +169,7 @@
       content: ''
       left: 0
       position: absolute
-      transition( all .25s )
+      transition-fn( all .25s )
       z-index 1
 
     [type="checkbox"].filled-in:not(:checked)+span:before
@@ -252,7 +252,7 @@
 /*Bottom animation*/
 .slide-fade-enter-active,
 .slide-fade-leave-active
-    transition( all 0.8s ease)
+    transition-fn( all 0.8s ease)
 
 .slide-fade-enter-from,
 .slide-fade-leave-to
@@ -288,7 +288,7 @@
       justify-content space-between
       align-items center
       opacity 0
-      transition(opacity .3s ease)
+      transition-fn(opacity .3s ease)
       z-index -1
 
       &.show

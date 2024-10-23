@@ -1,0 +1,36 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-filter-table'
+  - var authorized = 'true'
+
+block title
+  title Таблица с фильтром | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/include
+
+  hr
+
+  .container-fluid
+  
+    h1 Таблица с фильтром и страничником, стандартная заготовка
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/news
+          
+      article.col-12.col-md-9
+
+        p Старая версия таблицы с фильтром. Работает на Vue2, Vuex3. Недостатки - не работает по API, Vue, Vuex и плагины подключаются на странице. Не работает через Bitrix extensions.
+        
+        include ../../components/filter-table/template
+  
+    

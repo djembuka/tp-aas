@@ -42,7 +42,15 @@ window.addEventListener('load', () => {
         commit('setModalProp', { prop: 'show', value: false });
         commit('setModalProp', { prop: 'file', value: {} });
       },
-      signAjax({ state, commit }) {
+      signAjax({ state }) {
+        console.log({
+          vkkrId: state.vkkrid,
+          id: state.modal.file.id,
+          fileId: state.modal.file.fileid,
+          userId: BX.message('USER_ID'),
+          typeId: state.modal.file.type,
+          signedParameters: state.signedParameters,
+        });
         if (window.BX) {
           return window.BX.ajax.runComponentAction('twinpx:vkd.act', 'sign', {
             mode: 'class',
@@ -51,6 +59,8 @@ window.addEventListener('load', () => {
               id: state.modal.file.id,
               fileId: state.modal.file.fileid,
               userId: BX.message('USER_ID'),
+              typeId: state.modal.file.type,
+              signedParameters: state.signedParameters,
             },
             dataType: 'json',
           });
@@ -79,7 +89,7 @@ window.addEventListener('load', () => {
                     <div class="item item-5"></div>
                 </div>
                 <div v-else>
-                    <h3 class="text-center">Вы подписываете документ простой цифровой подписью</h3>
+                    <h4 class="text-center">Вы подписываете документ простой цифровой подписью</h4>
                     <hr>
                     <p class="text-center">
                     Обратите внимание, что вы подписываете документы, <b>«{{ $store.state.modal.file.filename }}»</b> с использованием простой цифровой подписи.
@@ -135,6 +145,25 @@ window.addEventListener('load', () => {
     },
   });
 
+  Vue.component('roleBlock', {
+    props: ['role'],
+    template: `
+      <div class="b-check-detail-sign__role-block" v-if="files.length">
+        <h4>{{ role.value }}</h4>
+        <div v-for="file in files" :data-id="file.id">
+          <file-info :file="file" :key="file.id"></file-info>
+        </div>
+      </div>
+    `,
+    computed: {
+      files() {
+        return this.$store.state.files.filter(
+          (file) => String(file.role) === String(this.role.code)
+        );
+      },
+    },
+  });
+
   Vue.component('fileInfo', {
     data() {
       return {
@@ -148,6 +177,9 @@ window.addEventListener('load', () => {
           <a class="b-docs-block__icon" :href="file.filelink" :style="icon"></a>
           <span class="b-docs-block__text">
             <a :href="file.filelink" target="_blank">{{ name }}</a>
+            <span class="b-docs-block__data" v-if="file.author">
+              <span class="text-muted" v-html="file.author"></span>
+            </span>
           </span>
         </div>
         <div v-if="file.readonly || file.signed" class="b-docs-block__signed">
@@ -197,15 +229,15 @@ window.addEventListener('load', () => {
             <div class="btn btn-md" @click="clickError">Понятно</div>
           </div>
         </div>
-        <div v-for="file in files" :data-id="file.id">
-          <file-info :file="file" :key="file.id"></file-info>
+        <div v-for="role in roles">
+          <role-block :role="role" :key="role.code"></role-block>
         </div>
         <modal-popup></modal-popup>
       </div>
     `,
     computed: {
-      files() {
-        return this.$store.state.files;
+      roles() {
+        return this.$store.state.roles;
       },
       error() {
         return this.$store.state.error;

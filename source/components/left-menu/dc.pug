@@ -1,0 +1,31 @@
+// start /components/left-menu/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'left-menu'
+else
+  - var componentsArray = [ 'left-menu' ]
+  
+.b-left-menu.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content 
+
+    .b-left-menu__item.b-left-menu__item--show
+      .b-left-menu__title.active
+        a( href="" ) Дисциплинарная комиссия
+        span.b-left-menu__title-plus
+      .b-left-menu__sub.b-left-menu__sub--show
+        a( href="" ) Дисциплинарные дела
+        a( href="" ) Заседания
+        a( href="" ) Вопросы повесток
+        a( href="" ) Создать заседание
+        a( href="" ) Создать дисциплинарное дело
+
+// end /components/left-menu/

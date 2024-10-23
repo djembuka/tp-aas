@@ -76,7 +76,7 @@ h1
     width 24px
     height 24px
     cursor pointer
-    transition( opacity .5s ease )
+    transition-fn( opacity .5s ease )
     z-index 10
 
     &:hover
@@ -85,15 +85,18 @@ h1
     @media(max-width 991px)
       right -12px
 
+    .b-float-label-es + &
+      right -12px
+
   .anim &
 
     input:not([type=checkbox]),
     input:not([type=radio]),
     textarea
-      transition( background-color 1s ease )
+      transition-fn( background-color 1s ease )
 
     label
-      transition( all 1s ease )
+      transition-fn( all 1s ease )
 
   .new &
 
@@ -107,9 +110,13 @@ h1
       label
         color #74c37a
 
+.btn.left-margin
+  margin-left 38px
+
 @import './style/collapse-vue-component.styl'
 @import './style/checkbox-vue-component.styl'
 @import './style/file-vue-component.styl'
+@import './style/es-vue-component.styl'
 @import './style/add-fieldset-block.styl'
 @import './style/select.styl'
 @import './style/datepicker.styl'

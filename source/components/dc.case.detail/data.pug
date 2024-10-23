@@ -1,0 +1,221 @@
+.b-dc-case-detail__data
+
+  h3.mt-0 Общие данные
+
+  .row
+    .col-lg-6 
+      table.table
+        colgroup
+          col( style="width: 50%" )
+          col( style="width: 50%" )
+        tbody
+          tr
+            th Номер дисциплинарного дела
+            td N3456
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Дата создания
+            td 21.05.2024
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Автор
+            td Иванов Петр Матвеевич
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Заявитель
+            td МинФин
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Ответчик
+            td 
+              div
+                a(href="") ООО "АудитНезависимость"
+                hr.hr--xs
+                .small.text-muted ООО "12106028665"
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th ID дисц. дела
+            td 78236498
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+    .col-lg-6 
+      table.table
+        colgroup
+          col( style="width: 50%" )
+          col( style="width: 50%" )
+        tbody
+          tr
+            th Статус
+            td
+              span.label-orange
+                span Идет
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Основание
+            td Жалоба
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Нарушение
+            td
+              div
+                p Несоблюдение требования об уплате взносов в компенсационный фонд (компенсационные фонды) саморегулируемой организации аудиторов
+                p Неучастие аудитора в осуществлении аудиторской деятельности (неосуществление индивидуальным аудитором аудиторской деятельности) в течении двух последовательных календарных лет
+                p Несоблюдение требований Федерального закона от 30 декабря 2008 г. № 307-ФЗ «Об аудиторской деятельности»
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+.b-dc-case-detail__data
+
+  h3 Заявитель и автор
+
+  .row
+    .col-lg-6 
+      table.table
+        colgroup
+          col( style="width: 50%" )
+          col( style="width: 50%" )
+        tbody
+          tr
+            th Заявитель
+            td МинФин
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Email заявителя
+            td minfin@minfin.ru
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Телефон заявителя
+            td +7 919 919 19 19
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+    .col-lg-6 
+      table.table
+        colgroup
+          col( style="width: 50%" )
+          col( style="width: 50%" )
+        tbody
+          tr
+            th Автор
+            td Иванов Петр Матвеевич
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Email автора
+            td autor@mail.ru
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Телефон автора
+            td +7 919 919 19 19
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+.b-dc-case-detail__data
+
+  h3 Ответчик
+
+  .row
+    .col-lg-6 
+      table.table
+        colgroup
+          col( style="width: 50%" )
+          col( style="width: 50%" )
+        tbody
+          tr
+            th Ответчик
+            td 
+              div
+                a(href="") ООО "АудитНезависимость"
+                hr.hr--xs
+                .small.text-muted ООО "12106028665"
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Email ответчика
+            td autor@mail.ru
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+          tr
+            th Телефон ответчика
+            td +7 919 919 19 19
+              span.b-copy-icon( style="background-image: url('/template/images/copy-30.svg')")
+
+include ../../components/dc.case.detail.violations/template
+
+.b-dc-case-detail__table
+
+  h3 Заседания
+    span.text-blue &nbsp;&nbsp;7
+
+  table.table.table-responsive
+    colgroup 
+      col( style="width: 155px;" )
+      col( style="width: 86px;" )
+      col( style="width: 175px;" )
+      col( style="width: 94px;" )
+      col( style="width: auto;" )
+      col( style="width: 155px;" )
+    thead
+      tr
+        th Дата
+        th Номер
+        th Тип
+        th Номер вопроса
+        th Решение
+        th Статус
+    tbody
+      tr( data-url="/pages/dc-meeting-detail/" data-target="_self" )
+        td 18 июля 2024<br>18:00
+        td 150
+        td Очное заседание
+        td 560
+        td Отложить рассмотрение дела в отношении члена СРО ААС 11606088082 OOO "КомКон-Аудит". Дата заседания и форма участия в нем будет сообщена участникам дисциплинарного производства дополнительно.
+        td 
+          span.label-orange
+            span Идет
+      tr( data-url="/pages/dc-meeting-detail/" data-target="_self" )
+        td 18 июля 2024<br>18:00
+        td 150
+        td Очное заседание
+        td 560
+        td Отложить рассмотрение дела в отношении члена СРО ААС 11606088082 OOO "КомКон-Аудит". Дата заседания и форма участия в нем будет сообщена участникам дисциплинарного производства дополнительно.
+        td 
+          span.label-orange
+            span Идет
+      tr( data-url="/pages/dc-meeting-detail/" data-target="_self" )
+        td 18 июля 2024<br>18:00
+        td 150
+        td Очное заседание
+        td 560
+        td Отложить рассмотрение дела в отношении члена СРО ААС 11606088082 OOO "КомКон-Аудит". Дата заседания и форма участия в нем будет сообщена участникам дисциплинарного производства дополнительно.
+        td 
+          span.label-orange
+            span Идет
+      tr( data-url="/pages/dc-meeting-detail/" data-target="_self" )
+        td 18 июля 2024<br>18:00
+        td 150
+        td Очное заседание
+        td 560
+        td Отложить рассмотрение дела в отношении члена СРО ААС 11606088082 OOO "КомКон-Аудит". Дата заседания и форма участия в нем будет сообщена участникам дисциплинарного производства дополнительно.
+        td 
+          span.label-orange
+            span Идет
+      tr( data-url="/pages/dc-meeting-detail/" data-target="_self" )
+        td 18 июля 2024<br>18:00
+        td 150
+        td Очное заседание
+        td 560
+        td Отложить рассмотрение дела в отношении члена СРО ААС 11606088082 OOO "КомКон-Аудит". Дата заседания и форма участия в нем будет сообщена участникам дисциплинарного производства дополнительно.
+        td 
+          span.label-orange
+            span Идет
+
+  hr.hr--xl
+
+  a.btn.btn-serve.btn-md( href="/pages/dc-cases/" ) Все заседания
+
+hr.hr--xxl
+
+include ../../components/dc.case.detail.actions/template
+
+hr.hr--sl
+
+include ../../modules/block-with-buttons/dc
+
+hr.hr--sl
+
+include ../../modules/appeal-item/dc-no-heading

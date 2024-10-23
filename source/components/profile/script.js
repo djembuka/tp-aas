@@ -1,8 +1,19 @@
 window.addEventListener('load', function () {
+  //get excerpt modal window
+  $('#getExcerptModal').on('hidden.bs.modal', function () {
+    const app = document.getElementById('getExcerptApp');
+    if (app) {
+      const event = new Event('getExcerptModalHidden');
+      app.dispatchEvent(event);
+    }
+  });
+
   //docs to sign modal window
   const modal = document.getElementById('docToSignModal');
-  const profileId = modal.getAttribute('data-profileid');
+  let profileId;
+
   if (modal) {
+    profileId = modal.getAttribute('data-profileid');
     $('#docToSignModal').modal('show');
 
     modal.addEventListener('click', (e) => {

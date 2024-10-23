@@ -1,0 +1,46 @@
+// start /components/profile-export/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'profile-export'
+else
+  - var componentsArray = [ 'profile-export' ]
+ 
+.b-profile.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content
+
+    p Данные раздел содержит экспорты данных, которые необходимо делать регулярно., Он поможет вам самостоятельно создать файл экспорта в любой момент.
+
+    hr
+
+    .b-profile-export.d-flex.align-items-center.justify-content-between.p-4
+      div
+        h3 Экспорт данных реестра для Банка России
+        p Данные экспорт создан для выгрузки данных реестра по запросу ЦБ РФ Банка России. Выгрузка отправляется дважды в месяц в середине месяца и в конце. Но вы можете создать архив в любой удобный момент. Формат выгрузки XML.
+      div
+        button.btn.btn-secondary.btn-lg( data-toggle="modal" data-target="#profileExportModal" ) Сформировать выгрузку
+
+    #profileExportModal.modal--text.modal.fade(tabindex="-1" aria-labelledby="profileExportModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          button.close(type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );")
+          .modal-body( data-url="/components/profile-export/response.html" data-method="GET" )
+            
+            .progress-indicator
+              .item.item-1
+              .item.item-2
+              .item.item-3
+              .item.item-4
+              .item.item-5
+
+
+    
+// end /components/profile-export/

@@ -1,0 +1,36 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-dc-cases'
+  - var authorized = 'true'
+
+block title
+  title Заседание дисциплинарной комиссии | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/dc
+
+  hr
+
+  .container-fluid
+  
+    h1 Заседание дисциплинарной комиссии
+
+    hr
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/dc
+          
+      article.col-12.col-md-9
+        
+        include ../../components/dc.cases/template
+  
+    

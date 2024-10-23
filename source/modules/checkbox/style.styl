@@ -1,5 +1,18 @@
+@import '../../styl/component-include.styl'
+
 .b-checkbox
   max-width 700px
+  --aas-checkbox-width 24px
+  --aas-checkbox-height 24px
+  --aas-checkbox-checked-before-top 4px
+  --aas-checkbox-checked-before-left 3px
+  --aas-checkbox-checked-before-width 8px
+  --aas-checkbox-checked-before-height 13px
+  --aas-checkbox-span-min-height 25px
+  --aas-checkbox-span-padding-left calc(var(--aas-checkbox-width) + 20px)
+
+  label
+    margin-bottom 0
 
   [type="checkbox"]
   
@@ -11,13 +24,10 @@
 
     &+span
       position relative
-      padding-left 44px
+      padding-left var(--aas-checkbox-span-padding-left)
       cursor pointer
       display inline-block
-      min-height 25px
-      -webkit-user-select none
-      -moz-user-select none
-      -ms-user-select none
+      min-height var(--aas-checkbox-span-min-height)
       user-select none
 
     &.filled-in
@@ -48,9 +58,9 @@
           transform-origin 100% 100%
 
         &+span:after
-          height 24px
-          width 24px
-          background-color #f2f2f2
+          height var(--aas-checkbox-width)
+          width var(--aas-checkbox-height)
+          background-color $form-control-color
           top 0px
           border-radius 5px
           z-index 0
@@ -58,10 +68,10 @@
       &:checked+span
       
         &:before
-          top 4px
-          left 3px
-          width 8px
-          height 13px
+          top var(--aas-checkbox-checked-before-top)
+          left var(--aas-checkbox-checked-before-left)
+          width var(--aas-checkbox-checked-before-width)
+          height var(--aas-checkbox-checked-before-height)
           border-top 2px solid transparent
           border-left 2px solid transparent
           border-right 2px solid #003B78
@@ -73,9 +83,10 @@
 
         &:after
           top 0
-          width 24px
-          height 24px
-          background-color #f2f2f2
+          width var(--aas-checkbox-width)
+          height var(--aas-checkbox-height)
+          background-color $form-control-color
+          border-radius 5px
           z-index 0
 
       &.tabbed
@@ -116,3 +127,15 @@
     
       &:after
         background-color: #f00
+
+  &.b-checkbox--32x32
+    --aas-checkbox-width 32px
+    --aas-checkbox-height 32px
+    --aas-checkbox-checked-before-top 6px
+    --aas-checkbox-checked-before-left 4px
+    --aas-checkbox-checked-before-width 12px
+    --aas-checkbox-checked-before-height 17px
+    --aas-checkbox-span-min-height 32px
+
+  &.b-checkbox--no-text
+    --aas-checkbox-span-padding-left var(--aas-checkbox-width)

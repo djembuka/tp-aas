@@ -16,6 +16,7 @@ script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js")
 link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css")
 
 script( src="/components/appeal.inbox/store.js" )
+script( src="/components/appeal.inbox/bx.ajax.runAction.js" )
   
 .b-appeal-inbox.ph-block
 
@@ -29,26 +30,6 @@ script( src="/components/appeal.inbox/store.js" )
       div
 
   .ph-content
-
-    .b-appeal-inbox-profiles
-      .b-appeal-inbox-profiles__button
-        i Профили обращений
-        span
-      .b-appeal-inbox-profiles__container(style="height: 0;")
-        .h3 Профили обращений
-        p Вы работаете сразу с несколькими типами обращений, поэтому по умолчанию видите «Общий» вид таблицы. Выберите тот профильно который удобен для вас.
-
-        hr
-
-        .b-float-label
-          label.active Выберите профиль таблицы обращений
-          select
-            option( value="/" ) Общий
-            option( value="/pages/appeal-inbox/" ) Отдел по работе с жалобами
-
-    hr
-
-    h3 Заявки на изменения в реестре
 
     #appealInbox
 

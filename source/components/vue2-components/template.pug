@@ -1,0 +1,14 @@
+// start /components/vue2-components/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'vue2-components'
+else
+  - var componentsArray = [ 'vue2-components' ]
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+#vue2ComponentsApp
+    
+// end /components/vue2-components/

@@ -1,0 +1,166 @@
+extends ../../layouts/main
+
+block title
+  title Blocks | Buttons | AAS
+
+block content
+
+  .container-fluid
+
+    h1 Кнопки
+    
+    .row
+    
+      .col
+        
+        p
+          button.btn.btn-primary.btn-lg Принять участие
+        
+        p
+          button.btn.btn-secondary Личный кабинет
+        
+        p
+          button.btn.btn-light Редактировать
+        
+        p
+          button.btn.btn-success Отчет сдан
+        
+        p
+          button.btn.btn-danger Предупреждение
+        
+        p
+          button.btn.btn-dark.btn-md Кнопка 38px dark
+        
+        p
+          button.btn.btn-serve.btn-md Кнопка 38px служебная
+        
+        p
+          button.btn.btn-secondary.btn-sm Принять участие
+        
+        p
+          button.btn.btn-tag Архив документа
+        
+        p
+          button.btn.btn-primary.btn-lg( disabled ) Кнопка неактивна
+
+        p
+          button.btn.btn-primary.btn-sm
+            span.icon( style="background-image: url( '/template/images/copywhite.svg' );" )
+            span Заполнить из реестра
+
+        p
+          button.btn.btn-secondary
+            span.icon( style="background-image: url( '/template/images/icon-excerpt.svg' );" )
+            span Получить выписку
+
+        p
+          button.btn.btn-danger
+            span.icon( style="background-image: url( '/template/images/icon-complaint.svg' );" )
+            span Подать жалобу
+        
+        p
+          button.btn.btn-secondary.btn-lg.btn--load-circle Принять участие
+        
+        p
+          button.btn.btn-light.btn-link-color
+            span.icon( style="background-image: url( '/template/images/docs-icon.svg' );" )
+            span Подписать данные
+        
+        p
+          button.btn-delete
+          button.btn-remove
+            svg(xmlns="http://www.w3.org/2000/svg" width="16.251" height="20" viewBox="0 0 16.251 20")
+              path(d="M24.7,11.1H21.264v-.626A1.875,1.875,0,0,0,19.39,8.6h-2.5a1.875,1.875,0,0,0-1.874,1.874V11.1H11.576a1.562,1.562,0,0,0-1.561,1.563v1.25a.624.624,0,0,0,.624.624h15a.625.625,0,0,0,.626-.624v-1.25A1.563,1.563,0,0,0,24.7,11.1Zm-8.438-.626a.625.625,0,0,1,.624-.624h2.5a.625.625,0,0,1,.624.624V11.1h-3.75Z" transform="translate(-10.015 -8.601)")
+              path(d="M10.941,13.909a.2.2,0,0,0-.2.2l.516,10.822a1.873,1.873,0,0,0,1.873,1.786h9.492A1.873,1.873,0,0,0,24.5,24.935l.516-10.822a.2.2,0,0,0-.2-.2Zm9.44,1.561a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Z" transform="translate(-9.823 -6.721)")
+
+        p
+          button.btn-edit
+            svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+              g
+                path(d="M9.263,1.439l-8.21,8.69a3.05,3.05,0,0,0-.67,1.43L.013,14.8a1.527,1.527,0,0,0,1.87,1.77l3.22-.55a2.871,2.871,0,0,0,1.39-.75l8.21-8.69c1.42-1.5,2.06-3.21-.15-5.3C12.353-.791,10.683-.061,9.263,1.439Z" transform="translate(4.002 3.701)")
+                path(d="M0,0A6.126,6.126,0,0,0,5.45,5.15" transform="translate(11.895 6.59)")
+                path(d="M0,0H24V24H0Z" fill="none" opacity="0")
+
+        p
+          button.btn-icon
+            svg(xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32")
+              g(transform="translate(-296 -184)")
+                g(transform="translate(300 188)")
+                  path(d="M0,5H9.5V3c0-2-.75-3-3-3H3C.75,0,0,1,0,3Z" transform="translate(7.25 2)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M8,0V4A2.652,2.652,0,0,1,5,7H3A2.652,2.652,0,0,1,0,4V0Z" transform="translate(8 15)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M18,3V8a2.652,2.652,0,0,1-3,3H13V8H5v3H3A2.652,2.652,0,0,1,0,8V3A2.652,2.652,0,0,1,3,0H15A2.652,2.652,0,0,1,18,3Z" transform="translate(3 7)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M10,0H0" transform="translate(7 15)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M0,0H3" transform="translate(7 11)" fill="none" stroke="#e27d41" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5")
+                  path(d="M0,0H24V24H0Z" fill="none" opacity="0")
+    
+      .col
+        
+        p
+          a.btn.btn-primary.btn-lg( href="" ) Принять участие
+        
+        p
+          a.btn.btn-secondary( href="" ) Личный кабинет
+        
+        p
+          a.btn.btn-light( href="" ) Редактировать
+        
+        p
+          a.btn.btn-success( href="" ) Отчет сдан
+        
+        p
+          a.btn.btn-danger( href="" ) Предупреждение
+        
+        p
+          a.btn.btn-dark.btn-md( href="" ) Кнопка 38px dark
+        
+        p
+          a.btn.btn-serve.btn-md( href="" ) Кнопка 38px служебная
+        
+        p
+          a.btn.btn-secondary.btn-sm( href="" ) Принять участие
+        
+        p
+          a.btn.btn-tag( href="" ) Архив документа
+        
+        p
+          a.btn.btn-primary.btn-lg( href="" disabled ) Кнопка неактивна
+
+        p
+          a.btn.btn-primary.btn-sm( href="" )
+            span.icon( style="background-image: url( '/template/images/copywhite.svg' );" )
+            span Заполнить из реестра
+
+        p
+          button.btn.btn-secondary
+            span.icon( style="background-image: url( '/template/images/icon-excerpt.svg' );" )
+            span Получить выписку
+
+        p
+          button.btn.btn-danger
+            span.icon( style="background-image: url( '/template/images/icon-complaint.svg' );" )
+            span Подать жалобу
+        
+        p
+          a.btn.btn-secondary.btn-lg.btn--load-circle( href="" ) Принять участие
+        
+        p
+          a.btn.btn-light.btn-link-color( href="" )
+            span.icon( style="background-image: url( '/template/images/docs-icon.svg' );" )
+            span Подписать данные
+        
+        p
+          a.btn-delete( href="" )
+          a.btn-remove( href="" )
+            svg(xmlns="http://www.w3.org/2000/svg" width="16.251" height="20" viewBox="0 0 16.251 20")
+              path(d="M24.7,11.1H21.264v-.626A1.875,1.875,0,0,0,19.39,8.6h-2.5a1.875,1.875,0,0,0-1.874,1.874V11.1H11.576a1.562,1.562,0,0,0-1.561,1.563v1.25a.624.624,0,0,0,.624.624h15a.625.625,0,0,0,.626-.624v-1.25A1.563,1.563,0,0,0,24.7,11.1Zm-8.438-.626a.625.625,0,0,1,.624-.624h2.5a.625.625,0,0,1,.624.624V11.1h-3.75Z" transform="translate(-10.015 -8.601)")
+              path(d="M10.941,13.909a.2.2,0,0,0-.2.2l.516,10.822a1.873,1.873,0,0,0,1.873,1.786h9.492A1.873,1.873,0,0,0,24.5,24.935l.516-10.822a.2.2,0,0,0-.2-.2Zm9.44,1.561a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Zm-3.126,0a.625.625,0,0,1,1.25,0V23.6a.625.625,0,1,1-1.25,0Z" transform="translate(-9.823 -6.721)")
+
+        p
+          a.btn-edit( href="" )
+            svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+              g
+                path(d="M9.263,1.439l-8.21,8.69a3.05,3.05,0,0,0-.67,1.43L.013,14.8a1.527,1.527,0,0,0,1.87,1.77l3.22-.55a2.871,2.871,0,0,0,1.39-.75l8.21-8.69c1.42-1.5,2.06-3.21-.15-5.3C12.353-.791,10.683-.061,9.263,1.439Z" transform="translate(4.002 3.701)")
+                path(d="M0,0A6.126,6.126,0,0,0,5.45,5.15" transform="translate(11.895 6.59)")
+                path(d="M0,0H24V24H0Z" fill="none" opacity="0")
+
+

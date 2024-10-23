@@ -1,0 +1,16 @@
+// start /components/dc.case.detail.violations/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'dc.case.detail.violations'
+else
+  - var componentsArray = [ 'dc.case.detail.violations' ]
+
+script( src="/components/dc.case.detail.violations/bx.ajax.runAction.js" )
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+  
+#dcCaseDetailViolations
+  
+// end /components/dc.case.detail.violations/

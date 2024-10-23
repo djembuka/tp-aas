@@ -29,8 +29,8 @@
     background-size contain
     margin-left 16px
     flex-shrink 0
-    -webkit-transition( opacity .2s linear )
-    transition( opacity .2s linear )
+    -webkit-transition-fn( opacity .2s linear )
+    transition-fn( opacity .2s linear )
     opacity 0
     position relative
 
@@ -50,8 +50,8 @@
       padding 0 10px
       white-space nowrap
       opacity 0
-      -webkit-transition( opacity .2s linear )
-      transition( opacity .2s linear )
+      -webkit-transition-fn( opacity .2s linear )
+      transition-fn( opacity .2s linear )
       pointer-events none
 
       &.b-copy-icon__note--show
@@ -101,7 +101,7 @@
     justify-content space-between
     align-items flex-start
     cursor pointer
-    transition( all .3s ease )
+    transition-fn( all .3s ease )
     min-height 110px
     margin-bottom 0
 
@@ -168,7 +168,7 @@
       content: ''
       left: 0
       position: absolute
-      transition( all .25s )
+      transition-fn( all .25s )
       z-index 1
 
     [type="checkbox"].filled-in:not(:checked)+span:before

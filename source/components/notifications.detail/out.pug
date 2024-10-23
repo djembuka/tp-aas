@@ -1,0 +1,54 @@
+// start /components/notifications.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'notifications.detail'
+else
+  - var componentsArray = [ 'notifications.detail' ]
+
+.b-notifications-detail.ph-block
+
+  .ph
+
+    .ph__text
+      div
+      div
+      div
+      div
+      div
+      div
+
+  .ph-content 
+
+    .b-notifications-detail__panel 
+      .b-notifications-detail__panel-item
+        img( src="/components/notifications.detail/images/notif.svg" width="18" height="20" )
+        span
+          b Создано:
+          | 
+          | 13 марта 2023 12:01
+        span
+          b Прочитано:
+          | 
+          | 24 апреля 2023 14:45
+      .b-notifications-detail__panel-item
+        img( src="/components/notifications.detail/images/email.svg" width="20" height="17" )
+        span
+          b Email прочитан:
+          | 
+          | 24 апреля 2023 23:45
+
+    hr.hr--sl
+
+    h3 Изменение сведений об учредителях (Участниках, акционерах) аудиторской организации, а также сведения о держателях реестров акционеров аудиторской организации, созданной в форме акционерного общества
+
+    hr
+
+    p Независимый член Правления, председатель Комиссии СРО ААС по наградам, председатель Рабочего органа Совета по аудиторской деятельности, председатель Правления Фонда НСФО, начальник Департамента международной отчетности Бухгалтерии ПАО ЛУКОЙЛ, Заслуженный экономист РФ.
+
+    hr.hr--xxl.hr--line
+
+    a.btn.btn-serve.btn-lg(href="../") Вернуться
+
+
+// end /components/notifications.detail/

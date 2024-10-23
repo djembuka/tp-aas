@@ -11,7 +11,7 @@
   &__progressbar
     width 0%
     height 100%
-    transition(width .5s linear)
+    transition-fn(width .5s linear)
     position absolute
     top 0
     left 0
@@ -26,7 +26,7 @@
     z-index 1
 
     &.minimal
-      transition(width 1s linear)
+      transition-fn(width 1s linear)
 
     span
       padding 0 15px
@@ -81,7 +81,7 @@
     box-shadow: none;
     box-sizing: border-box;
     color: #3b3b3b;
-    transition( outline .3s ease-in)
+    transition-fn( outline .3s ease-in)
     
     &:focus:not([readonly]),
     &.active
@@ -128,7 +128,7 @@
     -webkit-transform-origin: 0% 100%;
     transform-origin: 0% 100%;
     text-align: initial;
-    transform( translateY(1rem))
+    transform( translateY(1.2rem))
     line-height 1
     margin-bottom 0
 

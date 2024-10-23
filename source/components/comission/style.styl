@@ -33,7 +33,7 @@
     @media( max-width 650px )
       transform( translateX( 100px ))
       opacity 0
-      transition( all .5s ease )
+      transition-fn( all .5s ease )
       
       &.animate
         opacity 1
@@ -67,7 +67,7 @@
     bottom -1px
     left 0
     border-top 1px solid #999
-    transition( all .5s ease )
+    transition-fn( all .5s ease )
 
   &__block
     position relative
@@ -85,7 +85,7 @@
 
     &.active
       position static
-      transition( opacity .5s ease )
+      transition-fn( opacity .5s ease )
       opacity 1
       pointer-events auto
 

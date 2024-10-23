@@ -2,12 +2,15 @@ window.BX = {
   bitrix_sessid() {
     return 'SESSID';
   },
+  message() {
+    return 456789;
+  },
   ajax: {
-    runComponentAction(_, type) {
+    runComponentAction(_, type, data) {
       let result;
       switch (type) {
         case 'blocks':
-          result = new Promise((resolve) => {
+          result = new Promise((resolve, reject) => {
             resolve({
               status: 'success',
               data: {
@@ -15,6 +18,8 @@ window.BX = {
                 blocks: [
                   {
                     id: 1225,
+                    cloud: true,
+                    iterations: 1,
                     author_id: '19891',
                     author_name: 'Виктор (Программист)',
                     date_added: '25 декабря 2023',
@@ -30,11 +35,11 @@ window.BX = {
                     archived: false,
                     needModerate: true,
                     permissions: {
-                      read: false,
+                      read: true,
                       write: false,
-                      moderation: true,
+                      moderation: false,
                       monitoring: false,
-                      supervisor: false,
+                      supervisor: true,
                     },
                     state: 'filled',
                     status: 3,
@@ -118,7 +123,8 @@ window.BX = {
                     ],
                   },
                   {
-                    id: 1225,
+                    id: 12250,
+                    iterations: 1,
                     author_id: null,
                     author_name: null,
                     date_added: null,
@@ -218,6 +224,7 @@ window.BX = {
 
                   {
                     id: 12,
+                    iterations: 1,
                     author_name: 'Суппорт',
                     author_id: 1,
                     date_added: '12.12.2023 15:01:00',
@@ -281,6 +288,7 @@ window.BX = {
                   },
                   {
                     id: 12,
+                    iterations: 1,
                     author_name: 'Суппорт',
                     author_id: 1,
                     date_added: '12.12.2023 15:01:00',
@@ -346,6 +354,7 @@ window.BX = {
 
                   {
                     id: 'id123',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     name: 'Пример незаполненного блока с 1 полем - empty+write',
@@ -424,6 +433,7 @@ window.BX = {
                   },
                   {
                     id: 'id124',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1244',
                     date_added: '15 января 2020',
@@ -495,6 +505,7 @@ window.BX = {
                   },
                   {
                     id: 'id125',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     name: 'Пример незаполненного блока с мультиполем - empty-write',
@@ -558,6 +569,7 @@ window.BX = {
 
                   {
                     id: 'id126',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     name: 'Пример незаполненного блока с мультиколлекцией - empty+write',
@@ -608,7 +620,8 @@ window.BX = {
                     ],
                   },
                   {
-                    id: 'id126',
+                    id: 'id0126',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     name: 'Пример незаполненного блока с мультиколлекцией и мультиполем - empty+write',
@@ -628,7 +641,7 @@ window.BX = {
                     status: '0',
                     items: [
                       {
-                        id: 'collectionId4',
+                        id: 'collectionId41',
                         type: 'collection',
                         name: 'Название коллекции 4',
                         description: 'Описание коллекции 4',
@@ -643,7 +656,7 @@ window.BX = {
                         maxcollections: 3,
                         files: [
                           {
-                            id: 'id1263',
+                            id: 'id12631',
                             type: 'file',
                             name: 'USER_FILE_6',
                             multiple: false,
@@ -654,7 +667,7 @@ window.BX = {
                               'Пример простого поля. Приложите файл в формате Exel, файл, который вы приложите, будет считаться официальном документом, подписанным простой электронной подписью.',
                           },
                           {
-                            id: 'id1311',
+                            id: 'id13111',
                             type: 'file',
                             name: 'USER_FILE_3',
                             description: 'Пример мультиполя',
@@ -672,6 +685,7 @@ window.BX = {
 
                   {
                     id: 'id130',
+                    iterations: 1,
                     date_added: '25 декабря 2023',
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
@@ -769,6 +783,7 @@ window.BX = {
                   },
                   {
                     id: 'id131',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'Промодерирован, с правами записи - filled+write',
@@ -865,6 +880,7 @@ window.BX = {
                   },
                   {
                     id: 'id128',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'Пустой, с правами модерации - empty+moderation',
@@ -943,6 +959,7 @@ window.BX = {
                   },
                   {
                     id: 'idModeratingExample',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     date_added: '15 января 2020',
@@ -1040,6 +1057,7 @@ window.BX = {
                   },
                   {
                     id: 'id129',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'Промодерирован, с правами модерации - filled+moderation',
@@ -1138,6 +1156,7 @@ window.BX = {
 
                   {
                     id: 'id128m',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'empty+monitoring',
@@ -1216,6 +1235,7 @@ window.BX = {
                   },
                   {
                     id: 'id789456m',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     date_added: '15 января 2020',
@@ -1313,6 +1333,7 @@ window.BX = {
                   },
                   {
                     id: 'id129m',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'filled+monitoring',
@@ -1411,6 +1432,7 @@ window.BX = {
 
                   {
                     id: 'id128m',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'empty+supervisor',
@@ -1489,6 +1511,7 @@ window.BX = {
                   },
                   {
                     id: 'id789456s',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1233',
                     date_added: '15 января 2020',
@@ -1586,6 +1609,7 @@ window.BX = {
                   },
                   {
                     id: 'id129s',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1283',
                     name: 'filled+supervisor',
@@ -1598,9 +1622,286 @@ window.BX = {
                     state: 'filled',
                     permissions: {
                       read: false,
-                      write: false,
+                      write: true,
                       moderation: false,
+                      monitoring: true,
+                      supervisor: true,
+                    },
+                    status: 1,
+                    items: [
+                      {
+                        id: 'collectionId9',
+                        type: 'collection',
+                        name: 'Название коллекции 9',
+                        description: 'Описание коллекции 9',
+                        hint: 'Подсказка коллекции 9',
+                        name_w: 'Название коллекции для write',
+                        description_w: 'Описание коллекции для write',
+                        hint_w: 'Подсказка коллекции для write',
+                        name_m: 'Название коллекции 6 для moderation',
+                        description_m: 'Описание коллекции 6 для moderation',
+                        hint_m: 'Подсказка коллекции 6 для moderation',
+                        multiple: false,
+                        files: [
+                          {
+                            id: 'id1292',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.pdf',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                          {
+                            id: 'id1292',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.doc',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                          {
+                            id: 'id1292',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.xls',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                        ],
+                      },
+                      {
+                        id: 'collectionId7',
+                        type: 'collection',
+                        name: 'Название коллекции 7',
+                        description: 'Описание коллекции 7',
+                        hint: 'Подсказка коллекции 7',
+                        name_w: 'Название коллекции для write',
+                        description_w: 'Описание коллекции для write',
+                        hint_w: 'Подсказка коллекции для write',
+                        name_m: 'Название коллекции 7 для moderation',
+                        description_m: 'Описание коллекции 7 для moderation',
+                        hint_m: 'Подсказка коллекции 7 для moderation',
+                        multiple: false,
+                        files: [
+                          {
+                            id: 'id12871',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.pdf',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                          {
+                            id: 'id1282',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.doc',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                          {
+                            id: 'id1283',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.xls',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+
+                  {
+                    id: 'id128m',
+                    iterations: 1,
+                    author_name: 'Азарянц Ашот Александрович',
+                    author_id: 'id1283',
+                    name: 'empty+supervisor+moderation',
+                    name_w: 'Название для прав записи',
+                    name_m:
+                      'Пустой, с правами модерации - empty+supervisor+moderation',
+                    description: '',
+                    hint: '',
+                    needModerate: false,
+                    state: 'empty',
+                    permissions: {
+                      read: false,
+                      write: false,
+                      moderation: true,
                       monitoring: false,
+                      supervisor: true,
+                    },
+                    status: '',
+                    items: [
+                      {
+                        id: 'collectionId1',
+                        type: 'collection',
+                        name: 'Название коллекции 1',
+                        description: 'Описание коллекции',
+                        hint: 'Подсказка коллекции',
+                        name_w: 'Название коллекции для write',
+                        description_w: 'Описание коллекции для write',
+                        hint_w: 'Подсказка коллекции для write',
+                        name_m: 'Название коллекции для moderation',
+                        description_m: 'Описание коллекции для moderation',
+                        hint_m: 'Подсказка коллекции для moderation',
+                        multiple: false,
+                        files: [
+                          {
+                            id: 'id1232',
+                            type: 'file',
+                            name: 'USER_FILE_2',
+                            type: 'file',
+                            multiple: false,
+                            maxfilesize: 1024000,
+                            filename: '',
+                            accept: ['pdf'],
+                            description:
+                              'Пример простого поля. Приложите файл в формате Exel, файл, который вы приложите, будет считаться официальном документом, подписанным простой электронной подписью.',
+                          },
+                        ],
+                      },
+                      {
+                        id: 'collectionId1',
+                        type: 'collection',
+                        name: 'Название коллекции 2',
+                        description: 'Описание коллекции',
+                        hint: 'Подсказка коллекции',
+                        name_w: 'Название коллекции для write',
+                        description_w: 'Описание коллекции для write',
+                        hint_w: 'Подсказка коллекции для write',
+                        name_m: 'Название коллекции для moderation',
+                        description_m: 'Описание коллекции для moderation',
+                        hint_m: 'Подсказка коллекции для moderation',
+                        multiple: false,
+                        files: [
+                          {
+                            id: 'id1232',
+                            type: 'file',
+                            name: 'USER_FILE_2',
+                            type: 'file',
+                            multiple: false,
+                            maxfilesize: 1024000,
+                            filename: '',
+                            accept: ['pdf'],
+                            description:
+                              'Пример простого поля. Приложите файл в формате Exel, файл, который вы приложите, будет считаться официальном документом, подписанным простой электронной подписью.',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    id: 'id789456s',
+                    iterations: 1,
+                    author_name: 'Азарянц Ашот Александрович',
+                    author_id: 'id1233',
+                    date_added: '15 января 2020',
+                    name: 'moderating+supervisor+moderation',
+                    name_w: 'Название для прав записи',
+                    name_m: 'Название для прав модерации',
+                    description: '',
+                    hint: '',
+                    needModerate: false,
+                    state: 'moderating',
+                    permissions: {
+                      read: false,
+                      write: false,
+                      moderation: true,
+                      monitoring: false,
+                      supervisor: true,
+                    },
+                    status: 3,
+                    items: [
+                      {
+                        id: 'collectionId6',
+                        type: 'collection',
+                        name: 'Название коллекции 6',
+                        description: 'Описание коллекции 6',
+                        hint: 'Подсказка коллекции 6',
+                        name_w: 'Название коллекции для write',
+                        description_w: 'Описание коллекции для write',
+                        hint_w: 'Подсказка коллекции для write',
+                        name_m: 'Название коллекции 6 для moderation',
+                        description_m: 'Описание коллекции 6 для moderation',
+                        hint_m: 'Подсказка коллекции 6 для moderation',
+                        multiple: false,
+                        files: [
+                          {
+                            id: 'id1272',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.pdf',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                          {
+                            id: 'id1272',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.doc',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                          {
+                            id: 'id1272',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.xls',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                        ],
+                      },
+                      {
+                        id: 'collectionId7',
+                        type: 'collection',
+                        name: 'Название коллекции 7',
+                        description: 'Описание коллекции 7',
+                        hint: 'Подсказка коллекции 7',
+                        name_w: 'Название коллекции для write',
+                        description_w: 'Описание коллекции для write',
+                        hint_w: 'Подсказка коллекции для write',
+                        name_m: 'Название коллекции 7 для moderation',
+                        description_m: 'Описание коллекции 7 для moderation',
+                        hint_m: 'Подсказка коллекции 7 для moderation',
+                        multiple: false,
+                        files: [
+                          {
+                            id: 'id12871',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.pdf',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                          {
+                            id: 'id1282',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.doc',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                          {
+                            id: 'id1283',
+                            type: 'file',
+                            filename: 'Anketa-auditorskoi-mir-audit.xls',
+                            filelink: 'link.pdf',
+                            filesize: '654 Кб',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    id: 'id129s',
+                    iterations: 1,
+                    author_name: 'Азарянц Ашот Александрович',
+                    author_id: 'id1283',
+                    name: 'filled+supervisor+moderation',
+                    name_w: 'Название для прав записи',
+                    name_m:
+                      'Промодерирован, с правами модерации - filled+moderation',
+                    description: '',
+                    hint: '',
+                    needModerate: false,
+                    state: 'filled',
+                    permissions: {
+                      read: false,
+                      write: true,
+                      moderation: true,
+                      monitoring: true,
                       supervisor: true,
                     },
                     status: 1,
@@ -1684,6 +1985,7 @@ window.BX = {
 
                   {
                     id: 'id132',
+                    iterations: 1,
                     author_name: 'Азарянц Ашот Александрович',
                     author_id: 'id1323',
                     name: 'Промодерирован, с правами чтения - filled+read',
@@ -1782,6 +2084,8 @@ window.BX = {
               },
               errors: [],
             });
+
+            // reject({ errors: [{ code: 1, message: 'blocks error' }] });
           });
           break;
         case 'statuses':
@@ -1813,7 +2117,7 @@ window.BX = {
               ],
               errors: [{ message: 'Error message' }],
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 2, message: 'statuses error' }] });
           });
           break;
         case 'saveBlock':
@@ -1838,17 +2142,17 @@ window.BX = {
               },
               errors: [],
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 3, message: 'saveBlock error' }] });
           });
           break;
         case 'resetBlock':
           result = new Promise((resolve, reject) => {
-            // resolve({
-            //   status: 'success',
-            //   data: {},
-            //   errors: [],
-            // });
-            reject(new Error('Response error.'));
+            resolve({
+              status: 'success',
+              data: {},
+              errors: [],
+            });
+            // reject({ errors: [{ code: 4, message: 'resetBlock error' }] });
           });
           break;
         case 'setBlockStatus':
@@ -1858,7 +2162,7 @@ window.BX = {
               data: {},
               errors: [],
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 5, message: 'setBlockStatus error' }] });
           });
           break;
         case 'history':
@@ -2080,7 +2384,7 @@ window.BX = {
               ],
               errors: [],
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 6, message: 'history error' }] });
           });
           break;
         case 'block':
@@ -2139,7 +2443,19 @@ window.BX = {
                 ],
               },
             });
-            // reject(new Error('Response error.'));
+            // reject({ errors: [{ code: 8, message: 'block error' }] });
+          });
+          break;
+        case 'download':
+          console.log(data);
+          result = new Promise((resolve, reject) => {
+            resolve({
+              status: 'success',
+              data: {
+                url: '/template/archive.zip',
+              },
+            });
+            // reject({ errors: [{ code: 8, message: 'download error' }] });
           });
           break;
       }

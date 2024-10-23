@@ -10,20 +10,20 @@ window.appealNewChangeFormStore = {
     },
   ],
   docsBlock: {
-    title: 'Документы необходимые для внесения изменения',
+    title: 'docsBlock - Документы, необходимые для внесения изменения',
     text: '',
     items: [
       {
         id: 6611,
         title: 'Справка-подтверждение. Приложение № 8а.',
         url: '/upload/iblock/a4b/Prilozhenie_8a_010121.docx',
-        icon: '/local/templates/aas/images/doc.svg',
+        icon: '/template/images/doc.svg',
         data: ['23.20 Кб .docx'],
       },
     ],
   },
   controlsBlock: {
-    title: 'Данные для изменения',
+    title: 'controlsBlock - Данные для изменения',
     text: '',
     controls: [
       /*{
@@ -169,7 +169,7 @@ window.appealNewChangeFormStore = {
           comment: '',
         },
       },
-      /*{
+      {
         property: 43,
         word: 'PROPERTY',
         sort: 0,
@@ -184,14 +184,14 @@ window.appealNewChangeFormStore = {
           value: '4564546654',
           comment: 'Comment',
         },
-      },*/
+      },
     ],
   },
   confirmDocsBlock: {
-    title: 'Документы',
+    title: 'confirmDocsBlock - Документы',
     text: '',
     items: [
-      /*{
+      {
         id: 0,
         checked: true,
         title: 'Пакет документов 1',
@@ -239,9 +239,10 @@ window.appealNewChangeFormStore = {
             },
           },
           {
-            property: 43,
+            property: 46,
             word: 'FILES[0]',
-            label: 'Документ, подтверждающий доводы',
+            label:
+              'Документ, подтверждающий полномочия заявителя, с электронной подписью',
             type: 'file',
             multy: 3,
             maxSize: 10240000,
@@ -249,7 +250,7 @@ window.appealNewChangeFormStore = {
             filename: [''],
             value: [
               {
-                id: 96328,
+                id: 15444,
                 val: '',
               },
             ],
@@ -257,11 +258,29 @@ window.appealNewChangeFormStore = {
               '<a href>Выберите файл</a> (pdf, jpg, jpeg, png, doc, docx, до 10МБ)',
             ext: ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'],
             completeBlock: {
-              comment: 'Документ, подтверждающий доводы',
+              comment: 'Документ, подтверждающий полномочия заявителя',
+            },
+            es: {
+              property: 1,
+              word: 'FILES[0]',
+              label: 'Подпись к документу',
+              type: 'es-file',
+              multy: 3,
+              maxSize: 10240000,
+              required: true,
+              filename: [''],
+              value: [
+                {
+                  id: 15448,
+                  val: '',
+                },
+              ],
+              default: '<a href>Выберите файл</a>',
+              ext: ['sig'],
             },
           },
         ],
-      },*/
+      },
     ],
   },
   autosaveTimeoutId: 58,

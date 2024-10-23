@@ -1,0 +1,13 @@
+// start /components/dc.case.detail.actions/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'dc.case.detail.actions'
+else
+  - var componentsArray = [ 'dc.case.detail.actions' ]
+
+script( src="/components/dc.case.detail.actions/bx.ajax.runAction.js" )
+  
+#dcCaseDetailActions
+  
+// end /components/dc.case.detail.actions/

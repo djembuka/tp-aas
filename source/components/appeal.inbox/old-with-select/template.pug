@@ -1,0 +1,55 @@
+// start /components/appeal.inbox/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'appeal.inbox'
+else
+  - var componentsArray = [ 'appeal.inbox' ]
+
+script( src="https://cdn.jsdelivr.net/npm/vue@2" )
+script( src="https://unpkg.com/vuex@3" )
+
+script( src="https://unpkg.com/vue-select@latest")
+link( rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css")
+
+script( src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.js")
+link( rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.9.0/index.min.css")
+
+script( src="/components/appeal.inbox/store.js" )
+  
+.b-appeal-inbox.ph-block
+
+  .ph
+
+    .ph__title
+    
+    .ph__num-blocks
+      div
+      div
+      div
+
+  .ph-content
+
+    .b-appeal-inbox-profiles
+      .b-appeal-inbox-profiles__button
+        i Профили обращений
+        span
+      .b-appeal-inbox-profiles__container(style="height: 0;")
+        .h3 Профили обращений
+        p Вы работаете сразу с несколькими типами обращений, поэтому по умолчанию видите «Общий» вид таблицы. Выберите тот профильно который удобен для вас.
+
+        hr
+
+        .b-float-label
+          label.active Выберите профиль таблицы обращений
+          select
+            option( value="/" ) Общий
+            option( value="/pages/appeal-inbox/" ) Отдел по работе с жалобами
+
+    hr
+
+    h3 Заявки на изменения в реестре
+
+    #appealInbox
+
+// end /components/appeal.inbox/

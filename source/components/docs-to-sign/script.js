@@ -26,36 +26,39 @@ window.addEventListener('load', () => {
       data = { id: docId };
     }
 
-    BX.ajax
-      .runComponentAction('twinpx:agreements', action, {
-        mode: 'class',
-        data: data,
-      })
-      .then(function (response) {
-        if (response.status === 'success') {
-          if (response.data && response.data.html) {
-            //open popup window
-            $('#docToSignModal').modal({ backdrop: 'static', show: true });
-            //set modal content
-            document.querySelector('#docToSignModal .modal-dialog').innerHTML =
-              response.data.html;
-          } else if (response.data && response.data.errors) {
-            //show error
-            let errorBlock = document.createElement('p');
-            errorBlock.classList.add('text-center', 'invalid');
-            errorBlock.textContent = response.data.errors || 'Server error.';
-            document.querySelector('.b-profile__text').prepend(errorBlock);
-            //close popup window
-            $('#docToSignModal').modal('hide');
-          } else {
-            //close popup window
-            $('#docToSignModal').modal('hide');
-            if (docId) {
-              //if some docs were signed
-              location.reload();
+    if (window.BX && BX.ajax) {
+      BX.ajax
+        .runComponentAction('twinpx:agreements', action, {
+          mode: 'class',
+          data: data,
+        })
+        .then(function (response) {
+          if (response.status === 'success') {
+            if (response.data && response.data.html) {
+              //open popup window
+              $('#docToSignModal').modal({ backdrop: 'static', show: true });
+              //set modal content
+              document.querySelector(
+                '#docToSignModal .modal-dialog'
+              ).innerHTML = response.data.html;
+            } else if (response.data && response.data.errors) {
+              //show error
+              let errorBlock = document.createElement('p');
+              errorBlock.classList.add('text-center', 'invalid');
+              errorBlock.textContent = response.data.errors || 'Server error.';
+              document.querySelector('.b-profile__text').prepend(errorBlock);
+              //close popup window
+              $('#docToSignModal').modal('hide');
+            } else {
+              //close popup window
+              $('#docToSignModal').modal('hide');
+              if (docId) {
+                //if some docs were signed
+                location.reload();
+              }
             }
           }
-        }
-      });
+        });
+    }
   }
 });

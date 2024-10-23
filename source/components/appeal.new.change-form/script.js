@@ -45,17 +45,31 @@ window.onload = function () {
       },
       changeControl(state, payload) {
         let control;
+        //ищем в блоке Данные для изменения
         if (state.controlsBlock && state.controlsBlock.controls) {
           control = state.controlsBlock.controls.find(
             (control) => control.property === payload.property
           );
         }
+
+        //Если не нашли, ищем в блоке Документы
         if (!control) {
           control = state.confirmDocsBlock.items
             .map((item) => {
-              return item.controls.find(
-                (control) => control.property === payload.property
-              );
+              let result;
+              item.controls.forEach((control) => {
+                if (result) return;
+                if (control.property === payload.property) {
+                  result = control;
+                } else if (
+                  //Если не нашли, ищем в электронных подписях блока Документы
+                  control.es &&
+                  control.es.property === payload.property
+                ) {
+                  result = control.es;
+                }
+              });
+              return result;
             })
             .find((elem) => elem);
         }
@@ -82,6 +96,7 @@ window.onload = function () {
         payload.control.value.splice(payload.index, 1);
       },
       setFile(state, payload) {
+        console.log(payload);
         const item = state.confirmDocsBlock.items.find(
           (item) => item.id === payload.id
         );
@@ -184,6 +199,7 @@ window.onload = function () {
     },
     props: ['index', 'control', 'blockFlag'],
     template: `<div class="b-form-control-vc" :class="{'i-active': $store.state.confirmDocsBlock.items[index].checked, 'i-block': blockFlag}">
+
       <label :class="{'i-active': checked}" class="b-form-control-vc__top">
         <div class="b-form-control-vc__content">
           <div class="b-form-control-vc__text"><b v-if="!blockFlag" v-html="control.title"></b><span v-html="control.text"></span></div>
@@ -191,10 +207,14 @@ window.onload = function () {
         
         <div class="b-radio-vc"><input type="radio" :name="control.name" :checked="checked" :value="control.value" class="with-gap" @change="change"><span></span></div>
       </label>
+
       <div class="b-form-control-vc__fields" v-show="blockFlag || $store.state.confirmDocsBlock.items[index].checked">
+
         <hr class="hr--line" style="margin-bottom: 2.5rem;">
+
         <div v-for="(formControl, controlIndex) in control.controls">
           <form-control-multy v-if="formControl.multy" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" :controlId="control.id" @autosave="autosave"></form-control-multy>
+          
           <form-control-file v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" :controlId="control.id" @autosave="autosave"></form-control-file>
         </div>
         
@@ -471,7 +491,7 @@ window.onload = function () {
 
             <div class="b-input-clear" @click.prevent="clearInput()" v-show="isClearable"></div>
             <div class="b-input-hint">
-              <div v-for="(user, index) in users" :data-id="user.ID" :data-ornz="user.ORNZ" :class="{active: activeHint[index]}" class="b-input-hint__item" @click.prevent="clickHint($event)"><div class="b-input-hint__img" :style="user.PHOTO"></div><a href="" class="b-input-hint__text">{{user.ORNZ}}<br>{{user.FIO}}</a></div>
+              <div v-for="(user, index) in users" :data-id="user.ID" :data-ornz="user.ORNZ" :class="{active: activeHint[index]}" class="b-input-hint__item" @click.prevent="clickHint($event)"><div class="b-input-hint__img" :style="user.PHOTO"></div><a href="" class="b-input-hint__text">{{user.ORNZ}}<span v-if="user.EXCLUDED">, <span class="b-input-hint__excluded" v-html="user.EXCLUDED"></span></span><br>{{user.FIO}}</a></div>
             </div>
           </div></div>
           <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
@@ -1048,7 +1068,7 @@ window.onload = function () {
     template: `
     <div>
       <div class="row align-items-center">
-        <div class="col-lg-6 col-12">
+        <div class="col-12" :class="{'col-lg-6': !es}">
           <span class="b-float-label-file__clear" :class="{'btn--load-circle': loadCircle}" @click.prevent="clearInputFile" v-if="isClearable"></span>
           <div class="b-float-label--file" :class="{'filled': isFilled, 'progressing': isProgressing, 'deleting': loadCircle, 'invalid': !!isInvalid, 'clearable': isClearable }" ref="controlFile" >
             <span class="b-float-label-file__label">{{ formControl.label }}</span>
@@ -1062,9 +1082,20 @@ window.onload = function () {
             </div>
             <label :for="id" class="active" v-html="label" ref="dropzone" ></label>
           </div>
+
+          <div v-if="formControl.es">
+
+            <hr class="hr--sl">
+
+            <form-control-multy v-if="formControl.es.multy" :es="true" :formControl="formControl.es" fieldsetBlockIndex="0" :controlIndex="0" :controlId="formControl.es.id" @autosave="autosave"></form-control-multy>
+
+            <form-control-es-file v-else :es="true" :formControl="formControl.es" fieldsetBlockIndex="0" :controlIndex="0" :controlId="formControl.es.id" @autosave="autosave"></form-control-es-file>
+
+          </div>
+
         </div>
         <hr class="hr--xs d-block d-lg-none w-100">
-        <div class="col-lg-6 col-12 small" v-if="!formControl.multy || !controlIndex">
+        <div class="col-12 small" :class="{'col-lg-6': !es}" v-if="!formControl.multy || !controlIndex">
           <div v-if="formControl.completeBlock && formControl.completeBlock.comment" class="text-muted b-complete-comment">{{ formControl.completeBlock.comment }}</div>
         </div>
       </div>
@@ -1072,6 +1103,12 @@ window.onload = function () {
     </div>
     `,
     props: {
+      es: {
+        type: Boolean,
+        default() {
+          return false;
+        },
+      },
       formControl: Object,
       fieldsetBlockIndex: [Number, String],
       controlIndex: {
@@ -1175,7 +1212,11 @@ window.onload = function () {
       },
     },
     methods: {
+      autosave() {
+        this.$emit('autosave');
+      },
       uploadFile(files) {
+        console.log(this.formControl);
         store.commit('setFile', {
           id: this.controlId,
           property: this.formControl.property,
@@ -1387,6 +1428,54 @@ window.onload = function () {
     },
   });
 
+  //form control es file
+  Vue.component('formControlEsFile', {
+    data() {
+      return {
+        esIcon: `
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g id="copy-success" transform="translate(-746 -382)">
+              <path id="Vector" d="M14,9.1V4.9C14,1.4,12.6,0,9.1,0H4.9C1.4,0,0,1.4,0,4.9V6H3.1C6.6,6,8,7.4,8,10.9V14H9.1C12.6,14,14,12.6,14,9.1Z" transform="translate(754 384)" fill="none" stroke="#154d8a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path id="Vector-2" data-name="Vector" d="M14,9.1V4.9C14,1.4,12.6,0,9.1,0H4.9C1.4,0,0,1.4,0,4.9V9.1C0,12.6,1.4,14,4.9,14H9.1C12.6,14,14,12.6,14,9.1Z" transform="translate(748 390)" fill="none" stroke="#154d8a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path id="Vector-3" data-name="Vector" d="M0,1.95,1.95,3.9,5.84,0" transform="translate(752.08 395.05)" fill="none" stroke="#154d8a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              <path id="Vector-4" data-name="Vector" d="M0,0H24V24H0Z" transform="translate(746 382)" fill="none" opacity="0"/>
+            </g>
+          </svg>
+        `,
+      };
+    },
+    template: `
+      <div class="b-float-label-es">
+        <div class="b-float-label-es-icon" v-html="esIcon"></div>
+        <form-control-file :es="es" :formControl="formControl" :fieldsetBlockIndex="fieldsetBlockIndex" :controlIndex="controlIndex" :controlId="controlId" @autosave="autosave"></form-control-file>
+      </div>
+    `,
+    props: {
+      es: {
+        type: Boolean,
+        default() {
+          return false;
+        },
+      },
+      formControl: Object,
+      fieldsetBlockIndex: [Number, String],
+      controlIndex: {
+        type: [Number, String],
+        required: true,
+        default() {
+          return 0;
+        },
+      },
+      controlId: [Number, String],
+    },
+    emits: ['autosave', 'timeoutAutosave'],
+    methods: {
+      autosave() {
+        this.$emit('autosave');
+      },
+    },
+  });
+
   //form control textarea
   Vue.component('formControlTextarea', {
     data() {
@@ -1568,7 +1657,7 @@ window.onload = function () {
     data() {
       return {};
     },
-    props: ['formControl', 'fieldsetBlockIndex', 'controlId'],
+    props: ['es', 'formControl', 'fieldsetBlockIndex', 'controlId'],
     emits: ['autosave', 'timeoutAutosave'],
     template: `
       <div>
@@ -1577,6 +1666,14 @@ window.onload = function () {
           <transition-group name="list" tag="div" >
             <div v-for="(valueObject, idx) in formControl.value" :key="valueObject.id" class="multy-control-wrapper">
               <form-control-file :formControl="formControl" :fieldsetBlockIndex="idx" :controlIndex="idx" :controlId="controlId" @autosave="autosave"></form-control-file>
+              <div v-if="formControl.value.length > 1" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
+            </div>
+          </transition-group>
+        </div>
+        <div v-else-if="formControl.type==='es-file'">
+          <transition-group name="list" tag="div" >
+            <div v-for="(valueObject, idx) in formControl.value" :key="valueObject.id" class="multy-control-wrapper">
+              <form-control-es-file :es="true" :formControl="formControl" :fieldsetBlockIndex="idx" :controlIndex="idx" :controlId="controlId" @autosave="autosave"></form-control-es-file>
               <div v-if="formControl.value.length > 1" @click="remove(idx)" class="multy-control-wrapper__remove btn-delete"></div>
             </div>
           </transition-group>
@@ -1629,7 +1726,7 @@ window.onload = function () {
             </div>
           </transition-group>
         </div>
-        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled}" @click.prevent="add">Добавить еще</button>
+        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled, 'left-margin': formControl.type==='es-file'}" @click.prevent="add">Добавить еще</button>
         <hr class="hr--sl">
       </div>
     `,
@@ -1683,6 +1780,8 @@ window.onload = function () {
             })
             .find((elem) => elem);
         }
+
+        // console.log(this.formControl, this.formControl.value);
 
         let controlValue = control.value;
 
@@ -2297,12 +2396,16 @@ window.onload = function () {
   Vue.component('confirmDocsBlock', {
     template: `
     <div>
+
       <h2 v-if="$store.state.confirmDocsBlock.title">{{ $store.state.confirmDocsBlock.title }}</h2>
+
       <p v-if="$store.state.confirmDocsBlock.items.length !== 1 && $store.state.confirmDocsBlock.text" v-html="$store.state.confirmDocsBlock.text"></p>
+
       <div v-for="(doc, index) in $store.state.confirmDocsBlock.items">
         <form-control-radio-with-controls :index="index" :control="doc" :blockFlag="$store.state.confirmDocsBlock.items.length === 1"></form-control-radio-with-controls>
         <hr>
       </div>
+
     </div>`,
   });
 

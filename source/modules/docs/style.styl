@@ -4,29 +4,43 @@
   display block
   border 1px solid $line-color
   padding 40px
-  font-family $roboto
   
   @media( max-width 767px )
     padding 15px
 
   &__item
     font-family $roboto
+    --aas-docs-block-icon-width 65px
+    --aas-docs-block-icon-height 86px
+    --aas-docs-block-gap 40px
+    --aas-docs-block-button-width 0px
+
+    &--button
+      flex-shrink 0
+      --aas-docs-block-icon-margin 16px
+      --aas-docs-block-button-width 38px
+
+    &--32x44
+      --aas-docs-block-icon-width 32px
+      --aas-docs-block-icon-height 44px
+      --aas-docs-block-gap 16px
 
   &__body
     display flex
     align-items center
+    gap var(--aas-docs-block-gap)
     
     @media( max-width 767px )
       align-items flex-start
 
   &__icon
-    width 65px
-    height 86px
+    width var(--aas-docs-block-icon-width)
+    height var(--aas-docs-block-icon-height)
     background-repeat no-repeat
     background-position center
     background-size contain
-    margin-right 40px
     margin-bottom 5px
+    flex-shrink 0
     
     @media( max-width 767px )
       width 40px
@@ -34,7 +48,7 @@
       margin-right 15px
 
   &__text
-    width calc( 100% - 48px - 40px )
+    width calc( 100% - var(--aas-docs-block-icon-width) - var(--aas-docs-block-gap) - var(--aas-docs-block-button-width) - var(--aas-docs-block-gap) )
     
     a
       display inline-block
@@ -89,6 +103,8 @@
       width 30px
       height 40px
       margin-right 20px
+      margin-bottom 0
+      flex-shrink 0
 
     .b-docs-block__data
 
@@ -111,7 +127,7 @@
         margin-bottom 25px
         opacity 0
         transform( translateX( 50px ))
-        transition( all .5s ease .7s )
+        transition-fn( all .5s ease .7s )
         
         @media( max-width 767px )
           align-items flex-start
@@ -155,3 +171,76 @@
         &__item
           opacity 1
           transform( translateX(0))
+
+  &--gray
+    background-color $light-gray
+    padding 20px 16px !important
+    border-radius 8px
+
+  &--with-dots
+
+    .b-docs-block__icon
+      margin-right 10px !important
+
+    .b-docs-block__text
+
+      a
+        font-size $16px
+        font-weight $bold
+
+    .b-docs-block__data span
+      font-size $12px
+      line-height normal
+
+  &__more
+    position relative
+
+    &__button
+      display block
+      width 32px
+      height 32px
+      border-radius 5px
+      position relative
+      background-color #F0F5FC
+      background-repeat no-repeat
+      background-position center
+      background-size cover
+      margin-left 35px
+
+    &__files
+      position absolute
+      top calc( -54px / 2 - -32px / 2)
+      right 42px
+      box-shadow 0px 3px 6px #0000001A
+      background-color #fff
+      padding 11px 11px 11px 23px
+      border-radius 7px
+      display flex
+      justify-content space-between
+      align-items center
+      opacity 0
+      transition-fn(opacity .3s ease)
+      z-index -1
+
+      &--show
+        opacity 1
+        z-index 1
+
+      span
+        font-size $12px
+        white-space nowrap
+        margin-right 14px
+
+      a
+        display inline-block
+        white-space nowrap
+        padding-left 34px
+        background-repeat no-repeat
+        background-position left center
+        background-size contain
+        line-height 32px
+        margin-left 16px
+        font-size $9px
+
+
+

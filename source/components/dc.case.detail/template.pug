@@ -1,0 +1,39 @@
+// start /components/dc.case.detail/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'dc.case.detail'
+else
+  - var componentsArray = [ 'dc.case.detail' ]
+  
+.b-dc-case-detail.ph-block
+
+  .ph
+    div
+    div
+    div
+    div
+    div
+
+  .ph-content 
+  
+    .b-tabs-menu
+
+      .b-tabs-menu__wrapper
+
+        a( class=tab === 'data' ? 'active' : '' href="/pages/dc-case-detail/" ) Общие данные
+        a( class=tab === 'meetings' ? 'active' : '' href="/pages/dc-case-detail/meetings.html" ) Заседания
+        a( class=tab === 'docs' ? 'active' : '' href="/pages/dc-case-detail/docs.html" ) Документы
+
+    hr
+    
+    .b-dc-case-detail__block
+      hr
+      if tab === 'data'
+        include data
+      else if tab === 'meetings'
+        include meetings
+      else if tab === 'docs'
+        include docs
+
+// end /components/dc.case.detail/

@@ -1,0 +1,38 @@
+extends ../../layouts/main
+
+block vars
+  - var page = 'pages-dc-meetings-detail'
+  - var authorized = 'true'
+
+block title
+  title Заседание ДК | AAS
+
+block content
+
+  hr
+
+  .container-fluid
+  
+    include ../../modules/breadcrumbs/dc
+
+  hr
+
+  .container-fluid
+  
+    h1 Заседание  дисциплинарной комиссии 234
+
+    hr
+  
+    .row.justify-content-md-between
+      
+      aside.col-3.d-none.d-md-block
+        
+        include ../../components/left-menu/dc
+          
+      article.col-12.col-md-9
+
+        - var tab = 'members'
+        
+        include ../../components/dc.meetings.detail/template
+  
+    

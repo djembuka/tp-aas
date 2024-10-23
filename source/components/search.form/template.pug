@@ -1,0 +1,27 @@
+// start /components/search.form/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'search.form'
+else
+  - var componentsArray = [ 'search.form' ]
+  
+.b-search-form.ph-block
+
+  .ph
+    div
+
+  .ph-content
+
+    .b-search-form__form
+
+      form( action="" method="GET" )
+        .b-form-field
+          label Поиск по сайту
+          input.b-form-input( type="search" )
+        hr.hr--sm.d-block.d-sm-none
+        .b-form-submit
+          button.btn.btn-secondary( type="submit" ) Найти
+
+
+// end /components/search.form/
