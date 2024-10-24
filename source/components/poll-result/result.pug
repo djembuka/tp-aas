@@ -12,6 +12,8 @@ script( src="https://unpkg.com/vuex@3" )
     i До окончания
     b 4 дня
 
+hr
+
 .b-poll-result-ill( style="background-image: url('/upload/events/2.jpeg');")
 
 hr
@@ -24,3 +26,17 @@ hr
       div( v-for="question in group.questions" )
         poll-question( :question="question" )
         hr.hr--xl
+
+hr.hr--xl
+
+link( href="/components/poll.widget/style.css" rel="stylesheet" )
+script( src="/components/poll.widget/script.js" )
+
+.b-widget-code-block
+  span.b-copy-icon( style="background-image: url('/template/images/copy.svg')")
+  h4 Ссылка на публичную страницу результатов
+  hr
+  pre
+    | https://sroaas.ru/api/widget/script.js?ornz=99999999998
+  hr
+  button.btn.btn-dark.btn-md Скопировать
