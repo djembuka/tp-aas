@@ -66,6 +66,11 @@ window.addEventListener('load', () => {
                 );
               }
             } else {
+              let message = error.errors[0].message;
+              if (error.errors[0].code == '413') {
+                message = window.BX.message('ERROR_413');
+              }
+
               Vue.set(
                 state,
                 'error',
@@ -77,9 +82,7 @@ window.addEventListener('load', () => {
                     ? ' Код ошибки: ' + error.errors[0].code + '.'
                     : ''
                 } ${
-                  error.errors[0].message
-                    ? ' Описание: ' + error.errors[0].message + '.'
-                    : ''
+                  error.errors[0].message ? ' Описание: ' + message + '.' : ''
                 }`
               );
             }
