@@ -7,21 +7,18 @@ window.addEventListener('load', () => {
     state: {
       controls: [
         {
-          property: 47,
-          word: 'FILES[0]',
-          label: 'Жалоба *',
-          type: 'file',
-          multy: false,
-          maxSize: 102400000,
-          required: true,
-          filename: '',
+          property: 'file',
+          id: 'id0',
+          name: 'FILE',
+          label: 'Файл доказательств',
           value: '',
-          default: '<a href>Выберите файл</a> (pdf, до 100МБ)',
-          ext: ['pdf'],
-          completeBlock: {
-            comment:
-              'Жалоба в формате PDF с подписью и печатью (если печать есть)',
-          },
+          required: true,
+          disabled: false,
+          accept: ['pdf', 'exe', 'jpg'],
+          image: true,
+          maxsize: 10000000,
+          hint_external: '',
+          dependency: 'id6',
         },
       ],
     },
@@ -165,18 +162,13 @@ window.addEventListener('load', () => {
     },
   });
 
-  Vue.component('FormControlFile', {
+  Vue.component('ControlFile', {
     data() {
       return {
-        minimalLoading: false,
-        loading: false,
-        loadCircle: false,
-        percentage: 0, //%
-        isFileLoaded: false,
-        xhrStatus: '', //'Y', 'E'
-        isActive: true,
+        active: true,
         files: [],
-        required: this.formControl.required,
+        default: '<a href="">Выберите файл</a>&nbsp;или перетащите в поле',
+        hint: this.control.hint_external,
         icon: `<g transform="translate(-4.461)">
           <g transform="translate(4.461)">
             <g>
@@ -190,113 +182,90 @@ window.addEventListener('load', () => {
       };
     },
     template: `
-    <div>
-      <div class="row align-items-center">
-        <div class="col-12" :class="{'col-lg-6': !es}">
-          <span class="b-float-label-file__clear" :class="{'btn--load-circle': loadCircle}" @click.prevent="clearInputFile" v-if="isClearable"></span>
-          <div class="b-float-label--file" :class="{'filled': isFilled, 'progressing': isProgressing, 'deleting': loadCircle, 'invalid': !!isInvalid, 'clearable': isClearable }" ref="controlFile" >
-            <span class="b-float-label-file__label">{{ formControl.label }}</span>
-  
-            <svg xmlns="http://www.w3.org/2000/svg" width="17.383" height="24" viewBox="0 0 17.383 24" v-html="icon"></svg>
-  
-            <input type="file" :data-value="fileid" :data-required="required" :name="name" :id="id" @change="uploadFile($refs.inputFile.files)" ref="inputFile" />
-            <div class="b-float-label__progressbar" v-show="(isProgressing || loadCircle) && !isInvalid" ref="progressbar" :class="{'minimal': minimalLoading}">
-              <span v-html="label" v-show="isFileLoaded"></span>
-              <span v-show="!isFileLoaded">{{percentage}}%</span>
-            </div>
-            <label :for="id" class="active" v-html="label" ref="dropzone" ></label>
-          </div>
+    <div
+      :class="{
+        'twpx-form-control': true,
+        'twpx-form-control--file': true,
+        'twpx-form-control--active': active,
+        'twpx-form-control--invalid': invalid,
+        'twpx-form-control--disabled': disabled,
+      }"
+    >
+      <img
+        :src="disabled"
+        class="twpx-form-control__file__disabled-icon"
+        v-if="false"
+      />
+      <span
+        class="twpx-form-control__file__clear"
+        @click.prevent="clearInputFile"
+        v-if="isClearable"
+      ></span>
+      <div
+        class="twpx-form-control__file"
+        :class="{
+          filled: isFilled,
+          clearable: isClearable,
+        }"
+        ref="controlFile"
+      >
+        <span class="twpx-form-control__file__label">{{ control.label }}</span>
 
-          <div v-if="formControl.es">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="17.383"
+          height="24"
+          viewBox="0 0 17.383 24"
+          v-html="icon"
+        ></svg>
 
-            <hr class="hr--sl">
-
-            <form-control-multy v-if="formControl.es.multy" :es="true" :formControl="formControl.es" fieldsetBlockIndex="0" :controlIndex="0" :controlId="formControl.es.id" @autosave="autosave"></form-control-multy>
-
-            <form-control-es-file v-else :es="true" :formControl="formControl.es" fieldsetBlockIndex="0" :controlIndex="0" :controlId="formControl.es.id" @autosave="autosave"></form-control-es-file>
-
-          </div>
-
-        </div>
-        <hr class="hr--xs d-block d-lg-none w-100">
-        <div class="col-12 small" :class="{'col-lg-6': !es}" v-if="!formControl.multy || !controlIndex">
-          <div v-if="formControl.completeBlock && formControl.completeBlock.comment" class="text-muted b-complete-comment">{{ formControl.completeBlock.comment }}</div>
-        </div>
+        <input
+          type="file"
+          :name="control.name"
+          :id="control.id"
+          @change="uploadFile($refs.inputFile.files)"
+          ref="inputFile"
+        />
+        <label
+          :for="control.id"
+          class="active"
+          v-html="label"
+          ref="dropzone"
+        ></label>
       </div>
-      <hr class="hr--sl">
+      <div class="twpx-form-control__hint" v-html="hint" v-if="hint"></div>
     </div>
     `,
-    props: {
-      formControl: Object,
-      fieldsetBlockIndex: [Number, String],
-      controlIndex: {
-        type: [Number, String],
-        required: true,
-        default() {
-          return 0;
-        },
-      },
-      controlId: [Number, String],
-    },
-    emits: ['autosave', 'timeoutAutosave'],
-    watch: {
-      percentage(val) {
-        setTimeout(() => {
-          if (val === 100) {
-            this.isFileLoaded = true;
-          } else if (val === 0) {
-            this.isFileLoaded = false;
-          }
-        }, 600);
-      },
-    },
+    props: ['control'],
+    emits: ['input'],
     computed: {
-      name() {
-        return `${this.formControl.word}[${this.formControl.property}][${this.fieldsetBlockIndex}]`;
+      disabled() {
+        return this.control.disabled;
       },
-      id() {
-        return `${this.formControl.word}_${this.formControl.property}_${this.fieldsetBlockIndex}`;
-      },
-      isInvalid() {
+      invalid() {
         return !!this.invalidString;
       },
-      isProgressing() {
-        if (this.formControl.multy) {
-          return (
-            this.loading || this.formControl.value[this.controlIndex].loading
-          );
-        }
-        return this.loading;
-      },
       isClearable() {
-        return this.loadCircle || (!!this.filename && !this.isProgressing);
+        return !!this.filename;
       },
       isFilled() {
         return !!this.filename;
       },
-      fileid() {
-        return typeof this.formControl.value === 'object'
-          ? this.formControl.value[this.controlIndex].val
-          : this.formControl.value;
-      },
       invalidString() {
-        if (this.xhrStatus === 'E') {
-          return 'Ошибка загрузки';
-        } else if (this.files[0] && this.files[0].size && this.files[0].name) {
-          if (this.files[0].size >= this.formControl.maxSize) {
-            this.files = [];
+        if (this.files[0] && this.files[0].size && this.files[0].name) {
+          if (this.files[0].size >= this.control.maxsize) {
+            //this.files = [];
             return `Размер файла превышает ${this.formatSize(
-              this.formControl.maxSize
+              this.control.maxsize
             )}`;
           }
 
           const filename = this.files[0].name;
           const lastIndex = filename.lastIndexOf('.');
-          const regExp = new RegExp(this.formControl.ext.join('|'));
+          const regExp = new RegExp(this.control.accept.join('|'));
 
           if (!regExp.test(filename.substring(lastIndex + 1).toLowerCase())) {
-            this.files = [];
-            return `Прикладывайте файлы ${this.formControl.ext
+            return `Прикладывайте файлы ${this.control.accept
               .map((w) => w.toUpperCase())
               .join(', ')}.`;
           }
@@ -304,79 +273,40 @@ window.addEventListener('load', () => {
         return '';
       },
       label() {
-        if (this.isProgressing) {
-          return '';
-        }
-        if (this.isInvalid) {
+        if (this.invalid) {
           return this.invalidString;
         }
         if (this.files[0] && this.files[0].name) {
           return this.files[0].name;
         }
-        if (
-          this.formControl.multy &&
-          this.formControl.filename[this.controlIndex]
-        ) {
-          return this.formControl.filename[this.controlIndex];
-        } else if (!this.formControl.multy && this.formControl.filename) {
-          return this.formControl.filename;
+        if (this.control.value) {
+          return this.control.value;
         }
-        return this.formControl.default;
+        return this.default;
       },
       filename() {
-        return this.formControl.multy
-          ? this.formControl.filename[this.controlIndex]
-          : this.formControl.filename;
+        return this.control.value;
+      },
+      clearWatcher() {
+        return this.control.clearWatcher;
+      },
+    },
+    watch: {
+      clearWatcher() {
+        this.clearInputFile();
       },
     },
     methods: {
-      autosave() {
-        this.$emit('autosave');
-      },
       uploadFile(files) {
-        store.commit('setFile', {
-          id: this.controlId,
-          property: this.formControl.property,
-          filename: '',
-          controlIndex: this.controlIndex,
-          value: this.fileid,
-        });
-
         this.files = files;
-        this.xhrStatus = '';
-        this.percentage = 0;
-        //invalid and label change
-        setTimeout(() => {
-          if (this.isInvalid) {
-            this.$refs.inputFile.value = '';
-          } else {
-            let data = {};
-            data[this.name] = this.files[0];
-            data.FILEID = this.fileid;
-
-            this.loading = true;
-            this.sendData(data);
-          }
-        }, 0);
+        if (!this.invalidString) {
+          this.$emit('input', { value: files[0].name, file: files[0] });
+        }
       },
       clearInputFile() {
-        this.loadCircle = true;
-        this.percentage = 0;
-        this.loading = false;
         this.files = [];
         this.$refs.inputFile.value = '';
-        this.sendData({
-          [this.name]: 'DELETE',
-          FILEID: this.fileid,
-        });
-        //set value
-        store.commit('setFile', {
-          id: this.controlId,
-          property: this.formControl.property,
-          filename: '',
-          controlIndex: this.controlIndex,
-          value: '',
-        });
+        this.$emit('input', { value: '' });
       },
       cancelEvent(e) {
         e.preventDefault();
@@ -399,106 +329,6 @@ window.addEventListener('load', () => {
           i++;
         }
         return parseInt(length) + ' ' + type[i];
-      },
-      progressAnimation(xhr) {
-        let first = true;
-        xhr.upload.addEventListener('progress', ({ loaded, total }) => {
-          if (first && loaded === total) {
-            //loaded too fast, show minimal animation 1s
-            let counter = 0,
-              minimalTime = 1000,
-              intervalId;
-
-            this.minimalLoading = true;
-            this.$refs.progressbar.style.width = `100%`;
-
-            intervalId = setInterval(() => {
-              if (++counter === 11) {
-                clearInterval(intervalId);
-                this.dataLoaded(xhr);
-                this.minimalLoading = false;
-                return;
-              }
-              this.percentage = Math.floor((counter * 100) / 10);
-            }, minimalTime / 10);
-          } else {
-            this.percentage = Math.floor((loaded / total) * 100);
-            this.$refs.progressbar.style.width = `calc(46px + (100% - 46px ) * ${this.percentage} / 100)`;
-            if (this.percentage === 100) {
-              this.dataLoaded(xhr);
-            }
-          }
-          first = false;
-        });
-      },
-      dataLoaded(xhr) {
-        let timeoutId;
-
-        if (xhr.readyState != 4) {
-          this.loadCircle = true;
-          timeoutId = setTimeout(() => {
-            this.dataLoaded(xhr);
-          }, 100);
-          return;
-        } else {
-          this.loadCircle = false;
-          clearTimeout(timeoutId);
-        }
-
-        const fileObject = JSON.parse(xhr.response);
-
-        if (fileObject) {
-          this.xhrStatus = fileObject.STATUS;
-
-          switch (fileObject.STATUS) {
-            case 'Y':
-              //set value
-              store.commit('setFile', {
-                id: this.controlId,
-                property: this.formControl.property,
-                filename: this.files[0] ? this.files[0].name : '',
-                controlIndex: this.controlIndex,
-                value: this.files[0] ? fileObject.ID : '',
-              });
-
-              setTimeout(() => {
-                this.$refs.inputFile.value = '';
-              }, 100);
-
-              break;
-
-            case 'E':
-              break;
-          }
-          this.$refs.progressbar.style = '';
-          this.percentage = 0;
-          this.loading = false;
-          this.loadCircle = false;
-        }
-        this.$emit('timeoutAutosave');
-      },
-      async sendData(data) {
-        try {
-          const url = this.$store.state.url.fileUpload;
-          const formData = new FormData();
-
-          Object.keys(data).forEach((key) => {
-            formData.append(key, data[key]);
-          });
-
-          let xhr = new XMLHttpRequest();
-          xhr.open('POST', url);
-          //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-          xhr.setRequestHeader('Authentication', 'secret');
-          this.progressAnimation(xhr);
-          xhr.send(formData);
-
-          /*xhr.onreadystatechange = function () {
-            if (this.readyState != 4) return;
-          };*/
-        } catch (err) {
-          throw err;
-        }
       },
     },
     mounted() {
@@ -537,7 +367,6 @@ window.addEventListener('load', () => {
 
       dropZone.addEventListener('drop', (e) => {
         controlFile.classList.remove('dragover');
-        controlFile.classList.add('filled');
         this.uploadFile(e.dataTransfer.files);
       });
     },
@@ -552,8 +381,9 @@ window.addEventListener('load', () => {
           </div>
           <div class="row">
             <div class="col-sm-6">
-              <form-control-file :formControl="control" @input="input"></form-control-file>
+              <control-file :control="control" @input="input"></control-file>
             </div>
+            <hr class="hr--xs d-block d-xl-none d-md-none w-100">
             <div class="col-sm-6 text-muted small">Выберите файл, добавьте его и сохраните.</div>
           </div>
 
@@ -563,8 +393,6 @@ window.addEventListener('load', () => {
             <div class="col-xl-6">
               <button type="submit" class="btn btn-secondary btn-lg" :disabled="buttonDisabled">Сохранить</a>
             </div>
-            <hr class="d-block d-xl-none w-100">
-            <div class="col-xl-6 muted small d-flex align-items-center"></div>
           </div>
         </form>
       </div>
