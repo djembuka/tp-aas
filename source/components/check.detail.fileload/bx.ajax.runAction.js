@@ -13,9 +13,9 @@ window.BX = {
           result = new Promise((resolve, reject) => {
             resolve({
               status: 'success',
-              showArchive: true,
               data: {
                 id: 'id12',
+                showArchive: false,
                 blocks: [
                   {
                     id: 1225,

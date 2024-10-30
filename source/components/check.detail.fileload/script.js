@@ -820,7 +820,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="block.showArchive && last && !block.cloud" :block="block" :history="history"></files-archive>
+          <files-archive v-if="last && !block.cloud" :block="block" :history="history"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
@@ -2042,7 +2042,7 @@ window.addEventListener('load', () => {
           <collapse-block v-if="blockVisible(block)" :block="block" :key="block.id"></collapse-block>
         </div>
         <hr>
-        <full-archive></full-archive>
+        <full-archive v-if="$store.state.data.showArchive"></full-archive>
       </div>
       <div v-else>
         <div class="circle-loader">
