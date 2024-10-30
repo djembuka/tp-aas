@@ -1,9 +1,11 @@
 window.addEventListener('load', () => {
   //icon print
-  document.getElementById('iconPrint').addEventListener('click', (e) => {
-    e.preventDefault();
-    window.print();
-  });
+  if (document.getElementById('iconPrint')) {
+    document.getElementById('iconPrint').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.print();
+    });
+  }
 
   //icon copy
   const copyToClipboard = (str, elem) => {
