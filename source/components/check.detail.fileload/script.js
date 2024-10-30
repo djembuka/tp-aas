@@ -820,7 +820,7 @@ window.addEventListener('load', () => {
 
           <hr>
 
-          <files-archive v-if="last && !block.cloud" :block="block" :history="history"></files-archive>
+          <files-archive v-if="block.showArchive && last && !block.cloud" :block="block" :history="history"></files-archive>
 
         </div>
         <div v-else-if="showInfoEmpty">
