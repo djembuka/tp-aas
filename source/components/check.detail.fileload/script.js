@@ -541,7 +541,13 @@ window.addEventListener('load', () => {
 
                 <div class="b-check-detail-fileload__history-icon" v-html="historyIcon" v-if="status" @click.prevent="showHistory"></div>
                 
-                <div v-if="block.permissions.supervisor || block.permissions.moderation">
+                
+                <div v-if="block.state==='empty' && block.permissions.write && block.permissions.supervisor">
+                  <fileload-form :collections="block.items" :block="block"></fileload-form>
+                </div>
+
+                
+                <div v-else-if="block.permissions.supervisor || block.permissions.moderation">
                   <files-collection-info v-for="(collection, index) in block.items" :block="block" :collection="collection" :last="index === block.items.length-1"></files-collection-info>
 
                   <div v-if="block.state === 'filled' || block.state === 'moderating'">
