@@ -1320,12 +1320,14 @@ window.onload = function () {
         let timeoutId;
 
         if (xhr.readyState != 4) {
+          //not done
           this.loadCircle = true;
           timeoutId = setTimeout(() => {
             this.dataLoaded(xhr);
           }, 100);
           return;
         } else {
+          //done
           this.loadCircle = false;
           clearTimeout(timeoutId);
         }
