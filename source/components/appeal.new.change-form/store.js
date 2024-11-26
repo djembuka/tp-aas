@@ -26,7 +26,7 @@ window.appealNewChangeFormStore = {
     title: 'controlsBlock - Данные для изменения',
     text: '',
     controls: [
-      /*{
+      {
         multy: true,
         value: [''],
         property: '85',
@@ -34,6 +34,7 @@ window.appealNewChangeFormStore = {
         type: 'datefull',
         required: false,
         label: 'Дата*',
+        bigLabel: true,
         completeBlock: {
           comment: 'Можно выбрать любую дату, а не только прошедшую.',
         },
@@ -46,6 +47,7 @@ window.appealNewChangeFormStore = {
         type: 'date',
         required: false,
         label: 'Дата*',
+        bigLabel: true,
         completeBlock: {
           comment: 'Вы можете добавить несколько дат.',
         },
@@ -58,6 +60,7 @@ window.appealNewChangeFormStore = {
         type: 'date',
         required: false,
         label: 'Дата*',
+        bigLabel: true,
         completeBlock: {
           comment: 'Вы можете добавить несколько дат.',
         },
@@ -69,6 +72,7 @@ window.appealNewChangeFormStore = {
         word: 'PROPERTY',
         sort: 0,
         label: 'Select *',
+        bigLabel: true,
         type: 'select',
         required: true,
         options: [
@@ -105,6 +109,7 @@ window.appealNewChangeFormStore = {
         word: 'PROPERTY',
         sort: 0,
         label: 'Select *',
+        bigLabel: true,
         type: 'select',
         required: true,
         options: [
@@ -134,12 +139,13 @@ window.appealNewChangeFormStore = {
           value: '',
           comment: 'Comment',
         },
-      },*/
+      },
       {
         property: 42,
         word: 'PROPERTY',
         sort: 0,
         label: 'ОРНЗ организации / индивидуального аудитора *',
+        bigLabel: true,
         type: 'ornz',
         required: true,
         value: '22006129',
@@ -156,6 +162,7 @@ window.appealNewChangeFormStore = {
         word: 'PROPERTY',
         sort: 0,
         label: 'Поиск по url *',
+        bigLabel: true,
         type: 'search',
         required: true,
         value: '22006129',
@@ -174,6 +181,7 @@ window.appealNewChangeFormStore = {
         word: 'PROPERTY',
         sort: 0,
         label: '789 *',
+        bigLabel: true,
         type: 'text',
         required: true,
         value: '',
@@ -203,6 +211,7 @@ window.appealNewChangeFormStore = {
             property: 47,
             word: 'FILES[0]',
             label: 'Жалоба *',
+            bigLabel: true,
             type: 'file',
             multy: false,
             maxSize: 102400000,
@@ -220,6 +229,7 @@ window.appealNewChangeFormStore = {
             property: 42,
             word: 'FILES[0]',
             label: 'Документ, подтверждающий полномочия заявителя',
+            bigLabel: true,
             type: 'file',
             multy: 3,
             maxSize: 10240000,
