@@ -3,14 +3,17 @@ window.addEventListener('load', () => {
   let docRemoveId;
   $('.b-dc-case-detail__docs .b-docs-block__item .btn-remove').click((e) => {
     e.preventDefault();
+    e.stopPropagation();
     $('#removeDocConsent').modal('show');
-    docRemoveId = e.target.data('id');
+    docRemoveId = $(this).data('id');
   });
 
   document
     .querySelector('#removeDocConsent .btn-danger')
     .addEventListener('click', (e) => {
       e.preventDefault();
+
+      alert('Предполагается ajax.runAction или перезагрузка страницы?');
 
       if (window.BX) {
         window.BX.ajax
