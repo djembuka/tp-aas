@@ -220,7 +220,7 @@ window.addEventListener('load', () => {
       <div class="b-poll-result__questions__item">
         <div class="d-block d-sm-flex justify-content-between">
           <div class="b-poll-result__questions__header">
-            <h3>{{question.title}}</h3>
+            <h2>{{question.title}}</h2>
             <p v-html="question.description"></p>
           </div>
           <hr class="d-block d-sm-none">
@@ -245,7 +245,10 @@ window.addEventListener('load', () => {
     props: ['answer', 'index'],
     template: `
       <div class="b-poll-result__answers__item" @showeffect="showEffect()">
-        <div class="b-poll-result__answer-title" v-html="'<span>'+(index+1)+'. </span>'+answer.title"></div>
+        <div class="b-poll-result__answer-title">
+          <span>{{index+1}}.</span>
+          <span v-html="answer.title"></span>
+        </div>
         <div class="b-poll-result__answer-graph b-graph">
           <div class="b-graph__wrapper">
             <div class="b-graph__img"></div>

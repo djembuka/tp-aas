@@ -345,8 +345,14 @@ window.onload = function () {
       <div class="row align-items-center">
         <div class="col-lg-6 col-12">
           <div class="b-float-label" :class="{invalid: isInvalid}">
+            <div
+              class="b-float-label__big-label text-muted"
+              v-if="formControl.bigLabel"
+              v-html="formControl.label"
+            ></div>
             <input :data-pattern="formControl.pattern" :data-required="formControl.required" ref="input" :id="id" type="text" :name="name" autocomplete="off" @focus="focusControl" @blur="blurControl" @input="inputControl" v-model="controlValue">
-            <label ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
+            <label
+            v-if="!formControl.bigLabel" ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
           </div>
         </div>
         <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
@@ -486,8 +492,13 @@ window.onload = function () {
       <div class="row align-items-center">
         <div class="col-lg-6 col-12">
           <div class="b-float-label" :class="{invalid: isInvalid}" @mouseover="hover=true;" @mouseout="hover=false;">
+            <div
+              class="b-float-label__big-label text-muted"
+              v-if="formControl.bigLabel"
+              v-html="formControl.label"
+            ></div>
             <input :data-pattern="formControl.pattern" :data-required="formControl.required" ref="input" :id="id" type="text" :name="name" autocomplete="off" v-model="controlValue" @input="changeInput" @focus="focusInput" @blur="blurInput($event)" @keydown.enter.prevent="enterInput" @keydown.up.prevent="upArrow()" @keydown.down.prevent="downArrow()">
-            <label ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
+            <label v-if="!formControl.bigLabel" ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
 
             <div class="b-input-clear" @click.prevent="clearInput()" v-show="isClearable"></div>
             <div class="b-input-hint">
@@ -1070,7 +1081,8 @@ window.onload = function () {
       <div class="row align-items-center">
         <div class="col-12" :class="{'col-lg-6': !es}">
           <span class="b-float-label-file__clear" :class="{'btn--load-circle': loadCircle}" @click.prevent="clearInputFile" v-if="isClearable"></span>
-          <div class="b-float-label--file" :class="{'filled': isFilled, 'progressing': isProgressing, 'deleting': loadCircle, 'invalid': !!isInvalid, 'clearable': isClearable }" ref="controlFile" >
+          <div class="b-float-label--file" :class="{'filled': isFilled, 'progressing': isProgressing, 'deleting': loadCircle, 'invalid': !!isInvalid, 'clearable': isClearable}" ref="controlFile" >
+
             <span class="b-float-label-file__label">{{ formControl.label }}</span>
   
             <svg xmlns="http://www.w3.org/2000/svg" width="17.383" height="24" viewBox="0 0 17.383 24" v-html="icon"></svg>
@@ -1320,12 +1332,14 @@ window.onload = function () {
         let timeoutId;
 
         if (xhr.readyState != 4) {
+          //not done
           this.loadCircle = true;
           timeoutId = setTimeout(() => {
             this.dataLoaded(xhr);
           }, 100);
           return;
         } else {
+          //done
           this.loadCircle = false;
           clearTimeout(timeoutId);
         }
@@ -1501,8 +1515,13 @@ window.onload = function () {
       <div class="row align-items-center">
         <div class="col-lg-6 col-12">
           <div class="b-float-label" :class="{invalid: isInvalid}">
+            <div
+              class="b-float-label__big-label text-muted"
+              v-if="formControl.bigLabel"
+              v-html="formControl.label"
+            ></div>
             <textarea :data-required="formControl.required" ref="input" :id="id" :name="name" autocomplete="off" @focus="focusControl" @blur="blurControl" @input="inputControl" v-model="controlValue"></textarea>
-            <label ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
+            <label v-if="!formControl.bigLabel" ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
           </div>
         </div>
         <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
@@ -1610,9 +1629,14 @@ window.onload = function () {
     <div>
       <div class="row align-items-center">
         <div class="col-lg-6 col-12">
-          <div class="b-float-label-select-vc form-control-select">
+          <div class="b-float-label-select-vc form-control-select" :class="{'b-float-label--big-label': formControl.bigLabel}">
+            <div
+              class="b-float-label__big-label text-muted"
+              v-if="formControl.bigLabel"
+              v-html="formControl.label"
+            ></div>
             <v-select :searchable="false" :options="options" :value="options[0]" class="form-control-select" @input="onSelect()" v-model="selectedOption"></v-select>
-            <label>{{ formControl.label }}</label>
+            <label v-if="!formControl.bigLabel">{{ formControl.label }}</label>
             <input type="hidden" :name="name" :value="formControl.selectedOption.code">
           </div></div>
           <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
@@ -1814,8 +1838,13 @@ window.onload = function () {
       <div class="row align-items-center">
         <div class="col-lg-6 col-12">
         <div class="b-float-label" data-src="${store.state.url.img}calendar.svg" :class="{invalid: isInvalid}" ref="floatLabel">
+          <div
+            class="b-float-label__big-label text-muted"
+            v-if="formControl.bigLabel"
+            v-html="formControl.label"
+          ></div>
           <date-picker :data-required="formControl.required" :lang="lang" :input-attr="inputAttr" valueType="format" v-model="date" value-type="X" format="DD.MM.YYYY" @open="openInput" @close="closeInput" @clear="closeInput" @input="inputDate" @focus="focusInput" @blur="blurInput" :disabled-date="futureDatesDisabled"></date-picker>
-          <label :for="inputAttr.id" :class="{ active: isActive }">{{formControl.label}}</label>
+          <label v-if="!formControl.bigLabel" :for="inputAttr.id" :class="{ active: isActive }">{{formControl.label}}</label>
         </div>
         </div>
         <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
@@ -2014,8 +2043,13 @@ window.onload = function () {
       <div class="row align-items-center">
         <div class="col-lg-6 col-12">
         <div class="b-float-label" data-src="${store.state.url.img}calendar.svg" :class="{invalid: isInvalid}" ref="floatLabel">
+          <div
+            class="b-float-label__big-label text-muted"
+            v-if="formControl.bigLabel"
+            v-html="formControl.label"
+          ></div>
           <date-picker :data-required="formControl.required" :lang="lang" :input-attr="inputAttr" valueType="format" v-model="date" value-type="X" format="DD.MM.YYYY" @open="openInput" @close="closeInput" @clear="closeInput" @input="inputDate" @focus="focusInput" @blur="blurInput"></date-picker>
-          <label :for="inputAttr.id" :class="{ active: isActive }">{{formControl.label}}</label>
+          <label v-if="!formControl.bigLabel" :for="inputAttr.id" :class="{ active: isActive }">{{formControl.label}}</label>
         </div>
         </div>
         <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
