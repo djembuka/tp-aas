@@ -33,18 +33,46 @@ class twpxStickyScroll {
     this.thumbClickedFlag = false;
     this.thumbClickedCoords = 0;
     this.initialized = false;
+    this.resizeTimeoutId = undefined;
 
-    this.init();
+    this.mounted();
+  }
 
+  mounted() {
     window.addEventListener('resize', () => {
-      this.init();
+      this.setContentWidth();
+    });
+
+    this.createHtml();
+    this.createCss();
+
+    this.initContentWidth();
+
+    //document mouseup
+    document.addEventListener('mouseup', () => {
+      if (this.thumbClickedFlag) {
+        this.ss.classList.remove('twpx-sticky-scroll--mousemove');
+        this.thumbClickedFlag = false;
+      }
+    });
+
+    //document mousemove
+    document.addEventListener('mousemove', (e) => {
+      if (this.thumbClickedFlag) {
+        e.preventDefault();
+        this.ss.classList.add('twpx-sticky-scroll--mousemove');
+        let left =
+          e.clientX -
+          this.scrollbar.getBoundingClientRect().x -
+          this.thumbClickedCoords;
+
+        this.moveThumbAndContent(left);
+      }
     });
   }
 
   init() {
     if (!this.initialized) {
-      this.createHtml();
-      this.createCss();
       this.scrollbarEvents();
       this.scrollSpaceEvents();
       this.arrowEvents();
@@ -52,7 +80,8 @@ class twpxStickyScroll {
     }
     if (window.matchMedia('(min-width: 768px)').matches) {
       this.setThumbWidth();
-      this.setDelta();
+    } else {
+      this.ss.classList.add('twpx-sticky-scroll--invisible');
     }
   }
 
@@ -156,7 +185,7 @@ class twpxStickyScroll {
         opacity: 0;
         -webkit-transition: opacity 0.3s ease;
         transition: opacity 0.3s ease;
-        z-index: 20;
+        z-index: 60;
       }
       .twpx-sticky-scroll:hover .twpx-sticky-scroll-arrows {
         opacity: 1;
@@ -220,6 +249,17 @@ class twpxStickyScroll {
         transform: translateX(0);
         -webkit-transform: translateX(0);
       }
+      .twpx-sticky-scroll--invisible .twpx-sticky-scroll-space-right,
+      .twpx-sticky-scroll--invisible .twpx-sticky-scroll-space-left,
+      .twpx-sticky-scroll--invisible .twpx-sticky-scroll-arrows,
+      .twpx-sticky-scroll--invisible .twpx-sticky-scroll-scrollbar {
+        display: none;
+      }
+
+      .twpx-sticky-scroll--mousemove,
+      .twpx-sticky-scroll--mousemove * {
+        user-select: none;
+      }
 
       @media(max-width 767px) {
       .twpx-sticky-scroll-scrollbar,
@@ -233,10 +273,59 @@ class twpxStickyScroll {
     document.querySelector('head').appendChild(styleElement);
   }
 
+  setContentWidth() {
+    this.content.style.width = 'auto';
+
+    if (this.resizeTimeoutId) {
+      clearInterval(this.resizeTimeoutId);
+    }
+
+    this.resizeTimeoutId = setTimeout(() => {
+      if (this.content) {
+        if (this.content.querySelector('table.table')) {
+          this.content.style.width = `${
+            this.content.querySelector('table.table').clientWidth
+          }px`;
+        } else if (this.content.firstElementChild) {
+          this.content.style.width = `${this.content.firstElementChild.clientWidth}px`;
+        }
+
+        setTimeout(() => {
+          this.init();
+        }, 0);
+      }
+    }, 200);
+  }
+
+  async initContentWidth() {
+    do {
+      if (
+        !this.content ||
+        (!this.content.querySelector('table.table') &&
+          !this.content.firstElementChild)
+      ) {
+        await new Promise((r) => setTimeout(r, 500));
+      } else {
+        this.setContentWidth();
+        break;
+      }
+    } while (true);
+  }
+
   setThumbWidth() {
     const ratio = this.contentWrapper.clientWidth / this.content.clientWidth;
 
-    this.thumb.style.width = `${this.scrollbar.clientWidth * ratio}px`;
+    if (ratio >= 1) {
+      this.ss.classList.add('twpx-sticky-scroll--invisible');
+    } else {
+      this.ss.classList.remove('twpx-sticky-scroll--invisible');
+
+      setTimeout(() => {
+        this.thumb.style.width = `${this.scrollbar.clientWidth * ratio}px`;
+
+        this.setDelta();
+      }, 0);
+    }
   }
 
   setDelta() {
