@@ -69,6 +69,19 @@ class twpxStickyScroll {
         this.moveThumbAndContent(left);
       }
     });
+
+    // if the object is inside a collapse block
+    if (
+      this.contentWrapper &&
+      this.contentWrapper.closest('.b-collapse-block')
+    ) {
+      this.contentWrapper
+        .closest('.b-collapse-block')
+        .querySelector('.b-collapse-block__head')
+        .addEventListener('click', (e) => {
+          this.setContentWidth();
+        });
+    }
   }
 
   init() {
