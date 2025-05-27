@@ -1,6 +1,6 @@
 class twpxStickyScroll {
   /*
-  this.content - таблица
+  this.content - обёртка содержимого
   this.ss - .twpx-sticky-scroll
   this.contentWrapper - .twpx-sticky-scroll-content-wrapper
   this.scrollbar - .twpx-sticky-scroll-scrollbar
@@ -75,11 +75,14 @@ class twpxStickyScroll {
       this.contentWrapper &&
       this.contentWrapper.closest('.b-collapse-block')
     ) {
-      this.contentWrapper
-        .closest('.b-collapse-block')
+      const block = this.contentWrapper.closest('.b-collapse-block');
+
+      block
         .querySelector('.b-collapse-block__head')
-        .addEventListener('click', (e) => {
-          this.setContentWidth();
+        .addEventListener('click', () => {
+          if (block.classList.contains('slide')) {
+            this.setContentWidth();
+          }
         });
     }
   }
@@ -110,7 +113,10 @@ class twpxStickyScroll {
         <div class="twpx-sticky-scroll-arrow-left"></div>
       </div>
 
-      <div class="twpx-sticky-scroll-content-wrapper"></div>
+      <div class="twpx-sticky-scroll-content-wrapper">
+        <div class="twpx-sticky-scroll-content-wrapper-content">
+        </div>
+      </div>
 
       <div class="twpx-sticky-scroll-scrollbar">
         <div class="twpx-sticky-scroll-scrollbar-thumb"></div>
@@ -131,9 +137,11 @@ class twpxStickyScroll {
 
     this.elem.parentNode.insertBefore(this.ss, this.elem);
 
-    this.contentWrapper.append(this.elem);
+    this.content = this.ss.querySelector(
+      '.twpx-sticky-scroll-content-wrapper-content'
+    ); //this.elem;
 
-    this.content = this.elem;
+    this.content.append(this.elem);
   }
 
   createCss() {
