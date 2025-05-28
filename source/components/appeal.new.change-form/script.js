@@ -48,7 +48,7 @@ window.onload = function () {
         //ищем в блоке Данные для изменения
         if (state.controlsBlock && state.controlsBlock.controls) {
           control = state.controlsBlock.controls.find(
-            (control) => control.property === payload.property
+            (control) => String(control.property) === String(payload.property)
           );
         }
 
@@ -87,6 +87,52 @@ window.onload = function () {
           Vue.set(control.value[payload.index], 'val', payload.value);
         } else {
           Vue.set(control, 'value', payload.value);
+        }
+      },
+      changeValueWatcher(state, payload) {
+        let control;
+        //ищем в блоке Данные для изменения
+        if (state.controlsBlock && state.controlsBlock.controls) {
+          control = state.controlsBlock.controls.find(
+            (control) => String(control.property) === String(payload.property)
+          );
+        }
+
+        //Если не нашли, ищем в блоке Документы
+        if (!control) {
+          control = state.confirmDocsBlock.items
+            .map((item) => {
+              let result;
+              item.controls.forEach((control) => {
+                if (result) return;
+                if (control.property === payload.property) {
+                  result = control;
+                } else if (
+                  //Если не нашли, ищем в электронных подписях блока Документы
+                  control.es &&
+                  control.es.property === payload.property
+                ) {
+                  result = control.es;
+                }
+              });
+              return result;
+            })
+            .find((elem) => elem);
+        }
+
+        //multy
+        if (control.multy && payload.index !== undefined) {
+          if (!control.value) {
+            control.value = [];
+          }
+          if (!control.value[payload.index]) {
+            control.value.push({
+              id: parseInt(Math.random() * 100000, 10),
+            });
+          }
+          // Vue.set(control.value[payload.index], 'val', payload.value);
+        } else {
+          Vue.set(control, 'setValueWatcher', payload.value);
         }
       },
       removeControl(state, payload) {
@@ -378,6 +424,9 @@ window.onload = function () {
       name() {
         return `${this.formControl.word}[${this.formControl.property}][${this.fieldsetBlockIndex}]`;
       },
+      setValueWatcher() {
+        return this.formControl.setValueWatcher;
+      }
     },
     watch: {
       controlValue(val) {
@@ -390,6 +439,10 @@ window.onload = function () {
         }
         store.commit('changeControl', payload);
       },
+      setValueWatcher(val) {
+        this.controlValue = val;
+        this.isActive = !!val;
+      }
     },
     methods: {
       clickLink() {
@@ -549,11 +602,13 @@ window.onload = function () {
         this.activeHint = [];
         this.activeUser = {};
 
-        if (this.controlValue.length >= 5) {
+        if (this.controlValue.length >= (this.formControl.count || 5)) {
           (async () => {
+            const url = this.formControl.url || this.$store.state.url.getUsers;
+            const amp = String(url).search(/\?/) === -1 ? '?' : '&';
+
             try {
-              let response = await fetch(
-                `${this.$store.state.url.getUsers}?s=${this.controlValue}`,
+              let response = await fetch(`${url}${amp}s=${this.controlValue}`,
                 {
                   headers: {
                     Authentication: 'secret',
@@ -643,7 +698,7 @@ window.onload = function () {
           this.activeUser.AUTOCOMPLETE.forEach
         ) {
           this.activeUser.AUTOCOMPLETE.forEach((obj) => {
-            store.commit('changeControl', {
+            store.commit('changeValueWatcher', {
               property: obj.property,
               value: obj.value,
             });
@@ -681,7 +736,7 @@ window.onload = function () {
           this.activeUser.AUTOCOMPLETE.forEach
         ) {
           this.activeUser.AUTOCOMPLETE.forEach((obj) => {
-            store.commit('changeControl', {
+            store.commit('changeValueWatcher', {
               property: obj.property,
               value: obj.value,
             });
