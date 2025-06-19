@@ -470,7 +470,7 @@ label
 	width 100%
 
 .b-tab
-  display inline-flex
+  display inline-block
   width 48px
   height 48px
   background-repeat no-repeat
@@ -607,7 +607,7 @@ label
 
 .b-input-clear
   position absolute
-  bottom 17px
+  top 50%
   right 15px
   width 16px
   height 16px
@@ -649,9 +649,6 @@ label
 
     &.modal-frame--animate
       opacity 1
-
-  &-body
-    text-align center
 
   &--text
   
@@ -714,7 +711,7 @@ label
     z-index 1
 
   h3:first-child
-      margin-top 0
+    margin-top 0
 
 figure
   margin 0
@@ -756,6 +753,9 @@ figure
 
 .bt-1
   border-top 1px solid $line-color
+
+.b-all-1
+  border 1px solid $line-color
 
 .bg-fa
   background-color $light-gray

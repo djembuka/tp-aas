@@ -187,7 +187,7 @@ if (document.querySelector('.b-header__profile .btn')) {
 
 //placeholders
 setTimeout(function () {
-  $('.ph-block, .b-breadcrumbs, h1').addClass('ph-block--animated');
+  $('.ph-block, .b-breadcrumbs').addClass('ph-block--animated');
 }, 500);
 
 //header menu items width
