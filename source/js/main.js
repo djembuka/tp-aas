@@ -1,3 +1,5 @@
+// смотри файл bottom.js
+
 //Yandex browser <= 17
 if (document.getElementById('ieAlertModal') && isYabrowserLT18()) {
   $('#ieAlertModal').modal('show');

@@ -4,9 +4,11 @@ body
 
 body
   background #fff
-  font-family $open-sans
-  font-size 16px
-  color #3b3b3b
+  font-family $roboto
+  font-size $16px
+  font-weight $normal
+  color $text-color
+  line-height 1.5
   display flex
   flex-direction column
   height 100%
@@ -202,15 +204,12 @@ hr
   &.hr--line
     border-top 1px solid $line-color !important
 
-h1,.h1,
-h2,.h2,
-h3,.h3,
 p,
 blockquote,
 ul,
 ol
   max-width 770px
-  
+   
 h1,.h1
   font-family $roboto
   font-size $38px
@@ -759,6 +758,9 @@ figure
 
 .bg-fa
   background-color $light-gray
+
+.mb-0
+  margin-bottom 0 !important
 
 .p-16
   padding 16px
