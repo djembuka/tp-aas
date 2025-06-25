@@ -2,10 +2,6 @@
   "status": "success",
   "errors": [{ "message": "Error on server" }],
   "data": {
-    "discipline": {
-      "block123": ["1", "2"],
-      "block125": ["3"]
-    },
     "courseId": "123wer",
     "block": [
       {
@@ -38,8 +34,25 @@
               {
                 "name": "LESSON_TITLE",
                 "label": "Название занятия",
-                "value": "",
-                "type": "textarea",
+                "value": [
+                  {
+                    "label": "Тема 1",
+                    "code": "1",
+                    "discipline": ["1", "2", "3"]
+                  },
+                  {
+                    "label": "Тема 2",
+                    "code": "2",
+                    "discipline": ["2"]
+                  },
+                  {
+                    "label": "Тема 3",
+                    "code": "3",
+                    "discipline": ["1", "2"]
+                  }
+                ],
+                "selected": { "label": "Тема 2", "code": "2" },
+                "type": "select",
                 "required": true,
                 "invalid": false
               },

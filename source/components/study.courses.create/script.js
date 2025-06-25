@@ -36,8 +36,12 @@ window.onload = function () {
       ...window.studyCourseCreateStore,
       loading: false,
       error: '',
+      disciplineValue: {}
     },
     mutations: {
+      changeDisciplineValue(state, {key, value}) {
+        state.disciplineValue[key] = value;
+      },
       changeBlockLoading(state, { stepIndex, blockIndex, type, value }) {
         if (type === 'add') {
           Vue.set(state.steps[stepIndex], 'addLoading', value);
@@ -106,6 +110,12 @@ window.onload = function () {
 
         control.selected = selected;
       },
+      changeSelectStrict(_, {select, selected}) {
+        select.selected = selected;
+      },
+      changeSelectValue(_, {select, value}) {
+        select.value = value;
+      },
       changeDate(
         state,
         { stepIndex, blockIndex, lessonIndex, controlIndex, value }
@@ -158,40 +168,95 @@ window.onload = function () {
             state.TYPE_COMPARE[String(typeControl.selected.code)];
 
           state.steps[2].blocks.forEach((block) => {
-            block.lessons.forEach((lesson) => {
-              const lessonTypeControl = lesson.controls.find(
-                (c) => c.name === 'TASK_TYPE'
-              );
-              Vue.set(lessonTypeControl, 'value', typeControlValue);
-              Vue.set(lessonTypeControl, 'selected', typeControlValue[0]);
-            });
+            if (block && block.lessons) {
+              block.lessons.forEach((lesson) => {
+                const lessonTypeControl = lesson.controls.find(
+                  (c) => c.name === 'TASK_TYPE'
+                );
+                Vue.set(lessonTypeControl, 'value', typeControlValue);
+                Vue.set(lessonTypeControl, 'selected', typeControlValue[0]);
+              });
+            }
           });
         }
 
         //discipline select
-        Object.keys(data.discipline).forEach((id) => {
-          const block = state.steps[2].blocks.find(
-            (b) => String(b.id) === String(id)
-          );
-          block.lessons.forEach((lesson) => {
-            const control = lesson.controls.find(
-              (c) => c.name === 'TASK_DISCIPLINE'
-            );
-            const newValue = [];
-            data.discipline[id].forEach((code) => {
-              const valueObject = control.value.find(
-                (obj) => String(obj.code) === String(code)
-              );
-              if (valueObject) {
-                newValue.push(valueObject);
+        state.steps[2].blocks.forEach(b => {
+
+          //create disciplineValue - {blockId: [value of discipline control]}
+          if (b && b.lessons) {
+            const disciplineControl = b.lessons[0].controls.find(c => c.name === 'TASK_DISCIPLINE');
+            if (disciplineControl) {
+              store.commit('changeDisciplineValue', {
+                key: b.id,
+                value: disciplineControl.value
+              });
+            }
+          }
+
+          //check title value
+          b.lessons.forEach(l => {
+            const titleControl = l.controls.find(c => c.name === 'LESSON_TITLE');
+            const disciplineControl = l.controls.find(c => c.name === 'TASK_DISCIPLINE');
+
+            let titleSelectedCode = '';
+            if (titleControl) {
+              titleSelectedCode = titleControl?.selected?.code;
+            }
+
+            if (disciplineControl) {
+              if (!titleSelectedCode) {
+                store.commit('changeSelectStrict', {
+                  select: disciplineControl,
+                  selected: state.disciplineValue[b.id][0]
+                });
+              } else {
+                const titleSelectedDiscipline = titleControl.value.find(v => String(v.code) === String(titleControl.selected.code))?.discipline ;
+                const value = state.disciplineValue[b.id].filter(v => titleSelectedDiscipline.some(code => code === v.code));
+                store.commit('changeSelectValue', {
+                  select: disciplineControl,
+                  value
+                });
+  
+                if (!titleSelectedDiscipline.some(code => code === disciplineControl.selected.code)) {
+                  store.commit('changeSelectStrict', {
+                    select: disciplineControl,
+                    selected: disciplineControl.value[0]
+                  });
+                }
               }
-            });
-            //new value
-            control.value = newValue;
-            //selected
-            control.selected = newValue[0];
+            }
           });
         });
+        
+
+
+        // old
+        // Object.keys(data.discipline).forEach((id) => {
+        //   const block = state.steps[2].blocks.find(
+        //     (b) => String(b.id) === String(id)
+        //   );
+        //   if (block && block.lessons) {
+        //     block.lessons.forEach((lesson) => {
+        //       const control = lesson.controls.find(
+        //         (c) => c.name === 'TASK_DISCIPLINE'
+        //       );
+        //       const newValue = [];
+        //       data.discipline[id].forEach((code) => {
+        //         const valueObject = control.value.find(
+        //           (obj) => String(obj.code) === String(code)
+        //         );
+        //         if (valueObject) {
+        //           newValue.push(valueObject);
+        //         }
+        //       });
+        //       //new value
+        //       control.value = newValue;
+        //       //selected
+        //       control.selected = newValue[0];
+        //     });
+        //   }
+        // });
       },
     },
     getters: {
@@ -432,11 +497,9 @@ window.onload = function () {
                       history.replaceState({}, '', getQuery(queryObject));
                     }
                   } else if (getters.activeStepIndex === 1) {
-                    if (result.data.discipline) {
-                      commit('updateLessonSubject', {
-                        data: result.data,
-                      });
-                    }
+                    commit('updateLessonSubject', {
+                      data: result.data,
+                    });
                   }
                   let newActiveStepIndex = getters.activeStepIndex + 1;
                   commit('setStepActive', newActiveStepIndex);
@@ -461,11 +524,9 @@ window.onload = function () {
                   history.replaceState({}, '', getQuery(queryObject));
                 }
               } else if (stepIndex === 2) {
-                if (result.data.discipline) {
-                  commit('updateLessonSubject', {
-                    data: result.data,
-                  });
-                }
+                commit('updateLessonSubject', {
+                  data: result.data,
+                });
               }
               commit('setStepActive', stepIndex);
               commit('setStepVisited', stepIndex);
@@ -1342,7 +1403,7 @@ window.onload = function () {
           <div class="b-scc-step__block-title">Занятие {{ lessonIndex + 1 }}</div>
           <div class="row">
             <div class="col-lg-6">
-              <form-control-textarea :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[0]" formControlIndex="0"></form-control-textarea>
+              <form-control-select :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[0]" formControlIndex="0"></form-control-select>
               <form-control-date :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[1]" formControlIndex="1"></form-control-date>
               <form-control :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[2]" formControlIndex="2"></form-control>
               <form-control-textarea :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[3]" formControlIndex="3"></form-control-textarea>

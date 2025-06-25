@@ -25,15 +25,29 @@
         ]
       },
       {
-        "id": "block123",
+        "id": "block1234",
         "lessons": [
           {
             "controls": [
               {
                 "name": "LESSON_TITLE",
                 "label": "Название занятия",
-                "value": "",
-                "type": "textarea",
+                "value": [
+                  {
+                    "label": "Тема 1",
+                    "code": "1"
+                  },
+                  {
+                    "label": "Тема 2",
+                    "code": "2"
+                  },
+                  {
+                    "label": "Тема 3",
+                    "code": "3"
+                  }
+                ],
+                "selected": { "label": "", "code": "" },
+                "type": "select",
                 "required": true,
                 "invalid": false
               },
