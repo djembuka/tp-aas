@@ -36,10 +36,46 @@ window.onload = function () {
       ...window.studyCourseCreateStore,
       loading: false,
       error: '',
-      disciplineValue: {}
+      disciplineValue: {},
+      reInitDisciplineSelect: true,
     },
     mutations: {
-      changeDisciplineValue(state, {key, value}) {
+      onLessonTitleChange(state, { block, lesson }) {
+        const titleControl = lesson.controls.find(
+          (c) => c.name === 'LESSON_TITLE'
+        );
+        const disciplineControl = lesson.controls.find(
+          (c) => c.name === 'TASK_DISCIPLINE'
+        );
+
+        const titleSelectedDiscipline = titleControl.value.find(
+          (v) => String(v.code) === String(titleControl.selected.code)
+        )?.discipline;
+        const value = state.disciplineValue[block.id].filter((v) =>
+          titleSelectedDiscipline.some((code) => code === v.code)
+        );
+        store.commit('changeSelectValue', {
+          select: disciplineControl,
+          value,
+        });
+
+        if (
+          !titleSelectedDiscipline.some(
+            (code) => code === disciplineControl.selected.code
+          )
+        ) {
+          store.commit('changeSelectStrict', {
+            control: disciplineControl,
+            selected: disciplineControl.value[0],
+          });
+        }
+
+        store.reInitDisciplineSelect = false;
+        setTimeout(() => {
+          store.reInitDisciplineSelect = true;
+        });
+      },
+      changeDisciplineValue(state, { key, value }) {
         state.disciplineValue[key] = value;
       },
       changeBlockLoading(state, { stepIndex, blockIndex, type, value }) {
@@ -110,10 +146,10 @@ window.onload = function () {
 
         control.selected = selected;
       },
-      changeSelectStrict(_, {select, selected}) {
-        select.selected = selected;
+      changeSelectStrict(_, { control, selected }) {
+        control.selected = selected;
       },
-      changeSelectValue(_, {select, value}) {
+      changeSelectValue(_, { select, value }) {
         select.value = value;
       },
       changeDate(
@@ -181,23 +217,28 @@ window.onload = function () {
         }
 
         //discipline select
-        state.steps[2].blocks.forEach(b => {
-
+        state.steps[2].blocks.forEach((b) => {
           //create disciplineValue - {blockId: [value of discipline control]}
           if (b && b.lessons) {
-            const disciplineControl = b.lessons[0].controls.find(c => c.name === 'TASK_DISCIPLINE');
+            const disciplineControl = b.lessons[0].controls.find(
+              (c) => c.name === 'TASK_DISCIPLINE'
+            );
             if (disciplineControl) {
               store.commit('changeDisciplineValue', {
                 key: b.id,
-                value: disciplineControl.value
+                value: disciplineControl.value,
               });
             }
           }
 
           //check title value
-          b.lessons.forEach(l => {
-            const titleControl = l.controls.find(c => c.name === 'LESSON_TITLE');
-            const disciplineControl = l.controls.find(c => c.name === 'TASK_DISCIPLINE');
+          b.lessons.forEach((l) => {
+            const titleControl = l.controls.find(
+              (c) => c.name === 'LESSON_TITLE'
+            );
+            const disciplineControl = l.controls.find(
+              (c) => c.name === 'TASK_DISCIPLINE'
+            );
 
             let titleSelectedCode = '';
             if (titleControl) {
@@ -207,29 +248,40 @@ window.onload = function () {
             if (disciplineControl) {
               if (!titleSelectedCode) {
                 store.commit('changeSelectStrict', {
-                  select: disciplineControl,
-                  selected: state.disciplineValue[b.id][0]
+                  control: disciplineControl,
+                  selected: state.disciplineValue[b.id][0],
                 });
               } else {
-                const titleSelectedDiscipline = titleControl.value.find(v => String(v.code) === String(titleControl.selected.code))?.discipline ;
-                const value = state.disciplineValue[b.id].filter(v => titleSelectedDiscipline.some(code => code === v.code));
-                store.commit('changeSelectValue', {
-                  select: disciplineControl,
-                  value
+                store.commit('onLessonTitleChange', {
+                  block: b,
+                  lesson: l,
                 });
-  
-                if (!titleSelectedDiscipline.some(code => code === disciplineControl.selected.code)) {
-                  store.commit('changeSelectStrict', {
-                    select: disciplineControl,
-                    selected: disciplineControl.value[0]
-                  });
-                }
+
+                // const titleSelectedDiscipline = titleControl.value.find(
+                //   (v) => String(v.code) === String(titleControl.selected.code)
+                // )?.discipline;
+                // const value = state.disciplineValue[b.id].filter((v) =>
+                //   titleSelectedDiscipline.some((code) => code === v.code)
+                // );
+                // store.commit('changeSelectValue', {
+                //   select: disciplineControl,
+                //   value,
+                // });
+
+                // if (
+                //   !titleSelectedDiscipline.some(
+                //     (code) => code === disciplineControl.selected.code
+                //   )
+                // ) {
+                //   store.commit('changeSelectStrict', {
+                //     control: disciplineControl,
+                //     selected: disciplineControl.value[0],
+                //   });
+                // }
               }
             }
           });
         });
-        
-
 
         // old
         // Object.keys(data.discipline).forEach((id) => {
@@ -954,6 +1006,16 @@ window.onload = function () {
         if (!!this.selectedOption.code) {
           this.setInvalid(false);
         }
+
+        //lesson title select on the 3rd step
+        if (this.formControl.name === 'LESSON_TITLE') {
+          const b = store.state.steps[2].blocks[this.blockIndex];
+
+          store.commit('onLessonTitleChange', {
+            block: b,
+            lesson: b.lessons[this.lessonIndex],
+          });
+        }
       },
     },
   });
@@ -1410,7 +1472,7 @@ window.onload = function () {
             </div>
             <div class="col-lg-6">
               <form-control-select :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[4]" formControlIndex="4"></form-control-select>
-              <form-control-select :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[5]" formControlIndex="5"></form-control-select>
+              <form-control-select :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[5]" formControlIndex="5" v-if="$store.state.reInitDisciplineSelect"></form-control-select>
               <div class="row">
                 <div class="col-lg-4">
                   <form-control :formControl="lesson.controls[6]" :blockIndex="blockIndex" :lessonIndex="lessonIndex" formControlIndex="6" time="true"></form-control>
