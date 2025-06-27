@@ -40,6 +40,22 @@ window.onload = function () {
       reInitDisciplineSelect: true,
     },
     mutations: {
+      createMultiControl(_, {parent}) {
+        Vue.set( parent, 'multi', [] );
+      },
+      addMultiControl(_, {parent, add}) {
+        const randomId = Math.round(Math.random() * 1000);
+        add.id = `${add.name}${randomId}`;
+        add.name = `${add.name}[${parent.multi.length}]`
+
+        Vue.set( parent.multi, parent.multi.length, add);
+      },
+      removeMultiControl(_,{ parent, index }) {
+        // parent.multi.splice(index, 1);
+        const multi = parent.multi;
+        multi.splice(index, 1);
+        Vue.set( parent, 'multi', multi);
+      },
       onLessonTitleChange(state, { block, lesson }) {
         const titleControl = lesson.controls.find(
           (c) => c.name === 'LESSON_TITLE'
@@ -48,9 +64,28 @@ window.onload = function () {
           (c) => c.name === 'TASK_DISCIPLINE'
         );
 
-        const titleSelectedDiscipline = titleControl.value.find(
-          (v) => String(v.code) === String(titleControl.selected.code)
-        )?.discipline;
+        let titleSelectedDiscipline = [];
+
+        if (titleControl.multi) {
+          let disciplinesSet = new Set();
+          
+          titleControl.multi.forEach(c => {
+            const array = c.value.find(
+              (v) => String(v.code) === String(c.selected.code)
+            )?.discipline || [];
+
+            array.forEach(a => {
+              disciplinesSet.add(a)
+            })
+          });
+
+          titleSelectedDiscipline = [...disciplinesSet];
+        } else {
+          titleSelectedDiscipline = titleControl.value.find(
+            (v) => String(v.code) === String(titleControl.selected.code)
+          )?.discipline;
+        }
+
         const value = state.disciplineValue[block.id].filter((v) =>
           titleSelectedDiscipline.some((code) => code === v.code)
         );
@@ -70,10 +105,10 @@ window.onload = function () {
           });
         }
 
-        store.reInitDisciplineSelect = false;
+        state.reInitDisciplineSelect = false;
         setTimeout(() => {
-          store.reInitDisciplineSelect = true;
-        });
+          state.reInitDisciplineSelect = true;
+        }, 0);
       },
       changeDisciplineValue(state, { key, value }) {
         state.disciplineValue[key] = value;
@@ -119,6 +154,9 @@ window.onload = function () {
         if (state.steps[payload]) {
           Vue.set(state.steps[payload], 'visited', true);
         }
+      },
+      changeControlProp(_, {control, prop, value}) {
+        Vue.set(control, prop, value);
       },
       changeTextControl(
         state,
@@ -256,59 +294,10 @@ window.onload = function () {
                   block: b,
                   lesson: l,
                 });
-
-                // const titleSelectedDiscipline = titleControl.value.find(
-                //   (v) => String(v.code) === String(titleControl.selected.code)
-                // )?.discipline;
-                // const value = state.disciplineValue[b.id].filter((v) =>
-                //   titleSelectedDiscipline.some((code) => code === v.code)
-                // );
-                // store.commit('changeSelectValue', {
-                //   select: disciplineControl,
-                //   value,
-                // });
-
-                // if (
-                //   !titleSelectedDiscipline.some(
-                //     (code) => code === disciplineControl.selected.code
-                //   )
-                // ) {
-                //   store.commit('changeSelectStrict', {
-                //     control: disciplineControl,
-                //     selected: disciplineControl.value[0],
-                //   });
-                // }
               }
             }
           });
         });
-
-        // old
-        // Object.keys(data.discipline).forEach((id) => {
-        //   const block = state.steps[2].blocks.find(
-        //     (b) => String(b.id) === String(id)
-        //   );
-        //   if (block && block.lessons) {
-        //     block.lessons.forEach((lesson) => {
-        //       const control = lesson.controls.find(
-        //         (c) => c.name === 'TASK_DISCIPLINE'
-        //       );
-        //       const newValue = [];
-        //       data.discipline[id].forEach((code) => {
-        //         const valueObject = control.value.find(
-        //           (obj) => String(obj.code) === String(code)
-        //         );
-        //         if (valueObject) {
-        //           newValue.push(valueObject);
-        //         }
-        //       });
-        //       //new value
-        //       control.value = newValue;
-        //       //selected
-        //       control.selected = newValue[0];
-        //     });
-        //   }
-        // });
       },
     },
     getters: {
@@ -741,6 +730,114 @@ window.onload = function () {
   Vue.component('v-select', VueSelect.VueSelect);
   Vue.component('date-picker', DatePicker);
 
+  //multi control
+  Vue.component('controlMulti', {
+    data() {
+      return {
+        multi: 1,
+        copy: {},
+      };
+    },
+    props: ['parent', 'blockIndex', 'lessonIndex'],
+    // language=Vue
+    template: `
+      <div>
+        <div v-for="(addedControl, index) in parent.multi" :key="addedControl.id">
+          <div class="twpx-form-control-multi">
+  
+            <div class="btn-delete" @click.prevent="remove(index)" v-if="controlsLength > 1"></div>
+  
+            <form-control-select :formControl="addedControl" :blockIndex="blockIndex" :lessonIndex="lessonIndex" formControlIndex="0"></form-control-select>
+  
+          </div>
+  
+        </div>
+        <div class="btn btn-success btn-md" :class="{'btn-disabled': isDisabled}" @click.prevent="add()">Добавить</div>
+      </div>
+    `,
+    emits: [
+      'create',
+      'add',
+      'remove',
+      'input',
+    ],
+    computed: {
+      controlsLength() {
+        if (
+          this.parent.multi &&
+          typeof this.parent.multi === 'object' &&
+          this.parent.multi.length !== undefined
+        ) {
+          return this.parent.multi.length;
+        }
+        return 0;
+      },
+      isDisabled() {
+        return this.controlsLength >= this.multi;
+      },
+    },
+    methods: {
+      add(value) {
+        if (!this.isDisabled) {
+  
+          let copy = Object.assign({}, this.copy);
+          if (value) {
+            copy[copy.selected ? 'selected' : 'value'] = value;
+          }
+  
+          this.$emit('add', {
+            parent: this.parent,
+            add: copy,
+          });
+
+          if (this.parent.name.includes('LESSON_TITLE')) {
+            // create discipline options
+            const block = this.$store.state.steps[2].blocks[this.blockIndex];
+            const lesson = block.lessons[this.lessonIndex];
+            this.$store.commit('onLessonTitleChange', { block, lesson });
+          }
+        }
+      },
+      remove(index) {
+        this.$emit('remove', { parent: this.parent, index });
+      },
+      input(args) {
+        this.$emit('input', args);
+      },
+      focus(args) {
+        this.$emit('focus', args);
+      },
+      blur(args) {
+        this.$emit('blur', args);
+      },
+      enter(args) {
+        this.$emit('enter', args);
+      },
+      hints(args) {
+        this.$emit('hints', args);
+      },
+    },
+    beforeMount() {
+      this.multi = this.parent.multi;
+      const prop = this.parent.selected ? 'selected' : 'value';
+  
+      this.copy = Object.assign({}, this.parent);
+      delete this.copy.multi;
+      this.copy[prop] = prop === 'selected' ? this.parent.value[0] : '';
+  
+      this.$emit('create', { parent: this.parent });
+
+      if (this.parent[prop] !== null && typeof this.parent[prop] === 'object' && this.parent[prop].forEach && this.parent[prop].length) {
+        this.parent[prop].forEach(v => {
+          this.add(v);
+        })
+        this.parent[prop] = prop === 'selected' ? this.parent.value[0] : [];
+      } else {
+        this.add();
+      }
+    },
+  })
+
   //form control
   Vue.component('formControl', {
     data() {
@@ -983,22 +1080,23 @@ window.onload = function () {
     },
     methods: {
       setInvalid(val) {
-        store.commit('changeTextControl', {
-          stepIndex: this.$store.getters.activeStepIndex,
-          blockIndex: this.blockIndex,
-          lessonIndex: this.lessonIndex,
-          controlIndex: this.formControlIndex,
+        store.commit('changeControlProp', {
+          control: this.formControl,
           prop: 'invalid',
           value: val,
         });
       },
       onSelect() {
         //set select
-        store.commit('changeSelect', {
-          stepIndex: this.$store.getters.activeStepIndex,
-          blockIndex: this.blockIndex,
-          lessonIndex: this.lessonIndex,
-          controlIndex: this.formControlIndex,
+        // store.commit('changeSelect', {
+        //   stepIndex: this.$store.getters.activeStepIndex,
+        //   blockIndex: this.blockIndex,
+        //   lessonIndex: this.lessonIndex,
+        //   controlIndex: this.formControlIndex,
+        //   selected: this.selectedOption,
+        // });
+        store.commit('changeSelectStrict', {
+          control: this.formControl,
           selected: this.selectedOption,
         });
         this.$refs.hiddenInput.value = this.selectedOption.code;
@@ -1008,7 +1106,7 @@ window.onload = function () {
         }
 
         //lesson title select on the 3rd step
-        if (this.formControl.name === 'LESSON_TITLE') {
+        if (this.formControl.name.includes('LESSON_TITLE')) {
           const b = store.state.steps[2].blocks[this.blockIndex];
 
           store.commit('onLessonTitleChange', {
@@ -1465,14 +1563,26 @@ window.onload = function () {
           <div class="b-scc-step__block-title">Занятие {{ lessonIndex + 1 }}</div>
           <div class="row">
             <div class="col-lg-6">
-              <form-control-select :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[0]" formControlIndex="0"></form-control-select>
+        
+              <control-multi
+                :parent="lesson.controls[0]"
+                :blockIndex="blockIndex"
+                :lessonIndex="lessonIndex"
+                @create="createMultiControl"
+                @add="addMultiControl"
+                @remove="removeMultiControl"
+              ></control-multi>
+              <hr>
+              
               <form-control-date :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[1]" formControlIndex="1"></form-control-date>
               <form-control :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[2]" formControlIndex="2"></form-control>
               <form-control-textarea :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[3]" formControlIndex="3"></form-control-textarea>
             </div>
             <div class="col-lg-6">
               <form-control-select :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[4]" formControlIndex="4"></form-control-select>
-              <form-control-select :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[5]" formControlIndex="5" v-if="$store.state.reInitDisciplineSelect"></form-control-select>
+              <div style="height: 48px; margin-bottom: 2rem;">
+                <form-control-select :blockIndex="blockIndex" :lessonIndex="lessonIndex" :formControl="lesson.controls[5]" formControlIndex="5" v-if="$store.state.reInitDisciplineSelect"></form-control-select>
+              </div>
               <div class="row">
                 <div class="col-lg-4">
                   <form-control :formControl="lesson.controls[6]" :blockIndex="blockIndex" :lessonIndex="lessonIndex" formControlIndex="6" time="true"></form-control>
@@ -1505,7 +1615,16 @@ window.onload = function () {
           lessonId: this.lesson.id,
         });
       },
-    },
+      createMultiControl({parent}) {
+        this.$store.commit('createMultiControl', {parent});
+      },
+      addMultiControl({parent, add}) {
+        this.$store.commit('addMultiControl', {parent, add});
+      },
+      removeMultiControl({parent, index}) {
+        this.$store.commit('removeMultiControl', {parent, index});
+      },
+    }
   });
 
   //collapse block
@@ -1777,6 +1896,7 @@ window.onload = function () {
         <p v-html="step.description"></p>
         <hr>
         <div class="b-scc-step__controls">
+
           <div v-for="(formControl, formControlIndex) in step.controls">
 
             <form-control-textarea v-if="formControl.type==='textarea'" :formControl="formControl" :formControlIndex="formControlIndex"></form-control-textarea>

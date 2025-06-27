@@ -51,10 +51,11 @@
                     "discipline": ["1", "2"]
                   }
                 ],
-                "selected": { "label": "Тема 2", "code": "2" },
+                "selected": [{ "label": "Тема 2", "code": "2" }],
                 "type": "select",
                 "required": true,
-                "invalid": false
+                "invalid": false,
+                "multi": 3
               },
               {
                 "name": "LESSON_DATE",
