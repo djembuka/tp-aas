@@ -23,10 +23,24 @@ window.onload = function () {
   const store = new Vuex.Store({
     state: window.appealNewChangeFormStore,
     mutations: {
+      createFieldsetMulty(_, {fieldset}) {
+        Vue.set(fieldset, 'multy', []);
+      },
+      addFieldset(_, {fieldset, add}) {
+        Vue.set(fieldset.multy, fieldset.multy.length, add);
+      },
+      removeFieldset(_, {fieldset, index}) {
+        fieldset.multy.splice(index, 1);
+      },
       setSelected(state, payload) {
-        let control = state.controlsBlock.controls.find(
-          (c) => String(c.property) === String(payload.property)
-        );
+        let control;
+        if (payload.formControl) {
+          control = payload.formControl;
+        } else {
+          control = state.controlsBlock.controls.find(
+            (c) => String(c.property) === String(payload.property)
+          );
+        }
         Vue.set(control, 'selectedOption', payload.selectedOption);
       },
       setAppealId(state) {
@@ -45,33 +59,38 @@ window.onload = function () {
       },
       changeControl(state, payload) {
         let control;
-        //ищем в блоке Данные для изменения
-        if (state.controlsBlock && state.controlsBlock.controls) {
-          control = state.controlsBlock.controls.find(
-            (control) => String(control.property) === String(payload.property)
-          );
-        }
 
-        //Если не нашли, ищем в блоке Документы
-        if (!control) {
-          control = state.confirmDocsBlock.items
-            .map((item) => {
-              let result;
-              item.controls.forEach((control) => {
-                if (result) return;
-                if (control.property === payload.property) {
-                  result = control;
-                } else if (
-                  //Если не нашли, ищем в электронных подписях блока Документы
-                  control.es &&
-                  control.es.property === payload.property
-                ) {
-                  result = control.es;
-                }
-              });
-              return result;
-            })
-            .find((elem) => elem);
+        if (payload.formControl) {
+          control = payload.formControl;
+        } else {
+          //ищем в блоке Данные для изменения
+          if (state.controlsBlock && state.controlsBlock.controls) {
+            control = state.controlsBlock.controls.find(
+              (control) => String(control.property) === String(payload.property)
+            );
+          }
+
+          //Если не нашли, ищем в блоке Документы
+          if (!control) {
+            control = state.confirmDocsBlock.items
+              .map((item) => {
+                let result;
+                item.controls.forEach((control) => {
+                  if (result) return;
+                  if (control.property === payload.property) {
+                    result = control;
+                  } else if (
+                    //Если не нашли, ищем в электронных подписях блока Документы
+                    control.es &&
+                    control.es.property === payload.property
+                  ) {
+                    result = control.es;
+                  }
+                });
+                return result;
+              })
+              .find((elem) => elem);
+          }
         }
 
         //multy
@@ -163,18 +182,24 @@ window.onload = function () {
     },
     actions: {
       async removeControl({ state, commit }, payload) {
-        //find control
-        let control = state.controlsBlock.controls.find(
-          (control) => control.property === payload.property
-        );
-        if (!control) {
-          control = state.confirmDocsBlock.items
-            .map((item) => {
-              return item.controls.find(
-                (control) => control.property === payload.property
-              );
-            })
-            .find((elem) => elem);
+        let control;
+
+        if (payload.formControl) {
+          control = payload.formControl;
+        } else {
+          //find control
+          control = state.controlsBlock.controls.find(
+            (control) => control.property === payload.property
+          );
+          if (!control) {
+            control = state.confirmDocsBlock.items
+              .map((item) => {
+                return item.controls.find(
+                  (control) => control.property === payload.property
+                );
+              })
+              .find((elem) => elem);
+          }
         }
 
         //always multy
@@ -218,6 +243,138 @@ window.onload = function () {
 
   Vue.component('v-select', VueSelect.VueSelect);
   Vue.component('date-picker', DatePicker);
+
+  //add fieldset
+  Vue.component('fieldsetMulty', {
+    data() {
+      return {
+        emptyFieldset: {},
+        multy: null
+      };
+    },
+    props: ['fieldset'],
+    template: `
+    <div class="b-add-fieldset-vc">
+      <div>
+        <div class="b-add-fieldset-item-vc" v-for="(fieldsetItem, fieldsetIndex) in fieldset.multy" :key="fieldsetItem.id">
+          <div v-if="fieldset.multy.length > 1" @click="remove(fieldsetIndex)" class="btn-delete"></div>
+          <h4 class="b-add-fieldset-vc__title">{{ fieldset.title }} {{ fieldsetIndex + 1 }}</h4>
+          <hr class="hr--sl">
+          <div class="b-add-fieldset-vc__controls">
+            <div v-for="(formControl, controlIndex) in fieldsetItem.controls" :key="formControl.id">
+              <form-control-multy v-if="formControl.multy" :formControl="formControl" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
+              <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
+              <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
+              <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
+              <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
+              <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
+              <form-control-search v-else-if="formControl.type==='search'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-search>
+              <form-control v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
+            </div>
+          </div>
+        </div>
+        <hr class="hr--line" style="margin-bottom: 2.5rem;">
+        <button class="btn btn-success btn-md" :disabled="isBtnDisabled" @click.prevent="add">Добавить еще</button>
+        <hr class="hr--lg">
+        <hr class="hr--lg">
+      </div>
+    </div>
+    `,
+    emits: ['autosave', 'timeoutAutosave'],
+    computed: {
+      isBtnDisabled() {
+        return this.fieldset.multy.length === this.multy;
+      }
+    },
+    methods: {
+      //transition
+      enter: function (el, done) {
+        Velocity(el, 'slideDown', {
+          easing: 'ease',
+          duration: 500,
+        });
+      },
+      leave: function (el, done) {
+        Velocity(el, 'slideUp', {
+          easing: 'ease',
+          duration: 500,
+        });
+      },
+      add() {
+        const a = JSON.parse(JSON.stringify(this.emptyFieldset));
+        a.id = Math.floor(Math.random * 1000);
+
+        this.$store.commit('addFieldset', {
+          fieldset: this.fieldset,
+          add: a
+        });
+        this.autosave();
+      },
+      remove(idx) {
+        this.$store.commit('removeFieldset', {
+          fieldset: this.fieldset,
+          index: idx
+        });
+        this.autosave();
+      },
+      autosave() {
+        this.$emit('autosave');
+      },
+      timeoutAutosave() {
+        this.$emit('timeoutAutosave');
+      },
+      clearEmptyFieldset() {
+        this.emptyFieldset?.controls.forEach(c => {
+          if (!c.multy) {
+            switch(c.type) {
+              case 'datefull':
+              case 'date':
+              case 'ornz':
+              case 'search':
+              case 'text':
+              case 'textarea':
+              case 'tel':
+              case 'url':
+              case 'file':
+              case 'es-file':
+                c.value = '';
+                break;
+              case 'select':
+                c.selectedOption = c.options[0];
+                break;
+            }
+          } else {
+            switch(c.type) {
+              case 'datefull':
+              case 'date':
+              case 'ornz':
+              case 'search':
+              case 'text':
+              case 'textarea':
+              case 'tel':
+              case 'url':
+              case 'file':
+              case 'es-file':
+                c.value = [''];
+                break;
+              case 'select':
+                c.selectedOption = c.options[0];
+                break;
+            }
+          }
+        });
+      }
+    },
+    beforeMount() {
+      this.emptyFieldset = JSON.parse(JSON.stringify(this.fieldset));
+      this.clearEmptyFieldset();
+      this.multy = this.fieldset.multy;
+      this.$store.commit('createFieldsetMulty', {
+        fieldset: this.fieldset
+      });
+      this.add();
+    }
+  });
 
   //hidden fields
   Vue.component('hiddenFields', {
@@ -324,13 +481,13 @@ window.onload = function () {
       <p v-html="$store.state.controlsBlock.text"></p>
       <hr class="hr--sl">
       <div v-for="(formControl, controlIndex) in $store.state.controlsBlock.controls" :key="formControl.id">
-        <form-control-multy v-if="formControl.multy" :formControl="formControl" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
+        <fieldsetMulty v-if="formControl.type==='fieldset'" :fieldset="formControl" />
+        <form-control-multy v-else-if="formControl.multy" :formControl="formControl" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
         <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
         <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
         <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
         <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
         <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
-        <form-control-search v-else-if="formControl.type==='search'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-search>
         <form-control v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
       </div>
     </div>
@@ -431,6 +588,7 @@ window.onload = function () {
     watch: {
       controlValue(val) {
         let payload = {
+          formControl: this.formControl,
           property: this.formControl.property,
           value: val,
         };
@@ -577,6 +735,7 @@ window.onload = function () {
     watch: {
       controlValue(val) {
         let payload = {
+          formControl: this.formControl,
           property: this.formControl.property,
           value: val,
         };
@@ -955,6 +1114,7 @@ window.onload = function () {
     watch: {
       controlValue(val) {
         let payload = {
+          formControl: this.formControl,
           property: this.formControl.property,
           value: val,
         };
@@ -1650,6 +1810,7 @@ window.onload = function () {
         }
         //set value
         let payload = {
+          formControl: this.formControl,
           property: this.formControl.property,
           value: this.controlValue,
         };
@@ -1748,6 +1909,7 @@ window.onload = function () {
     methods: {
       onSelect() {
         this.$store.commit('setSelected', {
+          formControl: this.formControl,
           property: this.formControl.property,
           selectedOption: this.selectedOption,
         });
@@ -1833,7 +1995,7 @@ window.onload = function () {
             </div>
           </transition-group>
         </div>
-        <button class="btn btn-success btn-md" :class="{disabled: isBtnDisabled, 'left-margin': formControl.type==='es-file'}" @click.prevent="add">Добавить еще</button>
+        <button class="btn btn-success btn-md" :disabled="isBtnDisabled" :class="{'left-margin': formControl.type==='es-file'}" @click.prevent="add">Добавить еще</button>
         <hr class="hr--sl">
       </div>
     `,
@@ -1862,6 +2024,7 @@ window.onload = function () {
       },
       add() {
         this.$store.commit('changeControl', {
+          formControl: this.formControl,
           property: this.formControl.property,
           index: this.formControl.value.length,
           value: '',
@@ -1890,9 +2053,14 @@ window.onload = function () {
 
         // console.log(this.formControl, this.formControl.value);
 
+        if (!control) {
+          control = this.formControl;
+        }
+
         let controlValue = control.value;
 
         this.$store.dispatch('removeControl', {
+          formControl: this.formControl,
           property: this.formControl.property,
           index: idx,
         });
@@ -2103,6 +2271,7 @@ window.onload = function () {
         }
         //set value
         let payload = {
+          formControl: this.formControl,
           property: this.formControl.property,
           value: this.date,
         };
@@ -2308,6 +2477,7 @@ window.onload = function () {
         }
         //set value
         let payload = {
+          formControl: this.formControl,
           property: this.formControl.property,
           value: this.date,
         };
