@@ -1,0 +1,134 @@
+.twpx-modal-any-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(3.799999952316284px);
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.twpx-modal-any-content.twpx-modal-any-content--animate {
+  opacity: 1;
+}
+.twpx-modal-any-content.twpx-modal-any-content--open {
+  pointer-events: auto;
+  z-index: 1000;
+}
+.twpx-modal-any-content-body {
+  display: grid;
+  width: calc(100% - 16px * 2);
+  max-width: 700px;
+  padding: var(--twpx-table-padding-l, 32px);
+  padding-right: calc(var(--twpx-table-padding-l, 32px) - 5px);
+  gap: var(--twpx-table-padding-l, 32px);
+  border-radius: var(--twpx-text-border-radius-medium, 8px);
+  background: var(--twpx-background-default, #FFF);
+  box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.05);
+  max-height: calc(100vh - 50px);
+}
+.twpx-modal-any-content-body > div {
+  width: 100%;
+}
+.twpx-modal-any-content-close {
+  display: flex;
+  padding: var(--twpx-table-padding-m, 16px);
+  justify-content: flex-end;
+  align-items: center;
+}
+.twpx-modal-any-content-close svg {
+  cursor: pointer;
+}
+.twpx-modal-any-content-container {
+  max-height: calc(100vh - 50px - var(--twpx-table-padding-l, 32px) - 46px - var(--twpx-table-padding-l, 32px) - var(--twpx-table-padding-l, 32px));
+  overflow-y: auto;
+  padding-right: 5px;
+  scrollbar-width: thin;           /* Firefox */
+  scrollbar-color: #bbb #f5f5f5;   /* Firefox */
+}
+
+/* Chrome, Edge, Safari */
+.twpx-modal-any-content-container::-webkit-scrollbar {
+  width: 6px;
+  background: #f5f5f5;
+}
+
+.twpx-modal-any-content-container::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 3px;
+}
+
+.twpx-modal-any-content-container::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+.twpx-modal-any-content-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+.twpx-modal-any-content-buttons .vue-button {
+  width: 256px;
+}
+
+.twpx-modal-any-content h2,
+.twpx-modal-any-content p {
+    margin: 0;
+    padding: 0;
+}
+.twpx-modal-any-content-container {
+    display: grid;
+    gap: var(--twpx-table-padding-l, 32px);
+    justify-items: center;
+}
+
+.vue-loader-circle--modal {
+  --aas-primary-color: #074c86;
+  position: relative;
+  min-height: 70px;
+}
+.vue-loader-circle--modal svg {
+  position: absolute;
+  height: 70px;
+  width: 70px;
+  top: calc(50% - 35px);
+  right: calc(50% - 35px);
+  -webkit-animation: vue-loader-circle--modal 1.3s infinite linear;
+  animation: vue-loader-circle--modal 1.3s infinite linear;
+}
+
+@-webkit-keyframes vue-loader-circle--modal {
+  0% {
+    -webkit-transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes vue-loader-circle--modal {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.b-check-detail-fileload-error__content {
+    gap: 16px;
+}
+.b-check-detail-fileload-error__text {
+    grid-template-columns: 24px auto;
+    gap: 32px;
+}
+.b-check-detail-fileload-error__button {
+    padding-left: calc(24px + 32px);
+}

@@ -2447,15 +2447,25 @@ window.BX = {
           });
           break;
         case 'download':
-          console.log(data);
           result = new Promise((resolve, reject) => {
-            resolve({
+            /*resolve({
+              status: 'success',
+              data: {
+                uuid: '123',
+              },
+            });*/
+            reject({ errors: [{ code: 8, message: 'download error' }] });
+          });
+          break;
+		case 'getArchive':
+          result = new Promise((resolve, reject) => {
+            /*resolve({
               status: 'success',
               data: {
                 url: '/template/archive.zip',
               },
-            });
-            // reject({ errors: [{ code: 8, message: 'download error' }] });
+            });*/
+            reject({ errors: [{ code: 8, message: 'getArchive error' }] });
           });
           break;
       }

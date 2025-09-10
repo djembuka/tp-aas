@@ -9,10 +9,14 @@ window.addEventListener('load', () => {
     state: {
       data: undefined,
       modal: { show: false, blockId: null, loading: false, status_comment: '' },
+      modalLoaderState: false
     },
     mutations: {
       setModalStatusComment(state, { status_comment }) {
         Vue.set(state.modal, 'status_comment', status_comment);
+      },
+      changeModalLoaderState(state) {
+        Vue.set(state, 'modalLoaderState', !state.modalLoaderState);
       },
       changeModalState(state, { show, blockId, loading }) {
         if (show !== undefined) {
@@ -41,9 +45,7 @@ window.addEventListener('load', () => {
                   Vue.set(
                     state,
                     'error',
-                    `${window.BX.message('ERROR_SUPPORT')}
-                    <br>
-                    <br>
+                    `${window.BX.message('ERROR_SUPPORT') ? window.BX.message('ERROR_SUPPORT') + '<br>' : ''}
                     Метод: ${method}. Код ошибки: ${
                       error.data.ajaxRejectData.data
                     }. Описание: ${
@@ -57,9 +59,7 @@ window.addEventListener('load', () => {
                 Vue.set(
                   state,
                   'error',
-                  `${window.BX.message('ERROR_SUPPORT')}
-                  <br>
-                  <br>
+                  `${window.BX.message('ERROR_SUPPORT') ? window.BX.message('ERROR_SUPPORT') + '<br>' : ''}
                   Метод: ${method}. Код ошибки: NETWORK_ERROR. Описание: ${window.BX.message(
                     'ERROR_OFFLINE'
                   )}.`
@@ -69,9 +69,7 @@ window.addEventListener('load', () => {
               Vue.set(
                 state,
                 'error',
-                `${window.BX.message('ERROR_SUPPORT')}
-                <br>
-                <br>
+                `${window.BX.message('ERROR_SUPPORT') ? window.BX.message('ERROR_SUPPORT') + '<br>' : ''}
                 Метод: ${method}.${
                   error.errors[0].code
                     ? ' Код ошибки: ' + error.errors[0].code + '.'
@@ -442,7 +440,7 @@ window.addEventListener('load', () => {
           );
         }
       },
-      async downloadBX({ commit }, { vkkr_id, block_id, history }) {
+      /*async downloadBX({ commit }, { vkkr_id, block_id, history }) {
         if (window.BX) {
           const data = {
             vkkr_id,
@@ -469,6 +467,100 @@ window.addEventListener('load', () => {
               },
               (error) => {
                 commit('showError', { error, method: 'download' });
+              }
+            );
+        }
+      },*/
+      async downloadBX({ commit }, data) {
+        if (window.BX) {
+          commit('changeModalLoaderState');// show
+
+          let isTimedOut = false;
+          const timeoutId = setTimeout(() => {
+            isTimedOut = true;
+            commit('showError', { error: 'Таймаут ожидания ответа (20 сек.)', method: 'download' });
+            commit('changeModalLoaderState');// hide
+          }, 20000);
+
+          BX.ajax
+            .runComponentAction('twinpx:vkkr.api', 'download', {
+              mode: 'class',
+              data,
+            })
+            .then(
+              (r) => {
+                if (isTimedOut) return;
+                clearTimeout(timeoutId);
+
+                if (r && r.data && r.data.uuid) {
+                  const deadlineTs = Date.now() + 10 * 60 * 1000; // 10 минут
+                  let isPollingCancelled = false;
+
+                  const pollGetArchive = () => {
+                    if (isPollingCancelled) return;
+                    if (Date.now() > deadlineTs) {
+                      isPollingCancelled = true;
+                      commit('showError', { error: 'Превышено время ожидания формирования архива (10 минут)', method: 'getArchive' });
+                      commit('changeModalLoaderState');// hide
+                      return;
+                    }
+
+                    let callTimedOut = false;
+                    const perCallTimer = setTimeout(() => {
+                      callTimedOut = true;
+                      isPollingCancelled = true;
+                      commit('showError', { error: 'Таймаут ожидания ответа (20 сек.)', method: 'getArchive' });
+                      commit('changeModalLoaderState');// hide
+                    }, 20000);
+
+                    BX.ajax
+                      .runComponentAction('twinpx:vkkr.api', 'getArchive', {
+                        mode: 'class',
+                        data: {
+                          uuid: r.data.uuid,
+                          ...data
+                        },
+                      })
+                      .then(
+                        (ga) => {
+                          console.log(ga)
+                          if (isPollingCancelled || callTimedOut) return;
+                          clearTimeout(perCallTimer);
+
+                          const res = ga && ga.data ? ga.data : null;
+
+                          if (res) {
+                            if (res.url) {
+                              isPollingCancelled = true;
+                              window.location = res.url;
+                              commit('changeModalLoaderState');// hide
+                            } else if (res.reload) {
+                              setTimeout(pollGetArchive, 10000);
+                            }
+                          }
+                        },
+                        () => {
+                          if (isPollingCancelled || callTimedOut) return;
+                          clearTimeout(perCallTimer);
+                          // В случае ошибки повторим попытку до дедлайна
+                          setTimeout(pollGetArchive, 10000);
+                        }
+                      );
+                  };
+
+                  // первый запуск поллинга
+                  pollGetArchive();
+                } else {
+                  commit('showError', { error: 'Неверный формат ответа', method: 'download' });
+                  commit('changeModalLoaderState');// hide
+                }
+              },
+              (error) => {
+                if (isTimedOut) return;
+                clearTimeout(timeoutId);
+
+                commit('showError', { error, method: 'download' });
+                commit('changeModalLoaderState');// hide
               }
             );
         }
@@ -501,6 +593,123 @@ window.addEventListener('load', () => {
   });
 
   Vue.component('v-select', VueSelect.VueSelect);
+
+  Vue.component('modalLoader', {
+    data() {
+      return {
+        isOpen: false,
+        isAnimate: false,
+        IconLoader: `
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <g clip-path="url(#paint0_angular_3377_23_clip_path)">
+                <g transform="matrix(0 0.032 -0.032 0 32 32)">
+                  <foreignObject x="-1031.25" y="-1031.25" width="2062.5" height="2062.5">
+                      <div xmlns="http://www.w3.org/1999/xhtml" style="background:conic-gradient(from 90deg,rgba(67, 117, 216, 1) 0deg,rgba(255, 255, 255, 0) 360deg);height:100%;width:100%;opacity:1"></div>
+                  </foreignObject>
+                </g>
+            </g>
+            <path d="M64 32C64 49.6731 49.6731 64 32 64C14.3269 64 0 49.6731 0 32C0 14.3269 14.3269 0 32 0C49.6731 0 64 14.3269 64 32ZM6.4 32C6.4 46.1385 17.8615 57.6 32 57.6C46.1385 57.6 57.6 46.1385 57.6 32C57.6 17.8615 46.1385 6.4 32 6.4C17.8615 6.4 6.4 17.8615 6.4 32Z" />
+            <defs>
+                <clipPath id="paint0_angular_3377_23_clip_path">
+                  <path d="M64 32C64 49.6731 49.6731 64 32 64C14.3269 64 0 49.6731 0 32C0 14.3269 14.3269 0 32 0C49.6731 0 64 14.3269 64 32ZM6.4 32C6.4 46.1385 17.8615 57.6 32 57.6C46.1385 57.6 57.6 46.1385 57.6 32C57.6 17.8615 46.1385 6.4 32 6.4C17.8615 6.4 6.4 17.8615 6.4 32Z"/>
+                </clipPath>
+            </defs>
+          </svg>`,
+        IconClose: `
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M8.04995 6.98787L13.7795 1.25837C13.855 1.19193 13.9161 1.11073 13.959 1.01978C14.0019 0.928829 14.0258 0.830049 14.0291 0.729527C14.0324 0.629004 14.0151 0.528868 13.9783 0.435286C13.9414 0.341705 13.8858 0.25666 13.8148 0.185392C13.7438 0.114124 13.659 0.0581411 13.5656 0.0208929C13.4722 -0.0163553 13.3721 -0.0340802 13.2716 -0.0311898C13.1711 -0.0282994 13.0722 -0.00485496 12.981 0.0376992C12.8899 0.0802535 12.8085 0.141016 12.7417 0.216244L7.01132 5.95012L1.28183 0.216244C1.14363 0.0780497 0.956199 0.000412874 0.760763 0.000412874C0.565326 0.000412874 0.377895 0.0780497 0.2397 0.216244C0.101506 0.354438 0.0238691 0.54187 0.0238691 0.737307C0.0238691 0.932743 0.101506 1.12017 0.2397 1.25837L5.9692 6.98787L0.216075 12.7419C0.0778809 12.8801 0.000244141 13.0675 0.000244141 13.2629C0.000244141 13.4584 0.0778809 13.6458 0.216075 13.784C0.35427 13.9222 0.541701 13.9998 0.737138 13.9998C0.932574 13.9998 1.12001 13.9222 1.2582 13.784L7.01132 8.03087L12.7408 13.7612C12.879 13.8994 13.0665 13.9771 13.2619 13.9771C13.4573 13.9771 13.6448 13.8994 13.783 13.7612C13.9211 13.623 13.9988 13.4356 13.9988 13.2402C13.9988 13.0447 13.9211 12.8573 13.783 12.7191L8.04995 6.98787Z" fill="#5F7696"/>
+          </svg>
+        `,
+        textArray: [
+          'Архив заваривает себе кофе… и уже почти готов к встрече с вами.',
+          'Файлы упаковываются так тщательно, будто едут на курорт.',
+          'Архив разгоняется… но пока держим скорость ниже скорости света.',
+          'Идёт тонкая настройка — архив хочет выглядеть идеально.',
+          'Осталось красиво завязать бант… и можно скачивать!',
+        ],
+        uniqueIndex: 0,
+        getRandomUniqueIndex: () => {}
+      };
+    },
+    props: ['stateWatcher'],
+    template: `
+      <div :class="{
+        'twpx-modal-any-content': true,
+        'twpx-modal-any-content--open': isOpen,
+        'twpx-modal-any-content--animate': isAnimate
+        }">
+
+        <div class="twpx-modal-any-content-body" @click.stop>
+          <div class="twpx-modal-any-content-close">
+            <div v-html="IconClose" @click.prevent="close"></div>
+          </div>
+
+          <div class="twpx-modal-any-content-container">
+            <h2>Формирование архива</h2>  
+            <p v-text="textItem"></p>
+            <div v-html="IconLoader" class="vue-loader-circle--modal"></div>
+            <button class="btn btn-primary btn-lg">Отменить</button>
+          </div>
+        </div>
+      </div>
+    `,
+    computed: {
+      textItem() {
+        return this.textArray[this.uniqueIndex];
+      }
+    },
+    watch: {
+      stateWatcher() {
+        if (this.isOpen) {
+          this.close();
+        } else {
+          this.open();
+          this.getRandomUniqueIndex = this.createRandomUniqueIndexGenerator(this.textArray);
+          setInterval(() => {
+            this.uniqueIndex = this.getRandomUniqueIndex();
+          }, 10000);
+        }
+      }
+    },
+    methods: {
+      open() {
+        this.isOpen = true;
+        setTimeout(() => {
+          this.isAnimate = true;
+        }, 0)
+      },
+      close() {
+        this.isAnimate = false;
+        setTimeout(() => {
+          this.isOpen = false;
+        }, 300)
+      },
+      createRandomUniqueIndexGenerator(array) {
+        // Создаем массив индексов на основе длины переданного массива
+        let numbers = Array.from({ length: array.length }, (_, i) => i);
+        let previousIndex = null; // Храним предыдущий индекс
+      
+        return function () {
+          if (numbers.length === 0) {
+            // Если массив индексов пуст, снова заполняем его
+            numbers = Array.from({ length: array.length }, (_, i) => i);
+          }
+      
+          let randomIndex;
+          do {
+            // Выбираем случайный индекс из оставшихся
+            randomIndex = Math.floor(Math.random() * numbers.length);
+          } while (numbers[randomIndex] === previousIndex && numbers.length > 1); // Повторяем, если новый индекс равен предыдущему
+      
+          // Извлекаем число по этому индексу
+          const randomNumber = numbers.splice(randomIndex, 1)[0];
+          previousIndex = randomNumber; // Обновляем предыдущий индекс
+      
+          return randomNumber;
+        };
+      }
+    },
+  });
 
   Vue.component('collapseBlock', {
     data() {
@@ -2014,11 +2223,11 @@ window.addEventListener('load', () => {
     },
   });
 
-  const App = {
-    el: '#checkDetailFileload',
-    store,
+  Vue.component('ErrorComponent', {
+    data() {
+      return {}
+    },
     template: `
-    <div :class="{'b-check-detail-fileload-loader': !loaded}">
       <div v-if="error" class="b-check-detail-fileload-error" @click="clickError($event)">
         <div class="b-check-detail-fileload-error__content">
           <div class="b-check-detail-fileload-error__text">
@@ -2030,11 +2239,39 @@ window.addEventListener('load', () => {
             </svg>
             <span v-html="error"></span>
           </div>
-          <div class="btn btn-md" @click="clickError">Понятно</div>
+          <div class="b-check-detail-fileload-error__button"><div class="btn btn-md" @click="clickError">Понятно</div></div>
         </div>
       </div>
+    `,
+    computed: {
+      error() {
+        return this.$store.state.error;
+      }
+    },
+    methods: {
+      clickError(event) {
+        if (
+          event.target.classList.contains('b-check-detail-fileload-error') ||
+          event.target.classList.contains('btn')
+        ) {
+          this.$store.commit('showError', { error: false });
+        }
+      },
+    }
+  })
 
-      <div v-else-if="loaded">
+  const App = {
+    el: '#checkDetailFileload',
+    store,
+    template: `
+    <div :class="{'b-check-detail-fileload-loader': !loaded}">
+
+      <error-component />
+
+      <div v-if="loaded">
+
+        <modalLoader :stateWatcher="modalLoaderState" />
+
         <div v-for="block in blocks" :data-id="block.id">
           <collapse-block v-if="blockVisible(block)" :block="block" :key="block.id"></collapse-block>
         </div>
@@ -2056,12 +2293,12 @@ window.addEventListener('load', () => {
       loaded() {
         return !!this.$store.state.data && !!this.$store.state.statuses;
       },
-      error() {
-        return this.$store.state.error;
-      },
       blocks() {
         if (this.loaded) return this.$store.state.data.blocks;
       },
+      modalLoaderState() {
+        return this.$store.state.modalLoaderState;
+      }
     },
     methods: {
       blockVisible(block) {
@@ -2072,14 +2309,6 @@ window.addEventListener('load', () => {
           block.permissions.monitoring ||
           (block.permissions.read && block.state === 'filled')
         );
-      },
-      clickError(event) {
-        if (
-          event.target.classList.contains('b-check-detail-fileload-error') ||
-          event.target.classList.contains('btn')
-        ) {
-          this.$store.commit('showError', { error: false });
-        }
       },
     },
     beforeMount() {
