@@ -4,9 +4,6 @@ b
 i
   font-style italic
 
-.aas-logo img
-  display block
-
 table
   display table
   border-collapse collapse
@@ -42,7 +39,7 @@ td
   vertical-align top
   color #000
   font-weight normal
-  font-size 10px
+  font-size 14px
   line-height normal
   vertical-align top
 
@@ -74,7 +71,13 @@ td.border
 table.header
 
   td
-    font-size 8px
+    font-size 11px
+
+    &.aas-logo
+      vertical-align middle
+
+      img
+        display block
 
 table.h1
 
@@ -84,13 +87,13 @@ table.h1
 
 table.items
 
-  td
-    text-align left
+  b
+    display inline-block
+    margin-right 10px
 
 table.stamp
   border 3px solid #173457
   min-width 220px
-  margin-top 50px
   width auto
 
   td
@@ -99,16 +102,19 @@ table.stamp
     font-family "Roboto Condensed", Roboto, Arial, sans-serif
     font-weight bold
     color #0A355A
-    padding 0 15px
+    padding 1px 12px
 
-  td.pt7
-    padding-top 7px
+  td.pt12
+    padding-top 12px
 
-  td.pb7
-    padding-bottom 7px
+  td.pb12
+    padding-bottom 12px
 
   td.fs19
     font-size 19px
+
+  td.fs12
+    font-size 12px
 
   td.fs11
     font-size 11px
@@ -118,3 +124,6 @@ table.stamp
 
   td.fs8
     font-size 8px
+
+  td.fs6
+    font-size 6px

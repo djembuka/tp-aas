@@ -2448,13 +2448,13 @@ window.BX = {
           break;
         case 'download':
           result = new Promise((resolve, reject) => {
-            /*resolve({
+            resolve({
               status: 'success',
               data: {
                 uuid: '123',
               },
-            });*/
-            reject({ errors: [{ code: 8, message: 'download error' }] });
+            });
+            //reject({ errors: [{ code: 8, message: 'download error' }] });
           });
           break;
 		case 'getArchive':

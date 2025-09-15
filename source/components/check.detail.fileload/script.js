@@ -9,9 +9,13 @@ window.addEventListener('load', () => {
     state: {
       data: undefined,
       modal: { show: false, blockId: null, loading: false, status_comment: '' },
-      modalLoaderState: false
+      modalLoaderState: false,
+      stopDownloadTimestamp: 0
     },
     mutations: {
+      changeStopDownloadTimestamp(state, timestamp) {
+        Vue.set(state, 'stopDownloadTimestamp', timestamp)
+      },
       setModalStatusComment(state, { status_comment }) {
         Vue.set(state.modal, 'status_comment', status_comment);
       },
@@ -471,7 +475,9 @@ window.addEventListener('load', () => {
             );
         }
       },*/
-      async downloadBX({ commit }, data) {
+      async downloadBX({ state, commit }, data) {
+        let startDownloadTimestamp = new Date().getTime();
+
         if (window.BX) {
           commit('changeModalLoaderState');// show
 
@@ -491,6 +497,7 @@ window.addEventListener('load', () => {
               (r) => {
                 if (isTimedOut) return;
                 clearTimeout(timeoutId);
+                if (state.stopDownloadTimestamp > startDownloadTimestamp) return;
 
                 if (r && r.data && r.data.uuid) {
                   const deadlineTs = Date.now() + 10 * 60 * 1000; // 10 минут
@@ -498,6 +505,11 @@ window.addEventListener('load', () => {
 
                   const pollGetArchive = () => {
                     if (isPollingCancelled) return;
+                    if (state.stopDownloadTimestamp > startDownloadTimestamp) {
+                      isPollingCancelled = true;
+                      return;
+                    };
+
                     if (Date.now() > deadlineTs) {
                       isPollingCancelled = true;
                       commit('showError', { error: 'Превышено время ожидания формирования архива (10 минут)', method: 'getArchive' });
@@ -523,9 +535,13 @@ window.addEventListener('load', () => {
                       })
                       .then(
                         (ga) => {
-                          console.log(ga)
                           if (isPollingCancelled || callTimedOut) return;
                           clearTimeout(perCallTimer);
+                          if (state.stopDownloadTimestamp > startDownloadTimestamp) {
+                            callTimedOut = true;
+                            isPollingCancelled = true;
+                            return;
+                          };
 
                           const res = ga && ga.data ? ga.data : null;
 
@@ -542,6 +558,11 @@ window.addEventListener('load', () => {
                         () => {
                           if (isPollingCancelled || callTimedOut) return;
                           clearTimeout(perCallTimer);
+                          if (state.stopDownloadTimestamp > startDownloadTimestamp) {
+                            callTimedOut = true;
+                            isPollingCancelled = true;
+                            return;
+                          };
                           // В случае ошибки повторим попытку до дедлайна
                           setTimeout(pollGetArchive, 10000);
                         }
@@ -552,15 +573,20 @@ window.addEventListener('load', () => {
                   pollGetArchive();
                 } else {
                   commit('showError', { error: 'Неверный формат ответа', method: 'download' });
-                  commit('changeModalLoaderState');// hide
+                  setTimeout(() => {
+                    commit('changeModalLoaderState');// hide
+                  }, 0);
                 }
               },
               (error) => {
                 if (isTimedOut) return;
                 clearTimeout(timeoutId);
+                if (state.stopDownloadTimestamp > startDownloadTimestamp) return;
 
                 commit('showError', { error, method: 'download' });
-                commit('changeModalLoaderState');// hide
+                setTimeout(() => {
+                  commit('changeModalLoaderState');// hide
+                }, 0);
               }
             );
         }
@@ -628,7 +654,8 @@ window.addEventListener('load', () => {
           'Осталось красиво завязать бант… и можно скачивать!',
         ],
         uniqueIndex: 0,
-        getRandomUniqueIndex: () => {}
+        getRandomUniqueIndex: () => {},
+        intervalId: undefined
       };
     },
     props: ['stateWatcher'],
@@ -641,14 +668,14 @@ window.addEventListener('load', () => {
 
         <div class="twpx-modal-any-content-body" @click.stop>
           <div class="twpx-modal-any-content-close">
-            <div v-html="IconClose" @click.prevent="close"></div>
+            <div v-html="IconClose" @click.prevent="clickButton"></div>
           </div>
 
           <div class="twpx-modal-any-content-container">
             <h2>Формирование архива</h2>  
             <p v-text="textItem"></p>
             <div v-html="IconLoader" class="vue-loader-circle--modal"></div>
-            <button class="btn btn-primary btn-lg">Отменить</button>
+            <button class="btn btn-primary btn-lg" @click.prevent="clickButton">Отменить</button>
           </div>
         </div>
       </div>
@@ -665,13 +692,21 @@ window.addEventListener('load', () => {
         } else {
           this.open();
           this.getRandomUniqueIndex = this.createRandomUniqueIndexGenerator(this.textArray);
-          setInterval(() => {
+          this.intervalId = setInterval(() => {
             this.uniqueIndex = this.getRandomUniqueIndex();
           }, 10000);
         }
       }
     },
     methods: {
+      clickButton() {
+        // close modal
+        this.close();
+        // stop load
+        this.$store.commit('changeStopDownloadTimestamp', new Date().getTime());
+        // clear
+        clearInterval(this.intervalId);
+      },
       open() {
         this.isOpen = true;
         setTimeout(() => {
