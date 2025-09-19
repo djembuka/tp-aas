@@ -499,7 +499,7 @@ window.addEventListener('load', () => {
                 clearTimeout(timeoutId);
                 if (state.stopDownloadTimestamp > startDownloadTimestamp) return;
 
-                if (r && r.data && r.data.uuid) {
+                if (r && r.data && r.data.UUID) {
                   const deadlineTs = Date.now() + 10 * 60 * 1000; // 10 минут
                   let isPollingCancelled = false;
 
@@ -529,7 +529,7 @@ window.addEventListener('load', () => {
                       .runComponentAction('twinpx:vkkr.api', 'getArchive', {
                         mode: 'class',
                         data: {
-                          uuid: r.data.uuid,
+                          UUID: r.data.UUID,
                           ...data
                         },
                       })
