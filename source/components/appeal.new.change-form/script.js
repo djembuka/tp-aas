@@ -470,59 +470,6 @@ window.onload = function () {
     },
   });
 
-  //data to change
-  Vue.component('dataToChange', {
-    data() {
-      return {};
-    },
-    template: `
-    <div>
-      <h2>{{ $store.state.controlsBlock.title }}</h2>
-      <p v-html="$store.state.controlsBlock.text"></p>
-      <hr class="hr--sl">
-      <div v-for="(formControl, controlIndex) in $store.state.controlsBlock.controls" :key="formControl.id">
-        <fieldsetMulty v-if="formControl.type==='fieldset'" :fieldset="formControl" />
-        <form-control-multy v-else-if="formControl.multy" :formControl="formControl" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
-        <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
-        <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
-        <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
-        <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
-        <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
-        <form-control v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
-      </div>
-    </div>
-    `,
-    emits: ['autosave', 'timeoutAutosave'],
-    methods: {
-      //transition
-      enter: function (el, done) {
-        Velocity(el, 'slideDown', {
-          easing: 'ease',
-          duration: 500,
-        });
-      },
-      leave: function (el, done) {
-        Velocity(el, 'slideUp', {
-          easing: 'ease',
-          duration: 500,
-        });
-      },
-
-      toggleBody() {
-        //set slide class for the main div
-        this.slide = !this.slide;
-        //slide body
-        this.open = !this.open;
-      },
-      autosave() {
-        this.$emit('autosave');
-      },
-      timeoutAutosave() {
-        this.$emit('timeoutAutosave');
-      },
-    },
-  });
-
   //form control
   Vue.component('formControl', {
     data() {
@@ -2494,6 +2441,101 @@ window.onload = function () {
     },
   });
 
+  /////--------
+
+  //document block
+  Vue.component('docsBlock', {
+    template: `
+    <div>
+      <h2 v-if="$store.state.docsBlock.title">{{$store.state.docsBlock.title}}</h2>
+      <p v-if="$store.state.docsBlock.text" v-html="$store.state.docsBlock.text"></p>
+      <div class="b-docs-block" v-if="$store.state.docsBlock.items.length">
+        <div class="b-docs-block__item" href="/pages/news/" v-for="(item, index) in $store.state.docsBlock.items" :key="item.id">
+          <hr v-if="index !== 0">
+          <div class="b-docs-block__body">
+            <a class="b-docs-block__icon" :href="item.url" :style="'background-image: url( ' + item.icon + ' );'"></a>
+            <span class="b-docs-block__text">
+              <a :href="item.url">{{item.title}}</a>
+              <span class="b-docs-block__data" v-if="item.data.length">
+                <span class="text-muted" v-for="data in item.data" :key="data">{{data}}</span>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>`,
+  });
+
+  //data to change
+  Vue.component('dataToChange', {
+    data() {
+      return {};
+    },
+    template: `
+    <div>
+      <h2>{{ $store.state.controlsBlock.title }}</h2>
+      <p v-html="$store.state.controlsBlock.text"></p>
+      <hr class="hr--sl">
+      <div v-for="(formControl, controlIndex) in $store.state.controlsBlock.controls" :key="formControl.id">
+        <fieldsetMulty v-if="formControl.type==='fieldset'" :fieldset="formControl" />
+        <form-control-multy v-else-if="formControl.multy" :formControl="formControl" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
+        <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
+        <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
+        <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
+        <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
+        <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
+        <form-control v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
+      </div>
+    </div>
+    `,
+    emits: ['autosave', 'timeoutAutosave'],
+    methods: {
+      //transition
+      enter: function (el, done) {
+        Velocity(el, 'slideDown', {
+          easing: 'ease',
+          duration: 500,
+        });
+      },
+      leave: function (el, done) {
+        Velocity(el, 'slideUp', {
+          easing: 'ease',
+          duration: 500,
+        });
+      },
+
+      toggleBody() {
+        //set slide class for the main div
+        this.slide = !this.slide;
+        //slide body
+        this.open = !this.open;
+      },
+      autosave() {
+        this.$emit('autosave');
+      },
+      timeoutAutosave() {
+        this.$emit('timeoutAutosave');
+      },
+    },
+  });
+
+  //confirm document block
+  Vue.component('confirmDocsBlock', {
+    template: `
+    <div>
+
+      <h2 v-if="$store.state.confirmDocsBlock.title">{{ $store.state.confirmDocsBlock.title }}</h2>
+
+      <p v-if="$store.state.confirmDocsBlock.items.length !== 1 && $store.state.confirmDocsBlock.text" v-html="$store.state.confirmDocsBlock.text"></p>
+
+      <div v-for="(doc, index) in $store.state.confirmDocsBlock.items">
+        <form-control-radio-with-controls :index="index" :control="doc" :blockFlag="$store.state.confirmDocsBlock.items.length === 1"></form-control-radio-with-controls>
+        <hr>
+      </div>
+
+    </div>`,
+  });
+
   //submit button
   Vue.component('submitButton', {
     data() {
@@ -2656,45 +2698,8 @@ window.onload = function () {
     },
   });
 
-  //document block
-  Vue.component('docsBlock', {
-    template: `
-    <div>
-      <h2 v-if="$store.state.docsBlock.title">{{$store.state.docsBlock.title}}</h2>
-      <p v-if="$store.state.docsBlock.text" v-html="$store.state.docsBlock.text"></p>
-      <div class="b-docs-block" v-if="$store.state.docsBlock.items.length">
-        <div class="b-docs-block__item" href="/pages/news/" v-for="(item, index) in $store.state.docsBlock.items" :key="item.id">
-          <hr v-if="index !== 0">
-          <div class="b-docs-block__body">
-            <a class="b-docs-block__icon" :href="item.url" :style="'background-image: url( ' + item.icon + ' );'"></a>
-            <span class="b-docs-block__text">
-              <a :href="item.url">{{item.title}}</a>
-              <span class="b-docs-block__data" v-if="item.data.length">
-                <span class="text-muted" v-for="data in item.data" :key="data">{{data}}</span>
-              </span>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>`,
-  });
 
-  //confirm document block
-  Vue.component('confirmDocsBlock', {
-    template: `
-    <div>
-
-      <h2 v-if="$store.state.confirmDocsBlock.title">{{ $store.state.confirmDocsBlock.title }}</h2>
-
-      <p v-if="$store.state.confirmDocsBlock.items.length !== 1 && $store.state.confirmDocsBlock.text" v-html="$store.state.confirmDocsBlock.text"></p>
-
-      <div v-for="(doc, index) in $store.state.confirmDocsBlock.items">
-        <form-control-radio-with-controls :index="index" :control="doc" :blockFlag="$store.state.confirmDocsBlock.items.length === 1"></form-control-radio-with-controls>
-        <hr>
-      </div>
-
-    </div>`,
-  });
+  /////--------
 
   const App = {
     el: '#appealNewChangeForm',

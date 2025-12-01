@@ -80,6 +80,11 @@
       row-gap 16px
 
   &__data
+    display grid
+    gap 24px
+
+    h3
+      margin 0
     
     .b-copy-icon
       width 16px
@@ -117,8 +122,10 @@
         &.b-copy-icon__note--show
           opacity 1
 
-    .col-lg-6 table.table
+    table.table
       margin-bottom 0
+
+    .col-lg-6 table.table
 
       th,
       td
@@ -156,5 +163,19 @@
         
           .b-copy-icon
             opacity 1
+
+  .ph-content
+    display grid
+    gap 32px
+
+  h2
+    margin 0
+
+#dcCaseFormEdit,
+#dcApplicantFormEdit,
+#dcObjectFormEdit,
+#dcCaseFormViolations,
+#dcCaseFormMeasures
+  position absolute
 
   

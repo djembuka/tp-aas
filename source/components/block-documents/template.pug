@@ -1,0 +1,62 @@
+// start /components/block-documents/
+
+//- push style and script file to the end of the page
+if componentsArray
+  - componentsArray[ componentsArray.length ] = 'block-documents'
+else
+  - var componentsArray = [ 'block-documents' ]
+
+.b-content-panel
+  .b-block-documents
+    h3.b-block-documents__title Документы, прикрепленные к обращению
+
+    .b-block-documents__grid( role="list" )
+      .b-block-documents__card( role="listitem" )
+        .b-block-documents__card-title Справка-подтверждение (Приложение № 8а)
+
+        .b-block-documents__item( href="/pages/news/" )
+      
+          .b-block-documents__body
+          
+            a.b-block-documents__icon( href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );" )
+            
+            span.b-block-documents__text
+            
+              a( href="/pages/news/" ) Sparavka-moi
+              
+              span.b-block-documents__data
+                span.text-muted 654 Кб .doc
+
+      .b-block-documents__card( role="listitem" )
+        .b-block-documents__card-title Документ, подтверждающий прекращение членства реорганизованной аудиторской организации в СРО
+
+        .b-block-documents__item( href="/pages/news/" )
+      
+          .b-block-documents__body
+          
+            a.b-block-documents__icon( href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );" )
+            
+            span.b-block-documents__text
+            
+              a( href="/pages/news/" ) Очень длинное название файла
+              
+              span.b-block-documents__data
+                span.text-muted 654 Кб .doc
+
+      .b-block-documents__card( role="listitem" )
+        .b-block-documents__card-title Готовый комплект документов в СРО ААС
+
+        .b-block-documents__item( href="/pages/news/" )
+      
+          .b-block-documents__body
+          
+            a.b-block-documents__icon( href="/pages/news/" style="background-image: url( '/template/images/zip.svg' );" )
+            
+            span.b-block-documents__text
+              
+              a( href="/pages/news/" ) Zayvka_3456
+              
+              span.b-block-documents__data
+                span.text-muted 654 Кб .doc
+
+// end /components/block-documents/
