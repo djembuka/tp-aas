@@ -276,3 +276,108 @@
 
       small
         margin-top 20px
+
+.twpx-doc {
+  font-family: Roboto,sans-serif;
+  padding: 16px;
+  background-color: #fafbfc;
+  --aas-docs-block-icon-width: 24px;
+  --aas-docs-block-icon-height: 32px;
+  --aas-docs-block-gap: 16px;
+  --aas-docs-block-button-width: 0
+}
+
+.twpx-doc--button {
+  flex-shrink: 0;
+  --aas-docs-block-icon-margin: 16px;
+  --aas-docs-block-button-width: 38px
+}
+
+.twpx-doc__body {
+  display: flex;
+  align-items: center;
+  gap: var(--aas-docs-block-gap);
+}
+
+.twpx-doc__icon {
+  width: var(--aas-docs-block-icon-width);
+  height: var(--aas-docs-block-icon-height);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  flex-shrink: 0
+}
+
+.twpx-doc__text {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.twpx-doc__name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: normal;
+  display: inline-block;
+  word-break: break-word
+}
+
+.twpx-doc__data {
+  display: flex;
+  column-gap: 16px;
+  row-gap: 4px;
+  flex-wrap: wrap;
+}
+
+.twpx-doc__data span {
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: normal;
+  color: var(--grey-muted-text, #6A6A6A);
+}
+
+.twpx-doc .btn,.twpx-doc .btn:hover,.twpx-doc .btn:focus,.twpx-doc .btn:active {
+  color: #9b9b9b !important
+}
+
+.twpx-doc .btn.active,.twpx-doc .btn.active:hover,.twpx-doc .btn.active:focus,.twpx-doc .btn.active:active {
+  color: #f39442 !important
+}
+
+@media (max-width: 767px) {
+  .twpx-doc .btn {
+      display:inline-block;
+      margin-top: 7px
+  }
+}
+
+.twpx-doc.twpx-doc--small {
+  padding: 0;
+  border: none;
+  font-size: .69rem
+}
+
+.twpx-doc.twpx-doc--small .twpx-doc__icon {
+  width: 30px;
+  height: 40px;
+  margin-right: 20px;
+  margin-bottom: 0;
+  flex-shrink: 0
+}
+
+.twpx-doc.twpx-doc--small .twpx-doc__data span {
+  font-size: .69rem
+}
+
+
+@media (max-width: 767px) {
+  .twpx-doc__data {
+      display: grid;
+  }
+}
+
+.twpx-poll-question-item__files {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 32px;
+}
