@@ -161,7 +161,6 @@ window.onload = function () {
         payload.control.value.splice(payload.index, 1);
       },
       setFile(state, payload) {
-        console.log(payload);
         const item = state.confirmDocsBlock.items.find(
           (item) => item.id === payload.id
         );
@@ -262,19 +261,27 @@ window.onload = function () {
           <hr class="hr--sl">
           <div class="b-add-fieldset-vc__controls">
             <div v-for="(formControl, controlIndex) in fieldsetItem.controls" :key="formControl.id">
+
               <form-control-multy v-if="formControl.multy" :formControl="formControl" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
+
               <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
+
               <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
+
               <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
+
               <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
+
               <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
+
               <form-control-search v-else-if="formControl.type==='search'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-search>
+
               <form-control v-else :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
             </div>
           </div>
         </div>
         <hr class="hr--line" style="margin-bottom: 2.5rem;">
-        <button class="btn btn-success btn-md" :disabled="isBtnDisabled" @click.prevent="add">Добавить еще</button>
+        <button class="btn btn-success btn-md" :disabled="isBtnDisabled" @click.prevent="clickAdd">Добавить еще</button>
         <hr class="hr--lg">
         <hr class="hr--lg">
       </div>
@@ -300,14 +307,24 @@ window.onload = function () {
           duration: 500,
         });
       },
-      add() {
+      clickAdd() {
+        this.add();
+      },
+      add(block) {
+        if (this.isBtnDisabled) return;
+
         const a = JSON.parse(JSON.stringify(this.emptyFieldset));
         a.id = Math.floor(Math.random * 1000);
+
+        if (block) {
+          a.controls = block;
+        }
 
         this.$store.commit('addFieldset', {
           fieldset: this.fieldset,
           add: a,
         });
+
         this.autosave();
       },
       remove(idx) {
@@ -324,7 +341,23 @@ window.onload = function () {
         this.$emit('timeoutAutosave');
       },
       clearEmptyFieldset() {
-        this.emptyFieldset?.controls.forEach((c) => {
+        let controls = [];
+
+        if (
+          this.emptyFieldset &&
+          this.emptyFieldset.controls &&
+          Array.isArray(this.emptyFieldset.controls)
+        ) {
+          if (Array.isArray(this.emptyFieldset.controls[0])) {
+            controls = JSON.parse(
+              JSON.stringify(this.emptyFieldset.controls[0])
+            );
+          } else {
+            controls = JSON.parse(JSON.stringify(this.emptyFieldset.controls));
+          }
+        }
+
+        controls.forEach((c) => {
           if (!c.multy) {
             switch (c.type) {
               case 'datefull':
@@ -363,16 +396,41 @@ window.onload = function () {
             }
           }
         });
+        this.emptyFieldset.controls = controls;
+      },
+      addBeforeMount() {
+        if (
+          Array.isArray(this.fieldset.controls) &&
+          this.fieldset.controls.length > 0
+        ) {
+          this.fieldset.controls.forEach((b) => {
+            if (Array.isArray(b)) {
+              this.add(b);
+            }
+          });
+
+          if (
+            typeof this.fieldset.controls[0] === 'object' &&
+            !Array.isArray(this.fieldset.controls[0])
+          ) {
+            this.add(this.fieldset.control);
+          }
+
+          this.fieldset.controls = [];
+        } else {
+          this.add();
+        }
       },
     },
     beforeMount() {
       this.emptyFieldset = JSON.parse(JSON.stringify(this.fieldset));
       this.clearEmptyFieldset();
+      delete this.emptyFieldset.multy;
       this.multy = this.fieldset.multy;
       this.$store.commit('createFieldsetMulty', {
         fieldset: this.fieldset,
       });
-      this.add();
+      this.addBeforeMount();
     },
   });
 
@@ -1416,7 +1474,6 @@ window.onload = function () {
         this.$emit('autosave');
       },
       uploadFile(files) {
-        console.log(this.formControl);
         store.commit('setFile', {
           id: this.controlId,
           property: this.formControl.property,
@@ -1995,8 +2052,6 @@ window.onload = function () {
             })
             .find((elem) => elem);
         }
-
-        // console.log(this.formControl, this.formControl.value);
 
         if (!control) {
           control = this.formControl;
