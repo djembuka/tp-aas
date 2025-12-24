@@ -23,13 +23,13 @@ window.onload = function () {
   const store = new Vuex.Store({
     state: window.appealNewChangeFormStore,
     mutations: {
-      createFieldsetMulty(_, {fieldset}) {
+      createFieldsetMulty(_, { fieldset }) {
         Vue.set(fieldset, 'multy', []);
       },
-      addFieldset(_, {fieldset, add}) {
+      addFieldset(_, { fieldset, add }) {
         Vue.set(fieldset.multy, fieldset.multy.length, add);
       },
-      removeFieldset(_, {fieldset, index}) {
+      removeFieldset(_, { fieldset, index }) {
         fieldset.multy.splice(index, 1);
       },
       setSelected(state, payload) {
@@ -249,7 +249,7 @@ window.onload = function () {
     data() {
       return {
         emptyFieldset: {},
-        multy: null
+        multy: null,
       };
     },
     props: ['fieldset'],
@@ -263,13 +263,13 @@ window.onload = function () {
           <div class="b-add-fieldset-vc__controls">
             <div v-for="(formControl, controlIndex) in fieldsetItem.controls" :key="formControl.id">
               <form-control-multy v-if="formControl.multy" :formControl="formControl" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
-              <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
-              <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
-              <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
-              <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
-              <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
-              <form-control-search v-else-if="formControl.type==='search'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-search>
-              <form-control v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
+              <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
+              <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
+              <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
+              <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
+              <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
+              <form-control-search v-else-if="formControl.type==='search'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-search>
+              <form-control v-else :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
             </div>
           </div>
         </div>
@@ -284,7 +284,7 @@ window.onload = function () {
     computed: {
       isBtnDisabled() {
         return this.fieldset.multy.length === this.multy;
-      }
+      },
     },
     methods: {
       //transition
@@ -306,14 +306,14 @@ window.onload = function () {
 
         this.$store.commit('addFieldset', {
           fieldset: this.fieldset,
-          add: a
+          add: a,
         });
         this.autosave();
       },
       remove(idx) {
         this.$store.commit('removeFieldset', {
           fieldset: this.fieldset,
-          index: idx
+          index: idx,
         });
         this.autosave();
       },
@@ -324,9 +324,9 @@ window.onload = function () {
         this.$emit('timeoutAutosave');
       },
       clearEmptyFieldset() {
-        this.emptyFieldset?.controls.forEach(c => {
+        this.emptyFieldset?.controls.forEach((c) => {
           if (!c.multy) {
-            switch(c.type) {
+            switch (c.type) {
               case 'datefull':
               case 'date':
               case 'ornz':
@@ -344,7 +344,7 @@ window.onload = function () {
                 break;
             }
           } else {
-            switch(c.type) {
+            switch (c.type) {
               case 'datefull':
               case 'date':
               case 'ornz':
@@ -363,17 +363,17 @@ window.onload = function () {
             }
           }
         });
-      }
+      },
     },
     beforeMount() {
       this.emptyFieldset = JSON.parse(JSON.stringify(this.fieldset));
       this.clearEmptyFieldset();
       this.multy = this.fieldset.multy;
       this.$store.commit('createFieldsetMulty', {
-        fieldset: this.fieldset
+        fieldset: this.fieldset,
       });
       this.add();
-    }
+    },
   });
 
   //hidden fields
@@ -530,7 +530,7 @@ window.onload = function () {
       },
       setValueWatcher() {
         return this.formControl.setValueWatcher;
-      }
+      },
     },
     watch: {
       controlValue(val) {
@@ -547,7 +547,7 @@ window.onload = function () {
       setValueWatcher(val) {
         this.controlValue = val;
         this.isActive = !!val;
-      }
+      },
     },
     methods: {
       clickLink() {
@@ -714,13 +714,11 @@ window.onload = function () {
             const amp = String(url).search(/\?/) === -1 ? '?' : '&';
 
             try {
-              let response = await fetch(`${url}${amp}s=${this.controlValue}`,
-                {
-                  headers: {
-                    Authentication: 'secret',
-                  },
-                }
-              );
+              let response = await fetch(`${url}${amp}s=${this.controlValue}`, {
+                headers: {
+                  Authentication: 'secret',
+                },
+              });
               let result = await response.json();
 
               //change active hint array
@@ -2478,7 +2476,7 @@ window.onload = function () {
       <hr class="hr--sl">
       <div v-for="(formControl, controlIndex) in $store.state.controlsBlock.controls" :key="formControl.id">
         <fieldsetMulty v-if="formControl.type==='fieldset'" :fieldset="formControl" />
-        <form-control-multy v-else-if="formControl.multy" :formControl="formControl" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
+        <form-control-multy v-else-if="formControl.multy" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
         <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
         <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
         <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
@@ -2697,7 +2695,6 @@ window.onload = function () {
       },
     },
   });
-
 
   /////--------
 
