@@ -1055,7 +1055,7 @@ window.addEventListener('load', () => {
                       <div v-if="$store.state.modal.html" v-html="$store.state.modal.html"></div>
                       <div class="text-center modal-buttons">
                         <button class="btn btn-lg btn-light" data-dismiss="modal">{{$store.state.button.dismiss}}</button>
-                        <button :name="$store.state.button.name" class="btn btn-lg btn-secondary" type="submit" @click="submit()">{{$store.state.button.confirm}}</button>
+                        <button :name="$store.state.button.name" class="btn btn-lg btn-secondary" type="submit" @click="submit">{{$store.state.button.confirm}}</button>
                       </div>
                     </div>
 
@@ -1087,8 +1087,9 @@ window.addEventListener('load', () => {
         sendForm() {
           $('#explanationConfirmModal').modal('show');
         },
-        submit() {
+        submit(e) {
           this.isSubmitting = true;
+          e.target.closest('form').submit();
         },
       },
       mounted() {
