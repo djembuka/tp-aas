@@ -933,8 +933,8 @@ window.addEventListener('load', () => {
                 <div class="modal-body">
                   <div v-html="modal.html"></div>
                   <div class="text-center modal-buttons">
-                    <button :name="button.name" class="btn btn-lg btn-secondary" type="submit">{{button.confirm}}</button>
                     <button class="btn btn-lg btn-light" data-dismiss="modal">{{button.dismiss}}</button>
+                    <button :name="button.name" class="btn btn-lg btn-secondary" type="submit">{{button.confirm}}</button>
                   </div>
                 </div>
               </div>
@@ -1001,6 +1001,7 @@ window.addEventListener('load', () => {
         return {
           file: undefined,
           isLoading: false,
+          isSubmitting: false,
         };
       },
       computed: {
@@ -1049,18 +1050,26 @@ window.addEventListener('load', () => {
                 <div class="modal-content">
                   <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );"></button>
                   <div class="modal-body">
-                    <div v-html="$store.state.modal.html"></div>
-                    <div class="text-center modal-buttons">
-                      <button :name="$store.state.button.name" class="btn btn-lg btn-secondary" type="submit" @click="submit()">{{$store.state.button.confirm}}</button>
-                      <button class="btn btn-lg btn-light" data-dismiss="modal">{{$store.state.button.dismiss}}</button>
+
+                    <div v-if="!isSubmitting">
+                      <div v-if="$store.state.modal.html" v-html="$store.state.modal.html"></div>
+                      <div class="text-center modal-buttons">
+                        <button class="btn btn-lg btn-light" data-dismiss="modal">{{$store.state.button.dismiss}}</button>
+                        <button :name="$store.state.button.name" class="btn btn-lg btn-secondary" type="submit" @click="submit()">{{$store.state.button.confirm}}</button>
+                      </div>
                     </div>
-                    <div class="progress-indicator">
-                      <div class="item item-1"></div>
-                      <div class="item item-2"></div>
-                      <div class="item item-3"></div>
-                      <div class="item item-4"></div>
-                      <div class="item item-5"></div>
+
+                    <div v-else>
+                      <div v-if="$store.state.modal.htmlSubmitting" v-html="$store.state.modal.htmlSubmitting"></div>
+                      <div class="progress-indicator">
+                        <div class="item item-1"></div>
+                        <div class="item item-2"></div>
+                        <div class="item item-3"></div>
+                        <div class="item item-4"></div>
+                        <div class="item item-5"></div>
+                      </div>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -1079,16 +1088,12 @@ window.addEventListener('load', () => {
           $('#explanationConfirmModal').modal('show');
         },
         submit() {
-          document
-            .querySelector('#explanationConfirmModal .modal-content')
-            .classList.add('modal-content--indicator');
+          this.isSubmitting = true;
         },
       },
       mounted() {
         $('#explanationConfirmModal').on('hidden.bs.modal', function (e) {
-          document
-            .querySelector('#explanationConfirmModal .modal-content')
-            .classList.remove('modal-content--indicator');
+          this.isSubmitting = false;
         });
       },
     });
