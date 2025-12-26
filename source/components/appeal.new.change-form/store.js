@@ -32,161 +32,319 @@ window.appealNewChangeFormStore = {
         type: 'fieldset',
         multy: 3,
         controls: [
-          {
-            value: [''],
-            property: '85f',
-            word: 'QUANTITY',
-            type: 'datefull',
-            required: false,
-            label: 'Дата*',
-            completeBlock: {
-              comment: 'Можно выбрать любую дату, а не только прошедшую.',
-            },
-          },
-          {
-            value: [''],
-            property: '185f',
-            word: 'QUANTITY',
-            type: 'date',
-            required: false,
-            label: 'Дата*',
-            completeBlock: {
-              comment: 'Вы можете добавить несколько дат.',
-            },
-          },
-          {
-            value: [''],
-            property: '186f',
-            word: 'QUANTITY',
-            type: 'date',
-            required: false,
-            label: 'Дата*',
-            completeBlock: {
-              comment: 'Вы можете добавить несколько дат.',
-            },
-          },
-          {
-            value: [''],
-            property: '41f',
-            word: 'PROPERTY',
-            sort: 0,
-            label: 'Select *',
-            type: 'select',
-            required: true,
-            options: [
-              {
-                label: 'Ожидает проверки',
-                code: '',
+          [
+            {
+              value: [''],
+              property: '85f',
+              word: 'QUANTITY',
+              type: 'datefull',
+              required: false,
+              label: 'Дата*',
+              completeBlock: {
+                comment: 'Можно выбрать любую дату, а не только прошедшую.',
               },
-              {
+            },
+            {
+              value: [''],
+              property: '185f',
+              word: 'QUANTITY',
+              type: 'date',
+              required: false,
+              label: 'Дата*',
+              completeBlock: {
+                comment: 'Вы можете добавить несколько дат.',
+              },
+            },
+            {
+              value: [''],
+              property: '186f',
+              word: 'QUANTITY',
+              type: 'date',
+              required: false,
+              label: 'Дата*',
+              completeBlock: {
+                comment: 'Вы можете добавить несколько дат.',
+              },
+            },
+            {
+              value: [''],
+              property: '41f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: 'Select *',
+              type: 'select',
+              required: true,
+              options: [
+                {
+                  label: 'Ожидает проверки',
+                  code: '',
+                },
+                {
+                  label: 'В работе',
+                  code: 'prop1',
+                },
+                {
+                  label: 'Отклонено',
+                  code: 'prop2',
+                },
+                {
+                  label: 'Выполнено',
+                  code: 'prop3',
+                },
+              ],
+              selectedOption: {
                 label: 'В работе',
                 code: 'prop1',
               },
-              {
-                label: 'Отклонено',
-                code: 'prop2',
+              completeBlock: {
+                title: '',
+                value: '',
+                comment: '',
               },
-              {
-                label: 'Выполнено',
-                code: 'prop3',
-              },
-            ],
-            selectedOption: {
-              label: 'Ожидает проверки',
-              code: 'prop45',
             },
-            completeBlock: {
-              title: '',
-              value: '',
-              comment: '',
-            },
-          },
-          {
-            property: '40f',
-            word: 'PROPERTY',
-            sort: 0,
-            label: 'Select *',
-            type: 'select',
-            required: true,
-            options: [
-              {
+            {
+              property: '40f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: 'Select *',
+              type: 'select',
+              required: true,
+              options: [
+                {
+                  label: 'Ожидает проверки',
+                  code: '',
+                },
+                {
+                  label: 'В работе',
+                  code: 'prop1',
+                },
+                {
+                  label: 'Отклонено',
+                  code: 'prop2',
+                },
+                {
+                  label: 'Выполнено',
+                  code: 'prop3',
+                },
+              ],
+              selectedOption: {
                 label: 'Ожидает проверки',
                 code: '',
               },
-              {
+              completeBlock: {
+                title: '',
+                value: '',
+                comment: 'Comment',
+              },
+            },
+            {
+              property: '42f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: 'ОРНЗ организации / индивидуального аудитора *',
+              type: 'ornz',
+              required: true,
+              value: '22006129',
+              multy: false,
+              pattern: '^\\d{11}$',
+              completeBlock: {
+                title: '',
+                value: '',
+                comment: '',
+              },
+            },
+            {
+              property: '142f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: 'Поиск по url *',
+              type: 'search',
+              required: true,
+              value: '22006129',
+              multy: false,
+              //pattern: '^\\d{11}$',
+              url: '/components/appeal.new.change-form/get-search.json',
+              count: 3,
+              completeBlock: {
+                title: '',
+                value: '',
+                comment: '',
+              },
+            },
+            {
+              property: '43f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: '789 *',
+              type: 'text',
+              required: true,
+              value: 'test',
+              multy: false,
+              pattern: '^\\d{11}$',
+              completeBlock: {
+                title: 'Text',
+                value: '4564546654',
+                comment: 'Comment',
+              },
+            },
+          ],
+          [
+            {
+              value: '12.12.2025',
+              property: '85f',
+              word: 'QUANTITY',
+              type: 'datefull',
+              required: false,
+              label: 'Дата*',
+              completeBlock: {
+                comment: 'Можно выбрать любую дату, а не только прошедшую.',
+              },
+            },
+            {
+              value: [''],
+              property: '185f',
+              word: 'QUANTITY',
+              type: 'date',
+              required: false,
+              label: 'Дата*',
+              completeBlock: {
+                comment: 'Вы можете добавить несколько дат.',
+              },
+            },
+            {
+              value: [''],
+              property: '186f',
+              word: 'QUANTITY',
+              type: 'date',
+              required: false,
+              label: 'Дата*',
+              completeBlock: {
+                comment: 'Вы можете добавить несколько дат.',
+              },
+            },
+            {
+              value: [''],
+              property: '41f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: 'Select *',
+              type: 'select',
+              required: true,
+              options: [
+                {
+                  label: 'Ожидает проверки',
+                  code: '',
+                },
+                {
+                  label: 'В работе',
+                  code: 'prop1',
+                },
+                {
+                  label: 'Отклонено',
+                  code: 'prop2',
+                },
+                {
+                  label: 'Выполнено',
+                  code: 'prop3',
+                },
+              ],
+              selectedOption: {
                 label: 'В работе',
                 code: 'prop1',
               },
-              {
+              completeBlock: {
+                title: '',
+                value: '',
+                comment: '',
+              },
+            },
+            {
+              property: '40f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: 'Select *',
+              type: 'select',
+              required: true,
+              options: [
+                {
+                  label: 'Ожидает проверки',
+                  code: '',
+                },
+                {
+                  label: 'В работе',
+                  code: 'prop1',
+                },
+                {
+                  label: 'Отклонено',
+                  code: 'prop2',
+                },
+                {
+                  label: 'Выполнено',
+                  code: 'prop3',
+                },
+              ],
+              selectedOption: {
                 label: 'Отклонено',
                 code: 'prop2',
               },
-              {
-                label: 'Выполнено',
-                code: 'prop3',
+              completeBlock: {
+                title: '',
+                value: '',
+                comment: 'Comment',
               },
-            ],
-            selectedOption: {
-              label: 'Ожидает проверки',
-              code: '',
             },
-            completeBlock: {
-              title: '',
+            {
+              property: '42f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: 'ОРНЗ организации / индивидуального аудитора *',
+              type: 'ornz',
+              required: true,
+              value: '22006129',
+              multy: false,
+              pattern: '^\\d{11}$',
+              completeBlock: {
+                title: '',
+                value: '',
+                comment: '',
+              },
+            },
+            {
+              property: '142f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: 'Поиск по url *',
+              type: 'search',
+              required: true,
+              value: '22006129',
+              multy: false,
+              //pattern: '^\\d{11}$',
+              url: '/components/appeal.new.change-form/get-search.json',
+              count: 3,
+              completeBlock: {
+                title: '',
+                value: '',
+                comment: '',
+              },
+            },
+            {
+              property: '43f',
+              word: 'PROPERTY',
+              sort: 0,
+              label: '789 *',
+              type: 'text',
+              required: true,
               value: '',
-              comment: 'Comment',
+              multy: false,
+              pattern: '^\\d{11}$',
+              completeBlock: {
+                title: 'Text',
+                value: '4564546654',
+                comment: 'Comment',
+              },
             },
-          },
-          {
-            property: '42f',
-            word: 'PROPERTY',
-            sort: 0,
-            label: 'ОРНЗ организации / индивидуального аудитора *',
-            type: 'ornz',
-            required: true,
-            value: '22006129',
-            multy: false,
-            pattern: '^\\d{11}$',
-            completeBlock: {
-              title: '',
-              value: '',
-              comment: '',
-            },
-          },
-          {
-            property: '142f',
-            word: 'PROPERTY',
-            sort: 0,
-            label: 'Поиск по url *',
-            type: 'search',
-            required: true,
-            value: '22006129',
-            multy: false,
-            //pattern: '^\\d{11}$',
-            url: '/components/appeal.new.change-form/get-search.json',
-            count: 3,
-            completeBlock: {
-              title: '',
-              value: '',
-              comment: '',
-            },
-          },
-          {
-            property: '43f',
-            word: 'PROPERTY',
-            sort: 0,
-            label: '789 *',
-            type: 'text',
-            required: true,
-            value: '',
-            multy: false,
-            pattern: '^\\d{11}$',
-            completeBlock: {
-              title: 'Text',
-              value: '4564546654',
-              comment: 'Comment',
-            },
-          },
-        ]
+          ],
+        ],
       },
       /*{
         multy: true,
@@ -362,7 +520,7 @@ window.appealNewChangeFormStore = {
               comment: 'Comment',
             },
           },
-        ]
+        ],
       },
       {
         property: 43,
@@ -380,7 +538,7 @@ window.appealNewChangeFormStore = {
           comment: 'Comment',
         },
       },
-    ]
+    ],
   },
   confirmDocsBlock: {
     title: 'confirmDocsBlock - Документы',
