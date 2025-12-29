@@ -581,6 +581,8 @@ window.addEventListener('load', () => {
           if (this.isInvalid) {
             this.$refs.inputFile.value = '';
           } else {
+            this.$refs.inputFile.files = files;
+
             store.commit('setFile', {
               property: this.formControl.property,
               filename: this.files[0] ? this.files[0].name : '',
@@ -1046,16 +1048,24 @@ window.addEventListener('load', () => {
             </div>
 
             <div class="modal--text modal fade" id="explanationConfirmModal" tabindex="-1" aria-labelledby="explanationConfirmModalLabel" aria-hidden="true" style="display: none;">
+
               <div class="modal-dialog">
                 <div class="modal-content">
+
                   <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="background-image: url( '/template/images/cancel.svg' );"></button>
+
                   <div class="modal-body">
 
                     <div v-if="!isSubmitting">
+
                       <div v-if="$store.state.modal.html" v-html="$store.state.modal.html"></div>
+
                       <div class="text-center modal-buttons">
+
                         <button class="btn btn-lg btn-light" data-dismiss="modal">{{$store.state.button.dismiss}}</button>
+
                         <button :name="$store.state.button.name" class="btn btn-lg btn-secondary" type="submit" @click="submit">{{$store.state.button.confirm}}</button>
+
                       </div>
                     </div>
 
