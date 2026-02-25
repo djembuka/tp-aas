@@ -20,12 +20,9 @@
       --aas-docs-block-icon-margin 16px
       --aas-docs-block-button-width 38px
 
-    .text-muted
-      color #9B9B9B !important
-
   &__body
     display flex
-    align-items center
+    align-items flex-start
     gap var(--aas-docs-block-gap)
     
     @media( max-width 767px )
@@ -42,7 +39,7 @@
   &__text
     width calc( 100% - var(--aas-docs-block-icon-width) - var(--aas-docs-block-gap) - var(--aas-docs-block-button-width) - var(--aas-docs-block-gap) )
     display grid
-    gap 2px
+    gap 4px
 
     a
       word-break break-word
