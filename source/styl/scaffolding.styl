@@ -367,9 +367,13 @@
           padding-left 50px !important
           margin-bottom 0 !important
           background-repeat no-repeat
-          background-position left center
+          background-position left top
           background-size 32px
           min-height 32px
+
+        .b-header__menu-dropdown__column
+          display grid
+          gap 16
         
       @media( min-width 768px )
         position absolute
@@ -405,6 +409,7 @@
             font-size $16px
             font-weight $bold
             margin-bottom 18px
+            line-height 1.2
 
         &__sub
 
