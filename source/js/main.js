@@ -193,53 +193,53 @@ setTimeout(function () {
 }, 500);
 
 //header menu items width
-if (window.matchMedia('(min-width: 768px)').matches) {
-  //desktop
-  var menuItemsWidthArray = [];
-  document
-    .querySelectorAll('.b-header__menu-item')
-    .forEach(function (menuItem) {
-      menuItemsWidthArray.push(menuItem.offsetWidth);
-    });
+// if (window.matchMedia('(min-width: 768px)').matches) {
+//   //desktop
+//   var menuItemsWidthArray = [];
+//   document
+//     .querySelectorAll('.b-header__menu-item')
+//     .forEach(function (menuItem) {
+//       menuItemsWidthArray.push(menuItem.offsetWidth);
+//     });
 
-  setMenuItemsVisibility();
+//   setMenuItemsVisibility();
 
-  window.addEventListener('resize', function (e) {
-    setMenuItemsVisibility();
-  });
-}
+//   window.addEventListener('resize', function (e) {
+//     setMenuItemsVisibility();
+//   });
+// }
 
-function setMenuItemsVisibility() {
-  var menuItemsWidth = 0;
-  var space = document.querySelector('.b-header__menu').offsetWidth - 50;
-  var hiddenIndex = menuItemsWidthArray.length;
+// function setMenuItemsVisibility() {
+//   var menuItemsWidth = 0;
+//   var space = document.querySelector('.b-header__menu').offsetWidth - 50;
+//   var hiddenIndex = menuItemsWidthArray.length;
 
-  var i = 0;
-  while (menuItemsWidth < space) {
-    if (menuItemsWidthArray[i]) {
-      menuItemsWidth += menuItemsWidthArray[i] + 30;
-      i++;
-    } else {
-      i++;
-      break;
-    }
-  }
-  hiddenIndex = i - 1;
+//   var i = 0;
+//   while (menuItemsWidth < space) {
+//     if (menuItemsWidthArray[i]) {
+//       menuItemsWidth += menuItemsWidthArray[i] + 30;
+//       i++;
+//     } else {
+//       i++;
+//       break;
+//     }
+//   }
+//   hiddenIndex = i - 1;
 
-  if (hiddenIndex < 0) {
-    hiddenIndex = 0;
-  }
+//   if (hiddenIndex < 0) {
+//     hiddenIndex = 0;
+//   }
 
-  for (var j = 0; j < hiddenIndex; j++) {
-    document
-      .querySelectorAll('.b-header__menu-item')
-      [j].removeAttribute('style');
-  }
+//   for (var j = 0; j < hiddenIndex; j++) {
+//     document
+//       .querySelectorAll('.b-header__menu-item')
+//       [j].removeAttribute('style');
+//   }
 
-  for (var k = hiddenIndex; k < menuItemsWidthArray.length; k++) {
-    document.querySelectorAll('.b-header__menu-item')[k].style.display = 'none';
-  }
-}
+//   for (var k = hiddenIndex; k < menuItemsWidthArray.length; k++) {
+//     document.querySelectorAll('.b-header__menu-item')[k].style.display = 'none';
+//   }
+// }
 
 //header search
 document
