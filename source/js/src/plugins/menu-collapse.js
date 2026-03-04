@@ -1,113 +1,120 @@
   class slr2MenuCollapse {
     constructor(element) {
       this.element = element;
-	  this.element.classList.add('menu-collapse--visible');
-	  this.element.classList.add('menu-collapse--ready');
-	  
-	  window.addEventListener('load', () => {
-		  this.init();
-	  });
-      
-      this.events();
+      this.items = this.element.querySelectorAll('.menu-collapse__item');
+      this.moreButton;
+      this.subMenu;
+
+      this.itemsGap = 30;
+      this.moreWidth = 20;
+      this.moreMargin = this.itemsGap - 8;
+
+      this.init();
     }
 
     init() {
+      this.element.classList.add('menu-collapse--visible');
+      this.element.classList.add('menu-collapse--ready');
+      this.createMoreButton();
+      
+      window.addEventListener('load', () => {
+        this.fillSubMenu();
+      });
+        
+      this.handleEvents();
+    }
+
+    calcSumm(itemsWidth, index) {
+        let summ = itemsWidth + index * this.itemsGap;
+        const isItemLast = index === this.items.length - 1;
+
+        if (!isItemLast) {
+          summ += (this.moreMargin + this.moreWidth);
+        }
+
+        return summ;
+    }
+
+    calcEdgeIndex() {
       let menuWidth = this.element.getBoundingClientRect().width;
-      const items = this.element.querySelectorAll('.menu-collapse__item');
       let itemsWidth = 0;
       let edgeIndex;
 
-      items.forEach((item, index) => {
+      this.items.forEach((item, index) => {
         itemsWidth += item.getBoundingClientRect().width;
+        
+        const summ = this.calcSumm(itemsWidth, index);
 
-        let summ = itemsWidth + index * 24;
-        if (index != items.length - 1) {
-          summ += (16 + 20);
-        }
+        const isSummWider = summ > menuWidth;
+        const isEdgeIndexDefined = edgeIndex !== undefined
 
-        if (summ > menuWidth && edgeIndex === undefined) {
+        if (isSummWider && !isEdgeIndexDefined) {
           edgeIndex = index - 1;
         }
       });
 
-      //more button
-      const moreButton = document.createElement('div');
-      moreButton.classList.add('menu-collapse__more');
-      this.element.appendChild(moreButton);
+      return edgeIndex;
+    }
 
-      const subMenu = document.createElement('div');
-      subMenu.classList.add('menu-collapse__sub');
-      moreButton.appendChild(subMenu);
+    createMoreButton() {
+      this.moreButton = document.createElement('div');
+      this.moreButton.classList.add('menu-collapse__more');
+      this.element.appendChild(this.moreButton);
 
-      let showInterval;
-      moreButton.addEventListener('mouseenter', (e) => {
-        clearInterval(showInterval);
-        moreButton.classList.add('menu-collapse__more--show');
-      });
-      moreButton.addEventListener('mouseleave', () => {
-        showInterval = setTimeout(() => {
-          moreButton.classList.remove('menu-collapse__more--show');
-        }, 200);
-      });
+      this.subMenu = document.createElement('div');
+      this.subMenu.classList.add('menu-collapse__sub');
+      this.moreButton.appendChild(this.subMenu);
+    }
 
-      //append items to submenu
-      if (!edgeIndex || edgeIndex === items.length) {
+    fillSubMenu() {
+      const edgeIndex = this.calcEdgeIndex();
+      const isEdgeOnLastItem = !edgeIndex || edgeIndex === this.items.length;
+
+      if (isEdgeOnLastItem) {
         this.element.classList.add('menu-collapse--no-more');
       } else {
-        items.forEach((item, index) => {
+        this.items.forEach((item, index) => {
           if (index > edgeIndex) {
-            subMenu.appendChild(item);
+            this.subMenu.appendChild(item);
           }
         });
+        this.element.classList.remove('menu-collapse--no-more');
       }
     }
 
-    events() {
+    handleEvents() {
       window.addEventListener('resize', () => {
-        //hide submenu
-        this.element.classList.remove('menu-collapse--visible');
-        //move items back
-        const subMenu = this.element.querySelector('.menu-collapse__sub');
-        const moreButton = this.element.querySelector('.menu-collapse__more');
-        subMenu.querySelectorAll('.menu-collapse__item').forEach((item) => {
-          moreButton.before(item);
-        });
-  
-        const menuWidth = this.element.getBoundingClientRect().width;
-        const items = this.element.querySelectorAll('.menu-collapse__item');
-        let itemsWidth = 0;
-        let edgeIndex;
-  
-        items.forEach((item, index) => {
-          itemsWidth += item.getBoundingClientRect().width;
-
-          let summ = itemsWidth + index * 24;
-          if (index != items.length - 1) {
-            summ += (16 + 20);
-          }
-
-          if (summ > menuWidth && edgeIndex === undefined) {
-            edgeIndex = index - 1;
-          }
-        });
-  
-        if (!edgeIndex || edgeIndex === items.length) {
-          this.element.classList.add('menu-collapse--no-more');
-        } else {
-          items.forEach((item, index) => {
-            if (index > edgeIndex) {
-              subMenu.appendChild(item);
-            }
-          });
-          this.element.classList.remove('menu-collapse--no-more');
-        }
-  
-        this.element.classList.add('menu-collapse--visible');
+        this.calc();
       });
+
+      let showInterval;
+
+      this.moreButton.addEventListener('mouseenter', (e) => {
+        clearInterval(showInterval);
+        this.moreButton.classList.add('menu-collapse__more--show');
+      });
+
+      this.moreButton.addEventListener('mouseleave', () => {
+        showInterval = setTimeout(() => {
+          this.moreButton.classList.remove('menu-collapse__more--show');
+        }, 200);
+      });
+    }
+
+    calc() {
+      this.element.classList.remove('menu-collapse--visible');
+      
+      this.subMenu.querySelectorAll('.menu-collapse__item').forEach((item) => {
+        this.moreButton.before(item);
+      });
+
+      this.fillSubMenu();
+
+      this.element.classList.add('menu-collapse--visible');
     }
   }
 
   window.addEventListener('DOMContentLoaded', () => {
 	// to show menu as soon as possible
-    new slr2MenuCollapse(document.querySelector('.b-header__menu.menu-collapse'));
+    window.menuCollapse = new slr2MenuCollapse(document.querySelector('.b-header__menu.menu-collapse'));
   });

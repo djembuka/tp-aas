@@ -391,6 +391,7 @@ var widthTimeoutId;
 var menuWidthTimeoutId;
 if (window.matchMedia('(min-width: 768px)').matches) {
   var height = document.querySelector('.b-header').offsetHeight - 86;
+  let headerState = 'static';
   window.addEventListener('scroll', function (e) {
     if (window.scrollY >= height) {
       document.querySelector('body').classList.add('header-fixed');
@@ -400,26 +401,36 @@ if (window.matchMedia('(min-width: 768px)').matches) {
         $('.b-header__profile').addClass('width');
       }, 500);
       //menu width
-      document.querySelector('.b-header__menu').classList.add('nowrap');
-      setMenuItemsVisibility();
-      clearTimeout(menuWidthTimeoutId);
-      menuWidthTimeoutId = setTimeout(function () {
-        setMenuItemsVisibility();
-        document.querySelector('.b-header__menu').classList.remove('nowrap');
-      }, 300);
+      // document.querySelector('.b-header__menu').classList.add('nowrap');
+      // setMenuItemsVisibility();
+      // clearTimeout(menuWidthTimeoutId);
+      // menuWidthTimeoutId = setTimeout(function () {
+      //   setMenuItemsVisibility();
+      //   document.querySelector('.b-header__menu').classList.remove('nowrap');
+      // }, 300);
+      if (headerState === 'static' && window.menuCollapse) {
+        headerState = 'fixed';
+        window.menuCollapse.calc();
+      }
     } else {
       document.querySelector('body').classList.remove('header-fixed');
       //profile width
       clearTimeout(widthTimeoutId);
       $('.b-header__profile').removeClass('width');
       //menu width
-      document.querySelector('.b-header__menu').classList.add('nowrap');
-      setMenuItemsVisibility();
-      clearTimeout(menuWidthTimeoutId);
-      menuWidthTimeoutId = setTimeout(function () {
-        setMenuItemsVisibility();
-        document.querySelector('.b-header__menu').classList.remove('nowrap');
-      }, 300);
+      // document.querySelector('.b-header__menu').classList.add('nowrap');
+      // setMenuItemsVisibility();
+      // clearTimeout(menuWidthTimeoutId);
+      // menuWidthTimeoutId = setTimeout(function () {
+      //   setMenuItemsVisibility();
+      //   document.querySelector('.b-header__menu').classList.remove('nowrap');
+      // }, 300);
+      if (headerState === 'fixed' && window.menuCollapse) {
+        headerState = 'static';
+        setTimeout(() => {
+          window.menuCollapse.calc();
+        }, 300);
+      }
     }
   });
 

@@ -183,6 +183,10 @@
     
   &__menu
     width calc( 100% - 20px )
+    display flex
+    justify-content flex-start
+    align-items center
+    gap 30px
 
     @media( max-width 767px )
       width 100%
@@ -192,13 +196,14 @@
     &.nowrap
       white-space nowrap
       overflow hidden
+
+      .b-header__menu-dropdown
+        white-space normal
     
     i
       font-style normal
     
     &-item
-      display inline-block
-      margin-right 30px
       font-family $roboto
       font-weight $bold
       cursor pointer
@@ -758,6 +763,14 @@
   height: auto;
   padding: 0 !important;
   margin: 0 !important;
+}
+.menu-collapse__sub .menu-collapse__item:hover {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.menu-collapse__sub .menu-collapse__item span a,
+.menu-collapse__sub .menu-collapse__item span i {
+  line-height: 1.2;
 }
 .menu-collapse__more--show .menu-collapse__sub {
   -webkit-transform: translateY(0);
