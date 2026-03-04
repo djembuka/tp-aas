@@ -31,9 +31,12 @@ header.b-header.ph-block
             a.b-header__profile-icon.d-inline-block.d-md-none( href="/profile/" style="background-image: url( '/template/images/profile.svg' );" )
             a.b-header__menu-icon.d-inline-block.d-md-none( href="#" style="background-image: url( '/template/images/menu.svg' );" )
         
+      script( src="https://aas.2px.ru/local/js/local/extensions/menu-collapse/script.js" )
+      link( href="https://aas.2px.ru/local/js/local/extensions/menu-collapse/style.css" rel="stylesheet" )
+      
       .b-header__bottom
-        .b-header__menu
-          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+        .b-header__menu.menu-collapse
+          .b-header__menu-item.menu-collapse__item.bx-nav-1-lvl(data-dropdown="true")
             .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
             span
               a(href="/about/") СРО ААС
@@ -102,7 +105,7 @@ header.b-header.ph-block
                   a.b-header__menu-dropdown__b(href="")
                     img( src="/upload/gallery/1.jpg" alt="" )
           
-          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-item.menu-collapse__item.bx-nav-1-lvl(data-dropdown="true")
             .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
             span
               a(href="/reestr/") Реестры
@@ -176,22 +179,27 @@ header.b-header.ph-block
                   a.b-header__menu-dropdown__b(href="")
                     img( src="/upload/gallery/1.jpg" alt="" )
           
-          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-item.menu-collapse__item.bx-nav-1-lvl(data-dropdown="true")
             .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
             span
               a(href="/activity/") Саморегулирование
           
-          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-item.menu-collapse__item.bx-nav-1-lvl(data-dropdown="true")
             .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
             span
               a(href="/help_aas/") Аудиторам
 
-          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-item.menu-collapse__item.bx-nav-1-lvl(data-dropdown="true")
+            .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
+            span
+              a(href="/pc/") Повышение квалификации
+
+          .b-header__menu-item.menu-collapse__item.bx-nav-1-lvl(data-dropdown="true")
             .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
             span
               a(href="/pc/") Пресс-Центр
 
-          .b-header__menu-item.bx-nav-1-lvl(data-dropdown="true")
+          .b-header__menu-item.menu-collapse__item.bx-nav-1-lvl(data-dropdown="true")
             .b-header__menu-arrow.d-block.d-md-none(style="background-image: url( '/local/components/twinpx/menu.multilevel/templates/header_horizontal_multilevel/images/arrow-right.svg' );")
             span
               a(href="/events/") Мероприятия
@@ -340,8 +348,6 @@ header.b-header.ph-block
         //-a( href="/pages/profile/" ) МФБ (IFAC)
           em.b-note-badge( style="background-color: #f00;" ) !
         //-a( href="/pages/profile/" ) ICAEW
-
-//-.container-fluid
 
   .b-header__menu-dropdown
 

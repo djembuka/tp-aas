@@ -182,7 +182,11 @@
         height 20px
     
   &__menu
-    width calc( 100% - 20px )
+    width calc( 100% - 20px - 30px )
+    display flex
+    justify-content flex-start
+    align-items center
+    gap 30px
 
     @media( max-width 767px )
       width 100%
@@ -192,19 +196,17 @@
     &.nowrap
       white-space nowrap
       overflow hidden
+
+      .b-header__menu-dropdown
+        white-space normal
     
     i
       font-style normal
     
     &-item
-      display inline-block
-      margin-right 30px
       font-family $roboto
       font-weight $bold
       cursor pointer
-      
-      &:last-child
-        margin-right 0
         
       &.active
       
@@ -687,4 +689,3 @@
 
         .cls-1
           fill #de2726
-
