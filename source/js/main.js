@@ -284,6 +284,7 @@ document
 
         elem.addEventListener('mouseenter', function (e) {
           e.stopPropagation();
+          if (elem.closest('.menu-collapse__sub')) return;
           clearTimeout(headerDropdownId[index]);
           headerDropdownId[index] = setTimeout(function () {
             $(elem).find('.b-header__menu-dropdown').slideDown(400);
@@ -292,6 +293,7 @@ document
 
         elem.addEventListener('mouseleave', function (e) {
           e.stopPropagation();
+          if (elem.closest('.menu-collapse__sub')) return;
           clearTimeout(headerDropdownId[index]);
           headerDropdownId[index] = setTimeout(function () {
             $(elem).find('.b-header__menu-dropdown').slideUp(200);
@@ -304,6 +306,7 @@ document
       if (elem.querySelector('.b-header__menu-dropdown')) {
         elem.addEventListener('click', function (e) {
           e.preventDefault();
+          if (elem.closest('.menu-collapse__sub')) return;
           $(this).find('.b-header__menu-dropdown').slideToggle(300);
           elem.classList.toggle('open');
         });
