@@ -2631,8 +2631,13 @@ window.onload = function () {
             );
           controlsFlag = requiredControls.every((control) => {
             if (control.multy) {
-              return control.value.every((value) => value.val !== '');
+              return control.value.every((value) => {
+                return value.val !== ''
+              });
             } else {
+              if (control.type === 'select') {
+                return control.selectedOption.code !== '';
+              }
               return control.value !== '';
             }
           });
