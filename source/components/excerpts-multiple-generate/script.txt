@@ -196,6 +196,240 @@ window.addEventListener('load', () => {
     },
   });
 
+  Vue.component('iconButtonContent', {
+    props: ['props'],
+    template: `
+        <svg v-if="isDelete" xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18" fill="none">
+          <path d="M0.799927 3.82353H14.7999M5.17493 1H10.4249M6.04993 13.2353V7.58824M9.54993 13.2353V7.58824M10.8624 17H4.73743C3.77093 17 2.98743 16.1572 2.98743 15.1176L2.5879 4.80389C2.56719 4.26918 2.9646 3.82353 3.46214 3.82353H12.1377C12.6353 3.82353 13.0327 4.26918 13.012 4.80389L12.6124 15.1176C12.6124 16.1572 11.8289 17 10.8624 17Z" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+        <svg v-if="isDeleteWhite" xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 0 17 18" fill="none">
+          <path d="M1.5 3.82353H15.5M5.875 1H11.125M6.75 13.2353V7.58824M10.25 13.2353V7.58824M11.5625 17H5.4375C4.471 17 3.6875 16.1572 3.6875 15.1176L3.28798 4.80389C3.26726 4.26918 3.66468 3.82353 4.16222 3.82353H12.8378C13.3353 3.82353 13.7327 4.26918 13.712 4.80389L13.3125 15.1176C13.3125 16.1572 12.529 17 11.5625 17Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+        <svg v-else-if="isEdit" xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+          <path d="M12.5148 0.763672C13.0626 0.696373 13.7633 0.861252 14.67 1.62695L14.8546 1.78809C15.8601 2.70477 16.0846 3.41169 16.046 3.94336C16.0042 4.51799 15.6431 5.12918 14.9738 5.81055L14.9728 5.81152L6.78333 14.1631C6.50341 14.4244 6.15096 14.6076 5.76379 14.6904L2.57434 15.2158L2.52063 15.2266C2.39001 15.258 2.25237 15.2575 2.12219 15.2246C1.99228 15.1917 1.87574 15.1281 1.78235 15.043C1.6891 14.9579 1.6224 14.8539 1.58508 14.7422C1.54783 14.6306 1.5398 14.5127 1.56262 14.3984C1.5665 14.379 1.57006 14.3595 1.57239 14.3398L1.93665 11.2539C2.00656 10.8887 2.17408 10.5445 2.42493 10.2549L10.6066 1.91016C11.2714 1.23355 11.8952 0.83993 12.5148 0.763672Z" stroke="#5F7696" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    `,
+    computed: {
+        isDelete() {
+            return this.props.find(e => e === 'delete');
+        },
+        isDeleteWhite() {
+            return this.props.find(e => e === 'delete-white');
+        },
+        isEdit() {
+            return this.props.find(e => e === 'edit');
+        },
+    },
+  });
+
+  Vue.component('textButtonContent', {
+    props: ['text', 'props'],
+    template: `
+        <svg v-if="isIconDelete" xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 0 17 18" fill="none">
+          <path d="M1.5 3.82353H15.5M5.875 1H11.125M6.75 13.2353V7.58824M10.25 13.2353V7.58824M11.5625 17H5.4375C4.471 17 3.6875 16.1572 3.6875 15.1176L3.28798 4.80389C3.26726 4.26918 3.66468 3.82353 4.16222 3.82353H12.8378C13.3353 3.82353 13.7327 4.26918 13.712 4.80389L13.3125 15.1176C13.3125 16.1572 12.529 17 11.5625 17Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+        <svg v-if="isIconContent" xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+          <path d="M6.12488 15H2.62487C1.65837 15 0.874872 14.2165 0.874878 13.25L0.874946 2.74999C0.874952 1.7835 1.65845 1 2.62495 1H10.5001C11.4666 1 12.2501 1.7835 12.2501 2.75V7.5625M9.62515 12.406L11.4147 10.625M11.4147 10.625L13.1252 12.3255M11.4147 10.625V15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+        <svg v-if="isIconLink" class="vue-button-icon vue-button-icon--link" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M6.875 0.750001H3.375C1.92525 0.750001 0.75 1.92525 0.75 3.37499V12.125C0.75 13.5748 1.92525 14.75 3.375 14.75H12.125C13.5747 14.75 14.75 13.5748 14.75 12.125V8.62496M10.3746 0.750212L14.75 0.75M14.75 0.75V4.68758M14.75 0.75L7.31186 8.18725" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+        {{ text }}
+    `,
+    computed: {
+        isIconDelete() {
+            return this.props.find(e => e === 'icon-delete');
+        },
+        isIconContent() {
+            return this.props.find(e => e === 'icon-content');
+        },
+        isIconLink() {
+            return this.props.find(e => e === 'icon-link');
+        }
+    },
+  });
+
+  Vue.component('buttonComponent', {
+    data() {
+      return {};
+    },
+    props: {
+      text: {
+        type: String,
+        default: 'Button'
+      },
+      props: {
+        type: Array,
+        default() {
+          return ['secondary', 'medium']
+        }
+      },
+      disabled: {
+        type: Boolean,
+        default: false
+      },
+      href: {
+        type: String,
+      }
+    },
+    emits: ['clickButton'],
+    // language=Vue
+    template: ` 
+      <button v-if="isButtonTag && isIcon"
+        :class="propsClass"
+        :title="text"
+        @click.stop.prevent="clickButton"
+      >
+        <icon-button-content :props="props" />
+      </button>
+
+      <button v-else-if="isButtonTag"
+        class="vue-button"
+        :class="propsClass"
+        @click.prevent="clickButton"
+      >
+        <text-button-content :text="text" :props="props" />
+      </button>
+
+      <a v-else-if="isATag && isIcon"
+        :class="propsClass"
+        :title="text"
+        :href="href"
+      >
+        <icon-button-content :props="props" />
+      </a>
+
+      <a v-else-if="isATag"
+        class="vue-button"
+        :class="propsClass"
+        :href="href"
+      >
+        <text-button-content :text="text" :props="props" />
+      </a>
+    `,
+    computed: {
+      propsClass() {
+        const result = {};
+        if (this.props) {
+          this.props.forEach((p) => {
+            if (!p.startsWith('icon-')) {
+              result[`vue-button--${p}`] = true;
+            }
+          });
+        }
+
+        if (this.disabled) {
+          result[`vue-button--disabled`] = true;
+        }
+        return result;
+      },
+      isButtonTag() {
+        return !this.href;
+      },
+      isATag() {
+        return !!this.href;
+      },
+      isIcon() {
+        return this.props.find(e => e === 'icon');
+      },
+    },
+    methods: {
+      clickButton() {
+        this.$emit('clickButton');
+      },
+    }
+  });
+
+  Vue.component('docComponent', {
+    data() {
+      return {};
+    },
+    props: {
+      doc: {
+        type: Object,
+        default: () => ({
+          id: 123,
+          name: 'Протокол заседания дисицплинарной комиссии 234',
+          href: '/pages/Протокол заседания дисицплинарной комиссии 234.pdf',
+          size: 654000,
+          date: '15 января 2020',
+          author: 'Азарянц Ашот Александрович',
+          icon: '/template/images/pdf.svg',
+          remove: false
+        }),
+      },
+    },
+    emits: ['clickDelete'],
+    // language=Vue
+    template: `
+      <div class="twpx-doc twpx-doc--button">
+        <div class="twpx-doc__body">
+          <a class="twpx-doc__icon" :href="doc.href" :style="getStyle()" target="_blank"></a>
+          <span class="twpx-doc__text">
+            <a v-if="doc.name" class="twpx-doc__name" :href="doc.href" target="_blank">{{ doc.name }}</a>
+            <span class="twpx-doc__data">
+              <span v-if="doc.size && doc.href">{{ formatFileSize(doc.size) }} {{ getFileNameAndExt(doc.href).ext }}</span>
+              <span v-if="doc.date">Дата публикации: {{ formatDateToRussian(doc.date) }}</span>
+              <span v-if="doc.author">Автор: {{ doc.author }}</span>
+            </span>
+          </span>
+          <button-component v-if="doc.remove" :text="Delete" :props="['icon', 'delete', 'small']" @clickButton="$emit('clickDelete')" />
+        </div>
+      </div>
+    `,
+    computed: {},
+    methods: {
+      formatDateToRussian(dateString) {
+        const months = [
+          'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+          'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+        ];
+        const date = new Date(dateString);
+        if (isNaN(date)) return dateString; // если невалидная дата, возвращаем как есть
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        return `${day} ${month} ${year}`;
+      },
+      getStyle() {
+        return `background-image: url(${this.doc.icon})`;
+      },
+      getFileNameAndExt(path) {
+        // Получаем только имя файла с расширением
+        const fileNameWithExt = path.split('/').pop();
+        // Находим позицию последней точки
+        const lastDotIndex = fileNameWithExt.lastIndexOf('.');
+        if (lastDotIndex === -1) {
+          // Если точки нет, возвращаем всё как имя, расширение — пустая строка
+          return { name: fileNameWithExt, ext: '' };
+        }
+        // Имя файла без расширения
+        const name = fileNameWithExt.substring(0, lastDotIndex);
+        // Расширение с точкой
+        const ext = fileNameWithExt.substring(lastDotIndex);
+        return { name, ext };
+      },
+      formatFileSize(bytes) {
+        if (bytes === 0) return '0 б';
+        const units = ['Б', 'Кб', 'Мб', 'Гб', 'Тб'];
+        const k = 1024;
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        const size = bytes / Math.pow(k, i);
+        // Для Мб и выше округляем до одного знака после запятой, для Кб и ниже — до целых
+        if (i >= 2) {
+          return `${size.toFixed(1)} ${units[i]}`;
+        } else {
+          return `${Math.round(size)} ${units[i]}`;
+        }
+      }
+    },
+  });
+
   const App = {
     el: '#excerptsMultipleGenerateApp',
     store,
