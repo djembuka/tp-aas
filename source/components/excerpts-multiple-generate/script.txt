@@ -213,7 +213,7 @@ window.addEventListener('load', () => {
             </div>
             <div v-else>
                 <div v-if="$store.state.generated.fileURL">
-                    <h2>Сгенерированная выписка</h2>
+                    <h2>Архивы с выписками по сотрудникам</h2>
                     <div class="b-generated">
                         <div class="b-generated__left">
                             <a :href="$store.state.generated.fileURL">Архив с выписками</a>
