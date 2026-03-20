@@ -1,10 +1,20 @@
 {
-    "STATUS": "Y",
-    "GENERATED": {
-        "archiveURL": "/archive.html",
-        "date": "22 апреля 2021 17:30:12",
-        "size": "8.07 Мб",
-        "fileURL": "/file.zip",
-        "fileIcon": "/template/images/zip.svg"
+  "STATUS": "Y",
+  "GENERATED": {
+    "archiveURL": "/archive.html",
+    "date": "22 апреля 2021 17:30:12",
+    "size": "8.07 Мб",
+    "fileURL": "/file.zip",
+    "fileIcon": "/template/images/zip.svg",
+    "pdf-sig": {
+      "size": "650 Кб",
+      "url": "/pdf-sig.zip",
+      "pdf": {
+        "icon": "/template/images/zip.svg"
+      },
+      "sig": {
+        "icon": "/template/images/sig.svg"
+      }
     }
+  }
 }

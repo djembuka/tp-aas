@@ -369,12 +369,15 @@ window.addEventListener('load', () => {
     template: `
       <div class="twpx-doc twpx-doc--button">
         <div class="twpx-doc__body">
-          <a class="twpx-doc__icon" :href="doc.href" :style="getStyle()" target="_blank"></a>
+          <div class="twpx-doc__icons">
+            <a v-for="(icon, index) in doc.icon" :key="index" class="twpx-doc__icon" :href="doc.href" :style="getStyle(index)" target="_blank"></a>
+          </div>
           <span class="twpx-doc__text">
             <a v-if="doc.name" class="twpx-doc__name" :href="doc.href" target="_blank">{{ doc.name }}</a>
+            <span v-if="doc.desc" class="twpx-doc__desc">{{ doc.desc }}</span>
             <span class="twpx-doc__data">
-              <span v-if="doc.size && doc.href">{{ formatFileSize(doc.size) }} {{ getFileNameAndExt(doc.href).ext }}</span>
-              <span v-if="doc.date">Дата публикации: {{ formatDateToRussian(doc.date) }}</span>
+              <span v-if="doc.size && doc.href">{{ doc.size }} {{ getFileNameAndExt(doc.href).ext }}</span>
+              <span v-if="doc.date">Создан: {{ formatDateToRussian(doc.date) }}</span>
               <span v-if="doc.author">Автор: {{ doc.author }}</span>
             </span>
           </span>
@@ -396,8 +399,8 @@ window.addEventListener('load', () => {
         const year = date.getFullYear();
         return `${day} ${month} ${year}`;
       },
-      getStyle() {
-        return `background-image: url(${this.doc.icon})`;
+      getStyle(index) {
+        return `background-image: url(${this.doc.icon[index]})`;
       },
       getFileNameAndExt(path) {
         // Получаем только имя файла с расширением
@@ -448,23 +451,36 @@ window.addEventListener('load', () => {
             <div v-else>
                 <div v-if="$store.state.generated.fileURL">
                     <h2>Архивы с выписками по сотрудникам</h2>
-                    <div class="b-generated">
-                        <div class="b-generated__left">
-                            <a :href="$store.state.generated.fileURL">Архив с выписками</a>
-                            <span>{{ $store.state.generated.date }}</span>
-                        </div>
-                        <div class="b-generated__right">
-                            <a :href="$store.state.generated.fileURL" :style="'background-image: url(' +  $store.state.generated.fileIcon + ')'">{{ $store.state.generated.size }}</a>
 
-                            <div class="b-excerpts__more" v-if="$store.state.generated['pdf-sig']">
-                              <a class="b-excerpts__more__button" href="#" style="background-image: url('/template/images/more-btn.svg')" @click="clickMoreBtn($event)"></a>
-                              <div class="b-excerpts__more__files" :class="{show: isMoreOpen}">
-                                <span>Для некоторых сервисов требуется формат PDF + .sig</span>
-                                <a v-if="$store.state.generated['pdf-sig'].pdf" :href="$store.state.generated['pdf-sig'].pdf.url" target="_blank" :style="'background-image: url(' +  $store.state.generated.fileIcon + ')'">pdf</a>
-                                <a v-if="$store.state.generated['pdf-sig'].sig" :href="$store.state.generated['pdf-sig'].sig.url" target="_blank" :style="'background-image: url(' +  $store.state.generated.fileIcon + ')'">sig</a>
-                              </div>
-                            </div>
-                        </div>
+                    <div class="b-generated-grid">
+
+                      <doc-component :doc="{
+                        id: 1,
+                        name: 'Архив с подписаными выписками',
+                        desc: 'Выписки с присоединённой квалифицированной электронной подписью.',
+                        href: $store.state.generated.fileURL,
+                        size: $store.state.generated.size,
+                        date: $store.state.generated.date,
+                        author: '',
+                        icon: [$store.state.generated.fileIcon],
+                        remove: false
+                      }" />
+
+                      <doc-component :doc="{
+                        id: 2,
+                        name: 'Архив с выписками и подписью отдельно',
+                        desc: 'Выписки с отсоединенной квалифицированной электронной подписью (два файла: файл выписки и файл подписи в формате .sig).',
+                        href: $store.state.generated['pdf-sig'].url,
+                        size: $store.state.generated['pdf-sig'].size,
+                        date: $store.state.generated.date,
+                        author: '',
+                        icon: [
+                          $store.state.generated['pdf-sig'].pdf.icon,
+                          $store.state.generated['pdf-sig'].sig.icon
+                        ],
+                        remove: false
+                      }" />
+
                     </div>
                 </div>
                 <div>
@@ -549,6 +565,8 @@ window.addEventListener('load', () => {
 window.addEventListener('scroll', () => {
   //bottom panel select
   const panel = document.querySelector('.b-poll__form-bottom-panel');
+  if (!panel) return;
+
   if (panel.getBoundingClientRect().top < 168 + 86) {
     panel.classList.add('i-bottom');
   } else {
