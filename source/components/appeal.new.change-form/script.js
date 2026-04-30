@@ -161,6 +161,7 @@ window.onload = function () {
         payload.control.value.splice(payload.index, 1);
       },
       setFile(state, payload) {
+        console.log(payload);
         const item = state.confirmDocsBlock.items.find(
           (item) => item.id === payload.id
         );
@@ -275,6 +276,10 @@ window.onload = function () {
               <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
 
               <form-control-search v-else-if="formControl.type==='search'" :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-search>
+
+              <form-control-tel v-else-if="formControl.type==='tel'" :formControl="formControl" fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-tel>
+		
+              <form-control-email v-else-if="formControl.type==='email'" :formControl="formControl" fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-email>
 
               <form-control v-else :formControl="formControl" :fieldsetBlockIndex="fieldsetIndex" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
             </div>
@@ -1474,6 +1479,7 @@ window.onload = function () {
         this.$emit('autosave');
       },
       uploadFile(files) {
+        console.log(this.formControl);
         store.commit('setFile', {
           id: this.controlId,
           property: this.formControl.property,
@@ -2053,6 +2059,8 @@ window.onload = function () {
             .find((elem) => elem);
         }
 
+        // console.log(this.formControl, this.formControl.value);
+
         if (!control) {
           control = this.formControl;
         }
@@ -2493,7 +2501,7 @@ window.onload = function () {
       },
     },
   });
-
+  
   //form control tel
   Vue.component('formControlTel', {
     data() {
@@ -2862,6 +2870,7 @@ window.onload = function () {
     },
   });
 
+
   /////--------
 
   //document block
@@ -2899,14 +2908,25 @@ window.onload = function () {
       <hr class="hr--sl">
       <div v-for="(formControl, controlIndex) in $store.state.controlsBlock.controls" :key="formControl.id">
         <fieldsetMulty v-if="formControl.type==='fieldset'" :fieldset="formControl" />
+        
         <form-control-multy v-else-if="formControl.multy" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-multy>
+        
         <form-control-date v-else-if="formControl.type==='date'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date>
+        
         <form-control-date-full v-else-if="formControl.type==='datefull'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex"  @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-date-full>
+        
         <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
+        
         <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
+        
         <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
+        
+        <form-control-search v-else-if="formControl.type==='search'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-search>
+
         <form-control-tel v-else-if="formControl.type==='tel'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-tel>
+		
         <form-control-email v-else-if="formControl.type==='email'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-email>
+        
         <form-control v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
       </div>
     </div>
@@ -3001,9 +3021,7 @@ window.onload = function () {
             );
           controlsFlag = requiredControls.every((control) => {
             if (control.multy) {
-              return control.value.every((value) => {
-                return value.val !== ''
-              });
+              return control.value.every((value) => value.val !== '');
             } else {
               if (control.type === 'select') {
                 return control.selectedOption.code !== '';
