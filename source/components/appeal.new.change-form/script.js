@@ -2494,6 +2494,374 @@ window.onload = function () {
     },
   });
 
+  //form control tel
+  Vue.component('formControlTel', {
+    data() {
+      return {
+        controlValue: this.formControl.multy
+          ? this.formControl.value[this.controlIndex].val
+          : this.formControl.value,
+        isActive: this.formControl.multy
+          ? this.formControl.value[this.controlIndex].val === ''
+            ? false
+            : true
+          : this.formControl.value === ''
+          ? false
+          : true,
+        isInvalid: false,
+        compare: this.controlValue,
+      };
+    },
+    props: ['formControl', 'fieldsetBlockIndex', 'controlIndex'],
+    emits: ['autosave', 'timeoutAutosave'],
+    template: `
+    <div>
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-12">
+          <div class="b-float-label" :class="{invalid: isInvalid}">
+            <div
+              class="b-float-label__big-label text-muted"
+              v-if="formControl.bigLabel"
+              v-html="formControl.label"
+            ></div>
+            <input
+              :data-required="formControl.required"
+              ref="input"
+              :id="id"
+              type="tel"
+              :name="name"
+              autocomplete="off"
+              @focus="focusControl"
+              @blur="blurControl"
+              @keydown="keydown"
+              v-model="controlValue"
+            >
+            <label
+            v-if="!formControl.bigLabel" ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
+          </div>
+        </div>
+        <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
+        <div class="col-lg-6 col-12 small" v-if="!formControl.multy || !controlIndex">
+          <span class="text-muted" v-if="this.formControl.completeBlock && this.formControl.completeBlock.title">{{ this.formControl.completeBlock.title }}</span>
+          <span v-if="this.formControl.completeBlock && this.formControl.completeBlock.title">
+            <a v-if="this.formControl.completeBlock.value" class="b-complete-link" ref="link" href="" @click.prevent="clickLink">
+              {{ this.formControl.completeBlock.value }}
+              <span class="icon" style="background-image: url( '/template/images/copy.svg' );"></span>
+            </a>
+            <span v-else class="text-muted">Пусто.</span>
+          </span>
+          <div v-if="this.formControl.completeBlock && this.formControl.completeBlock.comment" class="text-muted b-complete-comment">{{ this.formControl.completeBlock.comment }}</div>
+        </div>
+      </div>
+      <hr class="hr--sl">
+    </div>
+    `,
+    computed: {
+      id() {
+        return `${this.formControl.word}_${this.formControl.property}_${this.fieldsetBlockIndex}`;
+      },
+      name() {
+        return `${this.formControl.word}[${this.formControl.property}][${this.fieldsetBlockIndex}]`;
+      },
+      setValueWatcher() {
+        return this.formControl.setValueWatcher;
+      },
+    },
+    watch: {
+      controlValue(val) {
+        let payload = {
+          formControl: this.formControl,
+          property: this.formControl.property,
+          value: val,
+        };
+        if (this.formControl.multy) {
+          payload.index = this.controlIndex;
+        }
+        store.commit('changeControl', payload);
+      },
+      setValueWatcher(val) {
+        this.controlValue = val;
+        this.isActive = !!val;
+      },
+    },
+    methods: {
+      clickLink() {
+        this.controlValue = this.formControl.completeBlock.value;
+        this.isActive = true;
+        this.validate();
+        //if tel
+        //autosave
+        this.$emit('autosave');
+
+        bitrixLogs(6, `${this.formControl.label}: ${this.controlValue}`);
+      },
+      // inputControl() {
+      //   //validate
+      //   if (!!this.controlValue) {
+      //     this.isInvalid = false;
+      //   }
+      //   //autosave
+      //   this.$emit('timeoutAutosave');
+      // },
+      focusControl() {
+        // mask
+        if (this.controlValue === '') {
+          this.controlValue = '+7 (';
+        }
+
+        if (
+          this.$refs.input
+            .closest('.b-float-label')
+            .className.includes('invalid')
+        ) {
+          this.isInvalid = true;
+        }
+        this.compare = this.controlValue;
+      },
+      blurControl() {
+        // mask
+        if (this.controlValue === '+7 (') {
+          this.controlValue = '';
+        }
+
+        if (this.controlValue !== '') {
+          this.isActive = true;
+        } else {
+          this.isActive = false;
+        }
+        this.validate();
+
+        if (this.controlValue !== this.compare) {
+          //autosave
+          this.$emit('autosave');
+          bitrixLogs(6, `${this.formControl.label}: ${this.controlValue}`);
+        }
+      },
+      keydown($event) {
+        this.inputphone($event);
+        this.$emit('timeoutAutosave');
+      },
+      inputphone(e) {
+        let key = e.key;
+        let not = key.replace(/([0-9])/, 1);
+
+        if (not == 1) {
+          if (this.controlValue.length < 4 || this.controlValue === '') {
+            this.controlValue = '+7 (';
+          }
+          if (this.controlValue.length === 7) {
+            this.controlValue = this.controlValue + ') ';
+          }
+          if (this.controlValue.length === 12) {
+            this.controlValue = this.controlValue + '-';
+          }
+          if (this.controlValue.length === 15) {
+            this.controlValue = this.controlValue + '-';
+          }
+          if (this.controlValue.length >= 18) {
+            this.controlValue = this.controlValue.substring(0, 17);
+          }
+        } else if ('Backspace' !== not && 'Tab' !== not) {
+          e.preventDefault();
+        }
+      },
+      validate() {
+        const digits = this.controlValue.replace(/\D/g, "");
+
+        if (!this.formControl.required) {
+          this.isInvalid = digits.length !== 0 && digits.length !== 11;
+        } else {
+          this.isInvalid = digits.length !== 11;
+        }
+      },
+    },
+  });
+
+  //form control email
+  Vue.component('formControlEmail', {
+    data() {
+      return {
+        controlValue: this.formControl.multy
+          ? this.formControl.value[this.controlIndex].val
+          : this.formControl.value,
+        isActive: this.formControl.multy
+          ? this.formControl.value[this.controlIndex].val === ''
+            ? false
+            : true
+          : this.formControl.value === ''
+          ? false
+          : true,
+        isInvalid: false,
+        compare: this.controlValue,
+      };
+    },
+    props: ['formControl', 'fieldsetBlockIndex', 'controlIndex'],
+    emits: ['autosave', 'timeoutAutosave'],
+    template: `
+    <div>
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-12">
+          <div class="b-float-label" :class="{invalid: isInvalid}">
+            <div
+              class="b-float-label__big-label text-muted"
+              v-if="formControl.bigLabel"
+              v-html="formControl.label"
+            ></div>
+            <input
+              :data-required="formControl.required"
+              ref="input"
+              :id="id"
+              type="email"
+              :name="name"
+              autocomplete="off"
+              @focus="focusControl"
+              @blur="blurControl"
+              @input="inputControl"
+              v-model="controlValue"
+            >
+            <label
+            v-if="!formControl.bigLabel" ref="label" :for="id" :class="{active: isActive}">{{formControl.label}}</label>
+          </div>
+        </div>
+        <hr class="hr--xs d-block d-lg-none w-100" v-if="!formControl.multy || !controlIndex">
+        <div class="col-lg-6 col-12 small" v-if="!formControl.multy || !controlIndex">
+          <span class="text-muted" v-if="this.formControl.completeBlock && this.formControl.completeBlock.title">{{ this.formControl.completeBlock.title }}</span>
+          <span v-if="this.formControl.completeBlock && this.formControl.completeBlock.title">
+            <a v-if="this.formControl.completeBlock.value" class="b-complete-link" ref="link" href="" @click.prevent="clickLink">
+              {{ this.formControl.completeBlock.value }}
+              <span class="icon" style="background-image: url( '/template/images/copy.svg' );"></span>
+            </a>
+            <span v-else class="text-muted">Пусто.</span>
+          </span>
+          <div v-if="this.formControl.completeBlock && this.formControl.completeBlock.comment" class="text-muted b-complete-comment">{{ this.formControl.completeBlock.comment }}</div>
+        </div>
+      </div>
+      <hr class="hr--sl">
+    </div>
+    `,
+    computed: {
+      id() {
+        return `${this.formControl.word}_${this.formControl.property}_${this.fieldsetBlockIndex}`;
+      },
+      name() {
+        return `${this.formControl.word}[${this.formControl.property}][${this.fieldsetBlockIndex}]`;
+      },
+      setValueWatcher() {
+        return this.formControl.setValueWatcher;
+      },
+    },
+    watch: {
+      controlValue(val) {
+        let payload = {
+          formControl: this.formControl,
+          property: this.formControl.property,
+          value: val,
+        };
+        if (this.formControl.multy) {
+          payload.index = this.controlIndex;
+        }
+        store.commit('changeControl', payload);
+      },
+      setValueWatcher(val) {
+        this.controlValue = val;
+        this.isActive = !!val;
+      },
+    },
+    methods: {
+      clickLink() {
+        this.controlValue = this.formControl.completeBlock.value;
+        this.isActive = true;
+        this.validate();
+        //if tel
+        //autosave
+        this.$emit('autosave');
+
+        bitrixLogs(6, `${this.formControl.label}: ${this.controlValue}`);
+      },
+      inputControl() {
+        //validate
+        if (!!this.controlValue) {
+          this.isInvalid = false;
+        }
+        //autosave
+        this.$emit('timeoutAutosave');
+      },
+      focusControl() {
+        if (
+          this.$refs.input
+            .closest('.b-float-label')
+            .className.includes('invalid')
+        ) {
+          this.isInvalid = true;
+        }
+        this.compare = this.controlValue;
+      },
+      blurControl() {
+        if (this.controlValue !== '') {
+          this.isActive = true;
+        } else {
+          this.isActive = false;
+        }
+        this.validate();
+
+        if (this.controlValue !== this.compare) {
+          //autosave
+          this.$emit('autosave');
+          bitrixLogs(6, `${this.formControl.label}: ${this.controlValue}`);
+        }
+      },
+      validate() {
+        const value = this.controlValue.trim();
+        
+        if (value === '') {
+          this.isInvalid = this.formControl.required;
+          return;
+        }
+
+        try {
+          if (!value.includes('@')) {
+            throw false;
+          }
+
+          const [localPart, domain] = value.split('@', 2);
+          const normalizedDomain = domain.toLowerCase();
+          const domainParts = normalizedDomain.split('.');
+          const lastPart = domainParts[domainParts.length - 1];
+          const allowedLocalChars = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+$/;
+          const allowedDomainChars = /^[a-zA-Z0-9.-]+$/;
+
+          if (
+            (!localPart || localPart.length === 0) ||
+            (localPart.includes('..')) ||
+            (localPart.startsWith('.') || localPart.endsWith('.')) ||
+            (!domain || domain.length === 0) ||
+            (!normalizedDomain.includes('.')) ||
+            (normalizedDomain.includes('..')) ||
+            (normalizedDomain.startsWith('.') || normalizedDomain.endsWith('.')) ||
+            (lastPart.length < 2) ||
+            (!allowedLocalChars.test(localPart)) ||
+            (!allowedDomainChars.test(normalizedDomain))
+          ) {
+            throw false;
+          }
+
+          for (const part of domainParts) {
+            if (part.startsWith('-') || part.endsWith('-')) {
+              throw false;
+            }
+          }
+
+          this.isInvalid = false;
+          return;
+
+        } catch(error) {
+          this.isInvalid = true;
+          return;
+        }
+      },
+    },
+  });
+
   /////--------
 
   //document block
@@ -2537,6 +2905,8 @@ window.onload = function () {
         <form-control-textarea v-else-if="formControl.type==='textarea'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-textarea>
         <form-control-ornz v-else-if="formControl.type==='ornz'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-ornz>
         <form-control-select v-else-if="formControl.type==='select'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-select>
+        <form-control-tel v-else-if="formControl.type==='tel'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-tel>
+        <form-control-email v-else-if="formControl.type==='email'" :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control-email>
         <form-control v-else :formControl="formControl" fieldsetBlockIndex="0" :controlIndex="controlIndex" @autosave="autosave" @timeoutAutosave="timeoutAutosave"></form-control>
       </div>
     </div>
