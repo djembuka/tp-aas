@@ -1215,10 +1215,18 @@ window.onload = function () {
         this.memoryValue = this.controlValue;
       },
       blurControl() {
-        this.formControl.value = this.memoryValue;
-        this.controlValue = this.memoryValue;
+        // this.formControl.value = this.memoryValue;
+        // this.controlValue = this.memoryValue;
 
         setTimeout(() => {
+          //если в hints одно значение, то подставляем как выбранное
+          const isHintSingle = this.users.length === 1;
+          if (isHintSingle) {
+            this.activeUser = this.users[0] || {};
+            this.controlValue = this.activeUser.value || '';
+            this.memoryValue = this.controlValue;
+          }
+
           this.isActive = !!this.controlValue;
           this.users = [];
           this.validate();
@@ -1283,6 +1291,7 @@ window.onload = function () {
                 if (
                   typeof result === 'object' &&
                   result.status === 'success' &&
+                  result.data &&
                   result.data.length
                 ) {
                   this.isInvalid = false;
