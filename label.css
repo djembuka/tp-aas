@@ -1,0 +1,34 @@
+[class^="label-"] {
+  text-align: center;
+  line-height: 1;
+}
+[class^="label-"] span {
+  border-radius: 1px;
+  display: inline;
+  font-family: Roboto, sans-serif;
+  font-size: 0.88rem;
+}
+.label-green span {
+  color: #74c37a;
+  background-color: #effff0;
+}
+.label-red span {
+  color: #f00;
+  background-color: #fff4f4;
+}
+.label-gray span {
+  color: #9b9b9b;
+  background-color: #f2f2f2;
+}
+.label-lightblue span {
+  color: #5f7696;
+  background-color: #f2f7ff;
+}
+.label-blue span {
+  color: #4375d8;
+  background-color: #f0f5ff;
+}
+.label-orange span {
+  color: #f2762e;
+  background-color: #fff7f2;
+}
