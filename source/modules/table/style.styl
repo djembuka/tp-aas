@@ -31,6 +31,9 @@
     line-height 1rem
     cursor pointer
 
+    &:has(+ td)
+      line-height 1.5 // для горизонтальных таблиц
+
     &.asc,
     &.desc
       color $secondary-color-2
